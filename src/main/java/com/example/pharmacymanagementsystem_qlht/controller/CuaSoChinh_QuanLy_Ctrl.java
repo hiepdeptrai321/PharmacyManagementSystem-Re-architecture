@@ -7,6 +7,8 @@ import com.example.pharmacymanagementsystem_qlht.dao.ThongKe_Dao;
 import com.example.pharmacymanagementsystem_qlht.dao.Thuoc_SP_TheoLo_Dao;
 import com.example.pharmacymanagementsystem_qlht.model.ThongKeBanHang;
 import com.example.pharmacymanagementsystem_qlht.model.Thuoc_SP_TheoLo;
+import com.example.pharmacymanagementsystem_qlht.session.SessionContext;
+import com.example.pharmacymanagementsystem_qlht.session.UserContext;
 import com.example.pharmacymanagementsystem_qlht.view.CN_XuLy.CaiDat.caiDat_GUI;
 import com.example.pharmacymanagementsystem_qlht.view.CN_XuLy.LapHoaDon.LapHoaDon_GUI;
 import com.example.pharmacymanagementsystem_qlht.view.CuaSoChinh_QuanLy_GUI;
@@ -94,8 +96,9 @@ public class CuaSoChinh_QuanLy_Ctrl extends Application {
         loadTableThuocSapHetHan();
         setThongKeLabelsAndData();
         setupGlobalShortcuts();
-        if (DangNhap_Ctrl.user != null) {
-            txtNguoiDung.setText("Người dùng: " + DangNhap_Ctrl.user.getTenNV());
+        UserContext currentUser = SessionContext.getCurrentUser();
+        if (currentUser != null) {
+            txtNguoiDung.setText("Người dùng: " + currentUser.getFullName());
         }
         pnlThongTin.setVisible(false);
     }
@@ -525,14 +528,14 @@ public class CuaSoChinh_QuanLy_Ctrl extends Application {
     //  Hàm xử lý sự kiện khi click vào panel người dùng
     public void pnlNguoiDungClick(MouseEvent mouseEvent) {
         pnlThongTin.setVisible(!pnlThongTin.isVisible());
-        lblVaiTro.setText(DangNhap_Ctrl.user.getVaiTro());
+        UserContext currentUser = SessionContext.getCurrentUser();
+        lblVaiTro.setText(currentUser == null ? "" : currentUser.getRole());
     }
 
     //  Hàm xử lý sự kiện đăng xuất
     public void btnDangXuatClick(ActionEvent actionEvent) {
         try {
-            // (tuỳ bạn) xoá session hiện tại
-            DangNhap_Ctrl.user = null;
+            SessionContext.clear();
 
             // Mở màn Login TRƯỚC
             DangNhap_Ctrl loginCtrl = new DangNhap_Ctrl();

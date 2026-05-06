@@ -2,9 +2,11 @@ package com.example.pharmacymanagementsystem_qlht.controller.CN_XuLy.LapPhieuDoi
 
 import com.example.pharmacymanagementsystem_qlht.controller.CN_DanhMuc.DMKhachHang.ThemKhachHang_Ctrl;
 import com.example.pharmacymanagementsystem_qlht.controller.CN_TimKiem.TKPhieuDoiHang.ChiTietPhieuDoiHang_Ctrl;
-import com.example.pharmacymanagementsystem_qlht.controller.DangNhap_Ctrl;
 import com.example.pharmacymanagementsystem_qlht.dao.*;
 import com.example.pharmacymanagementsystem_qlht.model.*;
+import com.example.pharmacymanagementsystem_qlht.session.SessionContext;
+import com.example.pharmacymanagementsystem_qlht.session.UserContext;
+import com.example.pharmacymanagementsystem_qlht.session.UserContextMapper;
 import com.example.pharmacymanagementsystem_qlht.service.DoiHangItem;
 import com.example.pharmacymanagementsystem_qlht.view.CN_DanhMuc.DMKhachHang.ThemKhachHang_GUI;
 import com.example.pharmacymanagementsystem_qlht.view.CN_TimKiem.TKPhieuDoi.ChiTietPhieuDoiHang_GUI;
@@ -693,7 +695,12 @@ public class LapPhieuDoiHang_Ctrl extends Application {
                 }
             }
 
-            phieu.setNhanVien(DangNhap_Ctrl.user);
+            UserContext currentUser = SessionContext.getCurrentUser();
+            if (currentUser == null) {
+                hien(ERROR, "Lỗi đăng nhập", "Chưa xác định nhân viên đang đăng nhập.");
+                return;
+            }
+            phieu.setNhanVien(UserContextMapper.toNhanVienReference(currentUser));
             phieu.setGhiChu(txtGhiChu == null ? "" : txtGhiChu.getText());
 
             new PhieuDoiHang_Dao().insert(phieu);

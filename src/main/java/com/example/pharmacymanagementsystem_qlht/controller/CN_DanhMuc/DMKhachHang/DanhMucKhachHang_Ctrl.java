@@ -1,7 +1,7 @@
 package com.example.pharmacymanagementsystem_qlht.controller.CN_DanhMuc.DMKhachHang;
 
-import com.example.pharmacymanagementsystem_qlht.dao.KhachHang_Dao;
 import com.example.pharmacymanagementsystem_qlht.model.KhachHang;
+import com.example.pharmacymanagementsystem_qlht.service.KhachHangService;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -35,7 +35,7 @@ public class DanhMucKhachHang_Ctrl extends Application {
     public TableView<KhachHang> tbKhachHang;
     public TextField txtTim;
 
-    private KhachHang_Dao khachHangDao = new KhachHang_Dao();
+    private final KhachHangService khachHangService = new KhachHangService();
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -58,7 +58,7 @@ public class DanhMucKhachHang_Ctrl extends Application {
 
     // --- LOGIC GIỮ NGUYÊN ---
     public void loadTable() {
-        List<KhachHang> list = khachHangDao.selectAll();
+        List<KhachHang> list = khachHangService.findAll();
         ObservableList<KhachHang> data = FXCollections.observableArrayList(list);
         cotSTT.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(tbKhachHang.getItems().indexOf(cellData.getValue()) + 1))
@@ -181,21 +181,7 @@ public class DanhMucKhachHang_Ctrl extends Application {
 
     private void TimKiem() {
         String keyword = txtTim.getText().trim().toLowerCase();
-        List<KhachHang> list = khachHangDao.selectAll();
-        if (keyword.isEmpty()) {
-            tbKhachHang.setItems(FXCollections.observableArrayList(list));
-            return;
-        }
-
-
-        List<KhachHang> filtered = list.stream()
-                .filter(keHang ->
-                        (keHang.getMaKH() != null && keHang.getMaKH().toLowerCase().contains(keyword)) ||
-                                (keHang.getTenKH() != null && keHang.getTenKH().toLowerCase().contains(keyword))
-
-                )
-                .toList();
-
+        List<KhachHang> filtered = khachHangService.searchByKeyword(keyword);
         tbKhachHang.setItems(FXCollections.observableArrayList(filtered));
     }
 }

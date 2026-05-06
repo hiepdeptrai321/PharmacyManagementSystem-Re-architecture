@@ -1,10 +1,8 @@
 package com.example.pharmacymanagementsystem_qlht.controller.CN_DanhMuc.DMKeHang;
 
-import com.example.pharmacymanagementsystem_qlht.dao.KeHang_Dao;
 import com.example.pharmacymanagementsystem_qlht.model.KeHang;
+import com.example.pharmacymanagementsystem_qlht.service.KeHangService;
 import javafx.application.Application;
-import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -14,15 +12,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class ThemKe_Ctrl extends Application {
-    // ĐÃ CHUYỂN SANG PUBLIC
     public Button btnHuy;
     public Button btnThem;
     public TextArea txtMoTa;
     public TextField txtTenKe;
 
-    private KeHang_Dao keHangDao = new KeHang_Dao();
+    private final KeHangService keHangService = new KeHangService();
 
-    // Gán sự kiện, được gọi bởi file GUI
     public void initialize() {
         btnThem.setOnAction(e -> themKe());
         btnHuy.setOnAction(e -> btnHuyClick());
@@ -30,47 +26,41 @@ public class ThemKe_Ctrl extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        // Thay đổi để gọi GUI mới
         new com.example.pharmacymanagementsystem_qlht.view.CN_DanhMuc.DMKeHang.ThemKe_GUI()
                 .showWithController(stage, this);
 
-        // Cần thêm stage.show() nếu bạn chạy file này độc lập
-        stage.setTitle("Thêm kệ hàng");
+        stage.setTitle("ThÃªm ká»‡ hÃ ng");
         stage.show();
     }
 
-    // Logic của bạn được giữ nguyên
-    public void btnHuyClick(){
+    public void btnHuyClick() {
         Stage stage = (Stage) txtTenKe.getScene().getWindow();
         stage.close();
     }
 
-    // Logic của bạn được giữ nguyên
     void themKe() {
-        // Sinh mã tự động
-        String maKe = keHangDao.generateNewMaKeHang();
+        String maKe = keHangService.generateNewMaKeHang();
         String tenKe = txtTenKe.getText().trim();
         String moTa = txtMoTa.getText().trim();
 
         if (tenKe.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Vui lòng nhập tên kệ hàng!");
+            showAlert(Alert.AlertType.WARNING, "Vui lÃ²ng nháº­p tÃªn ká»‡ hÃ ng!");
             return;
         }
 
         KeHang keHang = new KeHang(maKe, tenKe, moTa);
-        boolean success = keHangDao.insert(keHang);
+        boolean success = keHangService.create(keHang);
 
         if (success) {
-            showAlert(Alert.AlertType.INFORMATION, "Thêm kệ hàng thành công!\nMã: " + maKe);
+            showAlert(Alert.AlertType.INFORMATION, "ThÃªm ká»‡ hÃ ng thÃ nh cÃ´ng!\nMÃ£: " + maKe);
             txtTenKe.clear();
             txtMoTa.clear();
             dongCuaSo();
         } else {
-            showAlert(Alert.AlertType.ERROR, "Thêm kệ hàng thất bại!");
+            showAlert(Alert.AlertType.ERROR, "ThÃªm ká»‡ hÃ ng tháº¥t báº¡i!");
         }
     }
 
-    // Logic của bạn được giữ nguyên
     private void showAlert(Alert.AlertType type, String message) {
         Alert alert = new Alert(type);
         alert.setHeaderText(null);
@@ -78,7 +68,6 @@ public class ThemKe_Ctrl extends Application {
         alert.showAndWait();
     }
 
-    // Logic của bạn được giữ nguyên
     private void dongCuaSo() {
         Stage stage = (Stage) txtTenKe.getScene().getWindow();
         stage.close();

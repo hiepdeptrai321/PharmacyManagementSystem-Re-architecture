@@ -2,9 +2,11 @@ package com.example.pharmacymanagementsystem_qlht.controller.CN_XuLy.LapPhieuNha
 
 import com.example.pharmacymanagementsystem_qlht.TienIch.VNDFormatter;
 import com.example.pharmacymanagementsystem_qlht.controller.CN_DanhMuc.DMNhaCungCap.ThemNhaCungCap_Ctrl;
-import com.example.pharmacymanagementsystem_qlht.controller.DangNhap_Ctrl;
 import com.example.pharmacymanagementsystem_qlht.dao.*;
 import com.example.pharmacymanagementsystem_qlht.model.*;
+import com.example.pharmacymanagementsystem_qlht.session.SessionContext;
+import com.example.pharmacymanagementsystem_qlht.session.UserContext;
+import com.example.pharmacymanagementsystem_qlht.session.UserContextMapper;
 import com.example.pharmacymanagementsystem_qlht.view.CN_DanhMuc.DMNCC.ThemNhaCungCap_GUI;
 import com.example.pharmacymanagementsystem_qlht.view.CN_XuLy.LapPhieuNhapHang.LapPhieuNhapHang_GUI;
 import javafx.application.Application;
@@ -1021,9 +1023,17 @@ public class LapPhieuNhapHang_Ctrl{
             phieuNhap.setTrangThai(true);
 
 //          Lấy nhân viên hiện tại (giả sử là NV001)
-            NhanVien nv = new NhanVien();
-            nv.setMaNV(DangNhap_Ctrl.user.getMaNV());
-            nv.setTenNV(DangNhap_Ctrl.user.getTenNV());
+            UserContext currentUser = SessionContext.getCurrentUser();
+            if (currentUser == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText(null);
+                alert.setContentText("Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.");
+                alert.showAndWait();
+                return;
+            }
+
+            NhanVien nv = UserContextMapper.toNhanVienReference(currentUser);
             phieuNhap.setNhanVien(nv);
 
 //          Lưu từng chi tiết phiếu nhập

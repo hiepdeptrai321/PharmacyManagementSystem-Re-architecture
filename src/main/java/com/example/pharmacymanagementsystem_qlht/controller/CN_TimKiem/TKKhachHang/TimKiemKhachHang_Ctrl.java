@@ -1,16 +1,20 @@
 package com.example.pharmacymanagementsystem_qlht.controller.CN_TimKiem.TKKhachHang;
 
 import com.example.pharmacymanagementsystem_qlht.TienIch.DoiNgay;
-import com.example.pharmacymanagementsystem_qlht.dao.KhachHang_Dao;
 import com.example.pharmacymanagementsystem_qlht.model.KhachHang;
+import com.example.pharmacymanagementsystem_qlht.service.KhachHangService;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML; // (Có thể giữ lại)
+import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -20,7 +24,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class TimKiemKhachHang_Ctrl extends Application {
-    // 1. CÁC THÀNH PHẦN GIAO DIỆN (ĐÃ CHUYỂN SANG PUBLIC)
     public Button btnLamMoi;
     public Button btnTim;
     public ComboBox<String> cboTimKiem;
@@ -36,45 +39,41 @@ public class TimKiemKhachHang_Ctrl extends Application {
     public Pane mainPane;
     public TextField txtTimKiem;
 
-    private KhachHang_Dao khachHangDao = new KhachHang_Dao();
+    private final KhachHangService khachHangService = new KhachHangService();
     private Consumer<KhachHang> onSelected;
 
     public void setOnSelected(Consumer<KhachHang> onSelected) {
         this.onSelected = onSelected;
     }
 
-    // 2. KHỞI TẠO (INITIALIZE)
     @FXML
     public void initialize() {
         cboTimKiem.getItems().addAll(
-                "Theo mã, tên khách hàng",
+                "Theo mÃ£, tÃªn khÃ¡ch hÃ ng",
                 "Theo email",
                 "Theo SDT"
         );
-        cboTimKiem.setValue("Theo mã, tên khách hàng");
+        cboTimKiem.setValue("Theo mÃ£, tÃªn khÃ¡ch hÃ ng");
         loadTable();
         btnLamMoi.setOnAction(e -> LamMoi());
         btnTim.setOnAction(e -> TimKiem());
     }
 
-
     @Override
     public void start(Stage primaryStage) throws IOException {
-        // --- ĐÃ THAY THẾ FXML LOADER ---
         new com.example.pharmacymanagementsystem_qlht.view.CN_TimKiem.TKKhachHang.TimKiemKhachHang_GUI()
                 .showWithController(primaryStage, this);
     }
 
-    // 3. XỬ LÝ SỰ KIỆN GIAO DIỆN (LOGIC GIỮ NGUYÊN)
     public void loadTable() {
-        List<KhachHang> list = khachHangDao.selectAll();
+        List<KhachHang> list = khachHangService.findAll();
         ObservableList<KhachHang> data = FXCollections.observableArrayList(list);
         cotSTT.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(tbKhachHang.getItems().indexOf(cellData.getValue()) + 1))
         );
         cotMaKH.setCellValueFactory(new PropertyValueFactory<>("maKH"));
         cotTenKH.setCellValueFactory(new PropertyValueFactory<>("tenKH"));
-        cotTenKH.setCellFactory(col -> new TableCell<KhachHang, String>() {
+        cotTenKH.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -88,15 +87,14 @@ public class TimKiemKhachHang_Ctrl extends Application {
             }
         });
         cotGT.setCellValueFactory(cellData -> {
-            Boolean gt = cellData.getValue().getGioiTinh(); // handles primitive or boxed boolean
-            String text = Boolean.TRUE.equals(gt) ? "Nam" : "Nữ";
+            Boolean gt = cellData.getValue().getGioiTinh();
+            String text = Boolean.TRUE.equals(gt) ? "Nam" : "Ná»¯";
             return new SimpleStringProperty(text);
         });
-        // format date as dd-MM-yyyy
         cotNgaySinh.setCellValueFactory(cellData -> new SimpleStringProperty(DoiNgay.dinhDangNgay(cellData.getValue().getNgaySinh())));
         cotSDT.setCellValueFactory(new PropertyValueFactory<>("sdt"));
         cotEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        cotEmail.setCellFactory(col -> new TableCell<KhachHang, String>() {
+        cotEmail.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -110,7 +108,7 @@ public class TimKiemKhachHang_Ctrl extends Application {
             }
         });
         cotDiaChi.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
-        cotDiaChi.setCellFactory(col -> new TableCell<KhachHang, String>() {
+        cotDiaChi.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -129,7 +127,7 @@ public class TimKiemKhachHang_Ctrl extends Application {
     @FXML
     private void LamMoi() {
         txtTimKiem.clear();
-        cboTimKiem.setValue("Theo mã, tên khách hàng");
+        cboTimKiem.setValue("Theo mÃ£, tÃªn khÃ¡ch hÃ ng");
         loadTable();
     }
 
@@ -137,20 +135,7 @@ public class TimKiemKhachHang_Ctrl extends Application {
     private void TimKiem() {
         String criteria = cboTimKiem.getValue();
         String keyword = txtTimKiem.getText().trim().toLowerCase();
-        List<KhachHang> list = khachHangDao.selectAll();
-        List<KhachHang> filtered = list.stream().filter(kh -> {
-            switch (criteria) {
-                case "Theo mã, tên khách hàng":
-                    return kh.getMaKH().toLowerCase().contains(keyword) ||
-                            kh.getTenKH().toLowerCase().contains(keyword);
-                case "Theo email":
-                    return kh.getEmail().toLowerCase().contains(keyword);
-                case "Theo SDT":
-                    return kh.getSdt().toLowerCase().contains(keyword);
-                default:
-                    return true;
-            }
-        }).toList();
+        List<KhachHang> filtered = khachHangService.search(criteria, keyword);
         tbKhachHang.setItems(FXCollections.observableArrayList(filtered));
     }
 }

@@ -2,9 +2,11 @@ package com.example.pharmacymanagementsystem_qlht.controller.CN_XuLy.LapPhieuTra
 
 import com.example.pharmacymanagementsystem_qlht.controller.CN_DanhMuc.DMKhachHang.ThemKhachHang_Ctrl;
 import com.example.pharmacymanagementsystem_qlht.controller.CN_TimKiem.TKPhieuTraHang.ChiTietPhieuTraHang_Ctrl;
-import com.example.pharmacymanagementsystem_qlht.controller.DangNhap_Ctrl;
 import com.example.pharmacymanagementsystem_qlht.dao.*;
 import com.example.pharmacymanagementsystem_qlht.model.*;
+import com.example.pharmacymanagementsystem_qlht.session.SessionContext;
+import com.example.pharmacymanagementsystem_qlht.session.UserContext;
+import com.example.pharmacymanagementsystem_qlht.session.UserContextMapper;
 import com.example.pharmacymanagementsystem_qlht.service.DoiHangItem;
 import com.example.pharmacymanagementsystem_qlht.service.TraHangItem;
 import com.example.pharmacymanagementsystem_qlht.view.CN_DanhMuc.DMKhachHang.ThemKhachHang_GUI;
@@ -782,11 +784,12 @@ public class LapPhieuTraHang_Ctrl extends Application {
             PhieuTraHang phieuTra = new PhieuTraHang();
             phieuTra.setHoaDon(hdGoc);
 
-            if (DangNhap_Ctrl.user == null) {
+            UserContext currentUser = SessionContext.getCurrentUser();
+            if (currentUser == null) {
                 hien(ERROR, "Lỗi đăng nhập", "Chưa xác định nhân viên đang đăng nhập.");
                 return;
             }
-            phieuTra.setNhanVien(DangNhap_Ctrl.user);
+            phieuTra.setNhanVien(UserContextMapper.toNhanVienReference(currentUser));
 
             if (hdGoc.getMaKH() != null) {
                 phieuTra.setKhachHang(hdGoc.getMaKH());

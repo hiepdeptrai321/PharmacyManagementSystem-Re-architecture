@@ -2,6 +2,8 @@ package com.example.pharmacymanagementsystem_qlht.controller.CN_TimKiem.TKHoaDon
 
 import com.example.pharmacymanagementsystem_qlht.dao.*;
 import com.example.pharmacymanagementsystem_qlht.model.*;
+import com.example.pharmacymanagementsystem_qlht.session.SessionContext;
+import com.example.pharmacymanagementsystem_qlht.session.UserContext;
 import com.example.pharmacymanagementsystem_qlht.service.ApDungKhuyenMai;
 import com.example.pharmacymanagementsystem_qlht.service.DichVuKhuyenMai;
 import com.example.pharmacymanagementsystem_qlht.view.CN_TimKiem.TKHoaDon.ChiTietHoaDon_GUI;
@@ -41,8 +43,6 @@ import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import com.example.pharmacymanagementsystem_qlht.controller.DangNhap_Ctrl;
-
 import static com.example.pharmacymanagementsystem_qlht.TienIch.TuyChinhAlert.hien;
 import static javafx.scene.control.Alert.AlertType.ERROR;
 import static javafx.scene.control.Alert.AlertType.INFORMATION;
@@ -439,8 +439,9 @@ public class ChiTietHoaDon_Ctrl extends Application {
         document.add(new Paragraph("Nhân viên: " + lblTenNhanVienValue.getText()));
 
         String tenNhanVienIn = "Không rõ";
-        if (DangNhap_Ctrl.user != null && DangNhap_Ctrl.user.getTenNV() != null) {
-            tenNhanVienIn = DangNhap_Ctrl.user.getTenNV();
+        UserContext currentUser = SessionContext.getCurrentUser();
+        if (currentUser != null && currentUser.getFullName() != null) {
+            tenNhanVienIn = currentUser.getFullName();
         }
 
         // 6. Bảng chi tiết sản phẩm - THÊM CỘT MÃ LÔ

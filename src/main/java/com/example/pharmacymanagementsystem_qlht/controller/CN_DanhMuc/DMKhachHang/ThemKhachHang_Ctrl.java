@@ -1,16 +1,19 @@
 package com.example.pharmacymanagementsystem_qlht.controller.CN_DanhMuc.DMKhachHang;
 
-import com.example.pharmacymanagementsystem_qlht.dao.KhachHang_Dao;
 import com.example.pharmacymanagementsystem_qlht.model.KhachHang;
-import javafx.scene.control.*;
+import com.example.pharmacymanagementsystem_qlht.service.KhachHangService;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
-
 public class ThemKhachHang_Ctrl {
 
-    // Các control được inject bởi GUI Java
     public TextField txtTenKH;
     public DatePicker dpNgaySinh;
     public TextField txtSDT;
@@ -28,16 +31,15 @@ public class ThemKhachHang_Ctrl {
     public Label errDiaChi;
     public Label errGioiTinh;
 
-    private final KhachHang_Dao khDao = new KhachHang_Dao();
+    private final KhachHangService khachHangService = new KhachHangService();
     private Consumer<KhachHang> onSaved;
 
     public void setOnSaved(Consumer<KhachHang> onSaved) {
         this.onSaved = onSaved;
     }
 
-    // Gọi từ GUI sau khi inject control
     public void init() {
-        cbGioiTinh.getItems().addAll("Nam", "Nữ");
+        cbGioiTinh.getItems().addAll("Nam", "Ná»¯");
         clearErrors();
 
         btnThem.setOnAction(e -> handleSave());
@@ -78,40 +80,56 @@ public class ThemKhachHang_Ctrl {
 
         boolean valid = true;
 
-        if (ten.isEmpty()) { setError(errTenKH, "Không được bỏ trống"); valid = false; }
-        if (gioiTinh == null) { setError(errGioiTinh, "Chọn giới tính"); valid = false; }
-
-        if (ns == null) { setError(errNgaySinh, "Chọn ngày sinh"); valid = false; }
-
-        if (!sdt.matches("\\d{10}")) { setError(errSDT, "SĐT phải 10 số"); valid = false; }
-
-        if (email.isEmpty()) { setError(errEmail, "Không được rỗng"); valid = false; }
-        else if (!email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
-            setError(errEmail, "Email không hợp lệ");
+        if (ten.isEmpty()) {
+            setError(errTenKH, "KhÃ´ng Ä‘Æ°á»£c bá» trá»‘ng");
+            valid = false;
+        }
+        if (gioiTinh == null) {
+            setError(errGioiTinh, "Chá»n giá»›i tÃ­nh");
+            valid = false;
+        }
+        if (ns == null) {
+            setError(errNgaySinh, "Chá»n ngÃ y sinh");
+            valid = false;
+        }
+        if (!sdt.matches("\\d{10}")) {
+            setError(errSDT, "SÄT pháº£i 10 sá»‘");
+            valid = false;
+        }
+        if (email.isEmpty()) {
+            setError(errEmail, "KhÃ´ng Ä‘Æ°á»£c rá»—ng");
+            valid = false;
+        } else if (!email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            setError(errEmail, "Email khÃ´ng há»£p lá»‡");
+            valid = false;
+        }
+        if (diaChi.isEmpty()) {
+            setError(errDiaChi, "KhÃ´ng Ä‘Æ°á»£c rá»—ng");
             valid = false;
         }
 
-        if (diaChi.isEmpty()) { setError(errDiaChi, "Không được rỗng"); valid = false; }
-
-        if (!valid) return;
+        if (!valid) {
+            return;
+        }
 
         KhachHang kh = new KhachHang();
-        kh.setMaKH(khDao.generateNewMaKH());
+        kh.setMaKH(khachHangService.generateNewMaKH());
         kh.setTenKH(ten);
         kh.setSdt(sdt);
         kh.setEmail(email);
         kh.setDiaChi(diaChi);
         kh.setNgaySinh(ns);
-        kh.setGioiTinh(gioiTinh.equals("Nam"));
+        kh.setGioiTinh("Nam".equals(gioiTinh));
         kh.setTrangThai(true);
 
-        if (!khDao.insert(kh)) {
-            lblMessage.setText("Lỗi cơ sở dữ liệu");
+        if (!khachHangService.create(kh)) {
+            lblMessage.setText("Lá»—i cÆ¡ sá»Ÿ dá»¯ liá»‡u");
             return;
         }
 
-        if (onSaved != null)
+        if (onSaved != null) {
             onSaved.accept(kh);
+        }
 
         Stage st = (Stage) btnThem.getScene().getWindow();
         st.close();

@@ -1,11 +1,14 @@
 package com.example.pharmacymanagementsystem_qlht.controller.CN_DanhMuc.DMNhaCungCap;
 
-import com.example.pharmacymanagementsystem_qlht.dao.NhaCungCap_Dao;
 import com.example.pharmacymanagementsystem_qlht.model.NhaCungCap;
+import com.example.pharmacymanagementsystem_qlht.service.NhaCungCapService;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -37,6 +40,7 @@ public class SuaXoaNhaCungCap_Ctrl {
 
     private NhaCungCap ncc;
     private DanhMucNhaCungCap_Ctrl danhMucNhaCungCap_ctrl;
+    private final NhaCungCapService nhaCungCapService = new NhaCungCapService();
 
     public void initialize() {
         NutHuy.setOnMouseClicked(e -> btnHuy());
@@ -66,11 +70,11 @@ public class SuaXoaNhaCungCap_Ctrl {
 
     public void CapNhatNCC() {
         Dialog<ButtonType> dialogMain = new Dialog<>();
-        dialogMain.setTitle("Xác nhận");
+        dialogMain.setTitle("XÃ¡c nháº­n");
         DialogPane dialogTemp = dialogMain.getDialogPane();
-        dialogTemp.getButtonTypes().addAll(javafx.scene.control.ButtonType.OK);
-        dialogTemp.getButtonTypes().addAll(javafx.scene.control.ButtonType.CANCEL);
-        dialogTemp.setContentText("Bạn có muốn cập nhật nhà cung cấp này không?");
+        dialogTemp.getButtonTypes().addAll(ButtonType.OK);
+        dialogTemp.getButtonTypes().addAll(ButtonType.CANCEL);
+        dialogTemp.setContentText("Báº¡n cÃ³ muá»‘n cáº­p nháº­t nhÃ  cung cáº¥p nÃ y khÃ´ng?");
         Optional<ButtonType> result = dialogMain.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             ncc.setMaNCC(ncc.getMaNCC());
@@ -83,21 +87,23 @@ public class SuaXoaNhaCungCap_Ctrl {
             ncc.setMSThue(txtMaSoThue.getText());
             ncc.setGhiChu(txtGhiChu.getText());
 
-            NhaCungCap_Dao ncc_dao = new NhaCungCap_Dao();
-            if(ncc_dao.update(ncc)){
+            if (nhaCungCapService.update(ncc)) {
                 Dialog<String> dialog = new Dialog<>();
-                dialog.setTitle("Thông báo");
+                dialog.setTitle("ThÃ´ng bÃ¡o");
                 DialogPane dialogPane = dialog.getDialogPane();
-                dialogPane.getButtonTypes().addAll(javafx.scene.control.ButtonType.OK);
-                dialogPane.setContentText("Cập nhật nhà cung cấp thành công!");
+                dialogPane.getButtonTypes().addAll(ButtonType.OK);
+                dialogPane.setContentText("Cáº­p nháº­t nhÃ  cung cáº¥p thÃ nh cÃ´ng!");
                 dialog.showAndWait();
+                if (danhMucNhaCungCap_ctrl != null) {
+                    danhMucNhaCungCap_ctrl.refreshTable();
+                }
                 dong();
             } else {
                 Dialog<String> dialog = new Dialog<>();
-                dialog.setTitle("Thông báo");
+                dialog.setTitle("ThÃ´ng bÃ¡o");
                 DialogPane dialogPane = dialog.getDialogPane();
-                dialogPane.getButtonTypes().addAll(javafx.scene.control.ButtonType.OK);
-                dialogPane.setContentText("Cập nhật nhà cung cấp thất bại!");
+                dialogPane.getButtonTypes().addAll(ButtonType.OK);
+                dialogPane.setContentText("Cáº­p nháº­t nhÃ  cung cáº¥p tháº¥t báº¡i!");
                 dialog.showAndWait();
             }
         }
@@ -105,23 +111,21 @@ public class SuaXoaNhaCungCap_Ctrl {
 
     public void XoaNCC() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Xác nhận xoá");
+        alert.setTitle("XÃ¡c nháº­n xoÃ¡");
         alert.setHeaderText(null);
-        alert.setContentText("Bạn có chắc muốn xoá nhà cung cấp này không?");
+        alert.setContentText("Báº¡n cÃ³ cháº¯c muá»‘n xoÃ¡ nhÃ  cung cáº¥p nÃ y khÃ´ng?");
 
         if (alert.showAndWait().get() == ButtonType.OK) {
-
-            NhaCungCap_Dao dao = new NhaCungCap_Dao();
-
-            // CHÚ Ý: deleteById phải truyền mã, không truyền object ncc
-            boolean ok = dao.deleteById(ncc.getMaNCC());
+            boolean ok = nhaCungCapService.deleteById(ncc.getMaNCC());
 
             if (ok) {
-                new Alert(Alert.AlertType.INFORMATION, "Xoá thành công!", ButtonType.OK).showAndWait();
-                danhMucNhaCungCap_ctrl.refreshTable();
+                new Alert(Alert.AlertType.INFORMATION, "XoÃ¡ thÃ nh cÃ´ng!", ButtonType.OK).showAndWait();
+                if (danhMucNhaCungCap_ctrl != null) {
+                    danhMucNhaCungCap_ctrl.refreshTable();
+                }
                 dong();
             } else {
-                new Alert(Alert.AlertType.ERROR, "Xoá thất bại!", ButtonType.OK).showAndWait();
+                new Alert(Alert.AlertType.ERROR, "XoÃ¡ tháº¥t báº¡i!", ButtonType.OK).showAndWait();
             }
         }
     }

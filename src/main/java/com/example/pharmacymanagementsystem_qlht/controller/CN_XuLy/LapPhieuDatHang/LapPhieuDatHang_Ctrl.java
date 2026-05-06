@@ -4,11 +4,13 @@ import com.example.pharmacymanagementsystem_qlht.TienIch.VNDFormatter;
 import com.example.pharmacymanagementsystem_qlht.controller.CN_DanhMuc.DMKhachHang.ThemKhachHang_Ctrl;
 import com.example.pharmacymanagementsystem_qlht.controller.CN_TimKiem.TKKhachHang.TimKiemKhachHangTrongHD_Ctrl;
 import com.example.pharmacymanagementsystem_qlht.controller.CN_TimKiem.TKPhieuDatHang.ChiTietPhieuDatHang_Ctrl;
-import com.example.pharmacymanagementsystem_qlht.controller.DangNhap_Ctrl;
 import com.example.pharmacymanagementsystem_qlht.dao.ChiTietPhieuDatHang_Dao;
 import com.example.pharmacymanagementsystem_qlht.dao.PhieuDatHang_Dao;
 import com.example.pharmacymanagementsystem_qlht.dao.Thuoc_SanPham_Dao;
 import com.example.pharmacymanagementsystem_qlht.model.*;
+import com.example.pharmacymanagementsystem_qlht.session.SessionContext;
+import com.example.pharmacymanagementsystem_qlht.session.UserContext;
+import com.example.pharmacymanagementsystem_qlht.session.UserContextMapper;
 import com.example.pharmacymanagementsystem_qlht.view.CN_DanhMuc.DMKhachHang.ThemKhachHang_GUI;
 import com.example.pharmacymanagementsystem_qlht.view.CN_TimKiem.TKKhachHang.TimKiemKhachHangTrongHD_GUI;
 import com.example.pharmacymanagementsystem_qlht.view.CN_TimKiem.TKPhieuDatHang.ChiTietPhieuDatHang_GUI;
@@ -885,7 +887,12 @@ public class LapPhieuDatHang_Ctrl {
             pd.setNgayLap(new java.sql.Timestamp(System.currentTimeMillis()));
             pd.setSoTienCoc(parseDecimalOrZero(tfTienCoc != null ? tfTienCoc.getText() : null).doubleValue());
             pd.setGhiChu(tfGhiChu != null ? tfGhiChu.getText() : null);
-            pd.setNhanVien(DangNhap_Ctrl.user);
+            UserContext currentUser = SessionContext.getCurrentUser();
+            if (currentUser == null) {
+                showValidationAlert("Validation", "Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.", null);
+                return;
+            }
+            pd.setNhanVien(UserContextMapper.toNhanVienReference(currentUser));
 
             // Use existing khachHang field (must be set elsewhere)
             if (khachHang == null) {

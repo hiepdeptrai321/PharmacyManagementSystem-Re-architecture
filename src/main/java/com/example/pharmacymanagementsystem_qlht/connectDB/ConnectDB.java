@@ -1,28 +1,16 @@
 package com.example.pharmacymanagementsystem_qlht.connectDB;
 
-import com.example.pharmacymanagementsystem_qlht.controller.DangNhap_Ctrl;
-
-import java.nio.charset.StandardCharsets;
 import java.sql.*;
 
 public class ConnectDB {
 
     public static String url = "jdbc:sqlserver://localhost:1433;databaseName=QuanLyNhaThuoc;encrypt=true;trustServerCertificate=true;useUnicode=true;characterEncoding=UTF-8";
-    public static String user = "sa";
-    public static String password = "sapassword";
+    public static String dbUser = "sa";
+    public static String dbPassword = "sapassword";
 
     public static PreparedStatement getStmt(String sql, Object... args) throws Exception {
-        Connection con = DriverManager.getConnection(url, user, password);
+        Connection con = DriverManager.getConnection(url, dbUser, dbPassword);
         PreparedStatement stmt;
-        if (DangNhap_Ctrl.user != null) {
-            PreparedStatement ps = con.prepareStatement("SET CONTEXT_INFO ?");
-            byte[] maNvBytes = new byte[128];
-            byte[] actualBytes = DangNhap_Ctrl.user.getMaNV().getBytes(StandardCharsets.UTF_8);
-            System.arraycopy(actualBytes, 0, maNvBytes, 0, actualBytes.length);
-            ps.setBytes(1, maNvBytes);
-            ps.execute();
-            ps.close();
-        }
         if (sql.trim().startsWith("{")) {
             stmt = con.prepareCall(sql);
         } else {
@@ -57,7 +45,7 @@ public class ConnectDB {
 
     public static String queryTaoMa(String sql) {
         String maGenerate = null;
-        try (Connection con = DriverManager.getConnection(url, user, password);
+        try (Connection con = DriverManager.getConnection(url, dbUser, dbPassword);
              PreparedStatement stmt = con.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
@@ -73,17 +61,7 @@ public class ConnectDB {
 
 
     public static Connection getInstance() throws SQLException {
-        Connection con = DriverManager.getConnection(url, user, password);
-        if (DangNhap_Ctrl.user != null) {
-            try (PreparedStatement ps = con.prepareStatement("SET CONTEXT_INFO ?")) {
-                byte[] maNvBytes = new byte[128];
-                byte[] actualBytes = DangNhap_Ctrl.user.getMaNV().getBytes(StandardCharsets.UTF_8);
-                System.arraycopy(actualBytes, 0, maNvBytes, 0, Math.min(actualBytes.length, maNvBytes.length));
-                ps.setBytes(1, maNvBytes);
-                ps.execute();
-            } catch (SQLException ignored) { }
-        }
-        return con;
+        return DriverManager.getConnection(url, dbUser, dbPassword);
     }
 
 
