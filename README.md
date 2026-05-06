@@ -16,5 +16,5 @@ Tổng quan về project:
      - Nếu là chủ đề thầy cho phải hỏi thầy thật kỹ để không lạc đề
      - Nên lên kế hoạch kỹ hơn nữa
 
-Chúc mọi người một ngày dui dẻ, có thể xem clip demo ở dưới nha <3
+Chúc mọi người một ngày dui dẻ, có thể xem clip demo ở dưới nha <33
 https://drive.google.com/file/d/1d8SAiu7ZhIjgL6JT042fV5iKdeuwFsD8/view?usp=sharing
