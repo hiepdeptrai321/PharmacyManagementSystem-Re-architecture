@@ -1,0 +1,29 @@
+#NutHuy {
+    -fx-background-color: #bdbdbd;
+    -fx-background-radius: 5px;
+}
+#NutHuy:pressed {
+    -fx-background-color: #9b9b9b;
+}
+#txtTrang_Bold{
+    -fx-font-weight: bold;
+    -fx-text-fill: White;
+}
+#txtDen_Bold{
+    -fx-font-weight: bold;
+    -fx-text-fill: Black;
+}
+#nutThem{
+    -fx-background-color: green;
+    -fx-background-radius: 5px;
+}
+#nutThem:pressed{
+    -fx-background-color: #006600;
+}
+#nutXoa{
+    -fx-background-color: red;
+    -fx-background-radius: 5px;
+}
+#nutXoa:pressed{
+    -fx-background-color: #b30000;
+}

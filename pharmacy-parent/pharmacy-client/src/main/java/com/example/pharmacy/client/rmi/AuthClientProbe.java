@@ -11,7 +11,7 @@ public final class AuthClientProbe {
 
     public static void main(String[] args) throws Exception {
         String username = args.length > 0 ? args[0] : "admin";
-        String password = args.length > 1 ? args[1] : "admin";
+        String password = args.length > 1 ? args[1] : "123";
 
         SessionContext sessionContext = new SessionContext();
         AuthClientService authClientService = new RmiAuthClientService(new RmiClientProvider(), sessionContext);

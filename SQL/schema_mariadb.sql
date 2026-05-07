@@ -347,7 +347,7 @@ CREATE TABLE `ChiTietHoaDon` (
 
 CREATE TABLE `HoatDong` (
     `ID` INT NOT NULL AUTO_INCREMENT,
-    `MaHDong` VARCHAR(16) GENERATED ALWAYS AS (CONCAT('HD', LPAD(`ID`, 4, '0'))) STORED,
+    `MaHDong` VARCHAR(16) NULL COMMENT 'TODO: sinh o service layer theo format HD + LPAD(ID, 4, 0); khong dung generated column vi MariaDB khong cho phep tham chieu AUTO_INCREMENT o day',
     `LoaiHD` VARCHAR(50) NULL,
     `ThoiGian` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `BangDL` VARCHAR(50) NULL,

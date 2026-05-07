@@ -66,7 +66,7 @@ Thu muc [SQL/imgThuoc](/C:/Users/hiepdeptrai/Desktop/hk2_2025_2026/QuanLyHieuThu
 | 13 | `ChiTietDonViTinh` | `(MaThuoc, MaDVT)` | `MaThuoc`, `MaDVT` | He so quy doi, gia nhap, gia ban |
 | 14 | `HoaDon` | `MaHD` | `MaKH`, `MaNV` | Script SQL dung `TrangThai NVARCHAR(10)` |
 | 15 | `ChiTietHoaDon` | `(MaHD, MaLH, MaDVT)` | `MaHD`, `MaLH` | `MaDVT` khong duoc FK trong script cu |
-| 16 | `HoatDong` | `ID` | `MaNV` | `ID IDENTITY`, `MaHDong` computed, `NoiDung NVARCHAR(MAX)` |
+| 16 | `HoatDong` | `ID` | `MaNV` | `ID IDENTITY`, `MaHDong` la display code chuoi, `NoiDung NVARCHAR(MAX)` |
 | 17 | `PhieuDatHang` | `MaPDat` | `MaKH`, `MaNV` | `TrangThai INT DEFAULT 0` |
 | 18 | `ChiTietPhieuDatHang` | `(MaPDat, MaThuoc, MaDVT)` | `MaPDat`, `MaThuoc` | `MaDVT` khong duoc FK trong script cu |
 | 19 | `PhieuDoiHang` | `MaPD` | `MaNV`, `MaKH`, `MaHD` | Phieu doi gan voi hoa don |
@@ -297,7 +297,8 @@ Ghi chu:
 - Tiep tuc dung khoa chinh dang chuoi nghiep vu nhu `NV001`, `TS001`, `HD0001`, `PN001`
 - Khong doi ma nghiep vu dang chuoi sang `AUTO_INCREMENT`
 - `HoatDong.ID` chuyen thanh `AUTO_INCREMENT`
-- `HoatDong.MaHDong` chuyen thanh generated stored column cua MariaDB
+- `HoatDong.MaHDong` giu la cot `VARCHAR(16)` thong thuong
+- `MaHDong` se duoc sinh o service layer theo mau `HD` + `LPAD(ID, 4, '0')`
 - Cot tien/so tien chuyen tu `FLOAT` sang `DECIMAL(18,2)` o cac bang nghiep vu
 - `ChiTietDonViTinh.HeSoQuyDoi` chuyen sang `DECIMAL(18,4)`
 - `Thuoc_SanPham.HinhAnh` chuyen sang `MEDIUMBLOB`
@@ -349,7 +350,7 @@ Chu y:
 | 1 | `NVARCHAR(n)` | `VARCHAR(n)` voi `utf8mb4` | Nhieu bang | Da chuyen | Ho tro tieng Viet o muc schema |
 | 2 | `NVARCHAR(MAX)` | `LONGTEXT` | `HoatDong.NoiDung` | Da chuyen | Noi dung log dai |
 | 3 | `VARBINARY(MAX)` | `MEDIUMBLOB` | `Thuoc_SanPham.HinhAnh` | Da chuyen | Du cho anh thuoc co kich thuoc > 64KB |
-| 4 | `IDENTITY(1,1)` | `AUTO_INCREMENT` | `HoatDong.ID` | Da chuyen | Giữ `MaHDong` la generated column |
+| 4 | `IDENTITY(1,1)` | `AUTO_INCREMENT` | `HoatDong.ID` | Da chuyen | `MaHDong` khong dung generated column nua; sinh o service layer de tranh loi MariaDB 1901 |
 | 5 | Cot chuoi ma nghiep vu | Giu `VARCHAR`, khong doi sang so tu tang | `MaNV`, `MaThuoc`, `MaHD`, `MaPN`, ... | Da chuyen | Trach gay vo nghiep vu hien tai |
 | 6 | `GETDATE()` | `CURRENT_TIMESTAMP` / date function MariaDB | `HoatDong`, `KhuyenMai` | Da chuyen mot phan | Query/procedure se xu ly sau |
 | 7 | `BIT` | `TINYINT(1)` | Nhieu bang | Da chuyen | Map tot hon voi Java boolean |
@@ -438,4 +439,3 @@ mariadb -u root -p quan_ly_nha_thuoc < SQL/seed_mariadb.sql
 - [x] Co script schema rieng va seed rieng
 - [x] Cac diem rui ro da duoc ghi chu
 - [ ] Script da duoc chay thuc te tren MariaDB
-

@@ -1,0 +1,66 @@
+#btnChonTapTin {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #7be5cf 0%, #388e7e 100%);
+    -fx-text-fill: white;
+    -fx-padding: 10px 20px;
+    -fx-font-size: 14px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+#btnTaiFileMau {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #2196F3 0%, #1565C0 100%);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+#btnLuu {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #81C784 0%, #2E7D32 100%);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+#btnChonTapTin:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #72d5c1 0%, #338374 100%);
+}
+#btnChonTapTin:pressed {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #6ac4af 0%, #2d7366 100%);
+}
+
+#btnTaiFileMau:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #42a0f5 0%, #0f57b0 100%);
+}
+#btnTaiFileMau:pressed {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #1e88e5 0%, #0b4ea0 100%);
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.22), 6, 0.0, 0, 2);
+}
+
+#btnLuu:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #78b97b 0%, #29702d 100%);
+}
+#btnLuu:pressed {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #78cf88 0%, #1f5b24 100%);
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.26), 6, 0.0, 0, 2);
+}
+
+/* css */
+/* All AnchorPane nodes */
+.AnchorPane {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+}
+
+/* Or by style class */
+.anchor-pane {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+}
+
+/* Or by specific id (set fx:id="rootAnchor" in FXML) */
+#rootAnchor {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+}

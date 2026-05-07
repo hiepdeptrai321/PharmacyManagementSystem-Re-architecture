@@ -8,6 +8,8 @@ import com.example.pharmacy.common.request.PhieuNhapItemRequest;
 import com.example.pharmacy.common.request.PhieuNhapRequest;
 import com.example.pharmacy.server.repository.PurchaseOrderRepository;
 import com.example.pharmacy.server.transaction.TransactionManager;
+import com.example.pharmacymanagementsystem_qlht.model.ChiTietPhieuNhap;
+import com.example.pharmacymanagementsystem_qlht.model.PhieuNhap;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,6 +31,11 @@ public class PhieuNhapServiceImpl implements PhieuNhapService {
         this.purchaseOrderRepository = Objects.requireNonNull(purchaseOrderRepository, "purchaseOrderRepository must not be null");
         this.codeGenerationService = Objects.requireNonNull(codeGenerationService, "codeGenerationService must not be null");
         this.auditService = Objects.requireNonNull(auditService, "auditService must not be null");
+    }
+
+    @Override
+    public String generateNewMaPhieuNhap() {
+        return codeGenerationService.nextCode(BusinessCodeType.PHIEU_NHAP);
     }
 
     @Override
@@ -54,6 +61,27 @@ public class PhieuNhapServiceImpl implements PhieuNhapService {
                     "Tao phieu nhap voi " + request.getItems().size() + " dong chi tiet.");
             return maPhieuNhap;
         });
+    }
+
+    @Override
+    public List<PhieuNhap> findAll() {
+        return purchaseOrderRepository.findAll();
+    }
+
+    @Override
+    public PhieuNhap findById(String maPhieuNhap) {
+        if (isBlank(maPhieuNhap)) {
+            return null;
+        }
+        return purchaseOrderRepository.findById(maPhieuNhap.trim());
+    }
+
+    @Override
+    public List<ChiTietPhieuNhap> findDetailsByMaPhieuNhap(String maPhieuNhap) {
+        if (isBlank(maPhieuNhap)) {
+            return List.of();
+        }
+        return purchaseOrderRepository.findDetailsByMaPhieuNhap(maPhieuNhap.trim());
     }
 
     private void validatePurchaseOrderRequest(PhieuNhapRequest request, UserContext actor) {

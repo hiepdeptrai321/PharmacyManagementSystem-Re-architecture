@@ -1,0 +1,55 @@
+
+#btnhuy{
+-fx-background-color: green;
+}
+#mainPane {
+    -fx-background-color: #f4f6fb;
+    -fx-border-color: #d1d9e6;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-padding: 24px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 16, 0.2, 0, 4);
+}
+
+.label.title {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2d3a4b;
+}
+
+.button {
+    -fx-background-color: linear-gradient(to right, #4e9af1, #6ed0f6);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(78,154,241,0.15), 6, 0.2, 0, 2);
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to right, #6ed0f6, #4e9af1);
+}
+
+.text-field, .combo-box {
+    -fx-background-color: #fff;
+    -fx-border-color: #bfc9d9;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 6px 10px;
+}
+
+.table-view {
+    -fx-background-color: #fff;
+    -fx-border-color: #e3e7ef;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #eaf1fb;
+}
+
+.table-view .table-row-cell:filled:selected {
+    -fx-background-color: #d0e7ff;
+}

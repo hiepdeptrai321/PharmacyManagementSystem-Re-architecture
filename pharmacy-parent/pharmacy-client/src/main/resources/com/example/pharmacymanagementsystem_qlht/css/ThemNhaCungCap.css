@@ -1,0 +1,18 @@
+#btnThem {
+    -fx-background-color: green;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+#btnHuy {
+    -fx-background-color: #FF0000;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+
+#txtTrang_Bold{
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+#imgReset{
+fx-background-color: white;}

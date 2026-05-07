@@ -25,7 +25,7 @@ public class LoginResponse implements Serializable {
     }
 
     public static LoginResponse success(String sessionId, UserDTO user) {
-        return new LoginResponse(true, "Login successful.", sessionId, user);
+        return new LoginResponse(true, "Dang nhap thanh cong.", sessionId, user);
     }
 
     public static LoginResponse failure(String message) {

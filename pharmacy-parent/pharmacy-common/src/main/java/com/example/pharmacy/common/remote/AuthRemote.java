@@ -7,7 +7,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface AuthRemote extends Remote {
-    String BINDING_NAME = "AuthRemote";
+    String BINDING_NAME = "AuthRemoteService";
 
     LoginResponse login(LoginRequest request) throws RemoteException;
 }
