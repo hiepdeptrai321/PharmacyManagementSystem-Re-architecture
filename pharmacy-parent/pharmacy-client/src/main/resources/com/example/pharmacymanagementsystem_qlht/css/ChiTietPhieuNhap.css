@@ -1,0 +1,15 @@
+#paneTitle{
+    -fx-border-color: transparent transparent #ccc transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+#buttonThoat{
+    -fx-background-color: red;
+    -fx-background-radius: 5px;
+}
+#buttonThoat:pressed{
+    -fx-background-color: #cc0000;
+}
+#labelTrang{
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}

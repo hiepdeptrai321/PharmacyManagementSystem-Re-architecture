@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.sql.Date;
+
 @Entity
 @Table(name = "NhanVien")
 public class NhanVienEntity {
@@ -12,20 +14,41 @@ public class NhanVienEntity {
     @Column(name = "MaNV", nullable = false, length = 10)
     private String maNV;
 
-    @Column(name = "TaiKhoan", nullable = false, length = 50)
-    private String taiKhoan;
-
-    @Column(name = "MatKhau", nullable = false, length = 50)
-    private String matKhau;
-
     @Column(name = "TenNV", nullable = false, length = 50)
     private String tenNV;
+
+    @Column(name = "SDT", nullable = false, length = 15)
+    private String sdt;
+
+    @Column(name = "Email", length = 100)
+    private String email;
+
+    @Column(name = "NgaySinh", nullable = false)
+    private Date ngaySinh;
+
+    @Column(name = "GioiTinh", nullable = false)
+    private boolean gioiTinh;
+
+    @Column(name = "DiaChi", length = 255)
+    private String diaChi;
 
     @Column(name = "VaiTro", nullable = false, length = 20)
     private String vaiTro;
 
     @Column(name = "TrangThai", nullable = false)
     private boolean trangThai;
+
+    @Column(name = "TaiKhoan", nullable = false, length = 50)
+    private String taiKhoan;
+
+    @Column(name = "MatKhau", nullable = false, length = 255)
+    private String matKhau;
+
+    @Column(name = "NgayVaoLam", nullable = false)
+    private Date ngayVaoLam;
+
+    @Column(name = "NgayKetThuc")
+    private Date ngayKetThuc;
 
     @Column(name = "TrangThaiXoa", nullable = false)
     private boolean trangThaiXoa;
@@ -36,6 +59,70 @@ public class NhanVienEntity {
 
     public void setMaNV(String maNV) {
         this.maNV = maNV;
+    }
+
+    public String getTenNV() {
+        return tenNV;
+    }
+
+    public void setTenNV(String tenNV) {
+        this.tenNV = tenNV;
+    }
+
+    public String getSdt() {
+        return sdt;
+    }
+
+    public void setSdt(String sdt) {
+        this.sdt = sdt;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getNgaySinh() {
+        return ngaySinh;
+    }
+
+    public void setNgaySinh(Date ngaySinh) {
+        this.ngaySinh = ngaySinh;
+    }
+
+    public boolean isGioiTinh() {
+        return gioiTinh;
+    }
+
+    public void setGioiTinh(boolean gioiTinh) {
+        this.gioiTinh = gioiTinh;
+    }
+
+    public String getDiaChi() {
+        return diaChi;
+    }
+
+    public void setDiaChi(String diaChi) {
+        this.diaChi = diaChi;
+    }
+
+    public String getVaiTro() {
+        return vaiTro;
+    }
+
+    public void setVaiTro(String vaiTro) {
+        this.vaiTro = vaiTro;
+    }
+
+    public boolean isTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(boolean trangThai) {
+        this.trangThai = trangThai;
     }
 
     public String getTaiKhoan() {
@@ -54,28 +141,20 @@ public class NhanVienEntity {
         this.matKhau = matKhau;
     }
 
-    public String getTenNV() {
-        return tenNV;
+    public Date getNgayVaoLam() {
+        return ngayVaoLam;
     }
 
-    public void setTenNV(String tenNV) {
-        this.tenNV = tenNV;
+    public void setNgayVaoLam(Date ngayVaoLam) {
+        this.ngayVaoLam = ngayVaoLam;
     }
 
-    public String getVaiTro() {
-        return vaiTro;
+    public Date getNgayKetThuc() {
+        return ngayKetThuc;
     }
 
-    public void setVaiTro(String vaiTro) {
-        this.vaiTro = vaiTro;
-    }
-
-    public boolean isTrangThai() {
-        return trangThai;
-    }
-
-    public void setTrangThai(boolean trangThai) {
-        this.trangThai = trangThai;
+    public void setNgayKetThuc(Date ngayKetThuc) {
+        this.ngayKetThuc = ngayKetThuc;
     }
 
     public boolean isTrangThaiXoa() {

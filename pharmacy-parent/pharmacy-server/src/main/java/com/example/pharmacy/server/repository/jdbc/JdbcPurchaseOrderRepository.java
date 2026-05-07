@@ -4,10 +4,18 @@ import com.example.pharmacy.common.request.PhieuNhapItemRequest;
 import com.example.pharmacy.common.request.PhieuNhapRequest;
 import com.example.pharmacy.server.config.JdbcConnectionProvider;
 import com.example.pharmacy.server.repository.PurchaseOrderRepository;
+import com.example.pharmacymanagementsystem_qlht.model.ChiTietPhieuNhap;
+import com.example.pharmacymanagementsystem_qlht.model.NhaCungCap;
+import com.example.pharmacymanagementsystem_qlht.model.NhanVien;
+import com.example.pharmacymanagementsystem_qlht.model.PhieuNhap;
+import com.example.pharmacymanagementsystem_qlht.model.Thuoc_SanPham;
 
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implements PurchaseOrderRepository {
     private static final String INSERT_HEADER_SQL = """
@@ -28,6 +36,62 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
             UPDATE ChiTietDonViTinh
             SET GiaNhap = ?, GiaBan = COALESCE(?, GiaBan)
             WHERE MaThuoc = ? AND MaDVT = ?
+            """;
+    private static final String SELECT_ALL_SQL = """
+            SELECT pn.MaPN,
+                   pn.NgayNhap,
+                   pn.TrangThai,
+                   pn.GhiChu,
+                   ncc.MaNCC,
+                   ncc.TenNCC,
+                   nv.MaNV,
+                   nv.TenNV,
+                   COALESCE(SUM(
+                       (ct.SoLuong * ct.GiaNhap)
+                       - ((ct.SoLuong * ct.GiaNhap) * ct.ChietKhau / 100)
+                       + (((ct.SoLuong * ct.GiaNhap) - ((ct.SoLuong * ct.GiaNhap) * ct.ChietKhau / 100)) * ct.Thue / 100)
+                   ), 0) AS TongTien
+            FROM PhieuNhap pn
+            JOIN NhaCungCap ncc ON ncc.MaNCC = pn.MaNCC
+            JOIN NhanVien nv ON nv.MaNV = pn.MaNV
+            LEFT JOIN ChiTietPhieuNhap ct ON ct.MaPN = pn.MaPN
+            GROUP BY pn.MaPN, pn.NgayNhap, pn.TrangThai, pn.GhiChu, ncc.MaNCC, ncc.TenNCC, nv.MaNV, nv.TenNV
+            ORDER BY pn.NgayNhap DESC, pn.MaPN DESC
+            """;
+    private static final String SELECT_BY_ID_SQL = """
+            SELECT pn.MaPN,
+                   pn.NgayNhap,
+                   pn.TrangThai,
+                   pn.GhiChu,
+                   ncc.MaNCC,
+                   ncc.TenNCC,
+                   nv.MaNV,
+                   nv.TenNV,
+                   COALESCE(SUM(
+                       (ct.SoLuong * ct.GiaNhap)
+                       - ((ct.SoLuong * ct.GiaNhap) * ct.ChietKhau / 100)
+                       + (((ct.SoLuong * ct.GiaNhap) - ((ct.SoLuong * ct.GiaNhap) * ct.ChietKhau / 100)) * ct.Thue / 100)
+                   ), 0) AS TongTien
+            FROM PhieuNhap pn
+            JOIN NhaCungCap ncc ON ncc.MaNCC = pn.MaNCC
+            JOIN NhanVien nv ON nv.MaNV = pn.MaNV
+            LEFT JOIN ChiTietPhieuNhap ct ON ct.MaPN = pn.MaPN
+            WHERE pn.MaPN = ?
+            GROUP BY pn.MaPN, pn.NgayNhap, pn.TrangThai, pn.GhiChu, ncc.MaNCC, ncc.TenNCC, nv.MaNV, nv.TenNV
+            """;
+    private static final String SELECT_DETAILS_SQL = """
+            SELECT ct.MaPN,
+                   ct.MaThuoc,
+                   ct.MaLH,
+                   ct.SoLuong,
+                   ct.GiaNhap,
+                   ct.ChietKhau,
+                   ct.Thue,
+                   ts.TenThuoc
+            FROM ChiTietPhieuNhap ct
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = ct.MaThuoc
+            WHERE ct.MaPN = ?
+            ORDER BY ct.MaLH ASC, ct.MaThuoc ASC
             """;
 
     public JdbcPurchaseOrderRepository(JdbcConnectionProvider connectionProvider) {
@@ -118,5 +182,108 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
         } finally {
             closeConnection(connection);
         }
+    }
+
+    @Override
+    public List<PhieuNhap> findAll() {
+        Connection connection = null;
+        List<PhieuNhap> list = new ArrayList<>();
+        try {
+            connection = getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL);
+                 ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    list.add(mapHeader(resultSet));
+                }
+            }
+            return list;
+        } catch (Exception exception) {
+            throw new IllegalStateException("Could not load purchase orders.", exception);
+        } finally {
+            closeConnection(connection);
+        }
+    }
+
+    @Override
+    public PhieuNhap findById(String maPhieuNhap) {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID_SQL)) {
+                statement.setString(1, maPhieuNhap);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return mapHeader(resultSet);
+                    }
+                    return null;
+                }
+            }
+        } catch (Exception exception) {
+            throw new IllegalStateException("Could not load purchase order " + maPhieuNhap, exception);
+        } finally {
+            closeConnection(connection);
+        }
+    }
+
+    @Override
+    public List<ChiTietPhieuNhap> findDetailsByMaPhieuNhap(String maPhieuNhap) {
+        Connection connection = null;
+        List<ChiTietPhieuNhap> list = new ArrayList<>();
+        try {
+            connection = getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(SELECT_DETAILS_SQL)) {
+                statement.setString(1, maPhieuNhap);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        list.add(mapDetail(resultSet));
+                    }
+                }
+            }
+            return list;
+        } catch (Exception exception) {
+            throw new IllegalStateException("Could not load purchase order details for " + maPhieuNhap, exception);
+        } finally {
+            closeConnection(connection);
+        }
+    }
+
+    private PhieuNhap mapHeader(ResultSet resultSet) throws Exception {
+        PhieuNhap phieuNhap = new PhieuNhap();
+        phieuNhap.setMaPN(resultSet.getString("MaPN"));
+        Date ngayNhap = resultSet.getDate("NgayNhap");
+        phieuNhap.setNgayNhap(ngayNhap == null ? null : ngayNhap.toLocalDate());
+        phieuNhap.setTrangThai(resultSet.getBoolean("TrangThai"));
+        phieuNhap.setGhiChu(resultSet.getString("GhiChu"));
+        phieuNhap.setTongTien(resultSet.getDouble("TongTien"));
+
+        NhaCungCap nhaCungCap = new NhaCungCap();
+        nhaCungCap.setMaNCC(resultSet.getString("MaNCC"));
+        nhaCungCap.setTenNCC(resultSet.getString("TenNCC"));
+        phieuNhap.setNhaCungCap(nhaCungCap);
+
+        NhanVien nhanVien = new NhanVien();
+        nhanVien.setMaNV(resultSet.getString("MaNV"));
+        nhanVien.setTenNV(resultSet.getString("TenNV"));
+        phieuNhap.setNhanVien(nhanVien);
+        return phieuNhap;
+    }
+
+    private ChiTietPhieuNhap mapDetail(ResultSet resultSet) throws Exception {
+        ChiTietPhieuNhap detail = new ChiTietPhieuNhap();
+        PhieuNhap phieuNhap = new PhieuNhap();
+        phieuNhap.setMaPN(resultSet.getString("MaPN"));
+        detail.setPhieuNhap(phieuNhap);
+
+        Thuoc_SanPham thuoc = new Thuoc_SanPham();
+        thuoc.setMaThuoc(resultSet.getString("MaThuoc"));
+        thuoc.setTenThuoc(resultSet.getString("TenThuoc"));
+        detail.setThuoc(thuoc);
+
+        detail.setMaLH(resultSet.getString("MaLH"));
+        detail.setSoLuong(resultSet.getInt("SoLuong"));
+        detail.setGiaNhap(resultSet.getDouble("GiaNhap"));
+        detail.setChietKhau(resultSet.getFloat("ChietKhau"));
+        detail.setThue(resultSet.getFloat("Thue"));
+        return detail;
     }
 }

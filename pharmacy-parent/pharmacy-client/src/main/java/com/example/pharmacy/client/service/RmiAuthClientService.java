@@ -20,18 +20,30 @@ public class RmiAuthClientService implements AuthClientService {
     }
 
     @Override
-    public LoginResponse login(String username, String password) throws RemoteException {
+    public LoginResponse login(String username, String password) {
+        String normalizedUsername = username == null ? "" : username.trim();
+        String normalizedPassword = password == null ? "" : password;
+
+        if (normalizedUsername.isEmpty() || normalizedPassword.isEmpty()) {
+            sessionContext.clear();
+            return LoginResponse.failure("Vui long nhap day du tai khoan va mat khau.");
+        }
+
         try {
             AuthRemote authRemote = clientProvider.getAuthRemote();
-            LoginResponse response = authRemote.login(new LoginRequest(username, password));
+            LoginResponse response = authRemote.login(new LoginRequest(normalizedUsername, normalizedPassword));
             if (response != null && response.isSuccess()) {
                 sessionContext.establish(response);
             } else {
                 sessionContext.clear();
             }
-            return response;
+            return response == null ? LoginResponse.failure("Khong nhan duoc phan hoi hop le tu server.") : response;
         } catch (NotBoundException exception) {
-            throw new RemoteException("AuthRemote is not bound in the RMI registry.", exception);
+            sessionContext.clear();
+            return LoginResponse.failure("Server RMI chua bind AuthRemoteService.");
+        } catch (RemoteException exception) {
+            sessionContext.clear();
+            return LoginResponse.failure("Khong the ket noi den server. Vui long kiem tra RMI server va MariaDB.");
         }
     }
 }

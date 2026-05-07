@@ -286,7 +286,13 @@ Khong tao `alter_step_8_constraints_mariadb.sql` trong dot nay vi:
 - Dot nay uu tien bang `audit_log` de luu `entity_id` ro rang va tranh tiep tuc phu thuoc generated code `MaHDong`.
 - Man hinh cu doc `HoatDong` chua duoc doi sang `audit_log`.
 
-6. Doanh thu bao cao chua dat parity 100% voi proc SQL Server
+6. `HoatDong.MaHDong` khong nen de DB generated
+
+- Khi chay schema MariaDB that, generated column dua tren `ID AUTO_INCREMENT` gay loi `SQL Error 1901`.
+- Vi vay `MaHDong` nen la cot `VARCHAR` thuong.
+- TODO khi migrate nghiep vu `HoatDong`: insert truoc de lay `ID`, sau do sinh `MaHDong` trong service layer theo format display code roi update lai.
+
+7. Doanh thu bao cao chua dat parity 100% voi proc SQL Server
 
 - Query range hien tai tinh doanh thu tu hoa don va chi tiet hoa don.
 - Chua mo phong day du phan tru hang tra + VAT theo dung tat ca proc cu.

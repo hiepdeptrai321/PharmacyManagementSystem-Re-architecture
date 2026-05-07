@@ -29,28 +29,27 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LoginResponse login(LoginRequest request) {
         if (request == null) {
-            return LoginResponse.failure("Login request must not be null.");
+            return LoginResponse.failure("Yeu cau dang nhap khong hop le.");
         }
         if (request.getUsername() == null || request.getUsername().isBlank()) {
-            return LoginResponse.failure("Username is required.");
+            return LoginResponse.failure("Vui long nhap tai khoan.");
         }
         if (request.getPassword() == null || request.getPassword().isBlank()) {
-            return LoginResponse.failure("Password is required.");
+            return LoginResponse.failure("Vui long nhap mat khau.");
         }
 
         Optional<NhanVienEntity> entityOptional = nhanVienRepository.findByUsername(request.getUsername().trim());
         if (entityOptional.isEmpty()) {
-            return LoginResponse.failure("Invalid username or password.");
+            return LoginResponse.failure("Tai khoan hoac mat khau khong dung.");
         }
 
         NhanVienEntity entity = entityOptional.get();
         if (!entity.isTrangThai() || entity.isTrangThaiXoa()) {
-            return LoginResponse.failure("User account is inactive.");
+            return LoginResponse.failure("Tai khoan da bi khoa hoac ngung hoat dong.");
         }
 
-        // Placeholder only. Replace with password hashing and verification later.
         if (!Objects.equals(entity.getMatKhau(), request.getPassword())) {
-            return LoginResponse.failure("Invalid username or password.");
+            return LoginResponse.failure("Tai khoan hoac mat khau khong dung.");
         }
 
         UserDTO user = new UserDTO(
@@ -61,19 +60,23 @@ public class AuthServiceImpl implements AuthService {
                 entity.isTrangThai()
         );
         if (auditService != null) {
-            auditService.logAction(
-                    new UserContext(
-                            entity.getMaNV(),
-                            entity.getTaiKhoan(),
-                            entity.getMaNV(),
-                            entity.getTenNV(),
-                            UserRole.fromLegacyValue(entity.getVaiTro())
-                    ),
-                    AuditAction.LOGIN,
-                    "NhanVien",
-                    entity.getMaNV(),
-                    "Dang nhap thanh cong."
-            );
+            try {
+                auditService.logAction(
+                        new UserContext(
+                                entity.getMaNV(),
+                                entity.getTaiKhoan(),
+                                entity.getMaNV(),
+                                entity.getTenNV(),
+                                UserRole.fromLegacyValue(entity.getVaiTro())
+                        ),
+                        AuditAction.LOGIN,
+                        "NhanVien",
+                        entity.getMaNV(),
+                        "Dang nhap thanh cong."
+                );
+            } catch (RuntimeException exception) {
+                System.err.println("Audit logging failed during login: " + exception.getMessage());
+            }
         }
         return LoginResponse.success(UUID.randomUUID().toString(), user);
     }

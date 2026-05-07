@@ -2,6 +2,10 @@ package com.example.pharmacy.server.repository;
 
 import com.example.pharmacy.common.request.PhieuNhapItemRequest;
 import com.example.pharmacy.common.request.PhieuNhapRequest;
+import com.example.pharmacymanagementsystem_qlht.model.ChiTietPhieuNhap;
+import com.example.pharmacymanagementsystem_qlht.model.PhieuNhap;
+
+import java.util.List;
 
 public interface PurchaseOrderRepository {
     void insertHeader(String maPhieuNhap, String employeeId, PhieuNhapRequest request);
@@ -11,4 +15,10 @@ public interface PurchaseOrderRepository {
     void insertLot(String maPhieuNhap, String maLo, PhieuNhapItemRequest item);
 
     void updatePricing(String maThuoc, String maDvt, PhieuNhapItemRequest item);
+
+    List<PhieuNhap> findAll();
+
+    PhieuNhap findById(String maPhieuNhap);
+
+    List<ChiTietPhieuNhap> findDetailsByMaPhieuNhap(String maPhieuNhap);
 }

@@ -1,0 +1,20 @@
+#lbtitle{
+    -fx-border-color: transparent transparent #ccc transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+.tf{
+    -fx-border-color: #ccc;
+    -fx-border-radius: 4px;
+    -fx-border-width: 1px;
+    -fx-margin: 6px 8px;
+    -fx-font-size: 14px;
+}
+#btnThem{
+    -fx-background-color: #027816;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-border-radius: 4px;
+}
+#btnXoa{
+    -fx-background-color: red;
+}

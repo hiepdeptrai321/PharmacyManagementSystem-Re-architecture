@@ -14,4 +14,5 @@
     <artifactId>pharmacy-common</artifactId>
     <packaging>jar</packaging>
     <name>pharmacy-common</name>
+
 </project>

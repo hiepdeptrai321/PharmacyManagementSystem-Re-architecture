@@ -97,9 +97,12 @@ Ngoai 27 thanh phan tren, script SQL con co 2 logic nen ghi nho:
 
 - Dang dung cong thuc `'HD' + RIGHT('0000' + CAST(ID AS VARCHAR(4)), 4)`
 - Prefix `HD` de xuat doi lai vi dang de nham voi `HoaDon.MaHD`
-- Neu giu bang `HoatDong`, co the:
-  - giu generated column o DB nhung doi prefix, hoac
-  - bo display code, chi dung `ID`
+- MariaDB thuc te khong cho generated column tham chieu truc tiep cot `AUTO_INCREMENT` theo cach nay
+- Neu giu bang `HoatDong`, nen:
+  - bo generated column o DB
+  - insert ban ghi truoc de lay `ID`
+  - sinh `MaHDong` o service layer va update lai
+  - hoac bo display code, chi dung `ID`
 
 ## Phan loai tong the theo chien luoc thay the
 
@@ -180,7 +183,7 @@ Chien luoc de xuat theo nhom ma:
 | Ma master data co phat sinh tu UI | `NV`, `KH`, `NCC`, `TS`, `KM` | Sinh bang `code_sequence` trong service |
 | Ma theo lo | `LH00001` | Sinh bang `code_sequence`, nhung can review prefix vi dang trung voi `LoaiHang` |
 | Ma danh muc co tinh on dinh | `LH01` (LoaiHang), `NDL001`, `DVT01`, `KE001` | Co the seed/manual, khong nhat thiet sequence runtime |
-| Ma log hoat dong | `MaHDong` | Neu giu, doi prefix sang `LOG`/`ACT`; co the generated column hoac service-generated |
+| Ma log hoat dong | `MaHDong` | Neu giu, doi prefix sang `LOG`/`ACT`; uu tien service-generated vi MariaDB khong hop voi generated column dua tren `AUTO_INCREMENT` |
 
 ### 3. Cap nhat ton kho / giu hang / giao dich
 
@@ -292,6 +295,7 @@ Nen giu:
 - Default timestamps
 - Index
 - Co the giu generated column don gian neu khong mang nghiep vu kho debug
+  - Ngoai le: `HoatDong.MaHDong` khong nen dung generated column vi MariaDB khong hop voi cong thuc dua tren `AUTO_INCREMENT`
 - Co the giu `CHECK` don gian khi phu hop
 
 Khong nen giu trong DB duoi dang trigger/procedure nghiep vu:
@@ -440,6 +444,7 @@ De xuat giu:
 - Default timestamps
 - Index
 - Co the giu generated column don gian neu da review ky y nghia
+  - Ngoai le: `HoatDong.MaHDong` nen sinh o service layer
 - Check constraint don gian khi can
 
 Khong de xuat giu duoi dang trigger/procedure:
@@ -476,4 +481,3 @@ Khong de xuat giu duoi dang trigger/procedure:
 - [x] Da de xuat chien luoc sinh ma an toan
 - [x] Da de xuat transaction service cho ton kho / hoa don / phieu nhap / dat hang
 - [x] Da ghi cac diem can review thu cong
-

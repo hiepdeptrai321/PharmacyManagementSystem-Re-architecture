@@ -1,0 +1,112 @@
+#pnlGrid{
+    -fx-background-color: #efefef;
+}
+#btnExcel{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-text-fill: black;
+}
+#btnExcel:pressed{
+    -fx-background-color: #ececec;
+}
+#lbtitle{
+    -fx-border-color: transparent transparent #ccc transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-background-color: #efefef;
+}
+.lblChinh{
+    -fx-font-size: 13px;
+    -fx-text-fill: black;
+}
+.btnThem{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+}
+.btnThem:pressed{
+    -fx-background-color: #ececec;
+}
+.nenTrangComponent{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-border-width: 0;
+    -fx-box-shadow: none;
+    -fx-effect: none;
+}
+
+#listViewTimKiemThuoc{
+    -fx-background-color: #ffffff;
+    -fx-border-width: 1px 0 0 0;
+    -fx-box-shadow: none;
+    -fx-effect: none;
+    -fx-border-color: transparent;
+}
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-effect: null;
+}
+.text-area .content {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-effect: null;
+}
+#paneTienHang{
+    -fx-background-color: #eeeeee;
+    -fx-background-radius: 5px;
+}
+#btnXacNhan{
+    -fx-background-color: green;
+    -fx-background-radius: 5px;
+}
+#btnXacNhan:pressed{
+    -fx-background-color: #006600;
+}
+#btnHuy{
+    -fx-background-color: #ff0000;
+    -fx-background-radius: 5px;
+}
+#btnHuy:pressed{
+    -fx-background-color: #d30000;
+}
+#lblTrang{
+    -fx-text-fill: white;
+}
+
+.combo-box .list-cell:odd {
+    -fx-background-color: #f9f9f9; /* xám nhạt */
+}
+
+/* Dòng lẻ */
+.combo-box .list-cell:even {
+    -fx-background-color: #ffffff; /* trắng */
+}
+.combo-box .list-cell {
+    -fx-padding: 6 10 6 10;
+    -fx-font-size: 12px;          /* 👈 Cỡ chữ trong danh sách */
+    -fx-text-fill: #222;          /* Màu chữ */
+}
+#tblSoLo{
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: transparent;
+}
+#btnExcel{
+    -fx-background-color: transparent;
+        -fx-border-color: #027816; /* Màu xanh lá của Excel */
+        -fx-border-width: 1.5;
+        -fx-border-radius: 5;
+
+
+
+
+        -fx-padding: 6 12 6 12;
+        -fx-content-display: LEFT;
+        -fx-graphic-text-gap: 8;
+}
+#lblExcel{
+    -fx-text-fill: #217346; /* Màu xanh lá của Excel */
+}
+
+

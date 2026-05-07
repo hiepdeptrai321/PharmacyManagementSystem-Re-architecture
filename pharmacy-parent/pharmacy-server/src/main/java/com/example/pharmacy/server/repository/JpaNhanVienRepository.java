@@ -1,25 +1,40 @@
 package com.example.pharmacy.server.repository;
 
+import com.example.pharmacy.server.config.JpaUtil;
 import com.example.pharmacy.server.entity.NhanVienEntity;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.util.Optional;
 
 public class JpaNhanVienRepository implements NhanVienRepository {
-    private final EntityManager entityManager;
+    private final EntityManagerFactory entityManagerFactory;
 
-    public JpaNhanVienRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public JpaNhanVienRepository() {
+        this(JpaUtil.getEntityManagerFactory());
+    }
+
+    public JpaNhanVienRepository(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     @Override
     public Optional<NhanVienEntity> findByUsername(String username) {
-        throw new UnsupportedOperationException(
-                "JPA repository wiring will be implemented in step 2. Inject an EntityManager and replace the in-memory repository."
-        );
-    }
-
-    public EntityManager getEntityManager() {
-        return entityManager;
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        try {
+            return entityManager.createQuery(
+                            """
+                            SELECT nv
+                            FROM NhanVienEntity nv
+                            WHERE nv.taiKhoan = :username
+                            """,
+                            NhanVienEntity.class
+                    )
+                    .setParameter("username", username)
+                    .getResultStream()
+                    .findFirst();
+        } finally {
+            entityManager.close();
+        }
     }
 }
