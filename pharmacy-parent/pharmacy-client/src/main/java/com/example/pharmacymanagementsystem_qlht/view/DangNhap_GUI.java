@@ -1,17 +1,11 @@
 package com.example.pharmacymanagementsystem_qlht.view;
 
 import com.example.pharmacymanagementsystem_qlht.controller.DangNhap_Ctrl;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.util.Objects;
@@ -19,50 +13,85 @@ import java.util.Objects;
 public class DangNhap_GUI {
 
     public void showWithController(Stage stage, DangNhap_Ctrl ctrl) {
-        VBox root = new VBox(12);
-        root.setAlignment(Pos.CENTER);
-        root.setPadding(new Insets(24));
+        AnchorPane root = new AnchorPane();
+        root.setPrefSize(488, 649);
+        root.setStyle("-fx-font-size: 14 px;");
 
-        ImageView logo = new ImageView(new Image(Objects.requireNonNull(
-                getClass().getResource("/com/example/pharmacymanagementsystem_qlht/img/LogoDung.png")
-        ).toExternalForm()));
-        logo.setFitWidth(140);
-        logo.setFitHeight(140);
-        logo.setPreserveRatio(true);
-
-        Label lbTaiKhoan = new Label("Tai khoan");
         TextField tfTaiKhoan = new TextField();
-        tfTaiKhoan.setPromptText("Nhap tai khoan");
-        tfTaiKhoan.setMaxWidth(280);
+        tfTaiKhoan.setId("tfTaiKhoan");
+        tfTaiKhoan.setLayoutX(93);
+        tfTaiKhoan.setLayoutY(263);
+        tfTaiKhoan.setPrefSize(318, 26);
 
-        Label lbMatKhau = new Label("Mat khau");
         PasswordField tfMatKhauAn = new PasswordField();
-        tfMatKhauAn.setPromptText("Nhap mat khau");
-        tfMatKhauAn.setMaxWidth(280);
+        tfMatKhauAn.setId("tfMatKhauAn");
+        tfMatKhauAn.setLayoutX(93);
+        tfMatKhauAn.setLayoutY(327);
+        tfMatKhauAn.setPrefSize(318, 26);
 
         TextField tfMatKhau = new TextField();
-        tfMatKhau.setPromptText("Nhap mat khau");
-        tfMatKhau.setMaxWidth(280);
+        tfMatKhau.setId("tfMatKhau");
+        tfMatKhau.setLayoutX(93);
+        tfMatKhau.setLayoutY(327);
+        tfMatKhau.setPrefSize(318, 26);
         tfMatKhau.setVisible(false);
-        tfMatKhau.setManaged(false);
 
-        Button btnAnMK = new Button("Show");
-        Button btnDangNhap = new Button("Dang nhap");
-        CheckBox checkDangNhap = new CheckBox("Ghi nho dang nhap");
-        Label lbhotline = new Label("Hotline: 1800 6868");
+        Button btnAnMK = new Button("👁️‍🗨️");
+        btnAnMK.setId("btnAnMK");
+        btnAnMK.setLayoutX(373);
+        btnAnMK.setLayoutY(325);
+        btnAnMK.setPrefSize(38, 27);
+        btnAnMK.setMinWidth(37);
+        btnAnMK.setStyle("-fx-background-color: transparent;");
 
-        root.getChildren().addAll(
-                logo,
-                lbTaiKhoan,
-                tfTaiKhoan,
-                lbMatKhau,
-                tfMatKhauAn,
-                tfMatKhau,
-                btnAnMK,
-                checkDangNhap,
-                btnDangNhap,
-                lbhotline
+        CheckBox checkDangNhap = new CheckBox("Ghi nhớ đăng nhập");
+        checkDangNhap.setId("checkDangNhap");
+        checkDangNhap.setLayoutX(93);
+        checkDangNhap.setLayoutY(365);
+        checkDangNhap.setPrefSize(165, 18);
+
+        Button btnDangNhap = new Button("Đăng nhập");
+        btnDangNhap.setId("btnDangNhap");
+        btnDangNhap.setLayoutX(168);
+        btnDangNhap.setLayoutY(406);
+        btnDangNhap.setPrefSize(165, 38);
+        btnDangNhap.setStyle("-fx-text-fill: white; -fx-background-color: #007bff;");
+
+        Label lbTaiKhoan = new Label("Tài khoản");
+        lbTaiKhoan.setLayoutX(93);
+        lbTaiKhoan.setLayoutY(243);
+        lbTaiKhoan.setStyle("-fx-text-fill: #676767;");
+
+        Label lbMatKhau = new Label("Mật khẩu");
+        lbMatKhau.setLayoutX(93);
+        lbMatKhau.setLayoutY(307);
+        lbMatKhau.setStyle("-fx-text-fill: #676767;");
+
+        Label lbhotline = new Label("Hotline: 1800 6868 ");
+        lbhotline.setId("lbhotline");
+        lbhotline.setLayoutX(291);
+        lbhotline.setLayoutY(365);
+
+        Label lbFooter = new Label("Nhóm 2_DHKTPM19BTT_Khoa Công nghệ thông tin_Trường DHCN TPHCM");
+        lbFooter.setLayoutX(65);
+        lbFooter.setLayoutY(627);
+        lbFooter.setStyle("-fx-font-size: 11;");
+
+        ImageView logo = new ImageView(
+                new Image(Objects.requireNonNull(getClass().getResource("/com/example/pharmacymanagementsystem_qlht/img/LogoDung.png")).toExternalForm())
         );
+        logo.setFitWidth(177);
+        logo.setFitHeight(195);
+        logo.setLayoutX(160);
+        logo.setLayoutY(58);
+        logo.setPreserveRatio(true);
+        logo.setPickOnBounds(true);
+
+        root.getChildren().addAll(tfTaiKhoan, tfMatKhauAn, tfMatKhau, btnAnMK, checkDangNhap,
+                btnDangNhap, lbTaiKhoan, lbMatKhau, lbhotline, lbFooter, logo);
+
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/example/pharmacymanagementsystem_qlht/css/DangNhap.css")).toExternalForm());
 
         ctrl.tfTaiKhoan = tfTaiKhoan;
         ctrl.tfMatKhauAn = tfMatKhauAn;
@@ -71,15 +100,10 @@ public class DangNhap_GUI {
         ctrl.checkDangNhap = checkDangNhap;
         ctrl.btnDangNhap = btnDangNhap;
         ctrl.lbhotline = lbhotline;
+
         ctrl.initialize();
 
-        Scene scene = new Scene(root, 460, 560);
-        String css = "/com/example/pharmacymanagementsystem_qlht/css/DangNhap.css";
-        if (getClass().getResource(css) != null) {
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(css)).toExternalForm());
-        }
-
-        stage.setTitle("Dang nhap");
+        stage.setTitle("Đăng nhập");
         stage.setScene(scene);
     }
 }

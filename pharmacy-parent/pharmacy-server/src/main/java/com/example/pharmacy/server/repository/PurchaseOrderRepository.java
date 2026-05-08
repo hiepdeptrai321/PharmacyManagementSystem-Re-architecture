@@ -21,4 +21,6 @@ public interface PurchaseOrderRepository {
     PhieuNhap findById(String maPhieuNhap);
 
     List<ChiTietPhieuNhap> findDetailsByMaPhieuNhap(String maPhieuNhap);
+
+    long findMaxLotNumber();
 }

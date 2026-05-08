@@ -247,6 +247,24 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
         }
     }
 
+    @Override
+    public long findMaxLotNumber() {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(
+                    "SELECT COALESCE(MAX(CAST(SUBSTRING(MaLH, 3) AS UNSIGNED)), 0) FROM Thuoc_SP_TheoLo WHERE MaLH REGEXP '^LH[0-9]+$'")) {
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    return resultSet.next() ? resultSet.getLong(1) : 0;
+                }
+            }
+        } catch (Exception exception) {
+            throw new IllegalStateException("Could not find max lot number.", exception);
+        } finally {
+            closeConnection(connection);
+        }
+    }
+
     private PhieuNhap mapHeader(ResultSet resultSet) throws Exception {
         PhieuNhap phieuNhap = new PhieuNhap();
         phieuNhap.setMaPN(resultSet.getString("MaPN"));

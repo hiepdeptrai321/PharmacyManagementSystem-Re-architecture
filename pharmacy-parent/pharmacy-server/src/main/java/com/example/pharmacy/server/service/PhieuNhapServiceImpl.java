@@ -14,12 +14,14 @@ import com.example.pharmacymanagementsystem_qlht.model.PhieuNhap;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PhieuNhapServiceImpl implements PhieuNhapService {
     private final TransactionManager transactionManager;
     private final PurchaseOrderRepository purchaseOrderRepository;
     private final CodeGenerationService codeGenerationService;
     private final AuditService auditService;
+    private final AtomicBoolean lotSequenceSynced = new AtomicBoolean(false);
 
     public PhieuNhapServiceImpl(
             TransactionManager transactionManager,
@@ -41,6 +43,7 @@ public class PhieuNhapServiceImpl implements PhieuNhapService {
     @Override
     public String createPurchaseOrder(PhieuNhapRequest request, UserContext actor) {
         validatePurchaseOrderRequest(request, actor);
+        syncLotSequenceIfNeeded();
         return transactionManager.execute(() -> {
             String maPhieuNhap = isBlank(request.getMaPhieuNhap())
                     ? codeGenerationService.nextCode(BusinessCodeType.PHIEU_NHAP)
@@ -116,6 +119,20 @@ public class PhieuNhapServiceImpl implements PhieuNhapService {
             }
             if (item.getNsx() != null && item.getHsd() != null && item.getHsd().isBefore(item.getNsx())) {
                 throw new BusinessException("Han su dung khong duoc som hon ngay san xuat.");
+            }
+        }
+    }
+
+    private void syncLotSequenceIfNeeded() {
+        if (lotSequenceSynced.compareAndSet(false, true)) {
+            try {
+                long maxLot = purchaseOrderRepository.findMaxLotNumber();
+                if (maxLot > 0) {
+                    codeGenerationService.syncIfBehind(BusinessCodeType.LO_THUOC, maxLot);
+                }
+            } catch (Exception e) {
+                lotSequenceSynced.set(false);
+                throw e;
             }
         }
     }
