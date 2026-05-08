@@ -1,16 +1,9 @@
 package com.example.pharmacy.server.service;
 
 import com.example.pharmacy.common.enums.BusinessCodeType;
-import com.example.pharmacymanagementsystem_qlht.dao.ChiTietDonViTinh_Dao;
-import com.example.pharmacymanagementsystem_qlht.dao.ChiTietHoatChat_Dao;
-import com.example.pharmacymanagementsystem_qlht.dao.DonViTinh_Dao;
-import com.example.pharmacymanagementsystem_qlht.dao.HoatChat_Dao;
-import com.example.pharmacymanagementsystem_qlht.dao.LoaiHang_Dao;
-import com.example.pharmacymanagementsystem_qlht.dao.Thuoc_SP_TheoLo_Dao;
-import com.example.pharmacymanagementsystem_qlht.dao.Thuoc_SanPham_Dao;
-import com.example.pharmacymanagementsystem_qlht.model.ChiTietDonViTinh;
+import com.example.pharmacy.server.repository.MedicineCatalogRepository;
+import com.example.pharmacy.server.transaction.TransactionManager;
 import com.example.pharmacymanagementsystem_qlht.model.ChiTietHoatChat;
-import com.example.pharmacymanagementsystem_qlht.model.DonViTinh;
 import com.example.pharmacymanagementsystem_qlht.model.HoatChat;
 import com.example.pharmacymanagementsystem_qlht.model.LoaiHang;
 import com.example.pharmacymanagementsystem_qlht.model.ThuocTonKho;
@@ -24,22 +17,23 @@ import java.util.Objects;
 import java.util.Set;
 
 public class ThuocServiceImpl implements ThuocService {
-    private final Thuoc_SanPham_Dao thuocDao = new Thuoc_SanPham_Dao();
-    private final ChiTietHoatChat_Dao chiTietHoatChatDao = new ChiTietHoatChat_Dao();
-    private final HoatChat_Dao hoatChatDao = new HoatChat_Dao();
-    private final LoaiHang_Dao loaiHangDao = new LoaiHang_Dao();
-    private final DonViTinh_Dao donViTinhDao = new DonViTinh_Dao();
-    private final ChiTietDonViTinh_Dao chiTietDonViTinhDao = new ChiTietDonViTinh_Dao();
-    private final Thuoc_SP_TheoLo_Dao thuocTheoLoDao = new Thuoc_SP_TheoLo_Dao();
+    private final TransactionManager transactionManager;
+    private final MedicineCatalogRepository medicineCatalogRepository;
     private final CodeGenerationService codeGenerationService;
 
-    public ThuocServiceImpl(CodeGenerationService codeGenerationService) {
+    public ThuocServiceImpl(
+            TransactionManager transactionManager,
+            MedicineCatalogRepository medicineCatalogRepository,
+            CodeGenerationService codeGenerationService
+    ) {
+        this.transactionManager = Objects.requireNonNull(transactionManager, "transactionManager must not be null");
+        this.medicineCatalogRepository = Objects.requireNonNull(medicineCatalogRepository, "medicineCatalogRepository must not be null");
         this.codeGenerationService = Objects.requireNonNull(codeGenerationService, "codeGenerationService must not be null");
     }
 
     @Override
     public List<Thuoc_SanPham> findAll() {
-        return thuocDao.selectAll();
+        return medicineCatalogRepository.findAllMedicines();
     }
 
     @Override
@@ -49,22 +43,22 @@ public class ThuocServiceImpl implements ThuocService {
 
     @Override
     public List<LoaiHang> findAllLoaiHang() {
-        return loaiHangDao.selectAll();
+        return medicineCatalogRepository.findAllLoaiHang();
     }
 
     @Override
     public List<String> findAllLoaiHangNames() {
-        return thuocDao.getAllLoaiHang();
+        return medicineCatalogRepository.findAllLoaiHangNames();
     }
 
     @Override
     public List<HoatChat> findAllHoatChat() {
-        return hoatChatDao.selectAll();
+        return medicineCatalogRepository.findAllHoatChat();
     }
 
     @Override
     public List<ChiTietHoatChat> findChiTietHoatChatByMaThuoc(String maThuoc) {
-        return chiTietHoatChatDao.selectByMaThuoc(maThuoc);
+        return medicineCatalogRepository.findChiTietHoatChatByMaThuoc(maThuoc);
     }
 
     @Override
@@ -75,35 +69,30 @@ public class ThuocServiceImpl implements ThuocService {
         if (thuoc.getMaThuoc() == null || thuoc.getMaThuoc().isBlank()) {
             thuoc.setMaThuoc(generateNewMaThuoc());
         }
-        if (!thuocDao.insert(thuoc)) {
+        try {
+            return transactionManager.execute(() -> {
+                if (!medicineCatalogRepository.insertMedicine(thuoc)) {
+                    return false;
+                }
+
+                if (chiTietHoatChats != null) {
+                    for (ChiTietHoatChat chiTietHoatChat : chiTietHoatChats) {
+                        if (chiTietHoatChat == null || chiTietHoatChat.getHoatChat() == null) {
+                            continue;
+                        }
+                        chiTietHoatChat.setThuoc(thuoc);
+                        medicineCatalogRepository.insertChiTietHoatChat(thuoc.getMaThuoc(), chiTietHoatChat);
+                    }
+                }
+
+                if (maDonViTinhCoBan != null && !maDonViTinhCoBan.isBlank()) {
+                    medicineCatalogRepository.insertBaseUnit(thuoc.getMaThuoc(), maDonViTinhCoBan);
+                }
+                return true;
+            });
+        } catch (RuntimeException exception) {
             return false;
         }
-
-        if (chiTietHoatChats != null) {
-            for (ChiTietHoatChat chiTietHoatChat : chiTietHoatChats) {
-                if (chiTietHoatChat == null || chiTietHoatChat.getHoatChat() == null) {
-                    continue;
-                }
-                chiTietHoatChat.setThuoc(thuoc);
-                chiTietHoatChatDao.insert(chiTietHoatChat);
-            }
-        }
-
-        if (maDonViTinhCoBan != null && !maDonViTinhCoBan.isBlank()) {
-            DonViTinh donViTinh = donViTinhDao.selectById(maDonViTinhCoBan);
-            if (donViTinh != null) {
-                ChiTietDonViTinh chiTietDonViTinh = new ChiTietDonViTinh();
-                chiTietDonViTinh.setThuoc(thuoc);
-                chiTietDonViTinh.setDvt(donViTinh);
-                chiTietDonViTinh.setHeSoQuyDoi(1.0);
-                chiTietDonViTinh.setGiaNhap(0.0);
-                chiTietDonViTinh.setGiaBan(0.0);
-                chiTietDonViTinh.setDonViCoBan(true);
-                chiTietDonViTinhDao.insert(chiTietDonViTinh);
-            }
-        }
-
-        return true;
     }
 
     @Override
@@ -111,46 +100,53 @@ public class ThuocServiceImpl implements ThuocService {
         if (thuoc == null || thuoc.getMaThuoc() == null || thuoc.getMaThuoc().isBlank()) {
             return false;
         }
-        if (!thuocDao.update(thuoc)) {
+
+        try {
+            return transactionManager.execute(() -> {
+                if (!medicineCatalogRepository.updateMedicine(thuoc)) {
+                    return false;
+                }
+
+                List<ChiTietHoatChat> existing = medicineCatalogRepository.findChiTietHoatChatByMaThuoc(thuoc.getMaThuoc());
+                Set<String> currentKeys = new HashSet<>();
+
+                if (chiTietHoatChats != null) {
+                    for (ChiTietHoatChat chiTietHoatChat : chiTietHoatChats) {
+                        if (chiTietHoatChat == null || chiTietHoatChat.getHoatChat() == null) {
+                            continue;
+                        }
+                        chiTietHoatChat.setThuoc(thuoc);
+                        String maHoatChat = chiTietHoatChat.getHoatChat().getMaHoatChat();
+                        currentKeys.add(maHoatChat);
+
+                        ChiTietHoatChat existingChiTiet = existing.stream()
+                                .filter(item -> item.getHoatChat() != null && Objects.equals(item.getHoatChat().getMaHoatChat(), maHoatChat))
+                                .findFirst()
+                                .orElse(null);
+
+                        if (existingChiTiet == null) {
+                            medicineCatalogRepository.insertChiTietHoatChat(thuoc.getMaThuoc(), chiTietHoatChat);
+                        } else if (Float.compare(existingChiTiet.getHamLuong(), chiTietHoatChat.getHamLuong()) != 0) {
+                            medicineCatalogRepository.updateChiTietHoatChat(thuoc.getMaThuoc(), chiTietHoatChat);
+                        }
+                    }
+                }
+
+                for (ChiTietHoatChat oldChiTiet : existing) {
+                    if (oldChiTiet.getHoatChat() == null) {
+                        continue;
+                    }
+                    String maHoatChat = oldChiTiet.getHoatChat().getMaHoatChat();
+                    if (!currentKeys.contains(maHoatChat)) {
+                        medicineCatalogRepository.deleteChiTietHoatChat(thuoc.getMaThuoc(), maHoatChat);
+                    }
+                }
+
+                return true;
+            });
+        } catch (RuntimeException exception) {
             return false;
         }
-
-        List<ChiTietHoatChat> existing = chiTietHoatChatDao.selectByMaThuoc(thuoc.getMaThuoc());
-        Set<String> currentKeys = new HashSet<>();
-
-        if (chiTietHoatChats != null) {
-            for (ChiTietHoatChat chiTietHoatChat : chiTietHoatChats) {
-                if (chiTietHoatChat == null || chiTietHoatChat.getHoatChat() == null) {
-                    continue;
-                }
-                chiTietHoatChat.setThuoc(thuoc);
-                String maHoatChat = chiTietHoatChat.getHoatChat().getMaHoatChat();
-                currentKeys.add(maHoatChat);
-
-                ChiTietHoatChat existingChiTiet = existing.stream()
-                        .filter(item -> item.getHoatChat() != null && Objects.equals(item.getHoatChat().getMaHoatChat(), maHoatChat))
-                        .findFirst()
-                        .orElse(null);
-
-                if (existingChiTiet == null) {
-                    chiTietHoatChatDao.insert(chiTietHoatChat);
-                } else if (Float.compare(existingChiTiet.getHamLuong(), chiTietHoatChat.getHamLuong()) != 0) {
-                    chiTietHoatChatDao.update(chiTietHoatChat);
-                }
-            }
-        }
-
-        for (ChiTietHoatChat oldChiTiet : existing) {
-            if (oldChiTiet.getHoatChat() == null) {
-                continue;
-            }
-            String maHoatChat = oldChiTiet.getHoatChat().getMaHoatChat();
-            if (!currentKeys.contains(maHoatChat)) {
-                chiTietHoatChatDao.deleteById(thuoc.getMaThuoc(), maHoatChat);
-            }
-        }
-
-        return true;
     }
 
     @Override
@@ -158,27 +154,31 @@ public class ThuocServiceImpl implements ThuocService {
         if (maThuoc == null || maThuoc.isBlank()) {
             return false;
         }
-        return thuocDao.xoaThuoc_SanPham(maThuoc);
+        try {
+            return transactionManager.execute(() -> medicineCatalogRepository.softDeleteMedicine(maThuoc));
+        } catch (RuntimeException exception) {
+            return false;
+        }
     }
 
     @Override
     public int getTongSoLuongTonByMaThuoc(String maThuoc) {
-        return thuocTheoLoDao.selectSoLuongTonByMaThuoc(maThuoc);
+        return medicineCatalogRepository.getTongSoLuongTonByMaThuoc(maThuoc);
     }
 
     @Override
     public String getTenDonViTinhCoBan(String maThuoc) {
-        return thuocDao.getTenDVTByMaThuoc(maThuoc);
+        return medicineCatalogRepository.getTenDonViTinhCoBan(maThuoc);
     }
 
     @Override
     public List<ThuocTonKho> getThuocTonKho() {
-        return thuocTheoLoDao.getThuocTonKho();
+        return medicineCatalogRepository.getThuocTonKho();
     }
 
     @Override
     public List<Thuoc_SP_TheoLo> getAllTheoLo() {
-        List<Thuoc_SP_TheoLo> rawLots = thuocTheoLoDao.selectAll();
+        List<Thuoc_SP_TheoLo> rawLots = medicineCatalogRepository.findAllLots();
         List<Thuoc_SP_TheoLo> safeLots = new ArrayList<>();
         for (Thuoc_SP_TheoLo rawLot : rawLots) {
             Thuoc_SP_TheoLo safeLot = new Thuoc_SP_TheoLo();

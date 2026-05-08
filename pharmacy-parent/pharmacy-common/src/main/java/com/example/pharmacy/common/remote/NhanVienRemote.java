@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 public interface NhanVienRemote extends Remote {
-    String BINDING_NAME = "NhanVienRemote";
+    String BINDING_NAME = "NhanVienRemoteService";
 
     List<NhanVien> findAll() throws RemoteException;
 

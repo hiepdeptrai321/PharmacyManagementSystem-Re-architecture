@@ -1,10 +1,8 @@
 package com.example.pharmacy.server.service;
 
 import com.example.pharmacy.common.enums.BusinessCodeType;
-import com.example.pharmacymanagementsystem_qlht.dao.ChiTietKhuyenMai_Dao;
-import com.example.pharmacymanagementsystem_qlht.dao.KhuyenMai_Dao;
-import com.example.pharmacymanagementsystem_qlht.dao.LoaiKhuyenMai_Dao;
-import com.example.pharmacymanagementsystem_qlht.dao.Thuoc_SP_TangKem_Dao;
+import com.example.pharmacy.server.repository.PromotionRepository;
+import com.example.pharmacy.server.transaction.TransactionManager;
 import com.example.pharmacymanagementsystem_qlht.model.ChiTietKhuyenMai;
 import com.example.pharmacymanagementsystem_qlht.model.KhuyenMai;
 import com.example.pharmacymanagementsystem_qlht.model.LoaiKhuyenMai;
@@ -15,19 +13,23 @@ import java.util.List;
 import java.util.Objects;
 
 public class KhuyenMaiServiceImpl implements KhuyenMaiService {
-    private final KhuyenMai_Dao khuyenMaiDao = new KhuyenMai_Dao();
-    private final LoaiKhuyenMai_Dao loaiKhuyenMaiDao = new LoaiKhuyenMai_Dao();
-    private final ChiTietKhuyenMai_Dao chiTietKhuyenMaiDao = new ChiTietKhuyenMai_Dao();
-    private final Thuoc_SP_TangKem_Dao thuocSpTangKemDao = new Thuoc_SP_TangKem_Dao();
+    private final TransactionManager transactionManager;
+    private final PromotionRepository promotionRepository;
     private final CodeGenerationService codeGenerationService;
 
-    public KhuyenMaiServiceImpl(CodeGenerationService codeGenerationService) {
+    public KhuyenMaiServiceImpl(
+            TransactionManager transactionManager,
+            PromotionRepository promotionRepository,
+            CodeGenerationService codeGenerationService
+    ) {
+        this.transactionManager = Objects.requireNonNull(transactionManager, "transactionManager must not be null");
+        this.promotionRepository = Objects.requireNonNull(promotionRepository, "promotionRepository must not be null");
         this.codeGenerationService = Objects.requireNonNull(codeGenerationService, "codeGenerationService must not be null");
     }
 
     @Override
     public List<KhuyenMai> findAll() {
-        return khuyenMaiDao.selectAll();
+        return promotionRepository.findAll();
     }
 
     @Override
@@ -35,11 +37,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
         if (maKhuyenMai == null || maKhuyenMai.isBlank()) {
             return null;
         }
-        try {
-            return khuyenMaiDao.selectById(maKhuyenMai);
-        } catch (RuntimeException exception) {
-            return null;
-        }
+        return promotionRepository.findById(maKhuyenMai);
     }
 
     @Override
@@ -48,7 +46,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
         if (tuKhoa.isEmpty()) {
             return findAll();
         }
-        return khuyenMaiDao.selectByTuKhoa(tuKhoa);
+        return promotionRepository.searchByKeyword(tuKhoa);
     }
 
     @Override
@@ -58,7 +56,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
 
     @Override
     public List<LoaiKhuyenMai> findAllLoaiKhuyenMai() {
-        return loaiKhuyenMaiDao.selectAll();
+        return promotionRepository.findAllLoaiKhuyenMai();
     }
 
     @Override
@@ -66,11 +64,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
         if (maLoaiKhuyenMai == null || maLoaiKhuyenMai.isBlank()) {
             return null;
         }
-        try {
-            return loaiKhuyenMaiDao.selectById(maLoaiKhuyenMai);
-        } catch (RuntimeException exception) {
-            return null;
-        }
+        return promotionRepository.findLoaiKhuyenMaiById(maLoaiKhuyenMai);
     }
 
     @Override
@@ -78,11 +72,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
         if (tenLoaiKhuyenMai == null || tenLoaiKhuyenMai.isBlank()) {
             return null;
         }
-        try {
-            return loaiKhuyenMaiDao.selectByTen(tenLoaiKhuyenMai);
-        } catch (RuntimeException exception) {
-            return null;
-        }
+        return promotionRepository.findLoaiKhuyenMaiByTen(tenLoaiKhuyenMai);
     }
 
     @Override
@@ -90,7 +80,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
         if (maKhuyenMai == null || maKhuyenMai.isBlank()) {
             return List.of();
         }
-        return chiTietKhuyenMaiDao.selectByMaKM(maKhuyenMai);
+        return promotionRepository.findChiTietByMaKM(maKhuyenMai);
     }
 
     @Override
@@ -98,7 +88,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
         if (maKhuyenMai == null || maKhuyenMai.isBlank()) {
             return List.of();
         }
-        return thuocSpTangKemDao.selectByMaKM(maKhuyenMai);
+        return promotionRepository.findQuaTangByMaKM(maKhuyenMai);
     }
 
     @Override
@@ -110,12 +100,14 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
             khuyenMai.setMaKM(generateNewMaKM());
         }
         try {
-            if (!khuyenMaiDao.insert(khuyenMai)) {
-                return false;
-            }
-            saveChiTiet(khuyenMai, chiTietKhuyenMais);
-            saveQuaTang(khuyenMai, quaTangKhuyenMais);
-            return true;
+            return transactionManager.execute(() -> {
+                if (!promotionRepository.insertPromotion(khuyenMai)) {
+                    return false;
+                }
+                saveChiTiet(khuyenMai, chiTietKhuyenMais);
+                saveQuaTang(khuyenMai, quaTangKhuyenMais);
+                return true;
+            });
         } catch (RuntimeException exception) {
             return false;
         }
@@ -127,14 +119,16 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
             return false;
         }
         try {
-            if (!khuyenMaiDao.update(khuyenMai)) {
-                return false;
-            }
-            chiTietKhuyenMaiDao.deleteByMaKM(khuyenMai.getMaKM());
-            thuocSpTangKemDao.deleteByMaKM(khuyenMai.getMaKM());
-            saveChiTiet(khuyenMai, chiTietKhuyenMais);
-            saveQuaTang(khuyenMai, quaTangKhuyenMais);
-            return true;
+            return transactionManager.execute(() -> {
+                if (!promotionRepository.updatePromotion(khuyenMai)) {
+                    return false;
+                }
+                promotionRepository.deletePromotionDetailsByMaKM(khuyenMai.getMaKM());
+                promotionRepository.deletePromotionGiftsByMaKM(khuyenMai.getMaKM());
+                saveChiTiet(khuyenMai, chiTietKhuyenMais);
+                saveQuaTang(khuyenMai, quaTangKhuyenMais);
+                return true;
+            });
         } catch (RuntimeException exception) {
             return false;
         }
@@ -146,9 +140,11 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
             return false;
         }
         try {
-            thuocSpTangKemDao.deleteByMaKM(maKhuyenMai);
-            chiTietKhuyenMaiDao.deleteByMaKM(maKhuyenMai);
-            return khuyenMaiDao.deleteByMaKM(maKhuyenMai);
+            return transactionManager.execute(() -> {
+                promotionRepository.deletePromotionGiftsByMaKM(maKhuyenMai);
+                promotionRepository.deletePromotionDetailsByMaKM(maKhuyenMai);
+                return promotionRepository.deletePromotionById(maKhuyenMai);
+            });
         } catch (RuntimeException exception) {
             return false;
         }
@@ -159,7 +155,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
         if (ngay == null) {
             return List.of();
         }
-        return khuyenMaiDao.selectActiveOn(ngay);
+        return promotionRepository.findActiveOn(ngay);
     }
 
     @Override
@@ -167,7 +163,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
         if (ngay == null) {
             return List.of();
         }
-        return khuyenMaiDao.selectActiveInvoiceOn(ngay);
+        return promotionRepository.findActiveInvoiceOn(ngay);
     }
 
     private void saveChiTiet(KhuyenMai khuyenMai, List<ChiTietKhuyenMai> chiTietKhuyenMais) {
@@ -179,7 +175,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
                 continue;
             }
             chiTietKhuyenMai.setKhuyenMai(khuyenMai);
-            chiTietKhuyenMaiDao.insert(chiTietKhuyenMai);
+            promotionRepository.insertPromotionDetail(chiTietKhuyenMai);
         }
     }
 
@@ -192,7 +188,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
                 continue;
             }
             quaTangKhuyenMai.setKhuyenmai(khuyenMai);
-            thuocSpTangKemDao.insert(quaTangKhuyenMai);
+            promotionRepository.insertPromotionGift(quaTangKhuyenMai);
         }
     }
 }

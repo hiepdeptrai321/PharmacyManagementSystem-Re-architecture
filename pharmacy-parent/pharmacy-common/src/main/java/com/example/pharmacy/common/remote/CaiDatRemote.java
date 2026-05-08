@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 public interface CaiDatRemote extends Remote {
-    String BINDING_NAME = "CaiDatRemote";
+    String BINDING_NAME = "CaiDatRemoteService";
 
     List<CaiDat> findAll() throws RemoteException;
 
