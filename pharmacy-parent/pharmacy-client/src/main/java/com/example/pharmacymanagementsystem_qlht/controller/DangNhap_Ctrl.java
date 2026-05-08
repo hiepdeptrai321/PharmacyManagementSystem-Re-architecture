@@ -112,8 +112,8 @@ public class DangNhap_Ctrl extends Application {
             Stage mainStage = new Stage();
             mainStage.setTitle("Pharmacy Client");
             mainStage.getIcons().add(new Image(getClass().getResourceAsStream("/com/example/pharmacymanagementsystem_qlht/img/logoNguyenBan.png")));
-            new com.example.pharmacymanagementsystem_qlht.view.ClientHome_GUI()
-                    .showWithController(mainStage, new ClientHome_Ctrl());
+            new com.example.pharmacymanagementsystem_qlht.view.CuaSoChinh_QuanLy_GUI()
+                    .showWithController(mainStage, new CuaSoChinh_QuanLy_Ctrl());
             mainStage.show();
             loginStage.close();
         } catch (Exception exception) {
