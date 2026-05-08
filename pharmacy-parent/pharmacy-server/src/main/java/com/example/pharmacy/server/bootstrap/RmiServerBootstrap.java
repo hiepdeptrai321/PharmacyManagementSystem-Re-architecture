@@ -18,6 +18,7 @@ import com.example.pharmacy.common.remote.ReportRemote;
 import com.example.pharmacy.common.remote.TonKhoRemote;
 import com.example.pharmacy.common.remote.ThuocRemote;
 import com.example.pharmacy.server.bootstrap.rmi.AuditLogRemoteAdapter;
+import com.example.pharmacy.server.config.JpaUtil;
 import com.example.pharmacy.server.bootstrap.rmi.DonViTinhRemoteAdapter;
 import com.example.pharmacy.server.bootstrap.rmi.DoiTraRemoteAdapter;
 import com.example.pharmacy.server.bootstrap.rmi.HoaDonRemoteAdapter;
@@ -55,14 +56,19 @@ import com.example.pharmacy.server.service.ThuocService;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.concurrent.CountDownLatch;
 
 public final class RmiServerBootstrap {
     public static final int DEFAULT_PORT = 1099;
+    private static final CountDownLatch KEEP_ALIVE = new CountDownLatch(1);
 
     private RmiServerBootstrap() {
     }
 
     public static void main(String[] args) throws Exception {
+        String rmiHost = resolveRmiHost();
+        System.setProperty("java.rmi.server.hostname", rmiHost);
+
         Registry registry = createOrGetRegistry(DEFAULT_PORT);
         ServerComponentFactory componentFactory = new ServerComponentFactory();
         AuthService authService = componentFactory.createJpaAuthService();
@@ -118,6 +124,7 @@ public final class RmiServerBootstrap {
         registry.rebind(ReportRemote.BINDING_NAME, reportRemote);
         registry.rebind(AuditLogRemote.BINDING_NAME, auditLogRemote);
         System.out.println("RMI server started on port " + DEFAULT_PORT + " with binding " + AuthRemote.BINDING_NAME);
+        System.out.println("RMI hostname: " + rmiHost);
         System.out.println("Persistence unit: pharmacyPU");
         System.out.println("Login POC path: JavaFX client -> RMI -> AuthServiceImpl -> JPA/Hibernate -> MariaDB");
         System.out.println("Master data bindings: "
@@ -137,6 +144,29 @@ public final class RmiServerBootstrap {
                 + DoiTraRemote.BINDING_NAME + ", "
                 + ReportRemote.BINDING_NAME + ", "
                 + AuditLogRemote.BINDING_NAME);
+        System.out.println("RMI server is ready. Press Ctrl+C to stop.");
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                JpaUtil.close();
+            } catch (Exception ignored) {
+                // Best-effort cleanup during shutdown.
+            }
+        }, "pharmacy-rmi-shutdown"));
+
+        KEEP_ALIVE.await();
+    }
+
+    private static String resolveRmiHost() {
+        String systemProperty = System.getProperty("pharmacy.rmi.host");
+        if (systemProperty != null && !systemProperty.isBlank()) {
+            return systemProperty.trim();
+        }
+        String environment = System.getenv("PHARMACY_RMI_HOST");
+        if (environment != null && !environment.isBlank()) {
+            return environment.trim();
+        }
+        return "127.0.0.1";
     }
 
     private static Registry createOrGetRegistry(int port) throws RemoteException {
