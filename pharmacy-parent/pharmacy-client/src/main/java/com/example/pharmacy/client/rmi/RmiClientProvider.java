@@ -24,7 +24,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class RmiClientProvider {
-    public static final String DEFAULT_HOST = "localhost";
+    public static final String DEFAULT_HOST = defaultHost();
     public static final int DEFAULT_PORT = 1099;
 
     private final String host;
@@ -37,6 +37,18 @@ public class RmiClientProvider {
     public RmiClientProvider(String host, int port) {
         this.host = host;
         this.port = port;
+    }
+
+    private static String defaultHost() {
+        String systemProperty = System.getProperty("pharmacy.rmi.host");
+        if (systemProperty != null && !systemProperty.isBlank()) {
+            return systemProperty.trim();
+        }
+        String environment = System.getenv("PHARMACY_RMI_HOST");
+        if (environment != null && !environment.isBlank()) {
+            return environment.trim();
+        }
+        return "127.0.0.1";
     }
 
     public AuthRemote getAuthRemote() throws RemoteException, NotBoundException {
