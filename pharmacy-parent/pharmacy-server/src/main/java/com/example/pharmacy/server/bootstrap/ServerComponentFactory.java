@@ -28,6 +28,7 @@ import com.example.pharmacy.server.repository.NhaCungCapRepository;
 import com.example.pharmacy.server.repository.NhanVienManagementRepository;
 import com.example.pharmacy.server.repository.NhomDuocLyRepository;
 import com.example.pharmacy.server.repository.PhieuDatHangRepository;
+import com.example.pharmacy.server.repository.PromotionRepository;
 import com.example.pharmacy.server.repository.PurchaseOrderRepository;
 import com.example.pharmacy.server.repository.ReportRepository;
 import com.example.pharmacy.server.repository.TonKhoRepository;
@@ -39,6 +40,7 @@ import com.example.pharmacy.server.repository.jdbc.JdbcHoaDonRepository;
 import com.example.pharmacy.server.repository.jdbc.JdbcMedicineCatalogRepository;
 import com.example.pharmacy.server.repository.jdbc.JdbcPhieuDatHangRepository;
 import com.example.pharmacy.server.repository.jdbc.JdbcPurchaseOrderRepository;
+import com.example.pharmacy.server.repository.jdbc.JdbcPromotionRepository;
 import com.example.pharmacy.server.repository.jdbc.JdbcReportRepository;
 import com.example.pharmacy.server.repository.jdbc.JdbcTonKhoRepository;
 import com.example.pharmacy.server.service.AuditService;
@@ -113,7 +115,11 @@ public class ServerComponentFactory {
     }
 
     public KhuyenMaiService createKhuyenMaiService() {
-        return new KhuyenMaiServiceImpl(createCodeGenerationService());
+        return new KhuyenMaiServiceImpl(
+                transactionManager,
+                createPromotionRepository(),
+                createCodeGenerationService()
+        );
     }
 
     public DonViTinhService createDonViTinhService() {
@@ -207,7 +213,11 @@ public class ServerComponentFactory {
     }
 
     public ThuocService createThuocService() {
-        return new ThuocServiceImpl(createCodeGenerationService());
+        return new ThuocServiceImpl(
+                transactionManager,
+                createMedicineCatalogRepository(),
+                createCodeGenerationService()
+        );
     }
 
     public AuditService createAuditService() {
@@ -248,6 +258,10 @@ public class ServerComponentFactory {
 
     private ReportRepository createReportRepository() {
         return new JdbcReportRepository(connectionProvider);
+    }
+
+    private PromotionRepository createPromotionRepository() {
+        return new JdbcPromotionRepository(connectionProvider);
     }
 
     private CodeSequenceRepository createCodeSequenceRepository() {
