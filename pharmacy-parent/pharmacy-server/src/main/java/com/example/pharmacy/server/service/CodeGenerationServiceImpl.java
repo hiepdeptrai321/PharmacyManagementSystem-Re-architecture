@@ -27,4 +27,16 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
             return definition.prefix() + String.format("%0" + definition.padding() + "d", nextValue);
         });
     }
+
+    @Override
+    public void syncIfBehind(BusinessCodeType codeType, long maxKnownValue) {
+        transactionManager.execute(() -> {
+            codeSequenceRepository.lockByCodeType(codeType).ifPresent(def -> {
+                if (def.currentValue() < maxKnownValue) {
+                    codeSequenceRepository.updateCurrentValue(codeType, maxKnownValue);
+                }
+            });
+            return null;
+        });
+    }
 }

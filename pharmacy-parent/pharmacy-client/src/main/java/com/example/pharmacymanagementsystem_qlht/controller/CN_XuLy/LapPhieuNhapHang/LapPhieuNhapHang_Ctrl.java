@@ -223,8 +223,8 @@ public class LapPhieuNhapHang_Ctrl {
         setDatePickerCell(colHanSuDung, false);
         setIntegerCell(colSoLuong, CTPN_TSPTL_CHTDVT::getChiTietPhieuNhap, (row, value) -> row.getChiTietPhieuNhap().setSoLuong(Math.max(1, value)));
         setDoubleCell(colDonGiaNhap, CTPN_TSPTL_CHTDVT::getChiTietPhieuNhap, (row, value) -> row.getChiTietPhieuNhap().setGiaNhap(Math.max(0, value)));
-        setFloatCell(colChietKhau, CTPN_TSPTL_CHTDVT::getChiTietPhieuNhap, (row, value) -> row.getChiTietPhieuNhap().setChietKhau(Math.max(0, value)));
-        setFloatCell(colThue, CTPN_TSPTL_CHTDVT::getChiTietPhieuNhap, (row, value) -> row.getChiTietPhieuNhap().setThue(Math.max(0, value)));
+        setFloatCell(colChietKhau, CTPN_TSPTL_CHTDVT::getChiTietPhieuNhap, (row, value) -> row.getChiTietPhieuNhap().setChietKhau(Math.max(0, value)), "Chiet khau");
+        setFloatCell(colThue, CTPN_TSPTL_CHTDVT::getChiTietPhieuNhap, (row, value) -> row.getChiTietPhieuNhap().setThue(Math.max(0, value)), "Thue");
         colThanhTien.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(formatVnd(tinhTongDong(cellData.getValue()))));
         colXoa.setCellFactory(tc -> new TableCell<>() {
             private final Button btnXoa = new Button("X");
@@ -252,6 +252,7 @@ public class LapPhieuNhapHang_Ctrl {
     private void setDatePickerCell(TableColumn<CTPN_TSPTL_CHTDVT, LocalDate> column, boolean nsxColumn) {
         column.setCellFactory(col -> new TableCell<>() {
             private final DatePicker datePicker = new DatePicker();
+            private boolean updating = false;
 
             {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -268,16 +269,29 @@ public class LapPhieuNhapHang_Ctrl {
                 });
                 datePicker.setEditable(false);
                 datePicker.valueProperty().addListener((obs, oldVal, newVal) -> {
+                    if (updating) return;
                     CTPN_TSPTL_CHTDVT row = getCurrentRow();
-                    if (row == null || newVal == null) {
-                        return;
-                    }
+                    if (row == null || newVal == null) return;
+                    Thuoc_SP_TheoLo lo = row.getChiTietSP_theoLo();
                     if (nsxColumn) {
-                        row.getChiTietSP_theoLo().setNsx(Date.valueOf(newVal));
+                        if (lo.getHsd() != null && newVal.isAfter(lo.getHsd().toLocalDate())) {
+                            showWarning("NSX khong duoc sau HSD.");
+                            updating = true;
+                            datePicker.setValue(oldVal);
+                            updating = false;
+                            return;
+                        }
+                        lo.setNsx(Date.valueOf(newVal));
                     } else {
-                        row.getChiTietSP_theoLo().setHsd(Date.valueOf(newVal));
+                        if (lo.getNsx() != null && newVal.isBefore(lo.getNsx().toLocalDate())) {
+                            showWarning("HSD khong duoc truoc NSX.");
+                            updating = true;
+                            datePicker.setValue(oldVal);
+                            updating = false;
+                            return;
+                        }
+                        lo.setHsd(Date.valueOf(newVal));
                     }
-                    tblNhapThuoc.refresh();
                 });
             }
 
@@ -293,7 +307,9 @@ public class LapPhieuNhapHang_Ctrl {
                 if (empty) {
                     setGraphic(null);
                 } else {
+                    updating = true;
                     datePicker.setValue(item);
+                    updating = false;
                     setGraphic(datePicker);
                 }
             }
@@ -315,7 +331,7 @@ public class LapPhieuNhapHang_Ctrl {
         column.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<>() {
             @Override
             public String toString(Integer object) {
-                return object == null ? "0" : String.valueOf(object);
+                return object == null ? "1" : String.valueOf(object);
             }
 
             @Override
@@ -323,12 +339,23 @@ public class LapPhieuNhapHang_Ctrl {
                 try {
                     return Integer.parseInt(string.trim());
                 } catch (Exception ex) {
-                    return 0;
+                    return null;
                 }
             }
         }));
         column.setOnEditCommit(event -> {
-            setter.set(event.getRowValue(), event.getNewValue());
+            Integer newVal = event.getNewValue();
+            if (newVal == null) {
+                showWarning("So luong nhap khong hop le.");
+                tblNhapThuoc.refresh();
+                return;
+            }
+            if (newVal <= 0) {
+                showWarning("So luong phai lon hon 0.");
+                tblNhapThuoc.refresh();
+                return;
+            }
+            setter.set(event.getRowValue(), newVal);
             tblNhapThuoc.refresh();
             capNhatTongTien();
         });
@@ -349,12 +376,23 @@ public class LapPhieuNhapHang_Ctrl {
                 try {
                     return Double.parseDouble(string.trim());
                 } catch (Exception ex) {
-                    return 0d;
+                    return null;
                 }
             }
         }));
         column.setOnEditCommit(event -> {
-            setter.set(event.getRowValue(), event.getNewValue());
+            Double newVal = event.getNewValue();
+            if (newVal == null) {
+                showWarning("Don gia nhap khong hop le.");
+                tblNhapThuoc.refresh();
+                return;
+            }
+            if (newVal < 0) {
+                showWarning("Don gia nhap khong duoc am.");
+                tblNhapThuoc.refresh();
+                return;
+            }
+            setter.set(event.getRowValue(), newVal);
             tblNhapThuoc.refresh();
             capNhatTongTien();
         });
@@ -362,7 +400,8 @@ public class LapPhieuNhapHang_Ctrl {
 
     private void setFloatCell(TableColumn<CTPN_TSPTL_CHTDVT, Float> column,
                               DetailAccessor<Float> accessor,
-                              RowValueSetter<Float> setter) {
+                              RowValueSetter<Float> setter,
+                              String fieldName) {
         column.setCellValueFactory(cellData -> {
             ChiTietPhieuNhap detail = accessor.get(cellData.getValue());
             float value = column == colChietKhau ? detail.getChietKhau() : detail.getThue();
@@ -379,12 +418,23 @@ public class LapPhieuNhapHang_Ctrl {
                 try {
                     return Float.parseFloat(string.trim());
                 } catch (Exception ex) {
-                    return 0f;
+                    return null;
                 }
             }
         }));
         column.setOnEditCommit(event -> {
-            setter.set(event.getRowValue(), event.getNewValue());
+            Float newVal = event.getNewValue();
+            if (newVal == null) {
+                showWarning(fieldName + " khong hop le.");
+                tblNhapThuoc.refresh();
+                return;
+            }
+            if (newVal < 0) {
+                showWarning(fieldName + " khong duoc am.");
+                tblNhapThuoc.refresh();
+                return;
+            }
+            setter.set(event.getRowValue(), newVal);
             tblNhapThuoc.refresh();
             capNhatTongTien();
         });
