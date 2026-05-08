@@ -40,6 +40,16 @@ public class ClientHome_GUI {
         Button btnNhanVien = new Button("Danh muc nhan vien");
         Button btnDanhMucKhuyenMai = new Button("Danh muc khuyen mai");
         Button btnCapNhatKhuyenMai = new Button("Cap nhat khuyen mai");
+        Button btnLapHoaDon = new Button("Lap hoa don");
+        Button btnTimKiemHoaDon = new Button("Tim kiem hoa don");
+        Button btnLapPhieuDoi = new Button("Lap phieu doi");
+        Button btnLapPhieuTra = new Button("Lap phieu tra");
+        Button btnTimKiemPhieuDoi = new Button("Tim kiem phieu doi");
+        Button btnTimKiemPhieuTra = new Button("Tim kiem phieu tra");
+        Button btnThongKeBanHang = new Button("Thong ke ban hang");
+        Button btnThongKeTopSanPham = new Button("Thong ke top san pham");
+        Button btnThongKeXnt = new Button("Thong ke XNT");
+        Button btnTimKiemHoatDong = new Button("Tim kiem hoat dong");
         Button btnCaiDat = new Button("Cai dat");
         Button btnLogout = new Button("Dang xuat");
 
@@ -52,6 +62,16 @@ public class ClientHome_GUI {
                 btnNhanVien,
                 btnDanhMucKhuyenMai,
                 btnCapNhatKhuyenMai,
+                btnLapHoaDon,
+                btnTimKiemHoaDon,
+                btnLapPhieuDoi,
+                btnLapPhieuTra,
+                btnTimKiemPhieuDoi,
+                btnTimKiemPhieuTra,
+                btnThongKeBanHang,
+                btnThongKeTopSanPham,
+                btnThongKeXnt,
+                btnTimKiemHoatDong,
                 btnCaiDat,
                 btnLogout
         );
@@ -62,10 +82,20 @@ public class ClientHome_GUI {
         ctrl.btnNhanVien = btnNhanVien;
         ctrl.btnDanhMucKhuyenMai = btnDanhMucKhuyenMai;
         ctrl.btnCapNhatKhuyenMai = btnCapNhatKhuyenMai;
+        ctrl.btnLapHoaDon = btnLapHoaDon;
+        ctrl.btnTimKiemHoaDon = btnTimKiemHoaDon;
+        ctrl.btnLapPhieuDoi = btnLapPhieuDoi;
+        ctrl.btnLapPhieuTra = btnLapPhieuTra;
+        ctrl.btnTimKiemPhieuDoi = btnTimKiemPhieuDoi;
+        ctrl.btnTimKiemPhieuTra = btnTimKiemPhieuTra;
+        ctrl.btnThongKeBanHang = btnThongKeBanHang;
+        ctrl.btnThongKeTopSanPham = btnThongKeTopSanPham;
+        ctrl.btnThongKeXnt = btnThongKeXnt;
+        ctrl.btnTimKiemHoatDong = btnTimKiemHoatDong;
         ctrl.btnCaiDat = btnCaiDat;
         ctrl.btnLogout = btnLogout;
         ctrl.initialize();
 
-        stage.setScene(new Scene(root, 560, 500));
+        stage.setScene(new Scene(root, 560, 660));
     }
 }

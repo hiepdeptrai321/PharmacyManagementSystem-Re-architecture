@@ -1,8 +1,12 @@
 package com.example.pharmacymanagementsystem_qlht.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class ThuocHetHan {
+public class ThuocHetHan implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private String maThuocHH;
     private String tenThuocHH;
     private int soLuong;

@@ -1,6 +1,11 @@
 package com.example.pharmacymanagementsystem_qlht.model;
 
-public class ThongKeBanHang {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class ThongKeBanHang implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private String thoiGian;
     private int soLuongHoaDon;
     private double tongGiaTri;

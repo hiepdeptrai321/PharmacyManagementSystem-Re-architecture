@@ -8,7 +8,9 @@ import com.example.pharmacy.server.repository.AuditLogRepository;
 import com.example.pharmacy.server.repository.CaiDatRepository;
 import com.example.pharmacy.server.repository.CodeSequenceRepository;
 import com.example.pharmacy.server.repository.DonViTinhRepository;
+import com.example.pharmacy.server.repository.DoiTraRepository;
 import com.example.pharmacy.server.repository.EmployeeWriteRepository;
+import com.example.pharmacy.server.repository.HoaDonRepository;
 import com.example.pharmacy.server.repository.JpaCaiDatRepository;
 import com.example.pharmacy.server.repository.JpaDonViTinhRepository;
 import com.example.pharmacy.server.repository.JpaKeHangRepository;
@@ -31,13 +33,17 @@ import com.example.pharmacy.server.repository.ReportRepository;
 import com.example.pharmacy.server.repository.TonKhoRepository;
 import com.example.pharmacy.server.repository.jdbc.JdbcAuditLogRepository;
 import com.example.pharmacy.server.repository.jdbc.JdbcCodeSequenceRepository;
+import com.example.pharmacy.server.repository.jdbc.JdbcDoiTraRepository;
 import com.example.pharmacy.server.repository.jdbc.JdbcEmployeeWriteRepository;
+import com.example.pharmacy.server.repository.jdbc.JdbcHoaDonRepository;
 import com.example.pharmacy.server.repository.jdbc.JdbcMedicineCatalogRepository;
 import com.example.pharmacy.server.repository.jdbc.JdbcPhieuDatHangRepository;
 import com.example.pharmacy.server.repository.jdbc.JdbcPurchaseOrderRepository;
 import com.example.pharmacy.server.repository.jdbc.JdbcReportRepository;
 import com.example.pharmacy.server.repository.jdbc.JdbcTonKhoRepository;
 import com.example.pharmacy.server.service.AuditService;
+import com.example.pharmacy.server.service.AuditLogQueryService;
+import com.example.pharmacy.server.service.AuditLogQueryServiceImpl;
 import com.example.pharmacy.server.service.AuditServiceImpl;
 import com.example.pharmacy.server.service.AuthService;
 import com.example.pharmacy.server.service.AuthServiceImpl;
@@ -47,8 +53,12 @@ import com.example.pharmacy.server.service.CodeGenerationService;
 import com.example.pharmacy.server.service.CodeGenerationServiceImpl;
 import com.example.pharmacy.server.service.DonViTinhService;
 import com.example.pharmacy.server.service.DonViTinhServiceImpl;
+import com.example.pharmacy.server.service.DoiTraService;
+import com.example.pharmacy.server.service.DoiTraServiceImpl;
 import com.example.pharmacy.server.service.EmployeeManagementService;
 import com.example.pharmacy.server.service.EmployeeManagementServiceImpl;
+import com.example.pharmacy.server.service.HoaDonService;
+import com.example.pharmacy.server.service.HoaDonServiceImpl;
 import com.example.pharmacy.server.service.KeHangService;
 import com.example.pharmacy.server.service.KeHangServiceImpl;
 import com.example.pharmacy.server.service.KhachHangService;
@@ -166,12 +176,34 @@ public class ServerComponentFactory {
         );
     }
 
+    public HoaDonService createHoaDonService() {
+        return new HoaDonServiceImpl(
+                transactionManager,
+                createHoaDonRepository(),
+                createCodeGenerationService(),
+                createAuditService()
+        );
+    }
+
+    public DoiTraService createDoiTraService() {
+        return new DoiTraServiceImpl(
+                transactionManager,
+                createDoiTraRepository(),
+                createCodeGenerationService(),
+                createAuditService()
+        );
+    }
+
     public TonKhoService createTonKhoService() {
         return new TonKhoServiceImpl(createTonKhoRepository(), createAuditService());
     }
 
     public ReportService createReportService() {
         return new ReportServiceImpl(createReportRepository());
+    }
+
+    public AuditLogQueryService createAuditLogQueryService() {
+        return new AuditLogQueryServiceImpl(createAuditLogRepository());
     }
 
     public ThuocService createThuocService() {
@@ -204,6 +236,14 @@ public class ServerComponentFactory {
 
     private TonKhoRepository createTonKhoRepository() {
         return new JdbcTonKhoRepository(connectionProvider);
+    }
+
+    private HoaDonRepository createHoaDonRepository() {
+        return new JdbcHoaDonRepository(connectionProvider);
+    }
+
+    private DoiTraRepository createDoiTraRepository() {
+        return new JdbcDoiTraRepository(connectionProvider);
     }
 
     private ReportRepository createReportRepository() {

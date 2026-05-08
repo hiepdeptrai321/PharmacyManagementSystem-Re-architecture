@@ -1,8 +1,12 @@
 package com.example.pharmacymanagementsystem_qlht.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class HoaDonDisplay {
+public class HoaDonDisplay implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private String maHD;
     private LocalDate ngayLap;
     private String maKH;

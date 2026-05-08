@@ -1,8 +1,13 @@
 package com.example.pharmacymanagementsystem_qlht.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
-public class ChiTietPhieuDoiHang {
+public class ChiTietPhieuDoiHang implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private Thuoc_SP_TheoLo loHang;
     private PhieuDoiHang phieuDoiHang;
     private Thuoc_SanPham thuoc;

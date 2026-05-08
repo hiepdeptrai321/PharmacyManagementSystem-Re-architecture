@@ -1,0 +1,47 @@
+package com.example.pharmacy.common.request;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDate;
+
+public class HoaDonSearchRequest implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    private String criteria;
+    private String keyword;
+    private LocalDate fromDate;
+    private LocalDate toDate;
+
+    public String getCriteria() {
+        return criteria;
+    }
+
+    public void setCriteria(String criteria) {
+        this.criteria = criteria;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public LocalDate getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(LocalDate fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public LocalDate getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(LocalDate toDate) {
+        this.toDate = toDate;
+    }
+}
