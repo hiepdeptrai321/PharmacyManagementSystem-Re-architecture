@@ -1,6 +1,11 @@
 package com.example.pharmacymanagementsystem_qlht.model;
 
-public class ThongKeTonKho {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class ThongKeTonKho implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private String maThuoc;
     private String tenThuoc;
     private String dvt; // Don Vi Tinh (Kí hiệu)

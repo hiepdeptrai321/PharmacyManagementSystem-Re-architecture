@@ -1,8 +1,11 @@
 package com.example.pharmacy.client.rmi;
 
 import com.example.pharmacy.common.remote.AuthRemote;
+import com.example.pharmacy.common.remote.AuditLogRemote;
 import com.example.pharmacy.common.remote.CaiDatRemote;
 import com.example.pharmacy.common.remote.DonViTinhRemote;
+import com.example.pharmacy.common.remote.DoiTraRemote;
+import com.example.pharmacy.common.remote.HoaDonRemote;
 import com.example.pharmacy.common.remote.KeHangRemote;
 import com.example.pharmacy.common.remote.KhachHangRemote;
 import com.example.pharmacy.common.remote.KhuyenMaiRemote;
@@ -11,6 +14,7 @@ import com.example.pharmacy.common.remote.NhanVienRemote;
 import com.example.pharmacy.common.remote.NhomDuocLyRemote;
 import com.example.pharmacy.common.remote.PhieuDatHangRemote;
 import com.example.pharmacy.common.remote.PhieuNhapRemote;
+import com.example.pharmacy.common.remote.ReportRemote;
 import com.example.pharmacy.common.remote.TonKhoRemote;
 import com.example.pharmacy.common.remote.ThuocRemote;
 
@@ -98,5 +102,25 @@ public class RmiClientProvider {
     public TonKhoRemote getTonKhoRemote() throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(host, port);
         return (TonKhoRemote) registry.lookup(TonKhoRemote.BINDING_NAME);
+    }
+
+    public HoaDonRemote getHoaDonRemote() throws RemoteException, NotBoundException {
+        Registry registry = LocateRegistry.getRegistry(host, port);
+        return (HoaDonRemote) registry.lookup(HoaDonRemote.BINDING_NAME);
+    }
+
+    public DoiTraRemote getDoiTraRemote() throws RemoteException, NotBoundException {
+        Registry registry = LocateRegistry.getRegistry(host, port);
+        return (DoiTraRemote) registry.lookup(DoiTraRemote.BINDING_NAME);
+    }
+
+    public ReportRemote getReportRemote() throws RemoteException, NotBoundException {
+        Registry registry = LocateRegistry.getRegistry(host, port);
+        return (ReportRemote) registry.lookup(ReportRemote.BINDING_NAME);
+    }
+
+    public AuditLogRemote getAuditLogRemote() throws RemoteException, NotBoundException {
+        Registry registry = LocateRegistry.getRegistry(host, port);
+        return (AuditLogRemote) registry.lookup(AuditLogRemote.BINDING_NAME);
     }
 }

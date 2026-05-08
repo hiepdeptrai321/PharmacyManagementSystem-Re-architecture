@@ -1,10 +1,15 @@
 package com.example.pharmacymanagementsystem_qlht.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
-public class HoaDon {
+public class HoaDon implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private String maHD;
     private NhanVien nhanVien;
     private Timestamp ngayLap;

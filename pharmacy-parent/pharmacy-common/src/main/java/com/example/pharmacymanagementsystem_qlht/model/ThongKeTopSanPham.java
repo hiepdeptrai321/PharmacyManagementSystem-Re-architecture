@@ -1,6 +1,11 @@
 package com.example.pharmacymanagementsystem_qlht.model;
 
-public class ThongKeTopSanPham {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class ThongKeTopSanPham implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private int stt;            // Số thứ tự xếp hạng
     private String maThuoc;
     private String tenThuoc;

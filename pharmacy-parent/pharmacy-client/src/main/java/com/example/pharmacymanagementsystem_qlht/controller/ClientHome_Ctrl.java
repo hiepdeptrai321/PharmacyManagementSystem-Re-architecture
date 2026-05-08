@@ -19,6 +19,16 @@ public class ClientHome_Ctrl {
     public Button btnCaiDat;
     public Button btnDanhMucKhuyenMai;
     public Button btnCapNhatKhuyenMai;
+    public Button btnLapHoaDon;
+    public Button btnTimKiemHoaDon;
+    public Button btnLapPhieuDoi;
+    public Button btnLapPhieuTra;
+    public Button btnTimKiemPhieuDoi;
+    public Button btnTimKiemPhieuTra;
+    public Button btnThongKeBanHang;
+    public Button btnThongKeTopSanPham;
+    public Button btnThongKeXnt;
+    public Button btnTimKiemHoatDong;
 
     public void initialize() {
         UserContext currentUser = SessionContext.getCurrentUser();
@@ -44,6 +54,36 @@ public class ClientHome_Ctrl {
         }
         if (btnCapNhatKhuyenMai != null) {
             btnCapNhatKhuyenMai.setOnAction(event -> openCapNhatKhuyenMai());
+        }
+        if (btnLapHoaDon != null) {
+            btnLapHoaDon.setOnAction(event -> openLapHoaDon());
+        }
+        if (btnTimKiemHoaDon != null) {
+            btnTimKiemHoaDon.setOnAction(event -> openTimKiemHoaDon());
+        }
+        if (btnLapPhieuDoi != null) {
+            btnLapPhieuDoi.setOnAction(event -> openLapPhieuDoi());
+        }
+        if (btnLapPhieuTra != null) {
+            btnLapPhieuTra.setOnAction(event -> openLapPhieuTra());
+        }
+        if (btnTimKiemPhieuDoi != null) {
+            btnTimKiemPhieuDoi.setOnAction(event -> openTimKiemPhieuDoi());
+        }
+        if (btnTimKiemPhieuTra != null) {
+            btnTimKiemPhieuTra.setOnAction(event -> openTimKiemPhieuTra());
+        }
+        if (btnThongKeBanHang != null) {
+            btnThongKeBanHang.setOnAction(event -> openThongKeBanHang());
+        }
+        if (btnThongKeTopSanPham != null) {
+            btnThongKeTopSanPham.setOnAction(event -> openThongKeTopSanPham());
+        }
+        if (btnThongKeXnt != null) {
+            btnThongKeXnt.setOnAction(event -> openThongKeXnt());
+        }
+        if (btnTimKiemHoatDong != null) {
+            btnTimKiemHoatDong.setOnAction(event -> openTimKiemHoatDong());
         }
     }
 
@@ -108,6 +148,126 @@ public class ClientHome_Ctrl {
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/example/pharmacymanagementsystem_qlht/img/logoNguyenBan.png")));
             new com.example.pharmacymanagementsystem_qlht.view.CN_CapNhat.CapNhatKhuyenMai.CapNhatKhuyenMai_GUI()
                     .showWithController(stage, new com.example.pharmacymanagementsystem_qlht.controller.CN_CapNhat.CapNhatKhuyenMai.CapNhatKhuyenMai_Ctrl());
+            stage.show();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void openLapHoaDon() {
+        try {
+            Stage stage = new Stage();
+            stage.initOwner((Stage) btnLogout.getScene().getWindow());
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/example/pharmacymanagementsystem_qlht/img/logoNguyenBan.png")));
+            new com.example.pharmacymanagementsystem_qlht.controller.CN_XuLy.LapHoaDon.LapHoaDon_Ctrl().start(stage);
+            stage.show();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void openTimKiemHoaDon() {
+        try {
+            Stage stage = new Stage();
+            stage.initOwner((Stage) btnLogout.getScene().getWindow());
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/example/pharmacymanagementsystem_qlht/img/logoNguyenBan.png")));
+            new com.example.pharmacymanagementsystem_qlht.controller.CN_TimKiem.TKHoaDon.TimKiemHoaDon_Ctrl().start(stage);
+            stage.show();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void openLapPhieuDoi() {
+        try {
+            Stage stage = new Stage();
+            stage.initOwner((Stage) btnLogout.getScene().getWindow());
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/example/pharmacymanagementsystem_qlht/img/logoNguyenBan.png")));
+            new com.example.pharmacymanagementsystem_qlht.controller.CN_XuLy.LapPhieuDoi.LapPhieuDoiHang_Ctrl().start(stage);
+            stage.show();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void openLapPhieuTra() {
+        try {
+            Stage stage = new Stage();
+            stage.initOwner((Stage) btnLogout.getScene().getWindow());
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/example/pharmacymanagementsystem_qlht/img/logoNguyenBan.png")));
+            new com.example.pharmacymanagementsystem_qlht.controller.CN_XuLy.LapPhieuTra.LapPhieuTraHang_Ctrl().start(stage);
+            stage.show();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void openTimKiemPhieuDoi() {
+        try {
+            Stage stage = new Stage();
+            stage.initOwner((Stage) btnLogout.getScene().getWindow());
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/example/pharmacymanagementsystem_qlht/img/logoNguyenBan.png")));
+            new com.example.pharmacymanagementsystem_qlht.controller.CN_TimKiem.TKPhieuDoiHang.TKPhieuDoiHang_Ctrl().start(stage);
+            stage.show();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void openTimKiemPhieuTra() {
+        try {
+            Stage stage = new Stage();
+            stage.initOwner((Stage) btnLogout.getScene().getWindow());
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/example/pharmacymanagementsystem_qlht/img/logoNguyenBan.png")));
+            new com.example.pharmacymanagementsystem_qlht.controller.CN_TimKiem.TKPhieuTraHang.TKPhieuTraHang_Ctrl().start(stage);
+            stage.show();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void openThongKeBanHang() {
+        try {
+            Stage stage = new Stage();
+            stage.initOwner((Stage) btnLogout.getScene().getWindow());
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/example/pharmacymanagementsystem_qlht/img/logoNguyenBan.png")));
+            new com.example.pharmacymanagementsystem_qlht.controller.CN_ThongKe.ThongKeBanHang_Ctrl().start(stage);
+            stage.show();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void openThongKeTopSanPham() {
+        try {
+            Stage stage = new Stage();
+            stage.initOwner((Stage) btnLogout.getScene().getWindow());
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/example/pharmacymanagementsystem_qlht/img/logoNguyenBan.png")));
+            new com.example.pharmacymanagementsystem_qlht.controller.CN_ThongKe.ThongKeTopSanPham_Ctrl().start(stage);
+            stage.show();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void openThongKeXnt() {
+        try {
+            Stage stage = new Stage();
+            stage.initOwner((Stage) btnLogout.getScene().getWindow());
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/example/pharmacymanagementsystem_qlht/img/logoNguyenBan.png")));
+            new com.example.pharmacymanagementsystem_qlht.controller.CN_ThongKe.ThongKeXNT_Ctrl().start(stage);
+            stage.show();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void openTimKiemHoatDong() {
+        try {
+            Stage stage = new Stage();
+            stage.initOwner((Stage) btnLogout.getScene().getWindow());
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/example/pharmacymanagementsystem_qlht/img/logoNguyenBan.png")));
+            new com.example.pharmacymanagementsystem_qlht.controller.CN_TimKiem.TKHoatDong.TKHoatDong_Ctrl().start(stage);
             stage.show();
         } catch (Exception exception) {
             exception.printStackTrace();
