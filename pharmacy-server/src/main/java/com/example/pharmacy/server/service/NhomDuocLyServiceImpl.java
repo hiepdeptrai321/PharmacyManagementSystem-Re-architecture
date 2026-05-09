@@ -2,9 +2,9 @@ package com.example.pharmacy.server.service;
 
 import com.example.pharmacy.common.enums.BusinessCodeType;
 import com.example.pharmacy.server.entity.NhomDuocLyEntity;
-import com.example.pharmacy.server.mapper.NhomDuocLyMapper;
 import com.example.pharmacy.server.repository.NhomDuocLyRepository;
 import com.example.pharmacy.common.model.NhomDuocLyDto;
+import com.example.pharmacy.server.mapper.ClassMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,12 +20,12 @@ public class NhomDuocLyServiceImpl implements NhomDuocLyService {
 
     @Override
     public List<NhomDuocLyDto> findAll() {
-        return nhomDuocLyRepository.findAll().stream().map(NhomDuocLyMapper::toDto).toList();
+        return nhomDuocLyRepository.findAll().stream().map(ClassMapper::toDto).toList();
     }
 
     @Override
     public NhomDuocLyDto findById(String maNhomDuocLy) {
-        return nhomDuocLyRepository.findById(maNhomDuocLy).map(NhomDuocLyMapper::toDto).orElse(null);
+        return nhomDuocLyRepository.findById(maNhomDuocLy).map(ClassMapper::toDto).orElse(null);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class NhomDuocLyServiceImpl implements NhomDuocLyService {
             return false;
         }
         try {
-            NhomDuocLyEntity entity = NhomDuocLyMapper.toEntity(nhomDuocLy);
+            NhomDuocLyEntity entity = ClassMapper.toEntity(nhomDuocLy);
             if (entity.getMaNDL() == null || entity.getMaNDL().isBlank()) {
                 entity.setMaNDL(generateNewMaNhomDuocLy());
                 nhomDuocLy.setMaNDL(entity.getMaNDL());
@@ -57,7 +57,7 @@ public class NhomDuocLyServiceImpl implements NhomDuocLyService {
             return false;
         }
         try {
-            nhomDuocLyRepository.update(NhomDuocLyMapper.toEntity(nhomDuocLy));
+            nhomDuocLyRepository.update(ClassMapper.toEntity(nhomDuocLy));
             return true;
         } catch (RuntimeException exception) {
             return false;

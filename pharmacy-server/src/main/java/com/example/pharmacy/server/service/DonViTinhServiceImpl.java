@@ -2,9 +2,9 @@ package com.example.pharmacy.server.service;
 
 import com.example.pharmacy.common.enums.BusinessCodeType;
 import com.example.pharmacy.server.entity.DonViTinhEntity;
-import com.example.pharmacy.server.mapper.DonViTinhMapper;
 import com.example.pharmacy.server.repository.DonViTinhRepository;
 import com.example.pharmacy.common.model.DonViTinhDto;
+import com.example.pharmacy.server.mapper.ClassMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,17 +20,17 @@ public class DonViTinhServiceImpl implements DonViTinhService {
 
     @Override
     public List<DonViTinhDto> findAll() {
-        return donViTinhRepository.findAll().stream().map(DonViTinhMapper::toDto).toList();
+        return donViTinhRepository.findAll().stream().map(ClassMapper::toDto).toList();
     }
 
     @Override
     public DonViTinhDto findById(String maDonViTinh) {
-        return donViTinhRepository.findById(maDonViTinh).map(DonViTinhMapper::toDto).orElse(null);
+        return donViTinhRepository.findById(maDonViTinh).map(ClassMapper::toDto).orElse(null);
     }
 
     @Override
     public DonViTinhDto findByTenDonViTinh(String tenDonViTinh) {
-        return donViTinhRepository.findByTenDonViTinh(tenDonViTinh).map(DonViTinhMapper::toDto).orElse(null);
+        return donViTinhRepository.findByTenDonViTinh(tenDonViTinh).map(ClassMapper::toDto).orElse(null);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class DonViTinhServiceImpl implements DonViTinhService {
             return false;
         }
         try {
-            DonViTinhEntity entity = DonViTinhMapper.toEntity(donViTinh);
+            DonViTinhEntity entity = ClassMapper.toEntity(donViTinh);
             if (entity.getMaDVT() == null || entity.getMaDVT().isBlank()) {
                 entity.setMaDVT(generateNewMaDVT());
                 donViTinh.setMaDVT(entity.getMaDVT());
@@ -62,7 +62,7 @@ public class DonViTinhServiceImpl implements DonViTinhService {
             return false;
         }
         try {
-            donViTinhRepository.update(DonViTinhMapper.toEntity(donViTinh));
+            donViTinhRepository.update(ClassMapper.toEntity(donViTinh));
             return true;
         } catch (RuntimeException exception) {
             return false;

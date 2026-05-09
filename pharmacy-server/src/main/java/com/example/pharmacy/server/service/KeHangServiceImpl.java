@@ -2,9 +2,9 @@ package com.example.pharmacy.server.service;
 
 import com.example.pharmacy.common.enums.BusinessCodeType;
 import com.example.pharmacy.server.entity.KeHangEntity;
-import com.example.pharmacy.server.mapper.KeHangMapper;
 import com.example.pharmacy.server.repository.KeHangRepository;
 import com.example.pharmacy.common.model.KeHangDto;
+import com.example.pharmacy.server.mapper.ClassMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,17 +20,17 @@ public class KeHangServiceImpl implements KeHangService {
 
     @Override
     public List<KeHangDto> findAll() {
-        return keHangRepository.findAll().stream().map(KeHangMapper::toDto).toList();
+        return keHangRepository.findAll().stream().map(ClassMapper::toDto).toList();
     }
 
     @Override
     public KeHangDto findById(String maKeHang) {
-        return keHangRepository.findById(maKeHang).map(KeHangMapper::toDto).orElse(null);
+        return keHangRepository.findById(maKeHang).map(ClassMapper::toDto).orElse(null);
     }
 
     @Override
     public KeHangDto findByTenKe(String tenKe) {
-        return keHangRepository.findByTenKe(tenKe).map(KeHangMapper::toDto).orElse(null);
+        return keHangRepository.findByTenKe(tenKe).map(ClassMapper::toDto).orElse(null);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class KeHangServiceImpl implements KeHangService {
             return false;
         }
         try {
-            KeHangEntity entity = KeHangMapper.toEntity(keHang);
+            KeHangEntity entity = ClassMapper.toEntity(keHang);
             if (entity.getMaKe() == null || entity.getMaKe().isBlank()) {
                 entity.setMaKe(generateNewMaKeHang());
                 keHang.setMaKe(entity.getMaKe());
@@ -62,7 +62,7 @@ public class KeHangServiceImpl implements KeHangService {
             return false;
         }
         try {
-            keHangRepository.update(KeHangMapper.toEntity(keHang));
+            keHangRepository.update(ClassMapper.toEntity(keHang));
             return true;
         } catch (RuntimeException exception) {
             return false;
