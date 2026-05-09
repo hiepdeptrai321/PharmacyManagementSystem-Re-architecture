@@ -21,39 +21,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaDonRepository {
-    private static final String INSERT_HEADER_SQL = """
-            INSERT INTO HoaDonDto (MaHD, MaNV, MaKH, NgayLap, TrangThai, LoaiHoaDon, MaDonThuoc)
-            VALUES (?, ?, ?, ?, 1, ?, ?)
+    private static final String INSERT_HOA_DON_SQL = """
+            INSERT INTO HoaDon (MaHD, MaNV, MaKH, NgayLap, TrangThai, LoaiHoaDon, MaDonThuoc)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """;
-    private static final String INSERT_DETAIL_SQL = """
-            INSERT INTO ChiTietHoaDonDto (MaHD, MaLH, MaDVT, SoLuong, DonGia, GiamGia)
+    private static final String INSERT_CHI_TIET_HOA_DON_SQL = """
+            INSERT INTO ChiTietHoaDon (MaHD, MaLH, MaDVT, SoLuong, DonGia, GiamGia)
             VALUES (?, ?, ?, ?, ?, ?)
             """;
-    private static final String SELECT_UNIT_CONVERSION_SQL = """
-            SELECT MaDVT, HeSoQuyDoi, DonViCoBan
-            FROM ChiTietDonViTinhDto
+    private static final String SELECT_HE_SO_QUY_DOI_SQL = """
+            SELECT HeSoQuyDoi
+            FROM ChiTietDonViTinh
             WHERE MaThuoc = ? AND MaDVT = ?
             """;
-    private static final String SELECT_LOTS_FOR_UPDATE_SQL = """
-            SELECT MaLH, SoLuongTon, SoLuongDat, SoLuongGiu, HSD
-            FROM Thuoc_SP_TheoLoDto
+    private static final String SELECT_LOT_SQL = """
+            SELECT MaLH, SoLuongTon
+            FROM Thuoc_SP_TheoLo
             WHERE MaThuoc = ?
             ORDER BY COALESCE(HSD, DATE('9999-12-31')) ASC, MaLH ASC
             FOR UPDATE
             """;
-    private static final String UPDATE_LOT_AFTER_SALE_SQL = """
-            UPDATE Thuoc_SP_TheoLoDto
-            SET SoLuongTon = SoLuongTon - ?,
-                SoLuongDat = GREATEST(SoLuongDat - ?, 0),
-                SoLuongGiu = GREATEST(SoLuongGiu - ?, 0)
+    private static final String UPDATE_LOT_STOCK_SQL = """
+            UPDATE Thuoc_SP_TheoLo
+            SET SoLuongTon = SoLuongTon - ?
             WHERE MaLH = ? AND SoLuongTon >= ?
             """;
-    private static final String UPDATE_PREORDER_STATUS_SQL = """
-            UPDATE PhieuDatHangDto
+    private static final String UPDATE_PHIEU_DAT_HANG_STATUS_SQL = """
+            UPDATE PhieuDatHang
             SET TrangThai = ?
             WHERE MaPDat = ?
             """;
-    private static final String SELECT_ALL_SQL = """
+    private static final String SELECT_HOA_DON_BY_ID_SQL = """
             SELECT hd.MaHD,
                    hd.NgayLap,
                    hd.TrangThai,
@@ -64,28 +62,28 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
                    kh.MaKH,
                    kh.TenKH,
                    kh.SDT
-            FROM HoaDonDto hd
-            JOIN NhanVienDto nv ON nv.MaNV = hd.MaNV
-            LEFT JOIN KhachHangDto kh ON kh.MaKH = hd.MaKH
-            ORDER BY hd.NgayLap DESC, hd.MaHD DESC
-            """;
-    private static final String SELECT_BY_ID_SQL = """
-            SELECT hd.MaHD,
-                   hd.NgayLap,
-                   hd.TrangThai,
-                   hd.LoaiHoaDon,
-                   hd.MaDonThuoc,
-                   nv.MaNV,
-                   nv.TenNV,
-                   kh.MaKH,
-                   kh.TenKH,
-                   kh.SDT
-            FROM HoaDonDto hd
-            JOIN NhanVienDto nv ON nv.MaNV = hd.MaNV
-            LEFT JOIN KhachHangDto kh ON kh.MaKH = hd.MaKH
+            FROM HoaDon hd
+            JOIN NhanVien nv ON nv.MaNV = hd.MaNV
+            LEFT JOIN KhachHang kh ON kh.MaKH = hd.MaKH
             WHERE hd.MaHD = ?
             """;
-    private static final String SELECT_DETAILS_SQL = """
+    private static final String SELECT_ALL_HOA_DON_SQL = """
+            SELECT hd.MaHD,
+                   hd.NgayLap,
+                   hd.TrangThai,
+                   hd.LoaiHoaDon,
+                   hd.MaDonThuoc,
+                   nv.MaNV,
+                   nv.TenNV,
+                   kh.MaKH,
+                   kh.TenKH,
+                   kh.SDT
+            FROM HoaDon hd
+            JOIN NhanVien nv ON nv.MaNV = hd.MaNV
+            LEFT JOIN KhachHang kh ON kh.MaKH = hd.MaKH
+            ORDER BY hd.NgayLap DESC, hd.MaHD DESC
+            """;
+    private static final String SELECT_CHI_TIET_HOA_DON_SQL = """
             SELECT ct.MaHD,
                    ct.MaLH,
                    ct.MaDVT,
@@ -95,10 +93,10 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
                    lo.MaThuoc,
                    ts.TenThuoc,
                    dvt.TenDonViTinh
-            FROM ChiTietHoaDonDto ct
-            JOIN Thuoc_SP_TheoLoDto lo ON lo.MaLH = ct.MaLH
-            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = lo.MaThuoc
-            LEFT JOIN DonViTinhDto dvt ON dvt.MaDVT = ct.MaDVT
+            FROM ChiTietHoaDon ct
+            JOIN Thuoc_SP_TheoLo lo ON lo.MaLH = ct.MaLH
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
+            LEFT JOIN DonViTinh dvt ON dvt.MaDVT = ct.MaDVT
             WHERE ct.MaHD = ?
             ORDER BY ts.TenThuoc ASC, ct.MaLH ASC
             """;
@@ -112,7 +110,7 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
         Connection connection = null;
         try {
             connection = getConnection();
-            try (PreparedStatement statement = connection.prepareStatement(INSERT_HEADER_SQL)) {
+            try (PreparedStatement statement = connection.prepareStatement(INSERT_HOA_DON_SQL)) {
                 statement.setString(1, maHoaDon);
                 statement.setString(2, employeeId);
                 statement.setString(3, isBlank(request.getMaKhachHang()) ? null : request.getMaKhachHang().trim());
@@ -134,7 +132,7 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
         Connection connection = null;
         try {
             connection = getConnection();
-            try (PreparedStatement statement = connection.prepareStatement(INSERT_DETAIL_SQL)) {
+            try (PreparedStatement statement = connection.prepareStatement(INSERT_CHI_TIET_HOA_DON_SQL)) {
                 statement.setString(1, maHoaDon);
                 statement.setString(2, maLo);
                 statement.setString(3, maDvt);
@@ -155,7 +153,7 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
         Connection connection = null;
         try {
             connection = getConnection();
-            try (PreparedStatement statement = connection.prepareStatement(SELECT_UNIT_CONVERSION_SQL)) {
+            try (PreparedStatement statement = connection.prepareStatement(SELECT_HE_SO_QUY_DOI_SQL)) {
                 statement.setString(1, maThuoc);
                 statement.setString(2, maDvt);
                 try (ResultSet resultSet = statement.executeQuery()) {
@@ -182,7 +180,7 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
         List<LotStock> list = new ArrayList<>();
         try {
             connection = getConnection();
-            try (PreparedStatement statement = connection.prepareStatement(SELECT_LOTS_FOR_UPDATE_SQL)) {
+            try (PreparedStatement statement = connection.prepareStatement(SELECT_LOT_SQL)) {
                 statement.setString(1, maThuoc);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
@@ -209,7 +207,7 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
         Connection connection = null;
         try {
             connection = getConnection();
-            try (PreparedStatement statement = connection.prepareStatement(UPDATE_LOT_AFTER_SALE_SQL)) {
+            try (PreparedStatement statement = connection.prepareStatement(UPDATE_LOT_STOCK_SQL)) {
                 statement.setInt(1, soLuongTonGiam);
                 statement.setInt(2, reservedGiam);
                 statement.setInt(3, reservedGiam);
@@ -229,7 +227,7 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
         Connection connection = null;
         try {
             connection = getConnection();
-            try (PreparedStatement statement = connection.prepareStatement(UPDATE_PREORDER_STATUS_SQL)) {
+            try (PreparedStatement statement = connection.prepareStatement(UPDATE_PHIEU_DAT_HANG_STATUS_SQL)) {
                 statement.setInt(1, status);
                 statement.setString(2, maPhieuDat);
                 statement.executeUpdate();
@@ -247,7 +245,7 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
         List<HoaDonDto> list = new ArrayList<>();
         try {
             connection = getConnection();
-            try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL);
+            try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_HOA_DON_SQL);
                  ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     list.add(mapHeader(resultSet));
@@ -266,7 +264,7 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
         Connection connection = null;
         try {
             connection = getConnection();
-            try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID_SQL)) {
+            try (PreparedStatement statement = connection.prepareStatement(SELECT_HOA_DON_BY_ID_SQL)) {
                 statement.setString(1, maHoaDon);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
@@ -288,7 +286,7 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
         List<ChiTietHoaDonDto> list = new ArrayList<>();
         try {
             connection = getConnection();
-            try (PreparedStatement statement = connection.prepareStatement(SELECT_DETAILS_SQL)) {
+            try (PreparedStatement statement = connection.prepareStatement(SELECT_CHI_TIET_HOA_DON_SQL)) {
                 statement.setString(1, maHoaDon);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {

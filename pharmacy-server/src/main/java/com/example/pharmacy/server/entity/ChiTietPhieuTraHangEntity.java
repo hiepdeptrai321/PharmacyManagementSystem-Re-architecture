@@ -11,22 +11,22 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class ChiTietPhieuTraHangEntity {
     @Id
-    @Column(name = "MaLH")
+    @Column(name = "MaLH", length = 10)
     private String maLH;
 
     @Id
-    @Column(name = "MaPT")
+    @Column(name = "MaPT", length = 10)
     private String maPT;
 
     @Id
-    @Column(name = "MaThuoc")
+    @Column(name = "MaThuoc", length = 10)
     private String maThuoc;
 
     @Column(name = "SoLuong", nullable = false)
     private int soLuong;
 
     @Id
-    @Column(name = "MaDVT")
+    @Column(name = "MaDVT", length = 10)
     private String maDVT;
 
     @Column(name = "DonGia", nullable = false)

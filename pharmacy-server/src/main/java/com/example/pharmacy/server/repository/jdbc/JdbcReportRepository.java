@@ -25,8 +25,8 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
     private static final String REVENUE_BY_RANGE_SQL = """
             SELECT DATE(hd.NgayLap) AS bucket_date,
                    ROUND(SUM((cthd.SoLuong * cthd.DonGia) - cthd.GiamGia), 2) AS revenue
-            FROM HoaDonDto hd
-            JOIN ChiTietHoaDonDto cthd ON cthd.MaHD = hd.MaHD
+            FROM HoaDon hd
+            JOIN ChiTietHoaDon cthd ON cthd.MaHD = hd.MaHD
             WHERE DATE(hd.NgayLap) BETWEEN ? AND ?
             GROUP BY DATE(hd.NgayLap)
             ORDER BY DATE(hd.NgayLap)
@@ -36,10 +36,10 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                    ts.TenThuoc,
                    SUM(cthd.SoLuong) AS quantity_sold,
                    ROUND(SUM((cthd.SoLuong * cthd.DonGia) - cthd.GiamGia), 2) AS revenue
-            FROM HoaDonDto hd
-            JOIN ChiTietHoaDonDto cthd ON cthd.MaHD = hd.MaHD
-            JOIN Thuoc_SP_TheoLoDto lo ON lo.MaLH = cthd.MaLH
-            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = lo.MaThuoc
+            FROM HoaDon hd
+            JOIN ChiTietHoaDon cthd ON cthd.MaHD = hd.MaHD
+            JOIN Thuoc_SP_TheoLo lo ON lo.MaLH = cthd.MaLH
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
             WHERE DATE(hd.NgayLap) BETWEEN ? AND ?
             GROUP BY ts.MaThuoc, ts.TenThuoc
             ORDER BY quantity_sold DESC, revenue DESC
@@ -52,8 +52,8 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                    lo.HSD,
                    lo.SoLuongTon,
                    DATEDIFF(lo.HSD, CURRENT_DATE()) AS days_to_expiry
-            FROM Thuoc_SP_TheoLoDto lo
-            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = lo.MaThuoc
+            FROM Thuoc_SP_TheoLo lo
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
             WHERE lo.SoLuongTon > 0
               AND lo.HSD IS NOT NULL
               AND lo.HSD < CURRENT_DATE()
@@ -66,8 +66,8 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                    lo.HSD,
                    lo.SoLuongTon,
                    DATEDIFF(lo.HSD, CURRENT_DATE()) AS days_to_expiry
-            FROM Thuoc_SP_TheoLoDto lo
-            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = lo.MaThuoc
+            FROM Thuoc_SP_TheoLo lo
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
             WHERE lo.SoLuongTon > 0
               AND lo.HSD IS NOT NULL
               AND lo.HSD BETWEEN CURRENT_DATE() AND DATE_ADD(CURRENT_DATE(), INTERVAL ? DAY)
@@ -80,8 +80,8 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                 h.MaKH,
                 h.MaNV,
                 COALESCE(SUM(ct.SoLuong * (ct.DonGia - ct.GiamGia)), 0) * 1.05 AS tongTienNet
-            FROM HoaDonDto h
-            LEFT JOIN ChiTietHoaDonDto ct ON h.MaHD = ct.MaHD
+            FROM HoaDon h
+            LEFT JOIN ChiTietHoaDon ct ON h.MaHD = ct.MaHD
             WHERE DATE(h.NgayLap) BETWEEN ? AND ?
             GROUP BY h.MaHD, DATE(h.NgayLap), h.MaKH, h.MaNV
             ORDER BY ngayLap DESC, h.MaHD DESC
@@ -93,16 +93,16 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                 COALESCE(dvtChuan.KiHieu, dvtChuan.TenDonViTinh, 'N/A') AS DVT_CoBan,
                 CAST(SUM(cthd.SoLuong * COALESCE(ctdvtBan.HeSoQuyDoi, 1)) AS SIGNED) AS TongSoLuong,
                 ROUND(SUM(cthd.SoLuong * (cthd.DonGia - cthd.GiamGia)), 2) AS TongDoanhThu
-            FROM ChiTietHoaDonDto cthd
-            JOIN HoaDonDto hd ON cthd.MaHD = hd.MaHD
-            JOIN Thuoc_SP_TheoLoDto lo ON cthd.MaLH = lo.MaLH
-            JOIN Thuoc_SanPhamDto t ON lo.MaThuoc = t.MaThuoc
-            LEFT JOIN ChiTietDonViTinhDto ctdvtChuan
+            FROM ChiTietHoaDon cthd
+            JOIN HoaDon hd ON cthd.MaHD = hd.MaHD
+            JOIN Thuoc_SP_TheoLo lo ON cthd.MaLH = lo.MaLH
+            JOIN Thuoc_SanPham t ON lo.MaThuoc = t.MaThuoc
+            LEFT JOIN ChiTietDonViTinh ctdvtChuan
                 ON t.MaThuoc = ctdvtChuan.MaThuoc
                AND ctdvtChuan.DonViCoBan = 1
-            LEFT JOIN DonViTinhDto dvtChuan
+            LEFT JOIN DonViTinh dvtChuan
                 ON ctdvtChuan.MaDVT = dvtChuan.MaDVT
-            LEFT JOIN ChiTietDonViTinhDto ctdvtBan
+            LEFT JOIN ChiTietDonViTinh ctdvtBan
                 ON t.MaThuoc = ctdvtBan.MaThuoc
                AND cthd.MaDVT = ctdvtBan.MaDVT
             WHERE DATE(hd.NgayLap) BETWEEN ? AND ?
@@ -117,16 +117,16 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                 COALESCE(dvtChuan.KiHieu, dvtChuan.TenDonViTinh, 'N/A') AS DVT_CoBan,
                 CAST(SUM(cthd.SoLuong * COALESCE(ctdvtBan.HeSoQuyDoi, 1)) AS SIGNED) AS TongSoLuong,
                 ROUND(SUM(cthd.SoLuong * (cthd.DonGia - cthd.GiamGia)), 2) AS TongDoanhThu
-            FROM ChiTietHoaDonDto cthd
-            JOIN HoaDonDto hd ON cthd.MaHD = hd.MaHD
-            JOIN Thuoc_SP_TheoLoDto lo ON cthd.MaLH = lo.MaLH
-            JOIN Thuoc_SanPhamDto t ON lo.MaThuoc = t.MaThuoc
-            LEFT JOIN ChiTietDonViTinhDto ctdvtChuan
+            FROM ChiTietHoaDon cthd
+            JOIN HoaDon hd ON cthd.MaHD = hd.MaHD
+            JOIN Thuoc_SP_TheoLo lo ON cthd.MaLH = lo.MaLH
+            JOIN Thuoc_SanPham t ON lo.MaThuoc = t.MaThuoc
+            LEFT JOIN ChiTietDonViTinh ctdvtChuan
                 ON t.MaThuoc = ctdvtChuan.MaThuoc
                AND ctdvtChuan.DonViCoBan = 1
-            LEFT JOIN DonViTinhDto dvtChuan
+            LEFT JOIN DonViTinh dvtChuan
                 ON ctdvtChuan.MaDVT = dvtChuan.MaDVT
-            LEFT JOIN ChiTietDonViTinhDto ctdvtBan
+            LEFT JOIN ChiTietDonViTinh ctdvtBan
                 ON t.MaThuoc = ctdvtBan.MaThuoc
                AND cthd.MaDVT = ctdvtBan.MaDVT
             WHERE DATE(hd.NgayLap) BETWEEN ? AND ?
@@ -140,8 +140,8 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                 t.TenThuoc AS tenThuocHH,
                 SUM(l.SoLuongTon) AS soLuong,
                 l.HSD AS ngayHetHan
-            FROM Thuoc_SP_TheoLoDto l
-            JOIN Thuoc_SanPhamDto t ON l.MaThuoc = t.MaThuoc
+            FROM Thuoc_SP_TheoLo l
+            JOIN Thuoc_SanPham t ON l.MaThuoc = t.MaThuoc
             WHERE l.SoLuongTon > 0
               AND l.HSD IS NOT NULL
               AND l.HSD <= DATE_ADD(
@@ -165,15 +165,15 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                     MaThuoc,
                     MaDVT,
                     COALESCE(HeSoQuyDoi, 1) AS HeSoQuyDoi
-                FROM ChiTietDonViTinhDto
+                FROM ChiTietDonViTinh
                 WHERE DonViCoBan = 1
             ),
             BaseUnits AS (
                 SELECT
                     ct.MaThuoc,
                     dvt.KiHieu AS DVT
-                FROM ChiTietDonViTinhDto ct
-                JOIN DonViTinhDto dvt ON ct.MaDVT = dvt.MaDVT
+                FROM ChiTietDonViTinh ct
+                JOIN DonViTinh dvt ON ct.MaDVT = dvt.MaDVT
                 WHERE ct.DonViCoBan = 1
             ),
             AllProducts AS (
@@ -181,7 +181,7 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                     t.MaThuoc,
                     t.TenThuoc,
                     COALESCE(bu.DVT, 'N/A') AS DVT
-                FROM Thuoc_SanPhamDto t
+                FROM Thuoc_SanPham t
                 LEFT JOIN BaseUnits bu ON t.MaThuoc = bu.MaThuoc
             ),
             Transactions AS (
@@ -190,9 +190,9 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                     pn.NgayNhap AS NgayGiaoDich,
                     CEIL(ctpn.SoLuong * COALESCE(dvt.HeSoQuyDoi, 1) / dvtcb.HeSoQuyDoi) AS SoLuongNhap,
                     0 AS SoLuongXuat
-                FROM ChiTietPhieuNhapDto ctpn
-                JOIN PhieuNhapDto pn ON ctpn.MaPN = pn.MaPN
-                LEFT JOIN ChiTietDonViTinhDto dvt
+                FROM ChiTietPhieuNhap ctpn
+                JOIN PhieuNhap pn ON ctpn.MaPN = pn.MaPN
+                LEFT JOIN ChiTietDonViTinh dvt
                     ON ctpn.MaThuoc = dvt.MaThuoc
                    AND ctpn.MaDVT = dvt.MaDVT
                 JOIN DonViCoBan dvtcb ON ctpn.MaThuoc = dvtcb.MaThuoc
@@ -204,10 +204,10 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                     pt.NgayLap AS NgayGiaoDich,
                     CEIL(ctpt.SoLuong * COALESCE(dvt.HeSoQuyDoi, 1) / dvtcb.HeSoQuyDoi) AS SoLuongNhap,
                     0 AS SoLuongXuat
-                FROM ChiTietPhieuTraHangDto ctpt
-                JOIN PhieuTraHangDto pt ON ctpt.MaPT = pt.MaPT
-                JOIN Thuoc_SP_TheoLoDto lo ON ctpt.MaLH = lo.MaLH
-                LEFT JOIN ChiTietDonViTinhDto dvt
+                FROM ChiTietPhieuTraHang ctpt
+                JOIN PhieuTraHang pt ON ctpt.MaPT = pt.MaPT
+                JOIN Thuoc_SP_TheoLo lo ON ctpt.MaLH = lo.MaLH
+                LEFT JOIN ChiTietDonViTinh dvt
                     ON lo.MaThuoc = dvt.MaThuoc
                    AND ctpt.MaDVT = dvt.MaDVT
                 JOIN DonViCoBan dvtcb ON lo.MaThuoc = dvtcb.MaThuoc
@@ -219,9 +219,9 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                     pd.NgayLap AS NgayGiaoDich,
                     CEIL(ABS(ctpd.SoLuong) * COALESCE(dvt.HeSoQuyDoi, 1) / dvtcb.HeSoQuyDoi) AS SoLuongNhap,
                     0 AS SoLuongXuat
-                FROM ChiTietPhieuDoiHangDto ctpd
-                JOIN PhieuDoiHangDto pd ON ctpd.MaPD = pd.MaPD
-                LEFT JOIN ChiTietDonViTinhDto dvt
+                FROM ChiTietPhieuDoiHang ctpd
+                JOIN PhieuDoiHang pd ON ctpd.MaPD = pd.MaPD
+                LEFT JOIN ChiTietDonViTinh dvt
                     ON ctpd.MaThuoc = dvt.MaThuoc
                    AND ctpd.MaDVT = dvt.MaDVT
                 JOIN DonViCoBan dvtcb ON ctpd.MaThuoc = dvtcb.MaThuoc
@@ -234,10 +234,10 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                     hd.NgayLap AS NgayGiaoDich,
                     0 AS SoLuongNhap,
                     CEIL(cthd.SoLuong * COALESCE(dvt.HeSoQuyDoi, 1) / dvtcb.HeSoQuyDoi) AS SoLuongXuat
-                FROM ChiTietHoaDonDto cthd
-                JOIN HoaDonDto hd ON cthd.MaHD = hd.MaHD
-                JOIN Thuoc_SP_TheoLoDto lo ON cthd.MaLH = lo.MaLH
-                LEFT JOIN ChiTietDonViTinhDto dvt
+                FROM ChiTietHoaDon cthd
+                JOIN HoaDon hd ON cthd.MaHD = hd.MaHD
+                JOIN Thuoc_SP_TheoLo lo ON cthd.MaLH = lo.MaLH
+                LEFT JOIN ChiTietDonViTinh dvt
                     ON lo.MaThuoc = dvt.MaThuoc
                    AND cthd.MaDVT = dvt.MaDVT
                 JOIN DonViCoBan dvtcb ON lo.MaThuoc = dvtcb.MaThuoc
@@ -249,9 +249,9 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                     pd.NgayLap AS NgayGiaoDich,
                     0 AS SoLuongNhap,
                     CEIL(ctpd.SoLuong * COALESCE(dvt.HeSoQuyDoi, 1) / dvtcb.HeSoQuyDoi) AS SoLuongXuat
-                FROM ChiTietPhieuDoiHangDto ctpd
-                JOIN PhieuDoiHangDto pd ON ctpd.MaPD = pd.MaPD
-                LEFT JOIN ChiTietDonViTinhDto dvt
+                FROM ChiTietPhieuDoiHang ctpd
+                JOIN PhieuDoiHang pd ON ctpd.MaPD = pd.MaPD
+                LEFT JOIN ChiTietDonViTinh dvt
                     ON ctpd.MaThuoc = dvt.MaThuoc
                    AND ctpd.MaDVT = dvt.MaDVT
                 JOIN DonViCoBan dvtcb ON ctpd.MaThuoc = dvtcb.MaThuoc
@@ -282,6 +282,121 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                 OR COALESCE(SUM(CASE WHEN ds.Ngay BETWEEN ? AND ? THEN ds.TongNhap ELSE 0 END), 0) <> 0
                 OR COALESCE(SUM(CASE WHEN ds.Ngay BETWEEN ? AND ? THEN ds.TongXuat ELSE 0 END), 0) <> 0
             ORDER BY p.TenThuoc
+            """;
+    private static final String THONG_KE_BAN_HANG_SQL = """
+            SELECT hd.NgayLap AS ngay,
+                   SUM(cthd.SoLuong) AS soLuong,
+                   SUM((cthd.DonGia - cthd.GiamGia) * cthd.SoLuong) AS doanhThu
+            FROM HoaDon hd
+            JOIN ChiTietHoaDon cthd ON cthd.MaHD = hd.MaHD
+            WHERE hd.NgayLap BETWEEN ? AND ?
+            GROUP BY ngay
+            ORDER BY ngay
+            """;
+    private static final String THONG_KE_DOANH_THU_SQL = """
+            SELECT hd.NgayLap AS ngay,
+                   SUM((cthd.DonGia - cthd.GiamGia) * cthd.SoLuong) AS doanhThu
+            FROM HoaDon hd
+            JOIN ChiTietHoaDon cthd ON cthd.MaHD = hd.MaHD
+            WHERE hd.NgayLap BETWEEN ? AND ?
+            GROUP BY ngay
+            ORDER BY ngay
+            """;
+    private static final String THONG_KE_TON_KHO_SQL = """
+            SELECT lo.MaLH,
+                   lo.MaThuoc,
+                   ts.TenThuoc,
+                   lo.SoLuongTon,
+                   lo.HSD
+            FROM Thuoc_SP_TheoLo lo
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
+            ORDER BY lo.HSD ASC
+            """;
+    private static final String THONG_KE_TOP_BAN_CHAY_SQL = """
+            SELECT lo.MaThuoc,
+                   ts.TenThuoc,
+                   SUM(cthd.SoLuong) AS soLuong
+            FROM ChiTietHoaDon cthd
+            JOIN Thuoc_SP_TheoLo lo ON lo.MaLH = cthd.MaLH
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
+            WHERE cthd.MaHD IN (
+                SELECT hd.MaHD
+                FROM HoaDon hd
+                WHERE hd.NgayLap BETWEEN ? AND ?
+            )
+            GROUP BY lo.MaThuoc, ts.TenThuoc
+            ORDER BY soLuong DESC
+            LIMIT ?
+            """;
+    private static final String THONG_KE_TOP_DOANH_THU_SQL = """
+            SELECT lo.MaThuoc,
+                   ts.TenThuoc,
+                   SUM((cthd.DonGia - cthd.GiamGia) * cthd.SoLuong) AS doanhThu
+            FROM ChiTietHoaDon cthd
+            JOIN Thuoc_SP_TheoLo lo ON lo.MaLH = cthd.MaLH
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
+            WHERE cthd.MaHD IN (
+                SELECT hd.MaHD
+                FROM HoaDon hd
+                WHERE hd.NgayLap BETWEEN ? AND ?
+            )
+            GROUP BY lo.MaThuoc, ts.TenThuoc
+            ORDER BY doanhThu DESC
+            LIMIT ?
+            """;
+    private static final String HOADON_BY_RANGE_SQL = """
+            SELECT h.MaHD,
+                   h.NgayLap,
+                   h.MaKH,
+                   h.MaNV,
+                   h.TrangThai,
+                   h.LoaiHoaDon,
+                   COALESCE(SUM(ct.SoLuong), 0) AS tongSanPham
+            FROM HoaDon h
+            LEFT JOIN ChiTietHoaDon ct ON h.MaHD = ct.MaHD
+            WHERE h.NgayLap BETWEEN ? AND ?
+            GROUP BY h.MaHD
+            ORDER BY h.NgayLap DESC
+            """;
+    private static final String THONG_KE_XNT_SQL = """
+            SELECT cthd.MaHD,
+                   cthd.MaLH,
+                   cthd.SoLuong,
+                   cthd.DonGia,
+                   cthd.GiamGia
+            FROM ChiTietHoaDon cthd
+            WHERE cthd.MaHD BETWEEN ? AND ?
+            """;
+    private static final String THUOC_HET_HAN_SQL = """
+            SELECT lo.MaLH,
+                   lo.MaThuoc,
+                   ts.TenThuoc,
+                   lo.SoLuongTon,
+                   lo.HSD
+            FROM Thuoc_SP_TheoLo lo
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
+            WHERE lo.HSD IS NOT NULL AND lo.HSD <= ?
+            ORDER BY lo.HSD ASC
+            """;
+    private static final String THONG_KE_DOI_TRA_SQL = """
+            SELECT ctpd.MaThuoc,
+                   ts.TenThuoc,
+                   SUM(ctpd.SoLuong) AS soLuongDoi
+            FROM ChiTietPhieuDoiHang ctpd
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = ctpd.MaThuoc
+            JOIN PhieuDoiHang pd ON pd.MaPD = ctpd.MaPD
+            WHERE pd.NgayLap BETWEEN ? AND ?
+            GROUP BY ctpd.MaThuoc, ts.TenThuoc
+            """;
+    private static final String THONG_KE_TRA_HANG_SQL = """
+            SELECT ctpt.MaThuoc,
+                   ts.TenThuoc,
+                   SUM(ctpt.SoLuong) AS soLuongTra
+            FROM ChiTietPhieuTraHang ctpt
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = ctpt.MaThuoc
+            JOIN PhieuTraHang pt ON pt.MaPT = ctpt.MaPT
+            WHERE pt.NgayLap BETWEEN ? AND ?
+            GROUP BY ctpt.MaThuoc, ts.TenThuoc
             """;
 
     public JdbcReportRepository(JdbcConnectionProvider connectionProvider) {
@@ -558,8 +673,8 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                         COALESCE(SUM(cthd.SoLuong * cthd.GiamGia), 0) AS discount_value,
                         0 AS return_count,
                         0 AS return_value
-                    FROM HoaDonDto hd
-                    JOIN ChiTietHoaDonDto cthd ON hd.MaHD = cthd.MaHD
+                    FROM HoaDon hd
+                    JOIN ChiTietHoaDon cthd ON hd.MaHD = cthd.MaHD
                     WHERE DATE(hd.NgayLap) BETWEEN ? AND ?
                     GROUP BY bucket_label, sort_key
 
@@ -573,8 +688,8 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                         0 AS discount_value,
                         COUNT(DISTINCT pt.MaPT) AS return_count,
                         COALESCE(SUM(ctpt.SoLuong * (ctpt.DonGia - ctpt.GiamGia)), 0) AS return_value
-                    FROM PhieuTraHangDto pt
-                    JOIN ChiTietPhieuTraHangDto ctpt ON pt.MaPT = ctpt.MaPT
+                    FROM PhieuTraHang pt
+                    JOIN ChiTietPhieuTraHang ctpt ON pt.MaPT = ctpt.MaPT
                     WHERE DATE(pt.NgayLap) BETWEEN ? AND ?
                     GROUP BY bucket_label, sort_key
                 ) aggregated

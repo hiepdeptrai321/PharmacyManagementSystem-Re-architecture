@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implements MedicineCatalogRepository {
-    private static final String MEDICINE_SELECT_FRAGMENT = """
+    private static final String SELECT_MEDICINE_SQL = """
             SELECT ts.MaThuoc,
                    ts.TenThuoc,
                    ts.HamLuong,
@@ -39,39 +39,37 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
                    ts.HangSX,
                    ts.NuocSX,
                    ts.HinhAnh,
-                   ts.ETC,
+                   ts.MaLoaiHang,
+                   ts.MaNDL,
+                   ts.ViTri,
                    ts.TrangThaiXoa,
-                   ndl.MaNDL AS NDL_MaNDL,
-                   ndl.TenNDL AS NDL_TenNDL,
-                   ndl.MoTa AS NDL_MoTa,
-                   lh.MaLoaiHang AS LH_MaLoaiHang,
-                   lh.TenLH AS LH_TenLH,
-                   lh.MoTa AS LH_MoTa,
-                   kh.MaKe AS KE_MaKe,
-                   kh.TenKe AS KE_TenKe,
-                   kh.MoTa AS KE_MoTa
-            FROM Thuoc_SanPhamDto ts
-            LEFT JOIN NhomDuocLyDto ndl ON ndl.MaNDL = ts.MaNDL
-            LEFT JOIN LoaiHangDto lh ON lh.MaLoaiHang = ts.MaLoaiHang
-            LEFT JOIN KeHangDto kh ON kh.MaKe = ts.ViTri
+                   ts.ETC,
+                   ndl.TenNDL,
+                   lh.TenLH,
+                   kh.TenKe
+            FROM Thuoc_SanPham ts
+            LEFT JOIN NhomDuocLy ndl ON ndl.MaNDL = ts.MaNDL
+            LEFT JOIN LoaiHang lh ON lh.MaLoaiHang = ts.MaLoaiHang
+            LEFT JOIN KeHang kh ON kh.MaKe = ts.ViTri
+            ORDER BY ts.TenThuoc
             """;
-    private static final String SELECT_ALL_MEDICINES_SQL = MEDICINE_SELECT_FRAGMENT + """
+    private static final String SELECT_ALL_MEDICINES_SQL = SELECT_MEDICINE_SQL + """
             WHERE ts.TrangThaiXoa = 0
             ORDER BY ts.TenThuoc ASC, ts.MaThuoc ASC
             """;
     private static final String SELECT_ALL_LOAI_HANG_SQL = """
             SELECT MaLoaiHang, TenLH, MoTa
-            FROM LoaiHangDto
+            FROM LoaiHang
             ORDER BY TenLH ASC, MaLoaiHang ASC
             """;
     private static final String SELECT_ALL_LOAI_HANG_NAMES_SQL = """
             SELECT TenLH
-            FROM LoaiHangDto
+            FROM LoaiHang
             ORDER BY TenLH ASC, MaLoaiHang ASC
             """;
     private static final String SELECT_ALL_HOAT_CHAT_SQL = """
             SELECT MaHoatChat, TenHoatChat
-            FROM HoatChatDto
+            FROM HoatChat
             ORDER BY TenHoatChat ASC, MaHoatChat ASC
             """;
     private static final String SELECT_CHI_TIET_HOAT_CHAT_BY_MA_THUOC_SQL = """
@@ -80,20 +78,20 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
                    ct.HamLuong,
                    hc.TenHoatChat,
                    ts.TenThuoc
-            FROM ChiTietHoatChatDto ct
-            JOIN HoatChatDto hc ON hc.MaHoatChat = ct.MaHoatChat
-            LEFT JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = ct.MaThuoc
+            FROM ChiTietHoatChat ct
+            JOIN HoatChat hc ON hc.MaHoatChat = ct.MaHoatChat
+            LEFT JOIN Thuoc_SanPham ts ON ts.MaThuoc = ct.MaThuoc
             WHERE ct.MaThuoc = ?
             ORDER BY hc.TenHoatChat ASC, hc.MaHoatChat ASC
             """;
     private static final String INSERT_MEDICINE_SQL = """
-            INSERT INTO Thuoc_SanPhamDto (
+            INSERT INTO Thuoc_SanPham (
                 MaThuoc, TenThuoc, HamLuong, DonViHL, DuongDung, QuyCachDongGoi,
                 SDK_GPNK, HangSX, NuocSX, HinhAnh, MaLoaiHang, MaNDL, ViTri, TrangThaiXoa, ETC
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)
             """;
     private static final String UPDATE_MEDICINE_SQL = """
-            UPDATE Thuoc_SanPhamDto
+            UPDATE Thuoc_SanPham
             SET TenThuoc = ?,
                 HamLuong = ?,
                 DonViHL = ?,
@@ -110,45 +108,45 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
             WHERE MaThuoc = ?
             """;
     private static final String SOFT_DELETE_MEDICINE_SQL = """
-            UPDATE Thuoc_SanPhamDto
+            UPDATE Thuoc_SanPham
             SET TrangThaiXoa = 1
             WHERE MaThuoc = ?
             """;
     private static final String INSERT_BASE_UNIT_SQL = """
-            INSERT INTO ChiTietDonViTinhDto (
+            INSERT INTO ChiTietDonViTinh (
                 MaThuoc, MaDVT, HeSoQuyDoi, GiaNhap, GiaBan, DonViCoBan
             ) VALUES (?, ?, ?, ?, ?, 1)
             """;
     private static final String INSERT_DEFAULT_BASE_UNIT_SQL = """
-            INSERT INTO ChiTietDonViTinhDto (
+            INSERT INTO ChiTietDonViTinh (
                 MaThuoc, MaDVT, HeSoQuyDoi, GiaNhap, GiaBan, DonViCoBan
             )
             SELECT ?, MaDVT, 1.0, 0.0, 0.0, 1
-            FROM DonViTinhDto
+            FROM DonViTinh
             WHERE MaDVT = ?
             """;
     private static final String INSERT_CHI_TIET_HOAT_CHAT_SQL = """
-            INSERT INTO ChiTietHoatChatDto (MaThuoc, MaHoatChat, HamLuong)
+            INSERT INTO ChiTietHoatChat (MaThuoc, MaHoatChat, HamLuong)
             VALUES (?, ?, ?)
             """;
     private static final String UPDATE_CHI_TIET_HOAT_CHAT_SQL = """
-            UPDATE ChiTietHoatChatDto
+            UPDATE ChiTietHoatChat
             SET HamLuong = ?
             WHERE MaThuoc = ? AND MaHoatChat = ?
             """;
     private static final String DELETE_CHI_TIET_HOAT_CHAT_SQL = """
-            DELETE FROM ChiTietHoatChatDto
+            DELETE FROM ChiTietHoatChat
             WHERE MaThuoc = ? AND MaHoatChat = ?
             """;
     private static final String SELECT_TONG_SO_LUONG_TON_SQL = """
             SELECT COALESCE(SUM(SoLuongTon), 0) AS TongSoLuongTon
-            FROM Thuoc_SP_TheoLoDto
+            FROM Thuoc_SP_TheoLo
             WHERE MaThuoc = ?
             """;
     private static final String SELECT_TEN_DON_VI_CO_BAN_SQL = """
             SELECT dvt.TenDonViTinh
-            FROM ChiTietDonViTinhDto ctdvt
-            JOIN DonViTinhDto dvt ON dvt.MaDVT = ctdvt.MaDVT
+            FROM ChiTietDonViTinh ctdvt
+            JOIN DonViTinh dvt ON dvt.MaDVT = ctdvt.MaDVT
             WHERE ctdvt.MaThuoc = ? AND ctdvt.DonViCoBan = 1
             LIMIT 1
             """;
@@ -158,10 +156,10 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
                    dvt.TenDonViTinh,
                    COUNT(ttl.MaLH) AS SoLoTon,
                    COALESCE(SUM(ttl.SoLuongTon), 0) AS TongSoLuongTon
-            FROM Thuoc_SP_TheoLoDto ttl
-            JOIN Thuoc_SanPhamDto tsp ON tsp.MaThuoc = ttl.MaThuoc
-            JOIN ChiTietDonViTinhDto ctdvt ON ctdvt.MaThuoc = tsp.MaThuoc AND ctdvt.DonViCoBan = 1
-            JOIN DonViTinhDto dvt ON dvt.MaDVT = ctdvt.MaDVT
+            FROM Thuoc_SP_TheoLo ttl
+            JOIN Thuoc_SanPham tsp ON tsp.MaThuoc = ttl.MaThuoc
+            JOIN ChiTietDonViTinh ctdvt ON ctdvt.MaThuoc = tsp.MaThuoc AND ctdvt.DonViCoBan = 1
+            JOIN DonViTinh dvt ON dvt.MaDVT = ctdvt.MaDVT
             GROUP BY ttl.MaThuoc, tsp.TenThuoc, dvt.TenDonViTinh
             ORDER BY tsp.TenThuoc ASC, ttl.MaThuoc ASC
             """;
@@ -191,11 +189,11 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
                    kh.MaKe AS KE_MaKe,
                    kh.TenKe AS KE_TenKe,
                    kh.MoTa AS KE_MoTa
-            FROM Thuoc_SP_TheoLoDto ttl
-            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = ttl.MaThuoc
-            LEFT JOIN NhomDuocLyDto ndl ON ndl.MaNDL = ts.MaNDL
-            LEFT JOIN LoaiHangDto lh ON lh.MaLoaiHang = ts.MaLoaiHang
-            LEFT JOIN KeHangDto kh ON kh.MaKe = ts.ViTri
+            FROM Thuoc_SP_TheoLo ttl
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = ttl.MaThuoc
+            LEFT JOIN NhomDuocLy ndl ON ndl.MaNDL = ts.MaNDL
+            LEFT JOIN LoaiHang lh ON lh.MaLoaiHang = ts.MaLoaiHang
+            LEFT JOIN KeHang kh ON kh.MaKe = ts.ViTri
             ORDER BY ts.TenThuoc ASC, ttl.HSD ASC, ttl.NSX ASC, ttl.MaLH ASC
             """;
 
@@ -703,8 +701,8 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
                        ctdvt.DonViCoBan,
                        dvt.TenDonViTinh,
                        dvt.KiHieu
-                FROM ChiTietDonViTinhDto ctdvt
-                JOIN DonViTinhDto dvt ON dvt.MaDVT = ctdvt.MaDVT
+                FROM ChiTietDonViTinh ctdvt
+                JOIN DonViTinh dvt ON dvt.MaDVT = ctdvt.MaDVT
                 WHERE ctdvt.MaThuoc IN (%s)
                 ORDER BY ctdvt.MaThuoc ASC, ctdvt.DonViCoBan DESC, ctdvt.HeSoQuyDoi DESC, ctdvt.MaDVT ASC
                 """.formatted(placeholders);
