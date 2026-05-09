@@ -39,9 +39,9 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
                    kh.MaKH,
                    kh.TenKH,
                    kh.SDT
-            FROM HoaDonDto hd
-            JOIN NhanVienDto nv ON nv.MaNV = hd.MaNV
-            LEFT JOIN KhachHangDto kh ON kh.MaKH = hd.MaKH
+            FROM HoaDon hd
+            JOIN NhanVien nv ON nv.MaNV = hd.MaNV
+            LEFT JOIN KhachHang kh ON kh.MaKH = hd.MaKH
             WHERE hd.MaHD = ?
             """;
     private static final String SELECT_HOA_DON_DETAILS_SQL = """
@@ -54,92 +54,92 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
                    lo.MaThuoc,
                    ts.TenThuoc,
                    dvt.TenDonViTinh
-            FROM ChiTietHoaDonDto ct
-            JOIN Thuoc_SP_TheoLoDto lo ON lo.MaLH = ct.MaLH
-            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = lo.MaThuoc
-            LEFT JOIN DonViTinhDto dvt ON dvt.MaDVT = ct.MaDVT
+            FROM ChiTietHoaDon ct
+            JOIN Thuoc_SP_TheoLo lo ON lo.MaLH = ct.MaLH
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
+            LEFT JOIN DonViTinh dvt ON dvt.MaDVT = ct.MaDVT
             WHERE ct.MaHD = ?
             ORDER BY ts.TenThuoc ASC, ct.MaLH ASC
             """;
     private static final String UPDATE_HOA_DON_CUSTOMER_SQL = """
-            UPDATE HoaDonDto
+            UPDATE HoaDon
             SET MaKH = ?
             WHERE MaHD = ?
             """;
     private static final String SELECT_SO_LUONG_DA_DOI_SQL = """
             SELECT COALESCE(SUM(ct.SoLuong), 0)
-            FROM ChiTietPhieuDoiHangDto ct
-            JOIN PhieuDoiHangDto pd ON pd.MaPD = ct.MaPD
+            FROM ChiTietPhieuDoiHang ct
+            JOIN PhieuDoiHang pd ON pd.MaPD = ct.MaPD
             WHERE pd.MaHD = ? AND ct.MaLH = ? AND ct.MaDVT = ?
             """;
     private static final String SELECT_SO_LUONG_DA_TRA_SQL = """
             SELECT COALESCE(SUM(ct.SoLuong), 0)
-            FROM ChiTietPhieuTraHangDto ct
-            JOIN PhieuTraHangDto pt ON pt.MaPT = ct.MaPT
+            FROM ChiTietPhieuTraHang ct
+            JOIN PhieuTraHang pt ON pt.MaPT = ct.MaPT
             WHERE pt.MaHD = ? AND ct.MaLH = ? AND ct.MaDVT = ?
             """;
     private static final String SELECT_UNIT_CONVERSION_SQL = """
             SELECT MaDVT, HeSoQuyDoi, DonViCoBan
-            FROM ChiTietDonViTinhDto
+            FROM ChiTietDonViTinh
             WHERE MaThuoc = ? AND MaDVT = ?
             """;
     private static final String SELECT_LOTS_FOR_UPDATE_SQL = """
             SELECT MaLH, SoLuongTon, HSD
-            FROM Thuoc_SP_TheoLoDto
+            FROM Thuoc_SP_TheoLo
             WHERE MaThuoc = ?
             ORDER BY COALESCE(HSD, DATE('9999-12-31')) ASC, MaLH ASC
             FOR UPDATE
             """;
     private static final String UPDATE_ADD_STOCK_SQL = """
-            UPDATE Thuoc_SP_TheoLoDto
+            UPDATE Thuoc_SP_TheoLo
             SET SoLuongTon = SoLuongTon + ?
             WHERE MaLH = ?
             """;
     private static final String UPDATE_DEDUCT_STOCK_SQL = """
-            UPDATE Thuoc_SP_TheoLoDto
+            UPDATE Thuoc_SP_TheoLo
             SET SoLuongTon = SoLuongTon - ?
             WHERE MaLH = ? AND SoLuongTon >= ?
             """;
     private static final String INSERT_PHIEU_DOI_HEADER_SQL = """
-            INSERT INTO PhieuDoiHangDto (MaPD, NgayLap, GhiChu, MaNV, MaKH, MaHD)
+            INSERT INTO PhieuDoiHang (MaPD, NgayLap, GhiChu, MaNV, MaKH, MaHD)
             VALUES (?, ?, ?, ?, ?, ?)
             """;
     private static final String INSERT_PHIEU_DOI_DETAIL_SQL = """
-            INSERT INTO ChiTietPhieuDoiHangDto (MaLH, MaPD, MaThuoc, SoLuong, MaDVT, LyDoDoi)
+            INSERT INTO ChiTietPhieuDoiHang (MaLH, MaPD, MaThuoc, SoLuong, MaDVT, LyDoDoi)
             VALUES (?, ?, ?, ?, ?, ?)
             """;
     private static final String INSERT_PHIEU_TRA_HEADER_SQL = """
-            INSERT INTO PhieuTraHangDto (MaPT, NgayLap, GhiChu, MaNV, MaHD, MaKH)
+            INSERT INTO PhieuTraHang (MaPT, NgayLap, GhiChu, MaNV, MaHD, MaKH)
             VALUES (?, ?, ?, ?, ?, ?)
             """;
     private static final String INSERT_PHIEU_TRA_DETAIL_SQL = """
-            INSERT INTO ChiTietPhieuTraHangDto (MaLH, MaPT, MaThuoc, SoLuong, MaDVT, DonGia, GiamGia, LyDoTra)
+            INSERT INTO ChiTietPhieuTraHang (MaLH, MaPT, MaThuoc, SoLuong, MaDVT, DonGia, GiamGia, LyDoTra)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """;
     private static final String SELECT_ALL_PHIEU_DOI_SQL = """
             SELECT pd.MaPD, pd.NgayLap, pd.GhiChu, pd.MaHD,
                    nv.MaNV, nv.TenNV,
                    kh.MaKH, kh.TenKH, kh.SDT
-            FROM PhieuDoiHangDto pd
-            JOIN NhanVienDto nv ON nv.MaNV = pd.MaNV
-            JOIN KhachHangDto kh ON kh.MaKH = pd.MaKH
+            FROM PhieuDoiHang pd
+            JOIN NhanVien nv ON nv.MaNV = pd.MaNV
+            JOIN KhachHang kh ON kh.MaKH = pd.MaKH
             ORDER BY pd.NgayLap DESC, pd.MaPD DESC
             """;
     private static final String SELECT_PHIEU_DOI_BY_ID_SQL = """
             SELECT pd.MaPD, pd.NgayLap, pd.GhiChu, pd.MaHD,
                    nv.MaNV, nv.TenNV,
                    kh.MaKH, kh.TenKH, kh.SDT
-            FROM PhieuDoiHangDto pd
-            JOIN NhanVienDto nv ON nv.MaNV = pd.MaNV
-            JOIN KhachHangDto kh ON kh.MaKH = pd.MaKH
+            FROM PhieuDoiHang pd
+            JOIN NhanVien nv ON nv.MaNV = pd.MaNV
+            JOIN KhachHang kh ON kh.MaKH = pd.MaKH
             WHERE pd.MaPD = ?
             """;
     private static final String SELECT_CT_PHIEU_DOI_SQL = """
             SELECT ct.MaLH, ct.MaPD, ct.MaThuoc, ct.SoLuong, ct.MaDVT, ct.LyDoDoi,
                    ts.TenThuoc, dvt.TenDonViTinh
-            FROM ChiTietPhieuDoiHangDto ct
-            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = ct.MaThuoc
-            LEFT JOIN DonViTinhDto dvt ON dvt.MaDVT = ct.MaDVT
+            FROM ChiTietPhieuDoiHang ct
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = ct.MaThuoc
+            LEFT JOIN DonViTinh dvt ON dvt.MaDVT = ct.MaDVT
             WHERE ct.MaPD = ?
             ORDER BY ts.TenThuoc ASC, ct.MaLH ASC
             """;
@@ -147,26 +147,26 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
             SELECT pt.MaPT, pt.NgayLap, pt.GhiChu, pt.MaHD,
                    nv.MaNV, nv.TenNV,
                    kh.MaKH, kh.TenKH, kh.SDT
-            FROM PhieuTraHangDto pt
-            JOIN NhanVienDto nv ON nv.MaNV = pt.MaNV
-            JOIN KhachHangDto kh ON kh.MaKH = pt.MaKH
+            FROM PhieuTraHang pt
+            JOIN NhanVien nv ON nv.MaNV = pt.MaNV
+            JOIN KhachHang kh ON kh.MaKH = pt.MaKH
             ORDER BY pt.NgayLap DESC, pt.MaPT DESC
             """;
     private static final String SELECT_PHIEU_TRA_BY_ID_SQL = """
             SELECT pt.MaPT, pt.NgayLap, pt.GhiChu, pt.MaHD,
                    nv.MaNV, nv.TenNV,
                    kh.MaKH, kh.TenKH, kh.SDT
-            FROM PhieuTraHangDto pt
-            JOIN NhanVienDto nv ON nv.MaNV = pt.MaNV
-            JOIN KhachHangDto kh ON kh.MaKH = pt.MaKH
+            FROM PhieuTraHang pt
+            JOIN NhanVien nv ON nv.MaNV = pt.MaNV
+            JOIN KhachHang kh ON kh.MaKH = pt.MaKH
             WHERE pt.MaPT = ?
             """;
     private static final String SELECT_CT_PHIEU_TRA_SQL = """
             SELECT ct.MaLH, ct.MaPT, ct.MaThuoc, ct.SoLuong, ct.MaDVT, ct.DonGia, ct.GiamGia, ct.LyDoTra,
                    ts.TenThuoc, dvt.TenDonViTinh
-            FROM ChiTietPhieuTraHangDto ct
-            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = ct.MaThuoc
-            LEFT JOIN DonViTinhDto dvt ON dvt.MaDVT = ct.MaDVT
+            FROM ChiTietPhieuTraHang ct
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = ct.MaThuoc
+            LEFT JOIN DonViTinh dvt ON dvt.MaDVT = ct.MaDVT
             WHERE ct.MaPT = ?
             ORDER BY ts.TenThuoc ASC, ct.MaLH ASC
             """;

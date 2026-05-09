@@ -18,29 +18,31 @@ import java.util.List;
 
 public class JdbcTonKhoRepository extends AbstractJdbcRepository implements TonKhoRepository {
     private static final String SELECT_ALL_LOTS_SQL = """
-            SELECT lo.MaPN,
-                   lo.MaThuoc,
-                   lo.MaLH,
+            SELECT lo.MaLH,
                    lo.SoLuongTon,
                    lo.NSX,
                    lo.HSD,
+                   ts.MaThuoc,
                    ts.TenThuoc,
                    ts.ViTri,
                    ts.MaLoaiHang,
+                   ts.MaNDL,
+                   kh.MaKe,
                    kh.TenKe,
+                   lh.MaLoaiHang,
                    lh.TenLH,
-                   dvt.MaDVT AS BaseMaDVT,
-                   dvt.TenDonViTinh AS BaseTenDVT
-            FROM Thuoc_SP_TheoLoDto lo
-            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = lo.MaThuoc
-            LEFT JOIN KeHangDto kh ON kh.MaKe = ts.ViTri
-            LEFT JOIN LoaiHangDto lh ON lh.MaLoaiHang = ts.MaLoaiHang
-            LEFT JOIN ChiTietDonViTinhDto ctdvt ON ctdvt.MaThuoc = ts.MaThuoc AND ctdvt.DonViCoBan = 1
-            LEFT JOIN DonViTinhDto dvt ON dvt.MaDVT = ctdvt.MaDVT
-            ORDER BY ts.TenThuoc ASC, lo.MaLH ASC
+                   ctdvt.MaDVT,
+                   dvt.TenDonViTinh
+            FROM Thuoc_SP_TheoLo lo
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
+            LEFT JOIN KeHang kh ON kh.MaKe = ts.ViTri
+            LEFT JOIN LoaiHang lh ON lh.MaLoaiHang = ts.MaLoaiHang
+            LEFT JOIN ChiTietDonViTinh ctdvt ON ctdvt.MaThuoc = ts.MaThuoc AND ctdvt.DonViCoBan = 1
+            LEFT JOIN DonViTinh dvt ON dvt.MaDVT = ctdvt.MaDVT
+            ORDER BY ts.TenThuoc, lo.MaLH
             """;
     private static final String UPDATE_LOT_QUANTITY_SQL = """
-            UPDATE Thuoc_SP_TheoLoDto
+            UPDATE Thuoc_SP_TheoLo
             SET SoLuongTon = ?
             WHERE MaLH = ?
             """;

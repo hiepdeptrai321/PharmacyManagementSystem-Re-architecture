@@ -26,45 +26,43 @@ import java.util.Map;
 import java.util.StringJoiner;
 
 public class JdbcPromotionRepository extends AbstractJdbcRepository implements PromotionRepository {
-    private static final String PROMOTION_SELECT_FRAGMENT = """
+    private static final String SELECT_KHUYEN_MAI_SQL = """
             SELECT km.MaKM,
                    km.TenKM,
                    km.GiaTriKM,
                    km.GiaTriApDung,
+                   km.LoaiGiaTri,
                    km.NgayBatDau,
                    km.NgayKetThuc,
                    km.MoTa,
                    km.NgayTao,
-                   lkm.MaLoai AS LKM_MaLoai,
-                   lkm.TenLoai AS LKM_TenLoai,
-                   lkm.MoTa AS LKM_MoTa
-            FROM KhuyenMaiDto km
-            JOIN LoaiKhuyenMaiDto lkm ON lkm.MaLoai = km.MaLoai
-            """;
-    private static final String SELECT_ALL_PROMOTIONS_SQL = PROMOTION_SELECT_FRAGMENT + """
+                   km.MaLoai,
+                   lkm.TenLoai
+            FROM KhuyenMai km
+            JOIN LoaiKhuyenMai lkm ON lkm.MaLoai = km.MaLoai
             ORDER BY km.NgayBatDau DESC, km.MaKM DESC
             """;
-    private static final String SELECT_PROMOTION_BY_ID_SQL = PROMOTION_SELECT_FRAGMENT + """
+    private static final String SELECT_PROMOTION_BY_ID_SQL = SELECT_KHUYEN_MAI_SQL + """
             WHERE km.MaKM = ?
             """;
-    private static final String SEARCH_PROMOTIONS_SQL = PROMOTION_SELECT_FRAGMENT + """
+    private static final String SEARCH_PROMOTIONS_SQL = SELECT_KHUYEN_MAI_SQL + """
             WHERE LOWER(km.TenKM) LIKE ? OR LOWER(km.MaKM) LIKE ?
             ORDER BY km.NgayBatDau DESC, km.MaKM DESC
             """;
-    private static final String SELECT_ALL_PROMOTION_TYPES_SQL = """
+    private static final String SELECT_ALL_LOAI_KHUYEN_MAI_SQL = """
             SELECT MaLoai, TenLoai, MoTa
-            FROM LoaiKhuyenMaiDto
-            ORDER BY TenLoai ASC, MaLoai ASC
+            FROM LoaiKhuyenMai
+            ORDER BY TenLoai
             """;
-    private static final String SELECT_PROMOTION_TYPE_BY_ID_SQL = """
+    private static final String SELECT_LOAI_KHUYEN_MAI_BY_ID_SQL = """
             SELECT MaLoai, TenLoai, MoTa
-            FROM LoaiKhuyenMaiDto
+            FROM LoaiKhuyenMai
             WHERE MaLoai = ?
             """;
-    private static final String SELECT_PROMOTION_TYPE_BY_NAME_SQL = """
+    private static final String SELECT_LOAI_KHUYEN_MAI_BY_NAME_SQL = """
             SELECT MaLoai, TenLoai, MoTa
-            FROM LoaiKhuyenMaiDto
-            WHERE LOWER(TenLoai) = LOWER(?)
+            FROM LoaiKhuyenMai
+            WHERE TenLoai = ?
             """;
     private static final String MEDICINE_SELECT_FRAGMENT = """
             ts.MaThuoc,
@@ -95,11 +93,11 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
                    ct.SLApDung,
                    ct.SLToiDa,
             """ + MEDICINE_SELECT_FRAGMENT + """
-            FROM ChiTietKhuyenMaiDto ct
-            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = ct.MaThuoc
-            LEFT JOIN NhomDuocLyDto ndl ON ndl.MaNDL = ts.MaNDL
-            LEFT JOIN LoaiHangDto lh ON lh.MaLoaiHang = ts.MaLoaiHang
-            LEFT JOIN KeHangDto kh ON kh.MaKe = ts.ViTri
+            FROM ChiTietKhuyenMai ct
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = ct.MaThuoc
+            LEFT JOIN NhomDuocLy ndl ON ndl.MaNDL = ts.MaNDL
+            LEFT JOIN LoaiHang lh ON lh.MaLoaiHang = ts.MaLoaiHang
+            LEFT JOIN KeHang kh ON kh.MaKe = ts.ViTri
             WHERE ct.MaKM = ?
             ORDER BY ts.TenThuoc ASC, ct.MaThuoc ASC
             """;
@@ -108,21 +106,21 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
                    tg.MaThuocTangKem,
                    tg.SoLuong,
             """ + MEDICINE_SELECT_FRAGMENT.replace("ts.MaThuoc,", "ts.MaThuoc AS MaThuocTangKem,") + """
-            FROM Thuoc_SP_TangKemDto tg
-            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = tg.MaThuocTangKem
-            LEFT JOIN NhomDuocLyDto ndl ON ndl.MaNDL = ts.MaNDL
-            LEFT JOIN LoaiHangDto lh ON lh.MaLoaiHang = ts.MaLoaiHang
-            LEFT JOIN KeHangDto kh ON kh.MaKe = ts.ViTri
+            FROM Thuoc_SP_TangKem tg
+            JOIN Thuoc_SanPham ts ON ts.MaThuoc = tg.MaThuocTangKem
+            LEFT JOIN NhomDuocLy ndl ON ndl.MaNDL = ts.MaNDL
+            LEFT JOIN LoaiHang lh ON lh.MaLoaiHang = ts.MaLoaiHang
+            LEFT JOIN KeHang kh ON kh.MaKe = ts.ViTri
             WHERE tg.MaKM = ?
             ORDER BY ts.TenThuoc ASC, tg.MaThuocTangKem ASC
             """;
     private static final String INSERT_PROMOTION_SQL = """
-            INSERT INTO KhuyenMaiDto (
+            INSERT INTO KhuyenMai (
                 MaKM, MaLoai, TenKM, GiaTriKM, NgayBatDau, NgayKetThuc, MoTa, GiaTriApDung
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """;
     private static final String UPDATE_PROMOTION_SQL = """
-            UPDATE KhuyenMaiDto
+            UPDATE KhuyenMai
             SET MaLoai = ?,
                 TenKM = ?,
                 GiaTriKM = ?,
@@ -133,30 +131,30 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
             WHERE MaKM = ?
             """;
     private static final String DELETE_PROMOTION_SQL = """
-            DELETE FROM KhuyenMaiDto
+            DELETE FROM KhuyenMai
             WHERE MaKM = ?
             """;
     private static final String INSERT_PROMOTION_DETAIL_SQL = """
-            INSERT INTO ChiTietKhuyenMaiDto (MaThuoc, MaKM, SLApDung, SLToiDa)
+            INSERT INTO ChiTietKhuyenMai (MaThuoc, MaKM, SLApDung, SLToiDa)
             VALUES (?, ?, ?, ?)
             """;
     private static final String DELETE_PROMOTION_DETAILS_SQL = """
-            DELETE FROM ChiTietKhuyenMaiDto
+            DELETE FROM ChiTietKhuyenMai
             WHERE MaKM = ?
             """;
     private static final String INSERT_PROMOTION_GIFT_SQL = """
-            INSERT INTO Thuoc_SP_TangKemDto (MaThuocTangKem, MaKM, SoLuong)
+            INSERT INTO Thuoc_SP_TangKem (MaThuocTangKem, MaKM, SoLuong)
             VALUES (?, ?, ?)
             """;
     private static final String DELETE_PROMOTION_GIFTS_SQL = """
-            DELETE FROM Thuoc_SP_TangKemDto
+            DELETE FROM Thuoc_SP_TangKem
             WHERE MaKM = ?
             """;
-    private static final String SELECT_ACTIVE_PROMOTIONS_SQL = PROMOTION_SELECT_FRAGMENT + """
+    private static final String SELECT_ACTIVE_PROMOTIONS_SQL = SELECT_KHUYEN_MAI_SQL + """
             WHERE km.NgayBatDau <= ? AND km.NgayKetThuc >= ?
             ORDER BY km.NgayBatDau DESC, km.MaKM DESC
             """;
-    private static final String SELECT_ACTIVE_INVOICE_PROMOTIONS_SQL = PROMOTION_SELECT_FRAGMENT + """
+    private static final String SELECT_ACTIVE_INVOICE_PROMOTIONS_SQL = SELECT_KHUYEN_MAI_SQL + """
             WHERE km.NgayBatDau <= ? AND km.NgayKetThuc >= ? AND km.MaLoai IN ('LKM004', 'LKM005')
             ORDER BY km.NgayBatDau DESC, km.MaKM DESC
             """;
@@ -232,18 +230,18 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
 
     @Override
     public List<LoaiKhuyenMaiDto> findAllLoaiKhuyenMai() {
-        return loadPromotionTypes(SELECT_ALL_PROMOTION_TYPES_SQL, null);
+        return loadPromotionTypes(SELECT_ALL_LOAI_KHUYEN_MAI_SQL, null);
     }
 
     @Override
     public LoaiKhuyenMaiDto findLoaiKhuyenMaiById(String maLoaiKhuyenMai) {
-        List<LoaiKhuyenMaiDto> types = loadPromotionTypes(SELECT_PROMOTION_TYPE_BY_ID_SQL, maLoaiKhuyenMai);
+        List<LoaiKhuyenMaiDto> types = loadPromotionTypes(SELECT_LOAI_KHUYEN_MAI_BY_ID_SQL, maLoaiKhuyenMai);
         return types.isEmpty() ? null : types.get(0);
     }
 
     @Override
     public LoaiKhuyenMaiDto findLoaiKhuyenMaiByTen(String tenLoaiKhuyenMai) {
-        List<LoaiKhuyenMaiDto> types = loadPromotionTypes(SELECT_PROMOTION_TYPE_BY_NAME_SQL, tenLoaiKhuyenMai);
+        List<LoaiKhuyenMaiDto> types = loadPromotionTypes(SELECT_LOAI_KHUYEN_MAI_BY_NAME_SQL, tenLoaiKhuyenMai);
         return types.isEmpty() ? null : types.get(0);
     }
 
@@ -601,8 +599,8 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
                        ctdvt.DonViCoBan,
                        dvt.TenDonViTinh,
                        dvt.KiHieu
-                FROM ChiTietDonViTinhDto ctdvt
-                JOIN DonViTinhDto dvt ON dvt.MaDVT = ctdvt.MaDVT
+                FROM ChiTietDonViTinh ctdvt
+                JOIN DonViTinh dvt ON dvt.MaDVT = ctdvt.MaDVT
                 WHERE ctdvt.MaThuoc IN (%s)
                 ORDER BY ctdvt.MaThuoc ASC, ctdvt.DonViCoBan DESC, ctdvt.HeSoQuyDoi DESC, ctdvt.MaDVT ASC
                 """.formatted(placeholders(medicinesById.size()));
