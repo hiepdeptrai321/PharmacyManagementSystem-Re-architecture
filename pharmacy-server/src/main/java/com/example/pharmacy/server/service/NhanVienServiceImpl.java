@@ -3,11 +3,11 @@ package com.example.pharmacy.server.service;
 import com.example.pharmacy.common.enums.BusinessCodeType;
 import com.example.pharmacy.server.entity.LuongNhanVienEntity;
 import com.example.pharmacy.server.entity.NhanVienEntity;
-import com.example.pharmacy.server.mapper.NhanVienMapper;
 import com.example.pharmacy.server.repository.LuongNhanVienRepository;
 import com.example.pharmacy.server.repository.NhanVienManagementRepository;
 import com.example.pharmacy.common.model.LuongNhanVienDto;
 import com.example.pharmacy.common.model.NhanVienDto;
+import com.example.pharmacy.server.mapper.ClassMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +28,7 @@ public class NhanVienServiceImpl implements NhanVienService {
     @Override
     public List<NhanVienDto> findAll() {
         return nhanVienRepository.findAllNotDeleted().stream()
-                .map(NhanVienMapper::toDto)
+                .map(ClassMapper::toDto)
                 .toList();
     }
 
@@ -36,7 +36,7 @@ public class NhanVienServiceImpl implements NhanVienService {
     public NhanVienDto findById(String maNhanVien) {
         return nhanVienRepository.findById(maNhanVien)
                 .filter(entity -> !entity.isTrangThaiXoa())
-                .map(NhanVienMapper::toDto)
+                .map(ClassMapper::toDto)
                 .orElse(null);
     }
 
@@ -54,7 +54,7 @@ public class NhanVienServiceImpl implements NhanVienService {
             if (!isUsernameAvailable(nhanVien.getTaiKhoan(), null)) {
                 return false;
             }
-            NhanVienEntity entity = NhanVienMapper.toEntity(nhanVien, null);
+            NhanVienEntity entity = ClassMapper.toEntity(nhanVien, null);
             if (entity.getMaNV() == null || entity.getMaNV().isBlank()) {
                 entity.setMaNV(generateNewMaNhanVien());
                 nhanVien.setMaNV(entity.getMaNV());
@@ -79,7 +79,7 @@ public class NhanVienServiceImpl implements NhanVienService {
             if (!isUsernameAvailable(nhanVien.getTaiKhoan(), nhanVien.getMaNV())) {
                 return false;
             }
-            nhanVienRepository.update(NhanVienMapper.toEntity(nhanVien, existing));
+            nhanVienRepository.update(ClassMapper.toEntity(nhanVien, existing));
             return true;
         } catch (RuntimeException exception) {
             return false;
@@ -112,7 +112,7 @@ public class NhanVienServiceImpl implements NhanVienService {
             return List.of();
         }
         return luongNhanVienRepository.findByMaNhanVien(maNhanVien).stream()
-                .map(NhanVienMapper::toLuongDto)
+                .map(ClassMapper::toLuongDto)
                 .toList();
     }
 
@@ -128,7 +128,7 @@ public class NhanVienServiceImpl implements NhanVienService {
             return false;
         }
         try {
-            LuongNhanVienEntity entity = NhanVienMapper.toLuongEntity(luongNhanVien);
+            LuongNhanVienEntity entity = ClassMapper.toLuongEntity(luongNhanVien);
             if (entity.getMaLNV() == null || entity.getMaLNV().isBlank()) {
                 entity.setMaLNV(generateNewMaLuongNhanVien());
                 luongNhanVien.setMaLNV(entity.getMaLNV());

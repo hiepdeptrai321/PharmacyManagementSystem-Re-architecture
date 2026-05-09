@@ -2,9 +2,9 @@ package com.example.pharmacy.server.service;
 
 import com.example.pharmacy.common.enums.BusinessCodeType;
 import com.example.pharmacy.server.entity.KhachHangEntity;
-import com.example.pharmacy.server.mapper.KhachHangMapper;
 import com.example.pharmacy.server.repository.KhachHangRepository;
 import com.example.pharmacy.common.model.KhachHangDto;
+import com.example.pharmacy.server.mapper.ClassMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,12 +20,12 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Override
     public List<KhachHangDto> findAll() {
-        return khachHangRepository.findAllActive().stream().map(KhachHangMapper::toDto).toList();
+        return khachHangRepository.findAllActive().stream().map(ClassMapper::toDto).toList();
     }
 
     @Override
     public KhachHangDto findById(String maKhachHang) {
-        return khachHangRepository.findById(maKhachHang).map(KhachHangMapper::toDto).orElse(null);
+        return khachHangRepository.findById(maKhachHang).map(ClassMapper::toDto).orElse(null);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class KhachHangServiceImpl implements KhachHangService {
             return false;
         }
         try {
-            KhachHangEntity entity = KhachHangMapper.toEntity(khachHang);
+            KhachHangEntity entity = ClassMapper.toEntity(khachHang);
             if (entity.getMaKH() == null || entity.getMaKH().isBlank()) {
                 entity.setMaKH(generateNewMaKH());
                 khachHang.setMaKH(entity.getMaKH());
@@ -60,7 +60,7 @@ public class KhachHangServiceImpl implements KhachHangService {
             return create(khachHang);
         }
         try {
-            khachHangRepository.update(KhachHangMapper.toEntity(khachHang));
+            khachHangRepository.update(ClassMapper.toEntity(khachHang));
             return true;
         } catch (RuntimeException exception) {
             return false;

@@ -2,9 +2,9 @@ package com.example.pharmacy.server.service;
 
 import com.example.pharmacy.common.enums.BusinessCodeType;
 import com.example.pharmacy.server.entity.NhaCungCapEntity;
-import com.example.pharmacy.server.mapper.NhaCungCapMapper;
 import com.example.pharmacy.server.repository.NhaCungCapRepository;
 import com.example.pharmacy.common.model.NhaCungCapDto;
+import com.example.pharmacy.server.mapper.ClassMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,12 +20,12 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
 
     @Override
     public List<NhaCungCapDto> findAll() {
-        return nhaCungCapRepository.findAll().stream().map(NhaCungCapMapper::toDto).toList();
+        return nhaCungCapRepository.findAll().stream().map(ClassMapper::toDto).toList();
     }
 
     @Override
     public NhaCungCapDto findById(String maNhaCungCap) {
-        return nhaCungCapRepository.findById(maNhaCungCap).map(NhaCungCapMapper::toDto).orElse(null);
+        return nhaCungCapRepository.findById(maNhaCungCap).map(ClassMapper::toDto).orElse(null);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
             return false;
         }
         try {
-            NhaCungCapEntity entity = NhaCungCapMapper.toEntity(nhaCungCap);
+            NhaCungCapEntity entity = ClassMapper.toEntity(nhaCungCap);
             if (entity.getMaNCC() == null || entity.getMaNCC().isBlank()) {
                 entity.setMaNCC(generateNewMaNCC());
                 nhaCungCap.setMaNCC(entity.getMaNCC());
@@ -57,7 +57,7 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
             return false;
         }
         try {
-            nhaCungCapRepository.update(NhaCungCapMapper.toEntity(nhaCungCap));
+            nhaCungCapRepository.update(ClassMapper.toEntity(nhaCungCap));
             return true;
         } catch (RuntimeException exception) {
             return false;
