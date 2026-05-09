@@ -1,6 +1,7 @@
 package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
+import com.example.pharmacy.client.service.interfa.AuthClientService;
 import com.example.pharmacy.client.session.RmiSessionContext;
 import com.example.pharmacy.common.remote.AuthRemote;
 import com.example.pharmacy.common.request.LoginRequest;

@@ -1,6 +1,7 @@
 package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
+import com.example.pharmacy.client.service.interfa.CaiDatClientService;
 import com.example.pharmacy.common.remote.CaiDatRemote;
 import com.example.pharmacy.common.model.CaiDatDto;
 

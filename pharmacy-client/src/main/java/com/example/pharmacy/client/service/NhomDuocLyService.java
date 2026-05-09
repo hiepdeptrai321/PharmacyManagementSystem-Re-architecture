@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
-import com.example.pharmacy.client.service.NhomDuocLyClientService;
+import com.example.pharmacy.client.service.interfa.NhomDuocLyClientService;
 import com.example.pharmacy.client.service.RmiNhomDuocLyClientService;
 import com.example.pharmacy.common.model.NhomDuocLyDto;
 

@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
-import com.example.pharmacy.client.service.AuthClientService;
+import com.example.pharmacy.client.service.interfa.AuthClientService;
 import com.example.pharmacy.client.service.RmiAuthClientService;
 import com.example.pharmacy.common.dto.UserDTO;
 import com.example.pharmacy.common.enums.UserRole;

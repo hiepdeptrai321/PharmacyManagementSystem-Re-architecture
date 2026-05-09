@@ -1,6 +1,7 @@
 package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
+import com.example.pharmacy.client.service.interfa.PhieuDatHangClientService;
 import com.example.pharmacy.common.dto.UserContext;
 import com.example.pharmacy.common.remote.PhieuDatHangRemote;
 import com.example.pharmacy.common.model.ChiTietPhieuDatHangDto;

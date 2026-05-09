@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
-import com.example.pharmacy.client.service.DoiTraClientService;
+import com.example.pharmacy.client.service.interfa.DoiTraClientService;
 import com.example.pharmacy.client.service.RmiDoiTraClientService;
 import com.example.pharmacy.common.request.CreatePhieuDoiItemRequest;
 import com.example.pharmacy.common.request.CreatePhieuDoiRequest;

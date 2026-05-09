@@ -68,9 +68,9 @@ Pham vi batch nay:
 
 ### pharmacy-client
 
-- `com.example.pharmacy.client.service.NhanVienClientService`
+- `com.example.pharmacy.client.service.interfa.NhanVienClientService`
 - `com.example.pharmacy.client.service.RmiNhanVienClientService`
-- `com.example.pharmacy.client.service.CaiDatClientService`
+- `com.example.pharmacy.client.service.interfa.CaiDatClientService`
 - `com.example.pharmacy.client.service.RmiCaiDatClientService`
 - `com.example.pharmacymanagementsystem_qlht.service.NhanVienService`
 - `com.example.pharmacymanagementsystem_qlht.service.CaiDatService`

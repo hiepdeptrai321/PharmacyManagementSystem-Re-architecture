@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
-import com.example.pharmacy.client.service.KhachHangClientService;
+import com.example.pharmacy.client.service.interfa.KhachHangClientService;
 import com.example.pharmacy.client.service.RmiKhachHangClientService;
 import com.example.pharmacy.common.model.KhachHangDto;
 
