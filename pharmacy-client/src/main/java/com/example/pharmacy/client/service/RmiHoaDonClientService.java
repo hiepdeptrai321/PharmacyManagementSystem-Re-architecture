@@ -5,8 +5,8 @@ import com.example.pharmacy.common.dto.UserContext;
 import com.example.pharmacy.common.remote.HoaDonRemote;
 import com.example.pharmacy.common.request.CreateHoaDonRequest;
 import com.example.pharmacy.common.request.HoaDonSearchRequest;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.HoaDon;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.HoaDonDto;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -40,7 +40,7 @@ public class RmiHoaDonClientService implements HoaDonClientService {
     }
 
     @Override
-    public List<HoaDon> findAll() {
+    public List<HoaDonDto> findAll() {
         try {
             return remote().findAll();
         } catch (RemoteException | NotBoundException exception) {
@@ -50,7 +50,7 @@ public class RmiHoaDonClientService implements HoaDonClientService {
     }
 
     @Override
-    public HoaDon findById(String maHoaDon) {
+    public HoaDonDto findById(String maHoaDon) {
         try {
             return remote().findById(maHoaDon);
         } catch (RemoteException | NotBoundException exception) {
@@ -60,7 +60,7 @@ public class RmiHoaDonClientService implements HoaDonClientService {
     }
 
     @Override
-    public List<ChiTietHoaDon> findDetailsByMaHD(String maHoaDon) {
+    public List<ChiTietHoaDonDto> findDetailsByMaHD(String maHoaDon) {
         try {
             return remote().findDetailsByMaHD(maHoaDon);
         } catch (RemoteException | NotBoundException exception) {
@@ -70,7 +70,7 @@ public class RmiHoaDonClientService implements HoaDonClientService {
     }
 
     @Override
-    public List<HoaDon> search(HoaDonSearchRequest request) {
+    public List<HoaDonDto> search(HoaDonSearchRequest request) {
         try {
             return remote().search(request);
         } catch (RemoteException | NotBoundException exception) {

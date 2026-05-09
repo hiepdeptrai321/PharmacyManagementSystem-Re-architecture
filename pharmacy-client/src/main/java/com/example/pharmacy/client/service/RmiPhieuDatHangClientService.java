@@ -3,8 +3,8 @@ package com.example.pharmacy.client.service;
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.common.dto.UserContext;
 import com.example.pharmacy.common.remote.PhieuDatHangRemote;
-import com.example.pharmacy.common.model.ChiTietPhieuDatHang;
-import com.example.pharmacy.common.model.PhieuDatHang;
+import com.example.pharmacy.common.model.ChiTietPhieuDatHangDto;
+import com.example.pharmacy.common.model.PhieuDatHangDto;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -29,7 +29,7 @@ public class RmiPhieuDatHangClientService implements PhieuDatHangClientService {
     }
 
     @Override
-    public String create(PhieuDatHang phieuDatHang, List<ChiTietPhieuDatHang> details, UserContext actor) {
+    public String create(PhieuDatHangDto phieuDatHang, List<ChiTietPhieuDatHangDto> details, UserContext actor) {
         try {
             return remote().create(phieuDatHang, details, actor);
         } catch (RemoteException | NotBoundException exception) {
@@ -38,7 +38,7 @@ public class RmiPhieuDatHangClientService implements PhieuDatHangClientService {
     }
 
     @Override
-    public List<PhieuDatHang> findAll() {
+    public List<PhieuDatHangDto> findAll() {
         try {
             return remote().findAll();
         } catch (RemoteException | NotBoundException exception) {
@@ -48,7 +48,7 @@ public class RmiPhieuDatHangClientService implements PhieuDatHangClientService {
     }
 
     @Override
-    public PhieuDatHang findById(String maPhieuDat) {
+    public PhieuDatHangDto findById(String maPhieuDat) {
         try {
             return remote().findById(maPhieuDat);
         } catch (RemoteException | NotBoundException exception) {
@@ -58,7 +58,7 @@ public class RmiPhieuDatHangClientService implements PhieuDatHangClientService {
     }
 
     @Override
-    public List<ChiTietPhieuDatHang> findDetailsByMaPhieuDat(String maPhieuDat) {
+    public List<ChiTietPhieuDatHangDto> findDetailsByMaPhieuDat(String maPhieuDat) {
         try {
             return remote().findDetailsByMaPhieuDat(maPhieuDat);
         } catch (RemoteException | NotBoundException exception) {

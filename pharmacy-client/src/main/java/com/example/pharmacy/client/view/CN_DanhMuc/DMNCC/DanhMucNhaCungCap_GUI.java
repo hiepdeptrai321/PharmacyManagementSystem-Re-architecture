@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_DanhMuc.DMNCC;
 
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMNhaCungCap.DanhMucNhaCungCap_Ctrl;
-import com.example.pharmacy.common.model.NhaCungCap;
+import com.example.pharmacy.common.model.NhaCungCapDto;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -227,8 +227,8 @@ public class DanhMucNhaCungCap_GUI extends Application {
         TextField txtTimKiem;
         Button btnTim, btnLamMoi, btnThemNCC;
 
-        TableView<NhaCungCap> tblNhaCungCap;
-        TableColumn<NhaCungCap, String> colSTT, colMaNCC, colTenNCC, colDiaChi, colSDT, colEmail, colGhiChu, colChiTiet;
+        TableView<NhaCungCapDto> tblNhaCungCap;
+        TableColumn<NhaCungCapDto, String> colSTT, colMaNCC, colTenNCC, colDiaChi, colSDT, colEmail, colGhiChu, colChiTiet;
     }
 
     public static void main(String[] args) {

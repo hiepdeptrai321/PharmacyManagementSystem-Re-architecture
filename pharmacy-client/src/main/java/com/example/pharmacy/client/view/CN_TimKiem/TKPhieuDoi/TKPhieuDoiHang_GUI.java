@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_TimKiem.TKPhieuDoi;
 
 import com.example.pharmacy.client.controller.CN_TimKiem.TKPhieuDoiHang.TKPhieuDoiHang_Ctrl;
-import com.example.pharmacy.common.model.PhieuDoiHang;
+import com.example.pharmacy.common.model.PhieuDoiHangDto;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,9 +17,9 @@ import javafx.stage.Stage;
 public class TKPhieuDoiHang_GUI extends Application {
 
     public Pane mainPane;
-    public TableView<PhieuDoiHang> tblPD;
-    public TableColumn<PhieuDoiHang, Number> colSTT;
-    public TableColumn<PhieuDoiHang, String> colMaPD, colMaHD, colNgayLap, colTenKH, colSdtKH, colTenNV, colChiTiet;
+    public TableView<PhieuDoiHangDto> tblPD;
+    public TableColumn<PhieuDoiHangDto, Number> colSTT;
+    public TableColumn<PhieuDoiHangDto, String> colMaPD, colMaHD, colNgayLap, colTenKH, colSdtKH, colTenNV, colChiTiet;
     public ComboBox<String> cboTimKiem, cbLoc;
     public TextField txtNoiDungTimKiem;
     public DatePicker dpTuNgay, dpDenNgay;

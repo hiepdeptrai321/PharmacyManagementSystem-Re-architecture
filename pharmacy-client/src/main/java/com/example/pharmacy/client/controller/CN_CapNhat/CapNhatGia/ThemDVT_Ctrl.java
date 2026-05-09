@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.controller.CN_CapNhat.CapNhatGia;
 
-import com.example.pharmacy.common.model.DonViTinh;
+import com.example.pharmacy.common.model.DonViTinhDto;
 import com.example.pharmacy.client.service.DonViTinhService;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -35,7 +35,7 @@ public class ThemDVT_Ctrl{
             return;
         }
 
-        DonViTinh donViTinh = new DonViTinh(maDVT, tenDVT, kyHieu);
+        DonViTinhDto donViTinh = new DonViTinhDto(maDVT, tenDVT, kyHieu);
         boolean success = donViTinhService.insert(donViTinh);
 
         if (success) {

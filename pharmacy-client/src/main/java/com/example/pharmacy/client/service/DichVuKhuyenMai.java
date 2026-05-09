@@ -1,8 +1,8 @@
 package com.example.pharmacy.client.service;
 
-import com.example.pharmacy.common.model.ChiTietKhuyenMai;
-import com.example.pharmacy.common.model.KhuyenMai;
-import com.example.pharmacy.common.model.Thuoc_SP_TangKem;
+import com.example.pharmacy.common.model.ChiTietKhuyenMaiDto;
+import com.example.pharmacy.common.model.KhuyenMaiDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TangKemDto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -22,16 +22,16 @@ public class DichVuKhuyenMai {
             return ketQua;
         }
 
-        List<KhuyenMai> dsKhuyenMai = khuyenMaiService.findActiveOn(Date.valueOf(ngay));
-        for (KhuyenMai khuyenMai : dsKhuyenMai) {
+        List<KhuyenMaiDto> dsKhuyenMai = khuyenMaiService.findActiveOn(Date.valueOf(ngay));
+        for (KhuyenMaiDto khuyenMai : dsKhuyenMai) {
             if (khuyenMai == null || khuyenMai.getLoaiKM() == null) {
                 continue;
             }
-            List<ChiTietKhuyenMai> chiTiet = khuyenMaiService.findChiTietByMaKM(khuyenMai.getMaKM()).stream()
+            List<ChiTietKhuyenMaiDto> chiTiet = khuyenMaiService.findChiTietByMaKM(khuyenMai.getMaKM()).stream()
                     .filter(ct -> ct.getThuoc() != null && maThuoc.equalsIgnoreCase(ct.getThuoc().getMaThuoc()))
                     .toList();
 
-            for (ChiTietKhuyenMai ct : chiTiet) {
+            for (ChiTietKhuyenMaiDto ct : chiTiet) {
                 int soLuongApDung = Math.max(1, ct.getSlApDung());
                 int times = soLuongBase / soLuongApDung;
                 if (times <= 0) {
@@ -50,8 +50,8 @@ public class DichVuKhuyenMai {
                     ketQua.addDiscount(BigDecimal.valueOf(khuyenMai.getGiaTriKM()).multiply(BigDecimal.valueOf(times)));
                     ketQua.addApplied(khuyenMai.getMaKM());
                 } else if ("LKM001".equalsIgnoreCase(maLoai)) {
-                    List<Thuoc_SP_TangKem> gifts = khuyenMaiService.findQuaTangByMaKM(khuyenMai.getMaKM());
-                    for (Thuoc_SP_TangKem gift : gifts) {
+                    List<Thuoc_SP_TangKemDto> gifts = khuyenMaiService.findQuaTangByMaKM(khuyenMai.getMaKM());
+                    for (Thuoc_SP_TangKemDto gift : gifts) {
                         if (gift.getThuocTangKem() == null) {
                             continue;
                         }
@@ -81,17 +81,17 @@ public class DichVuKhuyenMai {
             return ketQua;
         }
 
-        List<KhuyenMai> dsKhuyenMai = khuyenMaiService.findActiveInvoiceOn(Date.valueOf(ngay));
-        KhuyenMai bestLkm004 = dsKhuyenMai.stream()
+        List<KhuyenMaiDto> dsKhuyenMai = khuyenMaiService.findActiveInvoiceOn(Date.valueOf(ngay));
+        KhuyenMaiDto bestLkm004 = dsKhuyenMai.stream()
                 .filter(km -> km.getLoaiKM() != null && "LKM004".equalsIgnoreCase(km.getLoaiKM().getMaLoai()))
                 .filter(km -> km.getGiaTriApDung() <= baseSauKhuyenMaiSanPham.doubleValue())
-                .max(Comparator.comparingDouble(KhuyenMai::getGiaTriApDung))
+                .max(Comparator.comparingDouble(KhuyenMaiDto::getGiaTriApDung))
                 .orElse(null);
 
-        KhuyenMai bestLkm005 = dsKhuyenMai.stream()
+        KhuyenMaiDto bestLkm005 = dsKhuyenMai.stream()
                 .filter(km -> km.getLoaiKM() != null && "LKM005".equalsIgnoreCase(km.getLoaiKM().getMaLoai()))
                 .filter(km -> km.getGiaTriApDung() <= baseSauKhuyenMaiSanPham.doubleValue())
-                .max(Comparator.comparingDouble(KhuyenMai::getGiaTriApDung))
+                .max(Comparator.comparingDouble(KhuyenMaiDto::getGiaTriApDung))
                 .orElse(null);
 
         BigDecimal giamCoDinh = BigDecimal.ZERO;

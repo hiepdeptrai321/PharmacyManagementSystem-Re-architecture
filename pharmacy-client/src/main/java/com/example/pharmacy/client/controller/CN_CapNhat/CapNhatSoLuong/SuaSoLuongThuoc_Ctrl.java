@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.controller.CN_CapNhat.CapNhatSoLuong;
 
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import com.example.pharmacy.client.service.TonKhoService;
 import com.example.pharmacy.client.session.SessionContext;
 import javafx.application.Platform;
@@ -20,14 +20,14 @@ public class SuaSoLuongThuoc_Ctrl {
     public ComboBox<String> cbLoaiHang;
 
     private final TonKhoService tonKhoService = new TonKhoService();
-    private Thuoc_SP_TheoLo thuocTheoLo;
+    private Thuoc_SP_TheoLoDto thuocTheoLo;
 
-    public void setThuoc(Thuoc_SP_TheoLo thuocLo) {
+    public void setThuoc(Thuoc_SP_TheoLoDto thuocLo) {
         if (thuocLo == null) {
             return;
         }
         this.thuocTheoLo = thuocLo;
-        Thuoc_SanPham thuoc = thuocLo.getThuoc();
+        Thuoc_SanPhamDto thuoc = thuocLo.getThuoc();
         tfMaThuoc.setText(thuoc.getMaThuoc());
         tfTenThuoc.setText(thuoc.getTenThuoc());
         tfSoLuongTon.setText(String.valueOf(thuocLo.getSoLuongTon()));

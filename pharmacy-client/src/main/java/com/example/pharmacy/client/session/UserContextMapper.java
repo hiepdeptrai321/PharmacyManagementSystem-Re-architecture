@@ -2,7 +2,7 @@ package com.example.pharmacy.client.session;
 
 import com.example.pharmacy.common.dto.UserDTO;
 import com.example.pharmacy.common.enums.UserRole;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.NhanVienDto;
 import com.example.pharmacy.common.session.UserContext;
 
 public final class UserContextMapper {
@@ -35,12 +35,12 @@ public final class UserContextMapper {
         );
     }
 
-    public static NhanVien toNhanVienReference(UserContext userContext) {
+    public static NhanVienDto toNhanVienReference(UserContext userContext) {
         if (userContext == null) {
             return null;
         }
 
-        NhanVien nhanVien = new NhanVien();
+        NhanVienDto nhanVien = new NhanVienDto();
         nhanVien.setMaNV(userContext.getEmployeeId());
         nhanVien.setTenNV(userContext.getFullName());
         nhanVien.setTaiKhoan(userContext.getUsername());

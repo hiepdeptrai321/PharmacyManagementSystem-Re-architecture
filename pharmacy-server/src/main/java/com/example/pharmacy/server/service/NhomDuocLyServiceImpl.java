@@ -2,8 +2,9 @@ package com.example.pharmacy.server.service;
 
 import com.example.pharmacy.common.enums.BusinessCodeType;
 import com.example.pharmacy.server.entity.NhomDuocLyEntity;
+import com.example.pharmacy.server.mapper.NhomDuocLyMapper;
 import com.example.pharmacy.server.repository.NhomDuocLyRepository;
-import com.example.pharmacy.common.model.NhomDuocLy;
+import com.example.pharmacy.common.model.NhomDuocLyDto;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,13 +19,13 @@ public class NhomDuocLyServiceImpl implements NhomDuocLyService {
     }
 
     @Override
-    public List<NhomDuocLy> findAll() {
-        return nhomDuocLyRepository.findAll().stream().map(this::toModel).toList();
+    public List<NhomDuocLyDto> findAll() {
+        return nhomDuocLyRepository.findAll().stream().map(NhomDuocLyMapper::toDto).toList();
     }
 
     @Override
-    public NhomDuocLy findById(String maNhomDuocLy) {
-        return nhomDuocLyRepository.findById(maNhomDuocLy).map(this::toModel).orElse(null);
+    public NhomDuocLyDto findById(String maNhomDuocLy) {
+        return nhomDuocLyRepository.findById(maNhomDuocLy).map(NhomDuocLyMapper::toDto).orElse(null);
     }
 
     @Override
@@ -33,12 +34,12 @@ public class NhomDuocLyServiceImpl implements NhomDuocLyService {
     }
 
     @Override
-    public boolean create(NhomDuocLy nhomDuocLy) {
+    public boolean create(NhomDuocLyDto nhomDuocLy) {
         if (nhomDuocLy == null) {
             return false;
         }
         try {
-            NhomDuocLyEntity entity = toEntity(nhomDuocLy);
+            NhomDuocLyEntity entity = NhomDuocLyMapper.toEntity(nhomDuocLy);
             if (entity.getMaNDL() == null || entity.getMaNDL().isBlank()) {
                 entity.setMaNDL(generateNewMaNhomDuocLy());
                 nhomDuocLy.setMaNDL(entity.getMaNDL());
@@ -51,12 +52,12 @@ public class NhomDuocLyServiceImpl implements NhomDuocLyService {
     }
 
     @Override
-    public boolean update(NhomDuocLy nhomDuocLy) {
+    public boolean update(NhomDuocLyDto nhomDuocLy) {
         if (nhomDuocLy == null || nhomDuocLy.getMaNDL() == null || nhomDuocLy.getMaNDL().isBlank()) {
             return false;
         }
         try {
-            nhomDuocLyRepository.update(toEntity(nhomDuocLy));
+            nhomDuocLyRepository.update(NhomDuocLyMapper.toEntity(nhomDuocLy));
             return true;
         } catch (RuntimeException exception) {
             return false;
@@ -84,21 +85,5 @@ public class NhomDuocLyServiceImpl implements NhomDuocLyService {
             return List.of();
         }
         return nhomDuocLyRepository.findThuocNamesByNhomDuocLy(maNhomDuocLy);
-    }
-
-    private NhomDuocLy toModel(NhomDuocLyEntity entity) {
-        NhomDuocLy nhomDuocLy = new NhomDuocLy();
-        nhomDuocLy.setMaNDL(entity.getMaNDL());
-        nhomDuocLy.setTenNDL(entity.getTenNDL());
-        nhomDuocLy.setMoTa(entity.getMoTa());
-        return nhomDuocLy;
-    }
-
-    private NhomDuocLyEntity toEntity(NhomDuocLy model) {
-        NhomDuocLyEntity entity = new NhomDuocLyEntity();
-        entity.setMaNDL(model.getMaNDL());
-        entity.setTenNDL(model.getTenNDL());
-        entity.setMoTa(model.getMoTa());
-        return entity;
     }
 }

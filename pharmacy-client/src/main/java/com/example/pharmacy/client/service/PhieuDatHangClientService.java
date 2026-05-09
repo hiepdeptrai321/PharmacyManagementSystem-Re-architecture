@@ -1,21 +1,21 @@
 package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.common.dto.UserContext;
-import com.example.pharmacy.common.model.ChiTietPhieuDatHang;
-import com.example.pharmacy.common.model.PhieuDatHang;
+import com.example.pharmacy.common.model.ChiTietPhieuDatHangDto;
+import com.example.pharmacy.common.model.PhieuDatHangDto;
 
 import java.util.List;
 
 public interface PhieuDatHangClientService {
     String generateNewMaPhieuDatHang();
 
-    String create(PhieuDatHang phieuDatHang, List<ChiTietPhieuDatHang> details, UserContext actor);
+    String create(PhieuDatHangDto phieuDatHang, List<ChiTietPhieuDatHangDto> details, UserContext actor);
 
-    List<PhieuDatHang> findAll();
+    List<PhieuDatHangDto> findAll();
 
-    PhieuDatHang findById(String maPhieuDat);
+    PhieuDatHangDto findById(String maPhieuDat);
 
-    List<ChiTietPhieuDatHang> findDetailsByMaPhieuDat(String maPhieuDat);
+    List<ChiTietPhieuDatHangDto> findDetailsByMaPhieuDat(String maPhieuDat);
 
     boolean approve(String maPhieuDat, UserContext actor);
 }

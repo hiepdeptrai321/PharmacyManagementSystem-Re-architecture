@@ -4,12 +4,12 @@ import com.example.pharmacy.common.request.CreatePhieuDoiItemRequest;
 import com.example.pharmacy.common.request.CreatePhieuDoiRequest;
 import com.example.pharmacy.common.request.CreatePhieuTraItemRequest;
 import com.example.pharmacy.common.request.CreatePhieuTraRequest;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.ChiTietPhieuDoiHang;
-import com.example.pharmacy.common.model.ChiTietPhieuTraHang;
-import com.example.pharmacy.common.model.HoaDon;
-import com.example.pharmacy.common.model.PhieuDoiHang;
-import com.example.pharmacy.common.model.PhieuTraHang;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.ChiTietPhieuDoiHangDto;
+import com.example.pharmacy.common.model.ChiTietPhieuTraHangDto;
+import com.example.pharmacy.common.model.HoaDonDto;
+import com.example.pharmacy.common.model.PhieuDoiHangDto;
+import com.example.pharmacy.common.model.PhieuTraHangDto;
 
 import java.sql.Date;
 import java.util.List;
@@ -21,9 +21,9 @@ public interface DoiTraRepository {
     record LotStock(String maLo, int soLuongTon, Date hsd) {
     }
 
-    HoaDon findHoaDonGoc(String maHoaDon);
+    HoaDonDto findHoaDonGoc(String maHoaDon);
 
-    List<ChiTietHoaDon> findHoaDonDetails(String maHoaDon);
+    List<ChiTietHoaDonDto> findHoaDonDetails(String maHoaDon);
 
     void attachKhachHangToHoaDon(String maHoaDon, String maKhachHang);
 
@@ -47,15 +47,15 @@ public interface DoiTraRepository {
 
     void insertPhieuTraDetail(String maPhieuTra, CreatePhieuTraItemRequest item, double donGia, double giamGia);
 
-    List<PhieuDoiHang> findAllPhieuDoi();
+    List<PhieuDoiHangDto> findAllPhieuDoi();
 
-    PhieuDoiHang findPhieuDoiById(String maPhieuDoi);
+    PhieuDoiHangDto findPhieuDoiById(String maPhieuDoi);
 
-    List<ChiTietPhieuDoiHang> findChiTietPhieuDoiByMaPD(String maPhieuDoi);
+    List<ChiTietPhieuDoiHangDto> findChiTietPhieuDoiByMaPD(String maPhieuDoi);
 
-    List<PhieuTraHang> findAllPhieuTra();
+    List<PhieuTraHangDto> findAllPhieuTra();
 
-    PhieuTraHang findPhieuTraById(String maPhieuTra);
+    PhieuTraHangDto findPhieuTraById(String maPhieuTra);
 
-    List<ChiTietPhieuTraHang> findChiTietPhieuTraByMaPT(String maPhieuTra);
+    List<ChiTietPhieuTraHangDto> findChiTietPhieuTraByMaPT(String maPhieuTra);
 }

@@ -2,8 +2,8 @@ package com.example.pharmacy.client.controller.CN_XuLy.LapPhieuNhapHang;
 
 import com.example.pharmacy.client.TienIch.TuyChinhAlert;
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMThuoc.ThemThuoc_Ctrl;
-import com.example.pharmacy.common.model.ChiTietDonViTinh;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietDonViTinhDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import com.example.pharmacy.client.service.ThuocService;
 import com.example.pharmacy.client.view.CN_DanhMuc.DMThuoc.ThemThuoc_GUI;
 import javafx.beans.property.SimpleObjectProperty;
@@ -27,21 +27,21 @@ public class ThemThuoc_LapPhieuNhapHang_Ctrl {
     public TextField tfMaThuoc;
     public TextField tfTenThuoc;
     private TextField tfLoaiHang;
-    public TableView<ChiTietDonViTinh> tbDVT;
-    public TableColumn<ChiTietDonViTinh, String> colDVT;
-    public TableColumn<ChiTietDonViTinh, String> colKH;
-    public TableColumn<ChiTietDonViTinh, Object> colHeSo;
-    public TableColumn<ChiTietDonViTinh, Object> colGiaNhap;
-    public TableColumn<ChiTietDonViTinh, Object> colGiaBan;
-    public TableColumn<ChiTietDonViTinh, Object> colDVCB;
-    public TableColumn<ChiTietDonViTinh, Void> colXoa;
+    public TableView<ChiTietDonViTinhDto> tbDVT;
+    public TableColumn<ChiTietDonViTinhDto, String> colDVT;
+    public TableColumn<ChiTietDonViTinhDto, String> colKH;
+    public TableColumn<ChiTietDonViTinhDto, Object> colHeSo;
+    public TableColumn<ChiTietDonViTinhDto, Object> colGiaNhap;
+    public TableColumn<ChiTietDonViTinhDto, Object> colGiaBan;
+    public TableColumn<ChiTietDonViTinhDto, Object> colDVCB;
+    public TableColumn<ChiTietDonViTinhDto, Void> colXoa;
     public Button btnLuu;
     public Button btnHuy;
     public Button btnThietLapGia;
 
-    private final ObservableList<ChiTietDonViTinh> listGia = FXCollections.observableArrayList();
+    private final ObservableList<ChiTietDonViTinhDto> listGia = FXCollections.observableArrayList();
     private final ThuocService thuocService = new ThuocService();
-    private Thuoc_SanPham thuoc;
+    private Thuoc_SanPhamDto thuoc;
     private LapPhieuNhapHang_Ctrl parentCtrl;
 
     public void initialize() {
@@ -75,7 +75,7 @@ public class ThemThuoc_LapPhieuNhapHang_Ctrl {
         this.parentCtrl = parentCtrl;
     }
 
-    public void setThuoc(Thuoc_SanPham thuoc) {
+    public void setThuoc(Thuoc_SanPhamDto thuoc) {
         this.thuoc = thuoc;
         tfMaThuoc.setText(thuoc.getMaThuoc());
         tfTenThuoc.setText(thuoc.getTenThuoc());
@@ -83,10 +83,10 @@ public class ThemThuoc_LapPhieuNhapHang_Ctrl {
     }
 
     public void loadListGia(String maThuoc) {
-        List<ChiTietDonViTinh> loaded = thuocService.findAll().stream()
+        List<ChiTietDonViTinhDto> loaded = thuocService.findAll().stream()
                 .filter(item -> maThuoc.equals(item.getMaThuoc()))
                 .findFirst()
-                .map(Thuoc_SanPham::getDsCTDVT)
+                .map(Thuoc_SanPhamDto::getDsCTDVT)
                 .orElse(List.of());
         listGia.setAll(loaded);
     }
@@ -123,7 +123,7 @@ public class ThemThuoc_LapPhieuNhapHang_Ctrl {
             gui.showWithController(stage, ctrl);
             stage.showAndWait();
 
-            Thuoc_SanPham thuocThem = ctrl.getThuocThem();
+            Thuoc_SanPhamDto thuocThem = ctrl.getThuocThem();
             if (thuocThem != null) {
                 setThuoc(thuocThem);
             }

@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.controller.CN_TimKiem.TKHoatDong;
 
-import com.example.pharmacy.common.model.HoatDong;
+import com.example.pharmacy.common.model.HoatDongDto;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
@@ -26,7 +26,7 @@ public class ChiTietHoatDong_Ctrl extends Application {
 
     private final SimpleDateFormat tsFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
 
-    private HoatDong currentHd;
+    private HoatDongDto currentHd;
 
     public void initialize() {
         if (btnHuy != null) {
@@ -41,8 +41,8 @@ public class ChiTietHoatDong_Ctrl extends Application {
         });
     }
 
-    // Allows external code to pass HoatDong; stores it and applies when UI is ready
-    public void loadData(HoatDong hd) {
+    // Allows external code to pass HoatDongDto; stores it and applies when UI is ready
+    public void loadData(HoatDongDto hd) {
         this.currentHd = hd;
         if (tfMaHD == null) {
             // UI not initialized yet; data will be applied in start()

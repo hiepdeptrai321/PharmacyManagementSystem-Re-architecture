@@ -3,13 +3,13 @@ package com.example.pharmacy.server.repository.jdbc;
 import com.example.pharmacy.common.request.CreateHoaDonRequest;
 import com.example.pharmacy.server.config.JdbcConnectionProvider;
 import com.example.pharmacy.server.repository.HoaDonRepository;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.DonViTinh;
-import com.example.pharmacy.common.model.HoaDon;
-import com.example.pharmacy.common.model.KhachHang;
-import com.example.pharmacy.common.model.NhanVien;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.DonViTinhDto;
+import com.example.pharmacy.common.model.HoaDonDto;
+import com.example.pharmacy.common.model.KhachHangDto;
+import com.example.pharmacy.common.model.NhanVienDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -22,34 +22,34 @@ import java.util.List;
 
 public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaDonRepository {
     private static final String INSERT_HEADER_SQL = """
-            INSERT INTO HoaDon (MaHD, MaNV, MaKH, NgayLap, TrangThai, LoaiHoaDon, MaDonThuoc)
+            INSERT INTO HoaDonDto (MaHD, MaNV, MaKH, NgayLap, TrangThai, LoaiHoaDon, MaDonThuoc)
             VALUES (?, ?, ?, ?, 1, ?, ?)
             """;
     private static final String INSERT_DETAIL_SQL = """
-            INSERT INTO ChiTietHoaDon (MaHD, MaLH, MaDVT, SoLuong, DonGia, GiamGia)
+            INSERT INTO ChiTietHoaDonDto (MaHD, MaLH, MaDVT, SoLuong, DonGia, GiamGia)
             VALUES (?, ?, ?, ?, ?, ?)
             """;
     private static final String SELECT_UNIT_CONVERSION_SQL = """
             SELECT MaDVT, HeSoQuyDoi, DonViCoBan
-            FROM ChiTietDonViTinh
+            FROM ChiTietDonViTinhDto
             WHERE MaThuoc = ? AND MaDVT = ?
             """;
     private static final String SELECT_LOTS_FOR_UPDATE_SQL = """
             SELECT MaLH, SoLuongTon, SoLuongDat, SoLuongGiu, HSD
-            FROM Thuoc_SP_TheoLo
+            FROM Thuoc_SP_TheoLoDto
             WHERE MaThuoc = ?
             ORDER BY COALESCE(HSD, DATE('9999-12-31')) ASC, MaLH ASC
             FOR UPDATE
             """;
     private static final String UPDATE_LOT_AFTER_SALE_SQL = """
-            UPDATE Thuoc_SP_TheoLo
+            UPDATE Thuoc_SP_TheoLoDto
             SET SoLuongTon = SoLuongTon - ?,
                 SoLuongDat = GREATEST(SoLuongDat - ?, 0),
                 SoLuongGiu = GREATEST(SoLuongGiu - ?, 0)
             WHERE MaLH = ? AND SoLuongTon >= ?
             """;
     private static final String UPDATE_PREORDER_STATUS_SQL = """
-            UPDATE PhieuDatHang
+            UPDATE PhieuDatHangDto
             SET TrangThai = ?
             WHERE MaPDat = ?
             """;
@@ -64,9 +64,9 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
                    kh.MaKH,
                    kh.TenKH,
                    kh.SDT
-            FROM HoaDon hd
-            JOIN NhanVien nv ON nv.MaNV = hd.MaNV
-            LEFT JOIN KhachHang kh ON kh.MaKH = hd.MaKH
+            FROM HoaDonDto hd
+            JOIN NhanVienDto nv ON nv.MaNV = hd.MaNV
+            LEFT JOIN KhachHangDto kh ON kh.MaKH = hd.MaKH
             ORDER BY hd.NgayLap DESC, hd.MaHD DESC
             """;
     private static final String SELECT_BY_ID_SQL = """
@@ -80,9 +80,9 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
                    kh.MaKH,
                    kh.TenKH,
                    kh.SDT
-            FROM HoaDon hd
-            JOIN NhanVien nv ON nv.MaNV = hd.MaNV
-            LEFT JOIN KhachHang kh ON kh.MaKH = hd.MaKH
+            FROM HoaDonDto hd
+            JOIN NhanVienDto nv ON nv.MaNV = hd.MaNV
+            LEFT JOIN KhachHangDto kh ON kh.MaKH = hd.MaKH
             WHERE hd.MaHD = ?
             """;
     private static final String SELECT_DETAILS_SQL = """
@@ -95,10 +95,10 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
                    lo.MaThuoc,
                    ts.TenThuoc,
                    dvt.TenDonViTinh
-            FROM ChiTietHoaDon ct
-            JOIN Thuoc_SP_TheoLo lo ON lo.MaLH = ct.MaLH
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
-            LEFT JOIN DonViTinh dvt ON dvt.MaDVT = ct.MaDVT
+            FROM ChiTietHoaDonDto ct
+            JOIN Thuoc_SP_TheoLoDto lo ON lo.MaLH = ct.MaLH
+            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = lo.MaThuoc
+            LEFT JOIN DonViTinhDto dvt ON dvt.MaDVT = ct.MaDVT
             WHERE ct.MaHD = ?
             ORDER BY ts.TenThuoc ASC, ct.MaLH ASC
             """;
@@ -242,9 +242,9 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
     }
 
     @Override
-    public List<HoaDon> findAll() {
+    public List<HoaDonDto> findAll() {
         Connection connection = null;
-        List<HoaDon> list = new ArrayList<>();
+        List<HoaDonDto> list = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL);
@@ -262,7 +262,7 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
     }
 
     @Override
-    public HoaDon findById(String maHoaDon) {
+    public HoaDonDto findById(String maHoaDon) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -283,9 +283,9 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
     }
 
     @Override
-    public List<ChiTietHoaDon> findDetailsByMaHD(String maHoaDon) {
+    public List<ChiTietHoaDonDto> findDetailsByMaHD(String maHoaDon) {
         Connection connection = null;
-        List<ChiTietHoaDon> list = new ArrayList<>();
+        List<ChiTietHoaDonDto> list = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_DETAILS_SQL)) {
@@ -304,22 +304,22 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
         }
     }
 
-    private HoaDon mapHeader(ResultSet resultSet) throws Exception {
-        HoaDon hoaDon = new HoaDon();
+    private HoaDonDto mapHeader(ResultSet resultSet) throws Exception {
+        HoaDonDto hoaDon = new HoaDonDto();
         hoaDon.setMaHD(resultSet.getString("MaHD"));
         hoaDon.setNgayLap(resultSet.getTimestamp("NgayLap"));
         hoaDon.setTrangThai(resultSet.getBoolean("TrangThai"));
         hoaDon.setLoaiHoaDon(resultSet.getString("LoaiHoaDon"));
         hoaDon.setMaDonThuoc(resultSet.getString("MaDonThuoc"));
 
-        NhanVien nhanVien = new NhanVien();
+        NhanVienDto nhanVien = new NhanVienDto();
         nhanVien.setMaNV(resultSet.getString("MaNV"));
         nhanVien.setTenNV(resultSet.getString("TenNV"));
         hoaDon.setMaNV(nhanVien);
 
         String maKh = resultSet.getString("MaKH");
         if (maKh != null) {
-            KhachHang khachHang = new KhachHang();
+            KhachHangDto khachHang = new KhachHangDto();
             khachHang.setMaKH(maKh);
             khachHang.setTenKH(resultSet.getString("TenKH"));
             khachHang.setSdt(resultSet.getString("SDT"));
@@ -330,22 +330,22 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
         return hoaDon;
     }
 
-    private ChiTietHoaDon mapDetail(ResultSet resultSet) throws Exception {
-        ChiTietHoaDon detail = new ChiTietHoaDon();
-        HoaDon hoaDon = new HoaDon();
+    private ChiTietHoaDonDto mapDetail(ResultSet resultSet) throws Exception {
+        ChiTietHoaDonDto detail = new ChiTietHoaDonDto();
+        HoaDonDto hoaDon = new HoaDonDto();
         hoaDon.setMaHD(resultSet.getString("MaHD"));
         detail.setHoaDon(hoaDon);
 
-        Thuoc_SanPham thuoc = new Thuoc_SanPham();
+        Thuoc_SanPhamDto thuoc = new Thuoc_SanPhamDto();
         thuoc.setMaThuoc(resultSet.getString("MaThuoc"));
         thuoc.setTenThuoc(resultSet.getString("TenThuoc"));
 
-        Thuoc_SP_TheoLo loHang = new Thuoc_SP_TheoLo();
+        Thuoc_SP_TheoLoDto loHang = new Thuoc_SP_TheoLoDto();
         loHang.setMaLH(resultSet.getString("MaLH"));
         loHang.setThuoc(thuoc);
         detail.setLoHang(loHang);
 
-        DonViTinh donViTinh = new DonViTinh();
+        DonViTinhDto donViTinh = new DonViTinhDto();
         donViTinh.setMaDVT(resultSet.getString("MaDVT"));
         donViTinh.setTenDonViTinh(resultSet.getString("TenDonViTinh"));
         detail.setDvt(donViTinh);

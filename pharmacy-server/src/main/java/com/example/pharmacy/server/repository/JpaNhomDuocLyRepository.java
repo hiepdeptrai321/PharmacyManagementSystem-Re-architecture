@@ -118,7 +118,7 @@ public class JpaNhomDuocLyRepository implements NhomDuocLyRepository {
             return entityManager.createNativeQuery(
                             """
                             SELECT TenThuoc
-                            FROM Thuoc_SanPham
+                            FROM Thuoc_SanPhamDto
                             WHERE MaNDL = :maNhomDuocLy AND TrangThaiXoa = 0
                             ORDER BY TenThuoc
                             """

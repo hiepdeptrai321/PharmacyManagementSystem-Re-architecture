@@ -2,7 +2,7 @@ package com.example.pharmacy.client.view.CN_TimKiem.TKHoaDon;
 
 import com.example.pharmacy.client.controller.CN_TimKiem.TKHoaDon.TimKiemHoaDon_Ctrl;
 import com.example.pharmacy.client.controller.CN_TimKiem.TKHoaDon.TimKiemHoaDon_Ctrl;
-import com.example.pharmacy.common.model.HoaDon;
+import com.example.pharmacy.common.model.HoaDonDto;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -175,33 +175,33 @@ public class TKHoaDon_GUI {
         rootTablePane.setPrefSize(1619, 735);
 
         // ===== Bảng =====
-        TableView<HoaDon> tblHD = new TableView<>();
+        TableView<HoaDonDto> tblHD = new TableView<>();
         tblHD.setPrefSize(1619, 735);
         tblHD.setStyle("-fx-font-size: 14px;");
 
-        TableColumn<HoaDon, String> colMaHD = new TableColumn<>("Mã hóa đơn");
+        TableColumn<HoaDonDto, String> colMaHD = new TableColumn<>("Mã hóa đơn");
         colMaHD.setPrefWidth(162);
         colMaHD.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<HoaDon, String> colNgayLap = new TableColumn<>("Ngày lập");
+        TableColumn<HoaDonDto, String> colNgayLap = new TableColumn<>("Ngày lập");
         colNgayLap.setPrefWidth(255);
         colNgayLap.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<HoaDon, String> colTenKH = new TableColumn<>("Khách hàng");
+        TableColumn<HoaDonDto, String> colTenKH = new TableColumn<>("Khách hàng");
         colTenKH.setPrefWidth(351);
 
-        TableColumn<HoaDon, String> colSdtKH = new TableColumn<>("SĐT");
+        TableColumn<HoaDonDto, String> colSdtKH = new TableColumn<>("SĐT");
         colSdtKH.setPrefWidth(229.6);
         colSdtKH.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<HoaDon, String> colTenNV = new TableColumn<>("Nhân viên");
+        TableColumn<HoaDonDto, String> colTenNV = new TableColumn<>("Nhân viên");
         colTenNV.setPrefWidth(293);
 
-        TableColumn<HoaDon, Integer> colSLP = new TableColumn<>("Số lượng phiếu đổi trả");
+        TableColumn<HoaDonDto, Integer> colSLP = new TableColumn<>("Số lượng phiếu đổi trả");
         colSLP.setPrefWidth(205);
         colSLP.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<HoaDon, String> colChiTiet = new TableColumn<>("Chi tiết");
+        TableColumn<HoaDonDto, String> colChiTiet = new TableColumn<>("Chi tiết");
         colChiTiet.setPrefWidth(105);
         colChiTiet.setStyle("-fx-alignment: CENTER;");
 

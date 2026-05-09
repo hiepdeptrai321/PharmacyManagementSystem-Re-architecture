@@ -6,11 +6,11 @@ import com.example.pharmacy.common.dto.TopSellingProductDTO;
 import com.example.pharmacy.common.exception.BusinessException;
 import com.example.pharmacy.common.request.DateRangeRequest;
 import com.example.pharmacy.server.repository.ReportRepository;
-import com.example.pharmacy.common.model.HoaDonDisplay;
-import com.example.pharmacy.common.model.ThongKeBanHang;
-import com.example.pharmacy.common.model.ThongKeTonKho;
-import com.example.pharmacy.common.model.ThongKeTopSanPham;
-import com.example.pharmacy.common.model.ThuocHetHan;
+import com.example.pharmacy.common.model.HoaDonDisplayDto;
+import com.example.pharmacy.common.model.ThongKeBanHangDto;
+import com.example.pharmacy.common.model.ThongKeTonKhoDto;
+import com.example.pharmacy.common.model.ThongKeTopSanPhamDto;
+import com.example.pharmacy.common.model.ThuocHetHanDto;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -25,50 +25,50 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<ThongKeBanHang> getThongKeBanHang(String preset) {
+    public List<ThongKeBanHangDto> getThongKeBanHang(String preset) {
         DateRangeRequest range = resolvePresetDateRange(preset);
         return reportRepository.findThongKeBanHangByDateRange(range, resolveBucketForPreset(preset));
     }
 
     @Override
-    public List<ThongKeBanHang> getThongKeBanHangByDateRange(DateRangeRequest request) {
+    public List<ThongKeBanHangDto> getThongKeBanHangByDateRange(DateRangeRequest request) {
         validateDateRangeRequest(request);
         return reportRepository.findThongKeBanHangByDateRange(request, ReportRepository.ReportBucket.DAY);
     }
 
     @Override
-    public List<HoaDonDisplay> getHoaDonTheoThoiGian(String preset) {
+    public List<HoaDonDisplayDto> getHoaDonTheoThoiGian(String preset) {
         return reportRepository.findHoaDonByDateRange(resolvePresetDateRange(preset));
     }
 
     @Override
-    public List<HoaDonDisplay> getHoaDonTheoDateRange(DateRangeRequest request) {
+    public List<HoaDonDisplayDto> getHoaDonTheoDateRange(DateRangeRequest request) {
         validateDateRangeRequest(request);
         return reportRepository.findHoaDonByDateRange(request);
     }
 
     @Override
-    public List<ThongKeTopSanPham> getTopBanChay(DateRangeRequest request, int limit) {
+    public List<ThongKeTopSanPhamDto> getTopBanChay(DateRangeRequest request, int limit) {
         validateDateRangeRequest(request);
         validateLimit(limit);
         return reportRepository.findTopBanChayByDateRange(request, limit);
     }
 
     @Override
-    public List<ThongKeTopSanPham> getTopDoanhThu(DateRangeRequest request, int limit) {
+    public List<ThongKeTopSanPhamDto> getTopDoanhThu(DateRangeRequest request, int limit) {
         validateDateRangeRequest(request);
         validateLimit(limit);
         return reportRepository.findTopDoanhThuByDateRange(request, limit);
     }
 
     @Override
-    public List<ThongKeTonKho> getThongKeXnt(DateRangeRequest request) {
+    public List<ThongKeTonKhoDto> getThongKeXnt(DateRangeRequest request) {
         validateDateRangeRequest(request);
         return reportRepository.findThongKeXnt(request);
     }
 
     @Override
-    public List<ThuocHetHan> getThuocHetHan() {
+    public List<ThuocHetHanDto> getThuocHetHan() {
         return reportRepository.findThuocHetHan();
     }
 

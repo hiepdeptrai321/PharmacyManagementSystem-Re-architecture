@@ -2,7 +2,7 @@ package com.example.pharmacy.client.controller.CN_TimKiem.TKHoaDon;
 
 import com.example.pharmacy.client.TienIch.TuyChinhAlert;
 import com.example.pharmacy.client.TienIch.DoiNgay;
-import com.example.pharmacy.common.model.HoaDon;
+import com.example.pharmacy.common.model.HoaDonDto;
 import com.example.pharmacy.client.service.HoaDonService;
 import com.example.pharmacy.client.view.CN_TimKiem.TKHoaDon.ChiTietHoaDon_GUI;
 import com.example.pharmacy.client.view.CN_TimKiem.TKHoaDon.TKHoaDon_GUI;
@@ -26,14 +26,14 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class TimKiemHoaDon_Ctrl extends Application {
-    public TableView<HoaDon> tblHD;
-    public TableColumn<HoaDon, String> colMaHD;
-    public TableColumn<HoaDon, String> colNgayLap;
-    public TableColumn<HoaDon, String> colTenKH;
-    public TableColumn<HoaDon, String> colSdtKH;
-    public TableColumn<HoaDon, String> colTenNV;
-    public TableColumn<HoaDon, Integer> colSLP;
-    public TableColumn<HoaDon, String> colChiTiet;
+    public TableView<HoaDonDto> tblHD;
+    public TableColumn<HoaDonDto, String> colMaHD;
+    public TableColumn<HoaDonDto, String> colNgayLap;
+    public TableColumn<HoaDonDto, String> colTenKH;
+    public TableColumn<HoaDonDto, String> colSdtKH;
+    public TableColumn<HoaDonDto, String> colTenNV;
+    public TableColumn<HoaDonDto, Integer> colSLP;
+    public TableColumn<HoaDonDto, String> colChiTiet;
 
     public ComboBox<String> cboTieuChiTimKiem;
     public TextField txtNoiDungTimKiem;
@@ -77,7 +77,7 @@ public class TimKiemHoaDon_Ctrl extends Application {
         txtNoiDungTimKiem.textProperty().addListener((obs, oldVal, newVal) -> timKiem());
 
         tblHD.setRowFactory(tv -> {
-            TableRow<HoaDon> row = new TableRow<>();
+            TableRow<HoaDonDto> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (!row.isEmpty() && event.getClickCount() == 2) {
                     btnChiTietClick(row.getItem());
@@ -90,25 +90,25 @@ public class TimKiemHoaDon_Ctrl extends Application {
     }
 
     public void loadTable() {
-        ObservableList<HoaDon> data = FXCollections.observableArrayList(hoaDonService.findAll());
+        ObservableList<HoaDonDto> data = FXCollections.observableArrayList(hoaDonService.findAll());
         colMaHD.setCellValueFactory(new PropertyValueFactory<>("maHD"));
         colNgayLap.setCellValueFactory(cellData ->
                 new SimpleStringProperty(DoiNgay.dinhDangThoiGian(cellData.getValue().getNgayLap()))
         );
         colTenKH.setCellValueFactory(cellData -> {
-            HoaDon hoaDon = cellData.getValue();
+            HoaDonDto hoaDon = cellData.getValue();
             String ten = hoaDon.getMaKH() == null || hoaDon.getMaKH().getTenKH() == null || hoaDon.getMaKH().getTenKH().isBlank()
                     ? "Khách vãng lai"
                     : hoaDon.getMaKH().getTenKH();
             return new SimpleStringProperty(ten);
         });
         colSdtKH.setCellValueFactory(cellData -> {
-            HoaDon hoaDon = cellData.getValue();
+            HoaDonDto hoaDon = cellData.getValue();
             String sdt = hoaDon.getMaKH() == null ? "" : safe(hoaDon.getMaKH().getSdt());
             return new SimpleStringProperty(sdt);
         });
         colTenNV.setCellValueFactory(cellData -> {
-            HoaDon hoaDon = cellData.getValue();
+            HoaDonDto hoaDon = cellData.getValue();
             String ten = hoaDon.getMaNV() == null ? "" : safe(hoaDon.getMaNV().getTenNV());
             return new SimpleStringProperty(ten);
         });
@@ -118,7 +118,7 @@ public class TimKiemHoaDon_Ctrl extends Application {
 
             {
                 btn.setOnAction(event -> {
-                    HoaDon hd = getTableView().getItems().get(getIndex());
+                    HoaDonDto hd = getTableView().getItems().get(getIndex());
                     btnChiTietClick(hd);
                 });
             }
@@ -132,7 +132,7 @@ public class TimKiemHoaDon_Ctrl extends Application {
         tblHD.setItems(data);
     }
 
-    private void btnChiTietClick(HoaDon hoaDon) {
+    private void btnChiTietClick(HoaDonDto hoaDon) {
         try {
             ChiTietHoaDon_Ctrl ctrl = new ChiTietHoaDon_Ctrl();
             ChiTietHoaDon_GUI gui = new ChiTietHoaDon_GUI();
@@ -151,7 +151,7 @@ public class TimKiemHoaDon_Ctrl extends Application {
     private void timKiem() {
         String criteria = cboTieuChiTimKiem.getValue();
         String keyword = txtNoiDungTimKiem.getText();
-        List<HoaDon> filtered = hoaDonService.search(buildSearch(criteria, keyword));
+        List<HoaDonDto> filtered = hoaDonService.search(buildSearch(criteria, keyword));
         tblHD.setItems(FXCollections.observableArrayList(filtered));
     }
 

@@ -2,12 +2,12 @@ package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.common.remote.ThuocRemote;
-import com.example.pharmacy.common.model.ChiTietHoatChat;
-import com.example.pharmacy.common.model.HoatChat;
-import com.example.pharmacy.common.model.LoaiHang;
-import com.example.pharmacy.common.model.ThuocTonKho;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietHoatChatDto;
+import com.example.pharmacy.common.model.HoatChatDto;
+import com.example.pharmacy.common.model.LoaiHangDto;
+import com.example.pharmacy.common.model.ThuocTonKhoDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -22,7 +22,7 @@ public class RmiThuocClientService implements ThuocClientService {
     }
 
     @Override
-    public List<Thuoc_SanPham> findAll() {
+    public List<Thuoc_SanPhamDto> findAll() {
         try {
             return remote().findAll();
         } catch (RemoteException | NotBoundException exception) {
@@ -42,7 +42,7 @@ public class RmiThuocClientService implements ThuocClientService {
     }
 
     @Override
-    public List<LoaiHang> findAllLoaiHang() {
+    public List<LoaiHangDto> findAllLoaiHang() {
         try {
             return remote().findAllLoaiHang();
         } catch (RemoteException | NotBoundException exception) {
@@ -62,7 +62,7 @@ public class RmiThuocClientService implements ThuocClientService {
     }
 
     @Override
-    public List<HoatChat> findAllHoatChat() {
+    public List<HoatChatDto> findAllHoatChat() {
         try {
             return remote().findAllHoatChat();
         } catch (RemoteException | NotBoundException exception) {
@@ -72,7 +72,7 @@ public class RmiThuocClientService implements ThuocClientService {
     }
 
     @Override
-    public List<ChiTietHoatChat> findChiTietHoatChatByMaThuoc(String maThuoc) {
+    public List<ChiTietHoatChatDto> findChiTietHoatChatByMaThuoc(String maThuoc) {
         try {
             return remote().findChiTietHoatChatByMaThuoc(maThuoc);
         } catch (RemoteException | NotBoundException exception) {
@@ -82,7 +82,7 @@ public class RmiThuocClientService implements ThuocClientService {
     }
 
     @Override
-    public boolean create(Thuoc_SanPham thuoc, List<ChiTietHoatChat> chiTietHoatChats, String maDonViTinhCoBan) {
+    public boolean create(Thuoc_SanPhamDto thuoc, List<ChiTietHoatChatDto> chiTietHoatChats, String maDonViTinhCoBan) {
         try {
             return remote().create(thuoc, chiTietHoatChats, maDonViTinhCoBan);
         } catch (RemoteException | NotBoundException exception) {
@@ -92,7 +92,7 @@ public class RmiThuocClientService implements ThuocClientService {
     }
 
     @Override
-    public boolean update(Thuoc_SanPham thuoc, List<ChiTietHoatChat> chiTietHoatChats) {
+    public boolean update(Thuoc_SanPhamDto thuoc, List<ChiTietHoatChatDto> chiTietHoatChats) {
         try {
             return remote().update(thuoc, chiTietHoatChats);
         } catch (RemoteException | NotBoundException exception) {
@@ -132,7 +132,7 @@ public class RmiThuocClientService implements ThuocClientService {
     }
 
     @Override
-    public List<ThuocTonKho> getThuocTonKho() {
+    public List<ThuocTonKhoDto> getThuocTonKho() {
         try {
             return remote().getThuocTonKho();
         } catch (RemoteException | NotBoundException exception) {
@@ -142,7 +142,7 @@ public class RmiThuocClientService implements ThuocClientService {
     }
 
     @Override
-    public List<Thuoc_SP_TheoLo> getAllTheoLo() {
+    public List<Thuoc_SP_TheoLoDto> getAllTheoLo() {
         try {
             return remote().getAllTheoLo();
         } catch (RemoteException | NotBoundException exception) {

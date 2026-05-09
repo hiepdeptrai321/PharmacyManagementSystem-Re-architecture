@@ -4,7 +4,7 @@ import com.example.pharmacy.common.dto.UserContext;
 import com.example.pharmacy.common.enums.AuditAction;
 import com.example.pharmacy.common.exception.BusinessException;
 import com.example.pharmacy.server.repository.TonKhoRepository;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
 
 import java.util.List;
 import java.util.Objects;
@@ -19,12 +19,12 @@ public class TonKhoServiceImpl implements TonKhoService {
     }
 
     @Override
-    public List<Thuoc_SP_TheoLo> findAllLots() {
+    public List<Thuoc_SP_TheoLoDto> findAllLots() {
         return tonKhoRepository.findAllLots();
     }
 
     @Override
-    public boolean updateLotQuantity(Thuoc_SP_TheoLo thuocTheoLo, UserContext actor) {
+    public boolean updateLotQuantity(Thuoc_SP_TheoLoDto thuocTheoLo, UserContext actor) {
         if (thuocTheoLo == null || thuocTheoLo.getMaLH() == null || thuocTheoLo.getMaLH().isBlank()) {
             throw new BusinessException("Thong tin lo thuoc khong hop le.");
         }
@@ -38,7 +38,7 @@ public class TonKhoServiceImpl implements TonKhoService {
         boolean updated = tonKhoRepository.updateLotQuantity(thuocTheoLo);
         if (updated) {
             String maThuoc = thuocTheoLo.getThuoc() == null ? "" : thuocTheoLo.getThuoc().getMaThuoc();
-            auditService.logAction(actor, AuditAction.UPDATE, "Thuoc_SP_TheoLo", thuocTheoLo.getMaLH(),
+            auditService.logAction(actor, AuditAction.UPDATE, "Thuoc_SP_TheoLoDto", thuocTheoLo.getMaLH(),
                     "Cap nhat so luong ton cho lo " + thuocTheoLo.getMaLH() + " cua thuoc " + maThuoc + ".");
         }
         return updated;

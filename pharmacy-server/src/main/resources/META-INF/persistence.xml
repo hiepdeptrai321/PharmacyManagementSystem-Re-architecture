@@ -6,6 +6,8 @@
 
     <persistence-unit name="pharmacyPU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!-- Bảng đơn giản (simple PK) -->
         <class>com.example.pharmacy.server.entity.NhanVienEntity</class>
         <class>com.example.pharmacy.server.entity.KhachHangEntity</class>
         <class>com.example.pharmacy.server.entity.NhaCungCapEntity</class>
@@ -14,6 +16,29 @@
         <class>com.example.pharmacy.server.entity.NhomDuocLyEntity</class>
         <class>com.example.pharmacy.server.entity.LuongNhanVienEntity</class>
         <class>com.example.pharmacy.server.entity.ThongSoUngDungEntity</class>
+        <class>com.example.pharmacy.server.entity.LoaiHangEntity</class>
+        <class>com.example.pharmacy.server.entity.HoatChatEntity</class>
+        <class>com.example.pharmacy.server.entity.LoaiKhuyenMaiEntity</class>
+        <class>com.example.pharmacy.server.entity.ThuocSanPhamEntity</class>
+        <class>com.example.pharmacy.server.entity.PhieuNhapEntity</class>
+        <class>com.example.pharmacy.server.entity.ThuocSPTheoLoEntity</class>
+        <class>com.example.pharmacy.server.entity.HoaDonEntity</class>
+        <class>com.example.pharmacy.server.entity.KhuyenMaiEntity</class>
+        <class>com.example.pharmacy.server.entity.PhieuDatHangEntity</class>
+        <class>com.example.pharmacy.server.entity.PhieuDoiHangEntity</class>
+        <class>com.example.pharmacy.server.entity.PhieuTraHangEntity</class>
+        <class>com.example.pharmacy.server.entity.HoatDongEntity</class>
+
+        <!-- Bảng composite PK (chi tiết) -->
+        <class>com.example.pharmacy.server.entity.ChiTietDonViTinhEntity</class>
+        <class>com.example.pharmacy.server.entity.ChiTietHoatChatEntity</class>
+        <class>com.example.pharmacy.server.entity.ChiTietKhuyenMaiEntity</class>
+        <class>com.example.pharmacy.server.entity.ThuocSPTangKemEntity</class>
+        <class>com.example.pharmacy.server.entity.ChiTietPhieuNhapEntity</class>
+        <class>com.example.pharmacy.server.entity.ChiTietHoaDonEntity</class>
+        <class>com.example.pharmacy.server.entity.ChiTietPhieuDatHangEntity</class>
+        <class>com.example.pharmacy.server.entity.ChiTietPhieuDoiHangEntity</class>
+        <class>com.example.pharmacy.server.entity.ChiTietPhieuTraHangEntity</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
@@ -22,7 +47,7 @@
             <property name="jakarta.persistence.jdbc.password" value="123456"/>
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.MariaDBDialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
         </properties>

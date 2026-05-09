@@ -2,7 +2,7 @@ package com.example.pharmacy.server.service;
 
 import com.example.pharmacy.server.entity.ThongSoUngDungEntity;
 import com.example.pharmacy.server.repository.CaiDatRepository;
-import com.example.pharmacy.common.model.CaiDat;
+import com.example.pharmacy.common.model.CaiDatDto;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,14 +15,14 @@ public class CaiDatServiceImpl implements CaiDatService {
     }
 
     @Override
-    public List<CaiDat> findAll() {
+    public List<CaiDatDto> findAll() {
         return caiDatRepository.findAll().stream()
-                .map(entity -> new CaiDat(entity.getTenThongSo(), entity.getGiaTri()))
+                .map(entity -> new CaiDatDto(entity.getTenThongSo(), entity.getGiaTri()))
                 .toList();
     }
 
     @Override
-    public boolean update(CaiDat caiDat) {
+    public boolean update(CaiDatDto caiDat) {
         if (caiDat == null || caiDat.getTenThongSo() == null || caiDat.getTenThongSo().isBlank()) {
             return false;
         }

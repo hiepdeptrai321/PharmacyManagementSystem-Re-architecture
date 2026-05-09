@@ -3,16 +3,16 @@ package com.example.pharmacy.server.repository.jdbc;
 import com.example.pharmacy.common.request.CreateThuocRequest;
 import com.example.pharmacy.server.config.JdbcConnectionProvider;
 import com.example.pharmacy.server.repository.MedicineCatalogRepository;
-import com.example.pharmacy.common.model.ChiTietDonViTinh;
-import com.example.pharmacy.common.model.ChiTietHoatChat;
-import com.example.pharmacy.common.model.DonViTinh;
-import com.example.pharmacy.common.model.HoatChat;
-import com.example.pharmacy.common.model.KeHang;
-import com.example.pharmacy.common.model.LoaiHang;
-import com.example.pharmacy.common.model.NhomDuocLy;
-import com.example.pharmacy.common.model.ThuocTonKho;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietDonViTinhDto;
+import com.example.pharmacy.common.model.ChiTietHoatChatDto;
+import com.example.pharmacy.common.model.DonViTinhDto;
+import com.example.pharmacy.common.model.HoatChatDto;
+import com.example.pharmacy.common.model.KeHangDto;
+import com.example.pharmacy.common.model.LoaiHangDto;
+import com.example.pharmacy.common.model.NhomDuocLyDto;
+import com.example.pharmacy.common.model.ThuocTonKhoDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,10 +50,10 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
                    kh.MaKe AS KE_MaKe,
                    kh.TenKe AS KE_TenKe,
                    kh.MoTa AS KE_MoTa
-            FROM Thuoc_SanPham ts
-            LEFT JOIN NhomDuocLy ndl ON ndl.MaNDL = ts.MaNDL
-            LEFT JOIN LoaiHang lh ON lh.MaLoaiHang = ts.MaLoaiHang
-            LEFT JOIN KeHang kh ON kh.MaKe = ts.ViTri
+            FROM Thuoc_SanPhamDto ts
+            LEFT JOIN NhomDuocLyDto ndl ON ndl.MaNDL = ts.MaNDL
+            LEFT JOIN LoaiHangDto lh ON lh.MaLoaiHang = ts.MaLoaiHang
+            LEFT JOIN KeHangDto kh ON kh.MaKe = ts.ViTri
             """;
     private static final String SELECT_ALL_MEDICINES_SQL = MEDICINE_SELECT_FRAGMENT + """
             WHERE ts.TrangThaiXoa = 0
@@ -61,17 +61,17 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
             """;
     private static final String SELECT_ALL_LOAI_HANG_SQL = """
             SELECT MaLoaiHang, TenLH, MoTa
-            FROM LoaiHang
+            FROM LoaiHangDto
             ORDER BY TenLH ASC, MaLoaiHang ASC
             """;
     private static final String SELECT_ALL_LOAI_HANG_NAMES_SQL = """
             SELECT TenLH
-            FROM LoaiHang
+            FROM LoaiHangDto
             ORDER BY TenLH ASC, MaLoaiHang ASC
             """;
     private static final String SELECT_ALL_HOAT_CHAT_SQL = """
             SELECT MaHoatChat, TenHoatChat
-            FROM HoatChat
+            FROM HoatChatDto
             ORDER BY TenHoatChat ASC, MaHoatChat ASC
             """;
     private static final String SELECT_CHI_TIET_HOAT_CHAT_BY_MA_THUOC_SQL = """
@@ -80,20 +80,20 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
                    ct.HamLuong,
                    hc.TenHoatChat,
                    ts.TenThuoc
-            FROM ChiTietHoatChat ct
-            JOIN HoatChat hc ON hc.MaHoatChat = ct.MaHoatChat
-            LEFT JOIN Thuoc_SanPham ts ON ts.MaThuoc = ct.MaThuoc
+            FROM ChiTietHoatChatDto ct
+            JOIN HoatChatDto hc ON hc.MaHoatChat = ct.MaHoatChat
+            LEFT JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = ct.MaThuoc
             WHERE ct.MaThuoc = ?
             ORDER BY hc.TenHoatChat ASC, hc.MaHoatChat ASC
             """;
     private static final String INSERT_MEDICINE_SQL = """
-            INSERT INTO Thuoc_SanPham (
+            INSERT INTO Thuoc_SanPhamDto (
                 MaThuoc, TenThuoc, HamLuong, DonViHL, DuongDung, QuyCachDongGoi,
                 SDK_GPNK, HangSX, NuocSX, HinhAnh, MaLoaiHang, MaNDL, ViTri, TrangThaiXoa, ETC
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)
             """;
     private static final String UPDATE_MEDICINE_SQL = """
-            UPDATE Thuoc_SanPham
+            UPDATE Thuoc_SanPhamDto
             SET TenThuoc = ?,
                 HamLuong = ?,
                 DonViHL = ?,
@@ -110,45 +110,45 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
             WHERE MaThuoc = ?
             """;
     private static final String SOFT_DELETE_MEDICINE_SQL = """
-            UPDATE Thuoc_SanPham
+            UPDATE Thuoc_SanPhamDto
             SET TrangThaiXoa = 1
             WHERE MaThuoc = ?
             """;
     private static final String INSERT_BASE_UNIT_SQL = """
-            INSERT INTO ChiTietDonViTinh (
+            INSERT INTO ChiTietDonViTinhDto (
                 MaThuoc, MaDVT, HeSoQuyDoi, GiaNhap, GiaBan, DonViCoBan
             ) VALUES (?, ?, ?, ?, ?, 1)
             """;
     private static final String INSERT_DEFAULT_BASE_UNIT_SQL = """
-            INSERT INTO ChiTietDonViTinh (
+            INSERT INTO ChiTietDonViTinhDto (
                 MaThuoc, MaDVT, HeSoQuyDoi, GiaNhap, GiaBan, DonViCoBan
             )
             SELECT ?, MaDVT, 1.0, 0.0, 0.0, 1
-            FROM DonViTinh
+            FROM DonViTinhDto
             WHERE MaDVT = ?
             """;
     private static final String INSERT_CHI_TIET_HOAT_CHAT_SQL = """
-            INSERT INTO ChiTietHoatChat (MaThuoc, MaHoatChat, HamLuong)
+            INSERT INTO ChiTietHoatChatDto (MaThuoc, MaHoatChat, HamLuong)
             VALUES (?, ?, ?)
             """;
     private static final String UPDATE_CHI_TIET_HOAT_CHAT_SQL = """
-            UPDATE ChiTietHoatChat
+            UPDATE ChiTietHoatChatDto
             SET HamLuong = ?
             WHERE MaThuoc = ? AND MaHoatChat = ?
             """;
     private static final String DELETE_CHI_TIET_HOAT_CHAT_SQL = """
-            DELETE FROM ChiTietHoatChat
+            DELETE FROM ChiTietHoatChatDto
             WHERE MaThuoc = ? AND MaHoatChat = ?
             """;
     private static final String SELECT_TONG_SO_LUONG_TON_SQL = """
             SELECT COALESCE(SUM(SoLuongTon), 0) AS TongSoLuongTon
-            FROM Thuoc_SP_TheoLo
+            FROM Thuoc_SP_TheoLoDto
             WHERE MaThuoc = ?
             """;
     private static final String SELECT_TEN_DON_VI_CO_BAN_SQL = """
             SELECT dvt.TenDonViTinh
-            FROM ChiTietDonViTinh ctdvt
-            JOIN DonViTinh dvt ON dvt.MaDVT = ctdvt.MaDVT
+            FROM ChiTietDonViTinhDto ctdvt
+            JOIN DonViTinhDto dvt ON dvt.MaDVT = ctdvt.MaDVT
             WHERE ctdvt.MaThuoc = ? AND ctdvt.DonViCoBan = 1
             LIMIT 1
             """;
@@ -158,10 +158,10 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
                    dvt.TenDonViTinh,
                    COUNT(ttl.MaLH) AS SoLoTon,
                    COALESCE(SUM(ttl.SoLuongTon), 0) AS TongSoLuongTon
-            FROM Thuoc_SP_TheoLo ttl
-            JOIN Thuoc_SanPham tsp ON tsp.MaThuoc = ttl.MaThuoc
-            JOIN ChiTietDonViTinh ctdvt ON ctdvt.MaThuoc = tsp.MaThuoc AND ctdvt.DonViCoBan = 1
-            JOIN DonViTinh dvt ON dvt.MaDVT = ctdvt.MaDVT
+            FROM Thuoc_SP_TheoLoDto ttl
+            JOIN Thuoc_SanPhamDto tsp ON tsp.MaThuoc = ttl.MaThuoc
+            JOIN ChiTietDonViTinhDto ctdvt ON ctdvt.MaThuoc = tsp.MaThuoc AND ctdvt.DonViCoBan = 1
+            JOIN DonViTinhDto dvt ON dvt.MaDVT = ctdvt.MaDVT
             GROUP BY ttl.MaThuoc, tsp.TenThuoc, dvt.TenDonViTinh
             ORDER BY tsp.TenThuoc ASC, ttl.MaThuoc ASC
             """;
@@ -191,11 +191,11 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
                    kh.MaKe AS KE_MaKe,
                    kh.TenKe AS KE_TenKe,
                    kh.MoTa AS KE_MoTa
-            FROM Thuoc_SP_TheoLo ttl
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = ttl.MaThuoc
-            LEFT JOIN NhomDuocLy ndl ON ndl.MaNDL = ts.MaNDL
-            LEFT JOIN LoaiHang lh ON lh.MaLoaiHang = ts.MaLoaiHang
-            LEFT JOIN KeHang kh ON kh.MaKe = ts.ViTri
+            FROM Thuoc_SP_TheoLoDto ttl
+            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = ttl.MaThuoc
+            LEFT JOIN NhomDuocLyDto ndl ON ndl.MaNDL = ts.MaNDL
+            LEFT JOIN LoaiHangDto lh ON lh.MaLoaiHang = ts.MaLoaiHang
+            LEFT JOIN KeHangDto kh ON kh.MaKe = ts.ViTri
             ORDER BY ts.TenThuoc ASC, ttl.HSD ASC, ttl.NSX ASC, ttl.MaLH ASC
             """;
 
@@ -257,9 +257,9 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
     }
 
     @Override
-    public List<Thuoc_SanPham> findAllMedicines() {
+    public List<Thuoc_SanPhamDto> findAllMedicines() {
         Connection connection = null;
-        List<Thuoc_SanPham> medicines = new ArrayList<>();
+        List<Thuoc_SanPhamDto> medicines = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_MEDICINES_SQL);
@@ -278,9 +278,9 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
     }
 
     @Override
-    public List<LoaiHang> findAllLoaiHang() {
+    public List<LoaiHangDto> findAllLoaiHang() {
         Connection connection = null;
-        List<LoaiHang> loaiHangs = new ArrayList<>();
+        List<LoaiHangDto> loaiHangs = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_LOAI_HANG_SQL);
@@ -318,15 +318,15 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
     }
 
     @Override
-    public List<HoatChat> findAllHoatChat() {
+    public List<HoatChatDto> findAllHoatChat() {
         Connection connection = null;
-        List<HoatChat> hoatChats = new ArrayList<>();
+        List<HoatChatDto> hoatChats = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_HOAT_CHAT_SQL);
                  ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    HoatChat hoatChat = new HoatChat();
+                    HoatChatDto hoatChat = new HoatChatDto();
                     hoatChat.setMaHoatChat(resultSet.getString("MaHoatChat"));
                     hoatChat.setTenHoatChat(resultSet.getString("TenHoatChat"));
                     hoatChats.add(hoatChat);
@@ -341,23 +341,23 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
     }
 
     @Override
-    public List<ChiTietHoatChat> findChiTietHoatChatByMaThuoc(String maThuoc) {
+    public List<ChiTietHoatChatDto> findChiTietHoatChatByMaThuoc(String maThuoc) {
         Connection connection = null;
-        List<ChiTietHoatChat> details = new ArrayList<>();
+        List<ChiTietHoatChatDto> details = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_CHI_TIET_HOAT_CHAT_BY_MA_THUOC_SQL)) {
                 statement.setString(1, maThuoc);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
-                        ChiTietHoatChat detail = new ChiTietHoatChat();
+                        ChiTietHoatChatDto detail = new ChiTietHoatChatDto();
 
-                        Thuoc_SanPham thuoc = new Thuoc_SanPham();
+                        Thuoc_SanPhamDto thuoc = new Thuoc_SanPhamDto();
                         thuoc.setMaThuoc(resultSet.getString("MaThuoc"));
                         thuoc.setTenThuoc(resultSet.getString("TenThuoc"));
                         detail.setThuoc(thuoc);
 
-                        HoatChat hoatChat = new HoatChat();
+                        HoatChatDto hoatChat = new HoatChatDto();
                         hoatChat.setMaHoatChat(resultSet.getString("MaHoatChat"));
                         hoatChat.setTenHoatChat(resultSet.getString("TenHoatChat"));
                         detail.setHoatChat(hoatChat);
@@ -376,7 +376,7 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
     }
 
     @Override
-    public boolean insertMedicine(Thuoc_SanPham thuoc) {
+    public boolean insertMedicine(Thuoc_SanPhamDto thuoc) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -422,7 +422,7 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
     }
 
     @Override
-    public void insertChiTietHoatChat(String maThuoc, ChiTietHoatChat chiTietHoatChat) {
+    public void insertChiTietHoatChat(String maThuoc, ChiTietHoatChatDto chiTietHoatChat) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -440,7 +440,7 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
     }
 
     @Override
-    public boolean updateMedicine(Thuoc_SanPham thuoc) {
+    public boolean updateMedicine(Thuoc_SanPhamDto thuoc) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -469,7 +469,7 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
     }
 
     @Override
-    public void updateChiTietHoatChat(String maThuoc, ChiTietHoatChat chiTietHoatChat) {
+    public void updateChiTietHoatChat(String maThuoc, ChiTietHoatChatDto chiTietHoatChat) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -562,15 +562,15 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
     }
 
     @Override
-    public List<ThuocTonKho> getThuocTonKho() {
+    public List<ThuocTonKhoDto> getThuocTonKho() {
         Connection connection = null;
-        List<ThuocTonKho> list = new ArrayList<>();
+        List<ThuocTonKhoDto> list = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_THUOC_TON_KHO_SQL);
                  ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    ThuocTonKho tonKho = new ThuocTonKho();
+                    ThuocTonKhoDto tonKho = new ThuocTonKhoDto();
                     tonKho.setMaThuoc(resultSet.getString("MaThuoc"));
                     tonKho.setTenThuoc(resultSet.getString("TenThuoc"));
                     tonKho.setDonViTinh(resultSet.getString("TenDonViTinh"));
@@ -588,23 +588,23 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
     }
 
     @Override
-    public List<Thuoc_SP_TheoLo> findAllLots() {
+    public List<Thuoc_SP_TheoLoDto> findAllLots() {
         Connection connection = null;
-        List<Thuoc_SP_TheoLo> lots = new ArrayList<>();
-        Map<String, Thuoc_SanPham> medicinesById = new LinkedHashMap<>();
+        List<Thuoc_SP_TheoLoDto> lots = new ArrayList<>();
+        Map<String, Thuoc_SanPhamDto> medicinesById = new LinkedHashMap<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_LOTS_SQL);
                  ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     String maThuoc = resultSet.getString("MaThuoc");
-                    Thuoc_SanPham thuoc = medicinesById.get(maThuoc);
+                    Thuoc_SanPhamDto thuoc = medicinesById.get(maThuoc);
                     if (thuoc == null) {
                         thuoc = mapMedicine(resultSet);
                         medicinesById.put(maThuoc, thuoc);
                     }
 
-                    Thuoc_SP_TheoLo lot = new Thuoc_SP_TheoLo();
+                    Thuoc_SP_TheoLoDto lot = new Thuoc_SP_TheoLoDto();
                     lot.setMaLH(resultSet.getString("MaLH"));
                     lot.setSoLuongTon(resultSet.getInt("SoLuongTon"));
                     lot.setNsx(resultSet.getDate("NSX"));
@@ -623,8 +623,8 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
         }
     }
 
-    private Thuoc_SanPham mapMedicine(ResultSet resultSet) throws SQLException {
-        Thuoc_SanPham thuoc = new Thuoc_SanPham();
+    private Thuoc_SanPhamDto mapMedicine(ResultSet resultSet) throws SQLException {
+        Thuoc_SanPhamDto thuoc = new Thuoc_SanPhamDto();
         thuoc.setMaThuoc(resultSet.getString("MaThuoc"));
         thuoc.setTenThuoc(resultSet.getString("TenThuoc"));
         thuoc.setHamLuong(resultSet.getFloat("HamLuong"));
@@ -642,49 +642,49 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
         return thuoc;
     }
 
-    private NhomDuocLy mapNhomDuocLy(ResultSet resultSet) throws SQLException {
+    private NhomDuocLyDto mapNhomDuocLy(ResultSet resultSet) throws SQLException {
         String maNdl = resultSet.getString("NDL_MaNDL");
         if (maNdl == null) {
             return null;
         }
-        NhomDuocLy nhomDuocLy = new NhomDuocLy();
+        NhomDuocLyDto nhomDuocLy = new NhomDuocLyDto();
         nhomDuocLy.setMaNDL(maNdl);
         nhomDuocLy.setTenNDL(resultSet.getString("NDL_TenNDL"));
         nhomDuocLy.setMoTa(resultSet.getString("NDL_MoTa"));
         return nhomDuocLy;
     }
 
-    private LoaiHang mapLoaiHang(ResultSet resultSet, String prefix) throws SQLException {
+    private LoaiHangDto mapLoaiHang(ResultSet resultSet, String prefix) throws SQLException {
         String maLoaiHang = resultSet.getString(prefix + "MaLoaiHang");
         if (maLoaiHang == null) {
             return null;
         }
-        LoaiHang loaiHang = new LoaiHang();
+        LoaiHangDto loaiHang = new LoaiHangDto();
         loaiHang.setMaLoaiHang(maLoaiHang);
         loaiHang.setTenLoaiHang(resultSet.getString(prefix + "TenLH"));
         loaiHang.setMoTa(resultSet.getString(prefix + "MoTa"));
         return loaiHang;
     }
 
-    private KeHang mapKeHang(ResultSet resultSet) throws SQLException {
+    private KeHangDto mapKeHang(ResultSet resultSet) throws SQLException {
         String maKe = resultSet.getString("KE_MaKe");
         if (maKe == null) {
             return null;
         }
-        KeHang keHang = new KeHang();
+        KeHangDto keHang = new KeHangDto();
         keHang.setMaKe(maKe);
         keHang.setTenKe(resultSet.getString("KE_TenKe"));
         keHang.setMoTa(resultSet.getString("KE_MoTa"));
         return keHang;
     }
 
-    private void attachUnitDetails(Collection<Thuoc_SanPham> medicines) throws SQLException {
+    private void attachUnitDetails(Collection<Thuoc_SanPhamDto> medicines) throws SQLException {
         if (medicines == null || medicines.isEmpty()) {
             return;
         }
 
-        Map<String, Thuoc_SanPham> medicinesById = new LinkedHashMap<>();
-        for (Thuoc_SanPham medicine : medicines) {
+        Map<String, Thuoc_SanPhamDto> medicinesById = new LinkedHashMap<>();
+        for (Thuoc_SanPhamDto medicine : medicines) {
             if (medicine != null && medicine.getMaThuoc() != null && !medicine.getMaThuoc().isBlank()) {
                 medicinesById.put(medicine.getMaThuoc(), medicine);
             }
@@ -703,14 +703,14 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
                        ctdvt.DonViCoBan,
                        dvt.TenDonViTinh,
                        dvt.KiHieu
-                FROM ChiTietDonViTinh ctdvt
-                JOIN DonViTinh dvt ON dvt.MaDVT = ctdvt.MaDVT
+                FROM ChiTietDonViTinhDto ctdvt
+                JOIN DonViTinhDto dvt ON dvt.MaDVT = ctdvt.MaDVT
                 WHERE ctdvt.MaThuoc IN (%s)
                 ORDER BY ctdvt.MaThuoc ASC, ctdvt.DonViCoBan DESC, ctdvt.HeSoQuyDoi DESC, ctdvt.MaDVT ASC
                 """.formatted(placeholders);
 
         Connection connection = null;
-        Map<String, List<ChiTietDonViTinh>> detailsByMedicineId = new LinkedHashMap<>();
+        Map<String, List<ChiTietDonViTinhDto>> detailsByMedicineId = new LinkedHashMap<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -721,8 +721,8 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         String maThuoc = resultSet.getString("MaThuoc");
-                        ChiTietDonViTinh detail = new ChiTietDonViTinh();
-                        DonViTinh donViTinh = new DonViTinh();
+                        ChiTietDonViTinhDto detail = new ChiTietDonViTinhDto();
+                        DonViTinhDto donViTinh = new DonViTinhDto();
                         donViTinh.setMaDVT(resultSet.getString("MaDVT"));
                         donViTinh.setTenDonViTinh(resultSet.getString("TenDonViTinh"));
                         donViTinh.setKiHieu(resultSet.getString("KiHieu"));
@@ -743,14 +743,14 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
             closeConnection(connection);
         }
 
-        for (Map.Entry<String, Thuoc_SanPham> entry : medicinesById.entrySet()) {
-            Thuoc_SanPham medicine = entry.getValue();
-            List<ChiTietDonViTinh> details = detailsByMedicineId.getOrDefault(entry.getKey(), new ArrayList<>());
-            for (ChiTietDonViTinh detail : details) {
+        for (Map.Entry<String, Thuoc_SanPhamDto> entry : medicinesById.entrySet()) {
+            Thuoc_SanPhamDto medicine = entry.getValue();
+            List<ChiTietDonViTinhDto> details = detailsByMedicineId.getOrDefault(entry.getKey(), new ArrayList<>());
+            for (ChiTietDonViTinhDto detail : details) {
                 detail.setThuoc(medicine);
             }
             medicine.setDsCTDVT(details);
-            medicine.setDvcb(details.stream().filter(ChiTietDonViTinh::isDonViCoBan).findFirst().orElse(null));
+            medicine.setDvcb(details.stream().filter(ChiTietDonViTinhDto::isDonViCoBan).findFirst().orElse(null));
         }
     }
 

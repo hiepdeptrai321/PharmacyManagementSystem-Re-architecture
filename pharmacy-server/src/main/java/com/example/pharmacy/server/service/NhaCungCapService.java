@@ -1,19 +1,19 @@
 package com.example.pharmacy.server.service;
 
-import com.example.pharmacy.common.model.NhaCungCap;
+import com.example.pharmacy.common.model.NhaCungCapDto;
 
 import java.util.List;
 
 public interface NhaCungCapService {
-    List<NhaCungCap> findAll();
+    List<NhaCungCapDto> findAll();
 
-    NhaCungCap findById(String maNhaCungCap);
+    NhaCungCapDto findById(String maNhaCungCap);
 
     String generateNewMaNCC();
 
-    boolean create(NhaCungCap nhaCungCap);
+    boolean create(NhaCungCapDto nhaCungCap);
 
-    boolean update(NhaCungCap nhaCungCap);
+    boolean update(NhaCungCapDto nhaCungCap);
 
     boolean deleteById(String maNhaCungCap);
 }

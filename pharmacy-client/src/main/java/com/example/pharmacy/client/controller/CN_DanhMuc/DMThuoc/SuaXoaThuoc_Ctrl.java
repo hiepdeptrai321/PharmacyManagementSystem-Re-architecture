@@ -1,11 +1,11 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMThuoc;
 
-import com.example.pharmacy.common.model.ChiTietHoatChat;
-import com.example.pharmacy.common.model.HoatChat;
-import com.example.pharmacy.common.model.KeHang;
-import com.example.pharmacy.common.model.LoaiHang;
-import com.example.pharmacy.common.model.NhomDuocLy;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietHoatChatDto;
+import com.example.pharmacy.common.model.HoatChatDto;
+import com.example.pharmacy.common.model.KeHangDto;
+import com.example.pharmacy.common.model.LoaiHangDto;
+import com.example.pharmacy.common.model.NhomDuocLyDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import com.example.pharmacy.client.service.KeHangService;
 import com.example.pharmacy.client.service.NhomDuocLyService;
 import com.example.pharmacy.client.service.ThuocService;
@@ -56,14 +56,14 @@ public class SuaXoaThuoc_Ctrl {
     public TextField txtQuyCachDongGoi;
     public TextField txtSDK_GPNK;
     public CheckBox cbETC;
-    public TableView<ChiTietHoatChat> tblHoatChat;
-    public TableColumn<ChiTietHoatChat, String> colMaHoatChat;
-    public TableColumn<ChiTietHoatChat, String> colTenHoatChat;
-    public TableColumn<ChiTietHoatChat, Float> colHamLuong;
-    public TableColumn<ChiTietHoatChat, String> colXoa;
+    public TableView<ChiTietHoatChatDto> tblHoatChat;
+    public TableColumn<ChiTietHoatChatDto, String> colMaHoatChat;
+    public TableColumn<ChiTietHoatChatDto, String> colTenHoatChat;
+    public TableColumn<ChiTietHoatChatDto, Float> colHamLuong;
+    public TableColumn<ChiTietHoatChatDto, String> colXoa;
     public TextField txtDuongDung;
     public TextField txtDonViHamLuong;
-    public ListView<HoatChat> listViewHoatChat;
+    public ListView<HoatChatDto> listViewHoatChat;
     public TextField txtTimKiemHoatChat;
     public TextField txtMaThuoc;
     public ImageView imgThuoc_SanPham;
@@ -76,8 +76,8 @@ public class SuaXoaThuoc_Ctrl {
     private final KeHangService keHangService = new KeHangService();
     private final NhomDuocLyService nhomDuocLyService = new NhomDuocLyService();
 
-    private ObservableList<HoatChat> allHoatChat;
-    private Thuoc_SanPham thuocTempDeXemSoLuongTon;
+    private ObservableList<HoatChatDto> allHoatChat;
+    private Thuoc_SanPhamDto thuocTempDeXemSoLuongTon;
     private DanhMucThuoc_Ctrl danhMucThuoc_Ctrl;
 
     public void initialize() {
@@ -108,7 +108,7 @@ public class SuaXoaThuoc_Ctrl {
                     return;
                 }
 
-                HoatChat hoatChat = newVal;
+                HoatChatDto hoatChat = newVal;
                 txtTimKiemHoatChat.clear();
                 listViewHoatChat.setVisible(false);
 
@@ -117,7 +117,7 @@ public class SuaXoaThuoc_Ctrl {
                                 && item.getHoatChat().getMaHoatChat().equals(hoatChat.getMaHoatChat()));
 
                 if (notExists) {
-                    ChiTietHoatChat chiTietHoatChat = new ChiTietHoatChat();
+                    ChiTietHoatChatDto chiTietHoatChat = new ChiTietHoatChatDto();
                     chiTietHoatChat.setHoatChat(hoatChat);
                     chiTietHoatChat.setThuoc(thuocTempDeXemSoLuongTon);
 
@@ -150,7 +150,7 @@ public class SuaXoaThuoc_Ctrl {
         btnChonAnh.setOnAction(event -> chonFile());
     }
 
-    public void load(Thuoc_SanPham thuoc) {
+    public void load(Thuoc_SanPhamDto thuoc) {
         if (tblHoatChat == null || colMaHoatChat == null || colTenHoatChat == null || colHamLuong == null || colXoa == null) {
             throw new IllegalStateException("Hãy gọi gui.showWithController(stage, ctrl) để inject UI trước, rồi mới gọi ctrl.load(thuoc).");
         }
@@ -172,7 +172,7 @@ public class SuaXoaThuoc_Ctrl {
         loadDuLieuThuoc(thuoc);
     }
 
-    public void loadDuLieuThuoc(Thuoc_SanPham thuoc) {
+    public void loadDuLieuThuoc(Thuoc_SanPhamDto thuoc) {
         txtMaThuoc.setText(thuoc.getMaThuoc());
         txtTenThuoc.setText(thuoc.getTenThuoc());
         cbxLoaiHang.setValue(thuoc.getLoaiHang() != null ? thuoc.getLoaiHang().getTenLoaiHang() : "Chọn loại hàng");
@@ -199,8 +199,8 @@ public class SuaXoaThuoc_Ctrl {
                     getClass().getResource("/com/example/pharmacy/client/img/noimage.jpg").toExternalForm()));
         }
 
-        List<ChiTietHoatChat> listHoatChat = thuocService.findChiTietHoatChatByMaThuoc(thuoc.getMaThuoc());
-        ObservableList<ChiTietHoatChat> data = FXCollections.observableArrayList(listHoatChat);
+        List<ChiTietHoatChatDto> listHoatChat = thuocService.findChiTietHoatChatByMaThuoc(thuoc.getMaThuoc());
+        ObservableList<ChiTietHoatChatDto> data = FXCollections.observableArrayList(listHoatChat);
         colMaHoatChat.setCellValueFactory(cd -> new SimpleStringProperty(cd.getValue().getHoatChat().getMaHoatChat()));
         colTenHoatChat.setCellValueFactory(cd -> new SimpleStringProperty(cd.getValue().getHoatChat().getTenHoatChat()));
         colHamLuong.setCellValueFactory(cd -> new javafx.beans.property.SimpleObjectProperty<>(cd.getValue().getHamLuong()));
@@ -209,7 +209,7 @@ public class SuaXoaThuoc_Ctrl {
 
             {
                 btn.setOnAction(event -> {
-                    ChiTietHoatChat chiTietHoatChat = getTableView().getItems().get(getIndex());
+                    ChiTietHoatChatDto chiTietHoatChat = getTableView().getItems().get(getIndex());
                     getTableView().getItems().remove(chiTietHoatChat);
                 });
             }
@@ -224,12 +224,12 @@ public class SuaXoaThuoc_Ctrl {
     }
 
     public void listView() {
-        List<HoatChat> listHoatChat = thuocService.getAllHoatChat();
+        List<HoatChatDto> listHoatChat = thuocService.getAllHoatChat();
         allHoatChat = FXCollections.observableArrayList(listHoatChat);
         listViewHoatChat.setItems(allHoatChat);
         listViewHoatChat.setCellFactory(lv -> new ListCell<>() {
             @Override
-            protected void updateItem(HoatChat item, boolean empty) {
+            protected void updateItem(HoatChatDto item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty || item == null ? null : item.getMaHoatChat() + " - " + item.getTenHoatChat());
             }
@@ -242,8 +242,8 @@ public class SuaXoaThuoc_Ctrl {
             return;
         }
         String keyword = keywordRaw.toLowerCase();
-        ObservableList<HoatChat> filtered = FXCollections.observableArrayList();
-        for (HoatChat hoatChat : allHoatChat) {
+        ObservableList<HoatChatDto> filtered = FXCollections.observableArrayList();
+        for (HoatChatDto hoatChat : allHoatChat) {
             if (hoatChat.getMaHoatChat().toLowerCase().contains(keyword)
                     || hoatChat.getTenHoatChat().toLowerCase().contains(keyword)) {
                 filtered.add(hoatChat);
@@ -275,7 +275,7 @@ public class SuaXoaThuoc_Ctrl {
         }
 
         new Thread(() -> {
-            Thuoc_SanPham thuoc = new Thuoc_SanPham();
+            Thuoc_SanPhamDto thuoc = new Thuoc_SanPhamDto();
             thuoc.setMaThuoc(txtMaThuoc.getText());
             thuoc.setTenThuoc(txtTenThuoc.getText().trim());
             thuoc.setLoaiHang(resolveLoaiHang());
@@ -291,7 +291,7 @@ public class SuaXoaThuoc_Ctrl {
             thuoc.setETC(cbETC.isSelected());
             thuoc.setHinhAnh(extractImageBytes());
 
-            List<ChiTietHoatChat> chiTietHoatChats = new ArrayList<>(tblHoatChat.getItems());
+            List<ChiTietHoatChatDto> chiTietHoatChats = new ArrayList<>(tblHoatChat.getItems());
             boolean success = thuocService.update(thuoc, chiTietHoatChats);
 
             Platform.runLater(() -> {
@@ -324,7 +324,7 @@ public class SuaXoaThuoc_Ctrl {
         }
     }
 
-    private LoaiHang resolveLoaiHang() {
+    private LoaiHangDto resolveLoaiHang() {
         String tenLoaiHang = cbxLoaiHang.getSelectionModel().getSelectedItem();
         if (tenLoaiHang == null || "Chọn loại hàng".equals(tenLoaiHang)) {
             return null;
@@ -332,7 +332,7 @@ public class SuaXoaThuoc_Ctrl {
         return thuocService.findByTenLoaiHang(tenLoaiHang);
     }
 
-    private KeHang resolveKeHang() {
+    private KeHangDto resolveKeHang() {
         String tenKe = cbxViTri.getSelectionModel().getSelectedItem();
         if (tenKe == null || "Chọn vị trí".equals(tenKe)) {
             return null;
@@ -340,7 +340,7 @@ public class SuaXoaThuoc_Ctrl {
         return keHangService.selectByTenKe(tenKe);
     }
 
-    private NhomDuocLy resolveNhomDuocLy() {
+    private NhomDuocLyDto resolveNhomDuocLy() {
         String tenNhomDuocLy = cbxNhomDuocLy.getSelectionModel().getSelectedItem();
         if (tenNhomDuocLy == null || "Chọn nhóm dược lý".equals(tenNhomDuocLy)) {
             return null;

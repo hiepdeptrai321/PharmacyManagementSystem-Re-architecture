@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.view.CN_DanhMuc.DMKhuyenMai;
 
-import com.example.pharmacy.common.model.KhuyenMai;
+import com.example.pharmacy.common.model.KhuyenMaiDto;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -95,40 +95,40 @@ public class DanhMucKhuyenMai_GUI {
         btnTim.setStyle(" -fx-background-color: #0c81ff; -fx-text-fill: white;");
 
         // Table and columns
-        TableView<KhuyenMai> tbKM = new TableView<>();
+        TableView<KhuyenMaiDto> tbKM = new TableView<>();
         tbKM.setId("tbKM");
         tbKM.setLayoutX(12);
         tbKM.setLayoutY(100);
         tbKM.setPrefSize(1622, 789);
 
-        TableColumn<KhuyenMai, String> colSTT = new TableColumn<>("STT");
+        TableColumn<KhuyenMaiDto, String> colSTT = new TableColumn<>("STT");
         colSTT.setPrefWidth(48.83);
         colSTT.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<KhuyenMai, String> colMaKM = new TableColumn<>("Mã khuyến mãi");
+        TableColumn<KhuyenMaiDto, String> colMaKM = new TableColumn<>("Mã khuyến mãi");
         colMaKM.setPrefWidth(114.17);
         colMaKM.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<KhuyenMai, String> colTenKM = new TableColumn<>("Tên khuyến mãi");
+        TableColumn<KhuyenMaiDto, String> colTenKM = new TableColumn<>("Tên khuyến mãi");
         colTenKM.setPrefWidth(348);
 
-        TableColumn<KhuyenMai, String> colLoaiKM = new TableColumn<>("Loại khuyến mãi");
+        TableColumn<KhuyenMaiDto, String> colLoaiKM = new TableColumn<>("Loại khuyến mãi");
         colLoaiKM.setPrefWidth(253);
         colLoaiKM.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<KhuyenMai, String> colNBD = new TableColumn<>("Ngày bắt đầu");
+        TableColumn<KhuyenMaiDto, String> colNBD = new TableColumn<>("Ngày bắt đầu");
         colNBD.setPrefWidth(285);
         colNBD.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<KhuyenMai, String> colNKT = new TableColumn<>("Ngày kết thúc");
+        TableColumn<KhuyenMaiDto, String> colNKT = new TableColumn<>("Ngày kết thúc");
         colNKT.setPrefWidth(220);
         colNKT.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<KhuyenMai, String> colNgayTao = new TableColumn<>("Ngày tạo khuyến mãi");
+        TableColumn<KhuyenMaiDto, String> colNgayTao = new TableColumn<>("Ngày tạo khuyến mãi");
         colNgayTao.setPrefWidth(227);
         colNgayTao.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<KhuyenMai, String> colChiTiet = new TableColumn<>();
+        TableColumn<KhuyenMaiDto, String> colChiTiet = new TableColumn<>();
         colChiTiet.setPrefWidth(108);
         colChiTiet.setStyle("-fx-alignment: CENTER;");
 

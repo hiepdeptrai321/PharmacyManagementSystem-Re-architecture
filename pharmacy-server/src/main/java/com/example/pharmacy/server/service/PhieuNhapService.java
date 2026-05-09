@@ -2,8 +2,8 @@ package com.example.pharmacy.server.service;
 
 import com.example.pharmacy.common.dto.UserContext;
 import com.example.pharmacy.common.request.PhieuNhapRequest;
-import com.example.pharmacy.common.model.ChiTietPhieuNhap;
-import com.example.pharmacy.common.model.PhieuNhap;
+import com.example.pharmacy.common.model.ChiTietPhieuNhapDto;
+import com.example.pharmacy.common.model.PhieuNhapDto;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ public interface PhieuNhapService {
 
     String createPurchaseOrder(PhieuNhapRequest request, UserContext actor);
 
-    List<PhieuNhap> findAll();
+    List<PhieuNhapDto> findAll();
 
-    PhieuNhap findById(String maPhieuNhap);
+    PhieuNhapDto findById(String maPhieuNhap);
 
-    List<ChiTietPhieuNhap> findDetailsByMaPhieuNhap(String maPhieuNhap);
+    List<ChiTietPhieuNhapDto> findDetailsByMaPhieuNhap(String maPhieuNhap);
 }

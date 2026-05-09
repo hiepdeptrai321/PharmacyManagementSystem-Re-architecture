@@ -2,8 +2,9 @@ package com.example.pharmacy.server.service;
 
 import com.example.pharmacy.common.enums.BusinessCodeType;
 import com.example.pharmacy.server.entity.KhachHangEntity;
+import com.example.pharmacy.server.mapper.KhachHangMapper;
 import com.example.pharmacy.server.repository.KhachHangRepository;
-import com.example.pharmacy.common.model.KhachHang;
+import com.example.pharmacy.common.model.KhachHangDto;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,13 +19,13 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public List<KhachHang> findAll() {
-        return khachHangRepository.findAllActive().stream().map(this::toModel).toList();
+    public List<KhachHangDto> findAll() {
+        return khachHangRepository.findAllActive().stream().map(KhachHangMapper::toDto).toList();
     }
 
     @Override
-    public KhachHang findById(String maKhachHang) {
-        return khachHangRepository.findById(maKhachHang).map(this::toModel).orElse(null);
+    public KhachHangDto findById(String maKhachHang) {
+        return khachHangRepository.findById(maKhachHang).map(KhachHangMapper::toDto).orElse(null);
     }
 
     @Override
@@ -33,12 +34,12 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public boolean create(KhachHang khachHang) {
+    public boolean create(KhachHangDto khachHang) {
         if (khachHang == null) {
             return false;
         }
         try {
-            KhachHangEntity entity = toEntity(khachHang);
+            KhachHangEntity entity = KhachHangMapper.toEntity(khachHang);
             if (entity.getMaKH() == null || entity.getMaKH().isBlank()) {
                 entity.setMaKH(generateNewMaKH());
                 khachHang.setMaKH(entity.getMaKH());
@@ -51,7 +52,7 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public boolean save(KhachHang khachHang) {
+    public boolean save(KhachHangDto khachHang) {
         if (khachHang == null) {
             return false;
         }
@@ -59,7 +60,7 @@ public class KhachHangServiceImpl implements KhachHangService {
             return create(khachHang);
         }
         try {
-            khachHangRepository.update(toEntity(khachHang));
+            khachHangRepository.update(KhachHangMapper.toEntity(khachHang));
             return true;
         } catch (RuntimeException exception) {
             return false;
@@ -76,31 +77,5 @@ public class KhachHangServiceImpl implements KhachHangService {
         } catch (RuntimeException exception) {
             return false;
         }
-    }
-
-    private KhachHang toModel(KhachHangEntity entity) {
-        KhachHang khachHang = new KhachHang();
-        khachHang.setMaKH(entity.getMaKH());
-        khachHang.setTenKH(entity.getTenKH());
-        khachHang.setSdt(entity.getSdt());
-        khachHang.setEmail(entity.getEmail());
-        khachHang.setNgaySinh(entity.getNgaySinh());
-        khachHang.setGioiTinh(entity.isGioiTinh());
-        khachHang.setDiaChi(entity.getDiaChi());
-        khachHang.setTrangThai(entity.isTrangThai());
-        return khachHang;
-    }
-
-    private KhachHangEntity toEntity(KhachHang model) {
-        KhachHangEntity entity = new KhachHangEntity();
-        entity.setMaKH(model.getMaKH());
-        entity.setTenKH(model.getTenKH());
-        entity.setSdt(model.getSdt());
-        entity.setEmail(model.getEmail());
-        entity.setNgaySinh(model.getNgaySinh());
-        entity.setGioiTinh(Boolean.TRUE.equals(model.getGioiTinh()));
-        entity.setDiaChi(model.getDiaChi());
-        entity.setTrangThai(model.getTrangThai() == null || model.getTrangThai());
-        return entity;
     }
 }

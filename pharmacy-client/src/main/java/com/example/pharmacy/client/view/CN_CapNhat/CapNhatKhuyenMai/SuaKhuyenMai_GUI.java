@@ -1,10 +1,10 @@
 package com.example.pharmacy.client.view.CN_CapNhat.CapNhatKhuyenMai;
 
 import com.example.pharmacy.client.controller.CN_CapNhat.CapNhatKhuyenMai.SuaKhuyenMai_Ctrl;
-import com.example.pharmacy.common.model.ChiTietKhuyenMai;
-import com.example.pharmacy.common.model.KhuyenMai;
-import com.example.pharmacy.common.model.Thuoc_SP_TangKem;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietKhuyenMaiDto;
+import com.example.pharmacy.common.model.KhuyenMaiDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TangKemDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -135,38 +135,38 @@ public class SuaKhuyenMai_GUI {
         HBox.setHgrow(tfTimThuoc, Priority.ALWAYS);
         hbSearchThuoc.getChildren().addAll(lblTim, tfTimThuoc);
 
-        TableView<ChiTietKhuyenMai> tbDSThuoc = new TableView<>();
+        TableView<ChiTietKhuyenMaiDto> tbDSThuoc = new TableView<>();
         tbDSThuoc.setId("tbDSThuoc");
         tbDSThuoc.setLayoutX(8);
         tbDSThuoc.setLayoutY(43);
         tbDSThuoc.setPrefSize(922, 133);
 
-        TableColumn<ChiTietKhuyenMai, String> colMaThuoc = new TableColumn<>("Mã thuốc");
+        TableColumn<ChiTietKhuyenMaiDto, String> colMaThuoc = new TableColumn<>("Mã thuốc");
         colMaThuoc.setPrefWidth(105);
         colMaThuoc.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<ChiTietKhuyenMai, String> colTenThuoc = new TableColumn<>("Tên thuốc");
+        TableColumn<ChiTietKhuyenMaiDto, String> colTenThuoc = new TableColumn<>("Tên thuốc");
         colTenThuoc.setPrefWidth(288);
 
-        TableColumn<ChiTietKhuyenMai, Integer> colSLAP = new TableColumn<>("Số lượng áp dụng");
+        TableColumn<ChiTietKhuyenMaiDto, Integer> colSLAP = new TableColumn<>("Số lượng áp dụng");
         colSLAP.setPrefWidth(152);
         colSLAP.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<ChiTietKhuyenMai, Integer> colSLTD = new TableColumn<>("Số hóa đơn áp dụng");
+        TableColumn<ChiTietKhuyenMaiDto, Integer> colSLTD = new TableColumn<>("Số hóa đơn áp dụng");
         colSLTD.setPrefWidth(166);
         colSLTD.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<ChiTietKhuyenMai, String> colDonVi = new TableColumn<>("Đơn vị (cơ bản)");
+        TableColumn<ChiTietKhuyenMaiDto, String> colDonVi = new TableColumn<>("Đơn vị (cơ bản)");
         colDonVi.setPrefWidth(146);
         colDonVi.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<ChiTietKhuyenMai, Void> colXoaCT = new TableColumn<>("");
+        TableColumn<ChiTietKhuyenMaiDto, Void> colXoaCT = new TableColumn<>("");
         colXoaCT.setPrefWidth(60);
         colXoaCT.setStyle("-fx-alignment: CENTER;");
 
         tbDSThuoc.getColumns().addAll(colMaThuoc, colTenThuoc, colSLAP, colSLTD, colDonVi, colXoaCT);
 
-        ListView<Thuoc_SanPham> listViewThuoc = new ListView<>();
+        ListView<Thuoc_SanPhamDto> listViewThuoc = new ListView<>();
         listViewThuoc.setId("listViewThuoc");
         listViewThuoc.setLayoutX(72);
         listViewThuoc.setLayoutY(32);
@@ -192,34 +192,34 @@ public class SuaKhuyenMai_GUI {
         HBox.setHgrow(tfTimQua, Priority.ALWAYS);
         hbSearchQua.getChildren().addAll(lblTimQua, tfTimQua);
 
-        TableView<Thuoc_SP_TangKem> tbTangKem = new TableView<>();
+        TableView<Thuoc_SP_TangKemDto> tbTangKem = new TableView<>();
         tbTangKem.setId("tbTangKem");
         tbTangKem.setLayoutX(8);
         tbTangKem.setLayoutY(42);
         tbTangKem.setPrefSize(922, 133);
 
-        TableColumn<Thuoc_SP_TangKem, String> colMaQua = new TableColumn<>("Mã thuốc");
+        TableColumn<Thuoc_SP_TangKemDto, String> colMaQua = new TableColumn<>("Mã thuốc");
         colMaQua.setPrefWidth(120);
         colMaQua.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<Thuoc_SP_TangKem, String> colTenQua = new TableColumn<>("Tên thuốc");
+        TableColumn<Thuoc_SP_TangKemDto, String> colTenQua = new TableColumn<>("Tên thuốc");
         colTenQua.setPrefWidth(400);
 
-        TableColumn<Thuoc_SP_TangKem, Integer> colSLTang = new TableColumn<>("Số lượng tặng");
+        TableColumn<Thuoc_SP_TangKemDto, Integer> colSLTang = new TableColumn<>("Số lượng tặng");
         colSLTang.setPrefWidth(149);
         colSLTang.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<Thuoc_SP_TangKem, String> colDonViQua = new TableColumn<>("Đơn vị (cơ bản)");
+        TableColumn<Thuoc_SP_TangKemDto, String> colDonViQua = new TableColumn<>("Đơn vị (cơ bản)");
         colDonViQua.setPrefWidth(181);
         colDonViQua.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<Thuoc_SP_TangKem, Void> colXoaQua = new TableColumn<>("");
+        TableColumn<Thuoc_SP_TangKemDto, Void> colXoaQua = new TableColumn<>("");
         colXoaQua.setPrefWidth(71);
         colXoaQua.setStyle("-fx-alignment: CENTER;");
 
         tbTangKem.getColumns().addAll(colMaQua, colTenQua, colSLTang, colDonViQua, colXoaQua);
 
-        ListView<Thuoc_SanPham> listViewQua = new ListView<>();
+        ListView<Thuoc_SanPhamDto> listViewQua = new ListView<>();
         listViewQua.setId("listViewQua");
         listViewQua.setLayoutX(88);
         listViewQua.setLayoutY(33);

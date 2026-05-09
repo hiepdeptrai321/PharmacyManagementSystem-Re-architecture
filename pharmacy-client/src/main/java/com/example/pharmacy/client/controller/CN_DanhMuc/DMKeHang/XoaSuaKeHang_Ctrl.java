@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMKeHang;
 
-import com.example.pharmacy.common.model.KeHang;
+import com.example.pharmacy.common.model.KeHangDto;
 import com.example.pharmacy.client.service.KeHangService;
 import javafx.application.Application;
 import javafx.scene.control.Alert;
@@ -21,7 +21,7 @@ public class XoaSuaKeHang_Ctrl extends Application {
     public TextField txtTenKe;
 
     private final KeHangService keHangService = new KeHangService();
-    private KeHang keHangHienTai;
+    private KeHangDto keHangHienTai;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -32,7 +32,7 @@ public class XoaSuaKeHang_Ctrl extends Application {
         stage.show();
     }
 
-    public void hienThiThongTin(KeHang kh) {
+    public void hienThiThongTin(KeHangDto kh) {
         if (kh != null) {
             keHangHienTai = kh;
         }

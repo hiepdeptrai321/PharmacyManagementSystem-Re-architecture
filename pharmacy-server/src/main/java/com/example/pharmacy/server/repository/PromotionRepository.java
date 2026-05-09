@@ -1,45 +1,45 @@
 package com.example.pharmacy.server.repository;
 
-import com.example.pharmacy.common.model.ChiTietKhuyenMai;
-import com.example.pharmacy.common.model.KhuyenMai;
-import com.example.pharmacy.common.model.LoaiKhuyenMai;
-import com.example.pharmacy.common.model.Thuoc_SP_TangKem;
+import com.example.pharmacy.common.model.ChiTietKhuyenMaiDto;
+import com.example.pharmacy.common.model.KhuyenMaiDto;
+import com.example.pharmacy.common.model.LoaiKhuyenMaiDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TangKemDto;
 
 import java.sql.Date;
 import java.util.List;
 
 public interface PromotionRepository {
-    List<KhuyenMai> findAll();
+    List<KhuyenMaiDto> findAll();
 
-    KhuyenMai findById(String maKhuyenMai);
+    KhuyenMaiDto findById(String maKhuyenMai);
 
-    List<KhuyenMai> searchByKeyword(String keyword);
+    List<KhuyenMaiDto> searchByKeyword(String keyword);
 
-    List<LoaiKhuyenMai> findAllLoaiKhuyenMai();
+    List<LoaiKhuyenMaiDto> findAllLoaiKhuyenMai();
 
-    LoaiKhuyenMai findLoaiKhuyenMaiById(String maLoaiKhuyenMai);
+    LoaiKhuyenMaiDto findLoaiKhuyenMaiById(String maLoaiKhuyenMai);
 
-    LoaiKhuyenMai findLoaiKhuyenMaiByTen(String tenLoaiKhuyenMai);
+    LoaiKhuyenMaiDto findLoaiKhuyenMaiByTen(String tenLoaiKhuyenMai);
 
-    List<ChiTietKhuyenMai> findChiTietByMaKM(String maKhuyenMai);
+    List<ChiTietKhuyenMaiDto> findChiTietByMaKM(String maKhuyenMai);
 
-    List<Thuoc_SP_TangKem> findQuaTangByMaKM(String maKhuyenMai);
+    List<Thuoc_SP_TangKemDto> findQuaTangByMaKM(String maKhuyenMai);
 
-    boolean insertPromotion(KhuyenMai khuyenMai);
+    boolean insertPromotion(KhuyenMaiDto khuyenMai);
 
-    boolean updatePromotion(KhuyenMai khuyenMai);
+    boolean updatePromotion(KhuyenMaiDto khuyenMai);
 
     boolean deletePromotionById(String maKhuyenMai);
 
-    void insertPromotionDetail(ChiTietKhuyenMai chiTietKhuyenMai);
+    void insertPromotionDetail(ChiTietKhuyenMaiDto chiTietKhuyenMai);
 
     void deletePromotionDetailsByMaKM(String maKhuyenMai);
 
-    void insertPromotionGift(Thuoc_SP_TangKem quaTangKhuyenMai);
+    void insertPromotionGift(Thuoc_SP_TangKemDto quaTangKhuyenMai);
 
     void deletePromotionGiftsByMaKM(String maKhuyenMai);
 
-    List<KhuyenMai> findActiveOn(Date ngay);
+    List<KhuyenMaiDto> findActiveOn(Date ngay);
 
-    List<KhuyenMai> findActiveInvoiceOn(Date ngay);
+    List<KhuyenMaiDto> findActiveInvoiceOn(Date ngay);
 }

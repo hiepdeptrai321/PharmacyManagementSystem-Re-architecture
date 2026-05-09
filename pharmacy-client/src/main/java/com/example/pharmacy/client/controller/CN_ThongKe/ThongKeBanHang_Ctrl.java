@@ -24,8 +24,8 @@ import com.itextpdf.io.font.constants.StandardFonts;
 
 import java.text.DecimalFormat;
 import javafx.scene.control.TableCell;
-import com.example.pharmacy.common.model.ThongKeBanHang;
-import com.example.pharmacy.common.model.HoaDonDisplay;
+import com.example.pharmacy.common.model.ThongKeBanHangDto;
+import com.example.pharmacy.common.model.HoaDonDisplayDto;
 import com.example.pharmacy.client.service.ThongKeService;
 
 import javafx.application.Application;
@@ -62,30 +62,30 @@ public class ThongKeBanHang_Ctrl extends Application {
     public Label lblTu;
     public Label lblDen;
     // Bảng Doanh Thu
-    public TableView<ThongKeBanHang> tableDoanhThu;
-    public TableColumn<ThongKeBanHang, String> cotTG;
-    public TableColumn<ThongKeBanHang, Integer> cotSLHoaDon;
-    public TableColumn<ThongKeBanHang, Double> cotTongGT;
-    public TableColumn<ThongKeBanHang, Double> cotGG;
-    public TableColumn<ThongKeBanHang, Integer> cotDT;
-    public TableColumn<ThongKeBanHang, Double> cotGTDonTra;
-    public TableColumn<ThongKeBanHang, Double> cotDoanhThu;
+    public TableView<ThongKeBanHangDto> tableDoanhThu;
+    public TableColumn<ThongKeBanHangDto, String> cotTG;
+    public TableColumn<ThongKeBanHangDto, Integer> cotSLHoaDon;
+    public TableColumn<ThongKeBanHangDto, Double> cotTongGT;
+    public TableColumn<ThongKeBanHangDto, Double> cotGG;
+    public TableColumn<ThongKeBanHangDto, Integer> cotDT;
+    public TableColumn<ThongKeBanHangDto, Double> cotGTDonTra;
+    public TableColumn<ThongKeBanHangDto, Double> cotDoanhThu;
     // Biểu đồ
     public CategoryAxis xAxis;
     public NumberAxis yAxis;
     public BarChart<String, Number> chartDoanhThu;
     // Bảng Hóa Đơn
-    public TableView<HoaDonDisplay> tableHoaDon;
-    public TableColumn<HoaDonDisplay, String> cotMaHoaDon;
-    public TableColumn<HoaDonDisplay, LocalDate> cotNgayLap;
-    public TableColumn<HoaDonDisplay, String> cotMaKhachHang;
-    public TableColumn<HoaDonDisplay, String> cotMaNhanVien;
-    public TableColumn<HoaDonDisplay, Double> cotTongTien;
+    public TableView<HoaDonDisplayDto> tableHoaDon;
+    public TableColumn<HoaDonDisplayDto, String> cotMaHoaDon;
+    public TableColumn<HoaDonDisplayDto, LocalDate> cotNgayLap;
+    public TableColumn<HoaDonDisplayDto, String> cotMaKhachHang;
+    public TableColumn<HoaDonDisplayDto, String> cotMaNhanVien;
+    public TableColumn<HoaDonDisplayDto, Double> cotTongTien;
 
     // --- 2. CÁC BIẾN LOGIC (GIỮ NGUYÊN) ---
     private final ThongKeService thongKeService = new ThongKeService();
-    private ObservableList<ThongKeBanHang> listThongKe;
-    private ObservableList<HoaDonDisplay> listHoaDon;
+    private ObservableList<ThongKeBanHangDto> listThongKe;
+    private ObservableList<HoaDonDisplayDto> listHoaDon;
     private DecimalFormat formatter;
 
     // Bỏ `private ThongKeBanHang_GUI view;`
@@ -254,7 +254,7 @@ public class ThongKeBanHang_Ctrl extends Application {
         }
     }
 
-    private void updateChart(ObservableList<ThongKeBanHang> data) {
+    private void updateChart(ObservableList<ThongKeBanHangDto> data) {
         chartDoanhThu.getData().clear();
         if (xAxis != null) xAxis.getCategories().clear();
 
@@ -262,7 +262,7 @@ public class ThongKeBanHang_Ctrl extends Application {
         series.setName("Doanh thu");
 
         double yAxisMax = 0;
-        for (ThongKeBanHang tk : data) {
+        for (ThongKeBanHangDto tk : data) {
             if (tk.getDoanhThu() > yAxisMax) {
                 yAxisMax = tk.getDoanhThu();
             }
@@ -270,7 +270,7 @@ public class ThongKeBanHang_Ctrl extends Application {
         final double max = (yAxisMax == 0) ? 1.0 : yAxisMax;
 
         ObservableList<String> categories = FXCollections.observableArrayList();
-        for (ThongKeBanHang tk : data) {
+        for (ThongKeBanHangDto tk : data) {
             String label = tk.getThoiGian() == null ? "" : tk.getThoiGian();
             categories.add(label);
 
@@ -372,7 +372,7 @@ public class ThongKeBanHang_Ctrl extends Application {
                 cell.setCellStyle(headerStyle);
             }
             int rowNumDT = 1;
-            for (ThongKeBanHang tk : listThongKe) {
+            for (ThongKeBanHangDto tk : listThongKe) {
                 Row row = sheetDT.createRow(rowNumDT++);
                 row.createCell(0).setCellValue(tk.getThoiGian());
                 row.createCell(1).setCellValue(tk.getSoLuongHoaDon());
@@ -398,7 +398,7 @@ public class ThongKeBanHang_Ctrl extends Application {
                 cell.setCellStyle(headerStyle);
             }
             int rowNumHD = 1;
-            for (HoaDonDisplay hd : listHoaDon) {
+            for (HoaDonDisplayDto hd : listHoaDon) {
                 Row row = sheetHD.createRow(rowNumHD++);
                 row.createCell(0).setCellValue(hd.getMaHD());
 
@@ -454,7 +454,7 @@ public class ThongKeBanHang_Ctrl extends Application {
         tableDT.addHeaderCell(new com.itextpdf.layout.element.Cell().add(new Paragraph(cotDT.getText()).setBold()));
         tableDT.addHeaderCell(new com.itextpdf.layout.element.Cell().add(new Paragraph(cotGTDonTra.getText()).setBold()));
         tableDT.addHeaderCell(new com.itextpdf.layout.element.Cell().add(new Paragraph(cotDoanhThu.getText()).setBold()));
-        for (ThongKeBanHang tk : listThongKe) {
+        for (ThongKeBanHangDto tk : listThongKe) {
             tableDT.addCell(tk.getThoiGian());
             tableDT.addCell(String.valueOf(tk.getSoLuongHoaDon()));
             tableDT.addCell(formatter.format(tk.getTongGiaTri()));
@@ -477,7 +477,7 @@ public class ThongKeBanHang_Ctrl extends Application {
         tableHD.addHeaderCell(new com.itextpdf.layout.element.Cell().add(new Paragraph(cotMaKhachHang.getText()).setBold()));
         tableHD.addHeaderCell(new com.itextpdf.layout.element.Cell().add(new Paragraph(cotMaNhanVien.getText()).setBold()));
         tableHD.addHeaderCell(new com.itextpdf.layout.element.Cell().add(new Paragraph(cotTongTien.getText()).setBold()));
-        for (HoaDonDisplay hd : listHoaDon) {
+        for (HoaDonDisplayDto hd : listHoaDon) {
             tableHD.addCell(hd.getMaHD());
             tableHD.addCell(hd.getNgayLap().toString());
             tableHD.addCell(hd.getMaKH() != null ? hd.getMaKH() : "");

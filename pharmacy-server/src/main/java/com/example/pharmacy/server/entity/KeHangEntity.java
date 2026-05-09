@@ -4,9 +4,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "KeHang")
+@Getter @Setter @NoArgsConstructor
 public class KeHangEntity {
     @Id
     @Column(name = "MaKe", nullable = false, length = 10)
@@ -17,28 +21,4 @@ public class KeHangEntity {
 
     @Column(name = "MoTa", columnDefinition = "TEXT")
     private String moTa;
-
-    public String getMaKe() {
-        return maKe;
-    }
-
-    public void setMaKe(String maKe) {
-        this.maKe = maKe;
-    }
-
-    public String getTenKe() {
-        return tenKe;
-    }
-
-    public void setTenKe(String tenKe) {
-        this.tenKe = tenKe;
-    }
-
-    public String getMoTa() {
-        return moTa;
-    }
-
-    public void setMoTa(String moTa) {
-        this.moTa = moTa;
-    }
 }

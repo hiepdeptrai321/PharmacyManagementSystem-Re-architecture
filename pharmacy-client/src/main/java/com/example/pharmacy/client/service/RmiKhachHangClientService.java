@@ -2,7 +2,7 @@ package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.common.remote.KhachHangRemote;
-import com.example.pharmacy.common.model.KhachHang;
+import com.example.pharmacy.common.model.KhachHangDto;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -17,7 +17,7 @@ public class RmiKhachHangClientService implements KhachHangClientService {
     }
 
     @Override
-    public List<KhachHang> findAll() {
+    public List<KhachHangDto> findAll() {
         try {
             return remote().findAll();
         } catch (RemoteException | NotBoundException exception) {
@@ -27,7 +27,7 @@ public class RmiKhachHangClientService implements KhachHangClientService {
     }
 
     @Override
-    public KhachHang findById(String maKhachHang) {
+    public KhachHangDto findById(String maKhachHang) {
         try {
             return remote().findById(maKhachHang);
         } catch (RemoteException | NotBoundException exception) {
@@ -47,7 +47,7 @@ public class RmiKhachHangClientService implements KhachHangClientService {
     }
 
     @Override
-    public boolean create(KhachHang khachHang) {
+    public boolean create(KhachHangDto khachHang) {
         try {
             return remote().create(khachHang);
         } catch (RemoteException | NotBoundException exception) {
@@ -57,7 +57,7 @@ public class RmiKhachHangClientService implements KhachHangClientService {
     }
 
     @Override
-    public boolean save(KhachHang khachHang) {
+    public boolean save(KhachHangDto khachHang) {
         try {
             return remote().save(khachHang);
         } catch (RemoteException | NotBoundException exception) {

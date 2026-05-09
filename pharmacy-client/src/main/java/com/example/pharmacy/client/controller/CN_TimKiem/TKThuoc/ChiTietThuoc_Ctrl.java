@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.controller.CN_TimKiem.TKThuoc;
 
-import com.example.pharmacy.common.model.ChiTietHoatChat;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietHoatChatDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import com.example.pharmacy.client.service.ThuocService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -25,10 +25,10 @@ public class ChiTietThuoc_Ctrl {
     public TextField txtNuocSanXuat;
     public TextField txtQCDongGoi;
     public TextField txtSDK_GPNK;
-    public TableView<ChiTietHoatChat> tblHoatChat;
-    public TableColumn<ChiTietHoatChat, String> colMaHoatChat;
-    public TableColumn<ChiTietHoatChat, String> colTenHoatChat;
-    public TableColumn<ChiTietHoatChat, String> colHamLuong;
+    public TableView<ChiTietHoatChatDto> tblHoatChat;
+    public TableColumn<ChiTietHoatChatDto, String> colMaHoatChat;
+    public TableColumn<ChiTietHoatChatDto, String> colTenHoatChat;
+    public TableColumn<ChiTietHoatChatDto, String> colHamLuong;
     public TextField txtDuongDung;
     public TextField txtViTri;
     public TextField txtLoaiHang;
@@ -41,11 +41,11 @@ public class ChiTietThuoc_Ctrl {
         // No-op
     }
 
-    public void initialize(Thuoc_SanPham thuoc) {
+    public void initialize(Thuoc_SanPhamDto thuoc) {
         load(thuoc);
     }
 
-    public void load(Thuoc_SanPham thuoc) {
+    public void load(Thuoc_SanPhamDto thuoc) {
         txtMaThuoc.setText(thuoc.getMaThuoc());
         txtTenThuoc.setText(thuoc.getTenThuoc());
         txtHamLuong.setText(thuoc.getHamLuongDonVi());
@@ -70,8 +70,8 @@ public class ChiTietThuoc_Ctrl {
                     getClass().getResource("/com/example/pharmacy/client/img/noimage.jpg").toExternalForm()));
         }
 
-        List<ChiTietHoatChat> list = thuocService.findChiTietHoatChatByMaThuoc(thuoc.getMaThuoc());
-        ObservableList<ChiTietHoatChat> oblist = FXCollections.observableArrayList(list);
+        List<ChiTietHoatChatDto> list = thuocService.findChiTietHoatChatByMaThuoc(thuoc.getMaThuoc());
+        ObservableList<ChiTietHoatChatDto> oblist = FXCollections.observableArrayList(list);
         colMaHoatChat.setCellValueFactory(cel -> new SimpleStringProperty(cel.getValue().getHoatChat().getMaHoatChat()));
         colTenHoatChat.setCellValueFactory(cel -> new SimpleStringProperty(cel.getValue().getHoatChat().getTenHoatChat()));
         colHamLuong.setCellValueFactory(cel -> new SimpleStringProperty(String.valueOf(cel.getValue().getHamLuong())));

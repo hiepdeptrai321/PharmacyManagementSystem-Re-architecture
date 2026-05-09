@@ -4,8 +4,8 @@ import com.example.pharmacy.common.dto.UserContext;
 import com.example.pharmacy.common.remote.PhieuNhapRemote;
 import com.example.pharmacy.common.request.PhieuNhapRequest;
 import com.example.pharmacy.server.service.PhieuNhapService;
-import com.example.pharmacy.common.model.ChiTietPhieuNhap;
-import com.example.pharmacy.common.model.PhieuNhap;
+import com.example.pharmacy.common.model.ChiTietPhieuNhapDto;
+import com.example.pharmacy.common.model.PhieuNhapDto;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -31,17 +31,17 @@ public class PhieuNhapRemoteAdapter extends UnicastRemoteObject implements Phieu
     }
 
     @Override
-    public List<PhieuNhap> findAll() throws RemoteException {
+    public List<PhieuNhapDto> findAll() throws RemoteException {
         return phieuNhapService.findAll();
     }
 
     @Override
-    public PhieuNhap findById(String maPhieuNhap) throws RemoteException {
+    public PhieuNhapDto findById(String maPhieuNhap) throws RemoteException {
         return phieuNhapService.findById(maPhieuNhap);
     }
 
     @Override
-    public List<ChiTietPhieuNhap> findDetailsByMaPhieuNhap(String maPhieuNhap) throws RemoteException {
+    public List<ChiTietPhieuNhapDto> findDetailsByMaPhieuNhap(String maPhieuNhap) throws RemoteException {
         return phieuNhapService.findDetailsByMaPhieuNhap(maPhieuNhap);
     }
 }

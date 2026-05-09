@@ -1,10 +1,10 @@
-package com.example.pharmacy.client.controller.CN_XuLy.CaiDat;
+package com.example.pharmacy.client.controller.CN_XuLy.CaiDatDto;
 
 import com.example.pharmacy.client.controller.DangNhap_Ctrl;
-import com.example.pharmacy.common.model.CaiDat;
+import com.example.pharmacy.common.model.CaiDatDto;
 import com.example.pharmacy.client.service.CaiDatService;
 import com.example.pharmacy.client.session.SessionContext;
-import com.example.pharmacy.client.view.CN_XuLy.CaiDat.caiDat_GUI;
+import com.example.pharmacy.client.view.CN_XuLy.CaiDatDto.caiDat_GUI;
 import com.example.pharmacy.client.view.DangNhap_GUI;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -20,7 +20,7 @@ import java.util.Optional;
 public class caiDat_Ctrl {
     private final caiDat_GUI view;
     private final CaiDatService caiDatService;
-    private final List<CaiDat> caiDatList;
+    private final List<CaiDatDto> caiDatList;
 
     public caiDat_Ctrl(caiDat_GUI view) {
         this.view = view;
@@ -31,7 +31,7 @@ public class caiDat_Ctrl {
     }
 
     public void loadThongSo() {
-        for (CaiDat caiDat : caiDatList) {
+        for (CaiDatDto caiDat : caiDatList) {
             switch (caiDat.getTenThongSo()) {
                 case "GiaTriThue" -> {
                     float giaTriThue = Float.parseFloat(caiDat.getGiaTri()) * 100;
@@ -68,7 +68,7 @@ public class caiDat_Ctrl {
         }
 
         boolean updated = true;
-        for (CaiDat caiDat : caiDatList) {
+        for (CaiDatDto caiDat : caiDatList) {
             switch (caiDat.getTenThongSo()) {
                 case "GiaTriThue" -> {
                     if (cachLuu == 1 || cachLuu == 3) {
@@ -138,7 +138,7 @@ public class caiDat_Ctrl {
 
     private int cachLuu() {
         int cachLuu = 0;
-        for (CaiDat caiDat : caiDatList) {
+        for (CaiDatDto caiDat : caiDatList) {
             switch (caiDat.getTenThongSo()) {
                 case "GiaTriThue" -> {
                     float thueTemp = Float.parseFloat(view.txtThue.getText());

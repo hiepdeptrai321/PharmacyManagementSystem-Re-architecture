@@ -1,11 +1,11 @@
 package com.example.pharmacy.client.service;
 
-import com.example.pharmacy.common.model.CaiDat;
+import com.example.pharmacy.common.model.CaiDatDto;
 
 import java.util.List;
 
 public interface CaiDatClientService {
-    List<CaiDat> findAll();
+    List<CaiDatDto> findAll();
 
-    boolean update(CaiDat caiDat);
+    boolean update(CaiDatDto caiDat);
 }

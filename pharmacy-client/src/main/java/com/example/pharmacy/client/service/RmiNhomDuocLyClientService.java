@@ -2,7 +2,7 @@ package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.common.remote.NhomDuocLyRemote;
-import com.example.pharmacy.common.model.NhomDuocLy;
+import com.example.pharmacy.common.model.NhomDuocLyDto;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -17,7 +17,7 @@ public class RmiNhomDuocLyClientService implements NhomDuocLyClientService {
     }
 
     @Override
-    public List<NhomDuocLy> findAll() {
+    public List<NhomDuocLyDto> findAll() {
         try {
             return remote().findAll();
         } catch (RemoteException | NotBoundException exception) {
@@ -27,7 +27,7 @@ public class RmiNhomDuocLyClientService implements NhomDuocLyClientService {
     }
 
     @Override
-    public NhomDuocLy findById(String maNhomDuocLy) {
+    public NhomDuocLyDto findById(String maNhomDuocLy) {
         try {
             return remote().findById(maNhomDuocLy);
         } catch (RemoteException | NotBoundException exception) {
@@ -47,7 +47,7 @@ public class RmiNhomDuocLyClientService implements NhomDuocLyClientService {
     }
 
     @Override
-    public boolean create(NhomDuocLy nhomDuocLy) {
+    public boolean create(NhomDuocLyDto nhomDuocLy) {
         try {
             return remote().create(nhomDuocLy);
         } catch (RemoteException | NotBoundException exception) {
@@ -57,7 +57,7 @@ public class RmiNhomDuocLyClientService implements NhomDuocLyClientService {
     }
 
     @Override
-    public boolean update(NhomDuocLy nhomDuocLy) {
+    public boolean update(NhomDuocLyDto nhomDuocLy) {
         try {
             return remote().update(nhomDuocLy);
         } catch (RemoteException | NotBoundException exception) {

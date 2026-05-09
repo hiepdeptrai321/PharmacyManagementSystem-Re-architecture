@@ -5,8 +5,8 @@ import com.example.pharmacy.client.service.HoaDonClientService;
 import com.example.pharmacy.client.service.RmiHoaDonClientService;
 import com.example.pharmacy.common.request.CreateHoaDonRequest;
 import com.example.pharmacy.common.request.HoaDonSearchRequest;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.HoaDon;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.HoaDonDto;
 import com.example.pharmacy.common.session.UserContext;
 import com.example.pharmacy.client.session.UserContextMapper;
 
@@ -24,19 +24,19 @@ public class HoaDonService {
         return hoaDonClientService.createInvoice(request, UserContextMapper.toRemoteUserContext(actor));
     }
 
-    public List<HoaDon> findAll() {
+    public List<HoaDonDto> findAll() {
         return hoaDonClientService.findAll();
     }
 
-    public HoaDon findById(String maHoaDon) {
+    public HoaDonDto findById(String maHoaDon) {
         return hoaDonClientService.findById(maHoaDon);
     }
 
-    public List<ChiTietHoaDon> findDetailsByMaHD(String maHoaDon) {
+    public List<ChiTietHoaDonDto> findDetailsByMaHD(String maHoaDon) {
         return hoaDonClientService.findDetailsByMaHD(maHoaDon);
     }
 
-    public List<HoaDon> search(HoaDonSearchRequest request) {
+    public List<HoaDonDto> search(HoaDonSearchRequest request) {
         return hoaDonClientService.search(request);
     }
 }

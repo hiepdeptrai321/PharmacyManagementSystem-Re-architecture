@@ -2,7 +2,7 @@ package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.common.remote.NhaCungCapRemote;
-import com.example.pharmacy.common.model.NhaCungCap;
+import com.example.pharmacy.common.model.NhaCungCapDto;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -17,7 +17,7 @@ public class RmiNhaCungCapClientService implements NhaCungCapClientService {
     }
 
     @Override
-    public List<NhaCungCap> findAll() {
+    public List<NhaCungCapDto> findAll() {
         try {
             return remote().findAll();
         } catch (RemoteException | NotBoundException exception) {
@@ -27,7 +27,7 @@ public class RmiNhaCungCapClientService implements NhaCungCapClientService {
     }
 
     @Override
-    public NhaCungCap findById(String maNhaCungCap) {
+    public NhaCungCapDto findById(String maNhaCungCap) {
         try {
             return remote().findById(maNhaCungCap);
         } catch (RemoteException | NotBoundException exception) {
@@ -47,7 +47,7 @@ public class RmiNhaCungCapClientService implements NhaCungCapClientService {
     }
 
     @Override
-    public boolean create(NhaCungCap nhaCungCap) {
+    public boolean create(NhaCungCapDto nhaCungCap) {
         try {
             return remote().create(nhaCungCap);
         } catch (RemoteException | NotBoundException exception) {
@@ -57,7 +57,7 @@ public class RmiNhaCungCapClientService implements NhaCungCapClientService {
     }
 
     @Override
-    public boolean update(NhaCungCap nhaCungCap) {
+    public boolean update(NhaCungCapDto nhaCungCap) {
         try {
             return remote().update(nhaCungCap);
         } catch (RemoteException | NotBoundException exception) {

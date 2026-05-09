@@ -2,12 +2,12 @@ package com.example.pharmacy.server.bootstrap.rmi;
 
 import com.example.pharmacy.common.remote.ThuocRemote;
 import com.example.pharmacy.server.service.ThuocService;
-import com.example.pharmacy.common.model.ChiTietHoatChat;
-import com.example.pharmacy.common.model.HoatChat;
-import com.example.pharmacy.common.model.LoaiHang;
-import com.example.pharmacy.common.model.ThuocTonKho;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietHoatChatDto;
+import com.example.pharmacy.common.model.HoatChatDto;
+import com.example.pharmacy.common.model.LoaiHangDto;
+import com.example.pharmacy.common.model.ThuocTonKhoDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -23,7 +23,7 @@ public class ThuocRemoteAdapter extends UnicastRemoteObject implements ThuocRemo
     }
 
     @Override
-    public List<Thuoc_SanPham> findAll() throws RemoteException {
+    public List<Thuoc_SanPhamDto> findAll() throws RemoteException {
         return thuocService.findAll();
     }
 
@@ -33,7 +33,7 @@ public class ThuocRemoteAdapter extends UnicastRemoteObject implements ThuocRemo
     }
 
     @Override
-    public List<LoaiHang> findAllLoaiHang() throws RemoteException {
+    public List<LoaiHangDto> findAllLoaiHang() throws RemoteException {
         return thuocService.findAllLoaiHang();
     }
 
@@ -43,22 +43,22 @@ public class ThuocRemoteAdapter extends UnicastRemoteObject implements ThuocRemo
     }
 
     @Override
-    public List<HoatChat> findAllHoatChat() throws RemoteException {
+    public List<HoatChatDto> findAllHoatChat() throws RemoteException {
         return thuocService.findAllHoatChat();
     }
 
     @Override
-    public List<ChiTietHoatChat> findChiTietHoatChatByMaThuoc(String maThuoc) throws RemoteException {
+    public List<ChiTietHoatChatDto> findChiTietHoatChatByMaThuoc(String maThuoc) throws RemoteException {
         return thuocService.findChiTietHoatChatByMaThuoc(maThuoc);
     }
 
     @Override
-    public boolean create(Thuoc_SanPham thuoc, List<ChiTietHoatChat> chiTietHoatChats, String maDonViTinhCoBan) throws RemoteException {
+    public boolean create(Thuoc_SanPhamDto thuoc, List<ChiTietHoatChatDto> chiTietHoatChats, String maDonViTinhCoBan) throws RemoteException {
         return thuocService.create(thuoc, chiTietHoatChats, maDonViTinhCoBan);
     }
 
     @Override
-    public boolean update(Thuoc_SanPham thuoc, List<ChiTietHoatChat> chiTietHoatChats) throws RemoteException {
+    public boolean update(Thuoc_SanPhamDto thuoc, List<ChiTietHoatChatDto> chiTietHoatChats) throws RemoteException {
         return thuocService.update(thuoc, chiTietHoatChats);
     }
 
@@ -78,12 +78,12 @@ public class ThuocRemoteAdapter extends UnicastRemoteObject implements ThuocRemo
     }
 
     @Override
-    public List<ThuocTonKho> getThuocTonKho() throws RemoteException {
+    public List<ThuocTonKhoDto> getThuocTonKho() throws RemoteException {
         return thuocService.getThuocTonKho();
     }
 
     @Override
-    public List<Thuoc_SP_TheoLo> getAllTheoLo() throws RemoteException {
+    public List<Thuoc_SP_TheoLoDto> getAllTheoLo() throws RemoteException {
         return thuocService.getAllTheoLo();
     }
 }

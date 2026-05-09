@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_DanhMuc.DMNhanVien;
 
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMNhanVien.DanhMucNhanVien_Ctrl;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.NhanVienDto;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,17 +22,17 @@ public class DanhMucNhanVien_GUI {
     public Button btnTim;
     public Button btnLamMoi;
     public Button btnThemNhanVien;
-    public TableView<NhanVien> tblNhanVien;
-    public TableColumn<NhanVien, String> colSTT;
-    public TableColumn<NhanVien, String> colMaNV;
-    public TableColumn<NhanVien, String> colTenNV;
-    public TableColumn<NhanVien, String> colGioiTinh;
-    public TableColumn<NhanVien, String> colSDT;
-    public TableColumn<NhanVien, String> colNgaySinh;
-    public TableColumn<NhanVien, String> colEmail;
-    public TableColumn<NhanVien, String> colDiaChi;
-    public TableColumn<NhanVien, String> colTrangThai;
-    public TableColumn<NhanVien, String> colCapNhat;
+    public TableView<NhanVienDto> tblNhanVien;
+    public TableColumn<NhanVienDto, String> colSTT;
+    public TableColumn<NhanVienDto, String> colMaNV;
+    public TableColumn<NhanVienDto, String> colTenNV;
+    public TableColumn<NhanVienDto, String> colGioiTinh;
+    public TableColumn<NhanVienDto, String> colSDT;
+    public TableColumn<NhanVienDto, String> colNgaySinh;
+    public TableColumn<NhanVienDto, String> colEmail;
+    public TableColumn<NhanVienDto, String> colDiaChi;
+    public TableColumn<NhanVienDto, String> colTrangThai;
+    public TableColumn<NhanVienDto, String> colCapNhat;
 
     public void showWithController(Stage stage, DanhMucNhanVien_Ctrl ctrl) {
         AnchorPane root = buildUI();

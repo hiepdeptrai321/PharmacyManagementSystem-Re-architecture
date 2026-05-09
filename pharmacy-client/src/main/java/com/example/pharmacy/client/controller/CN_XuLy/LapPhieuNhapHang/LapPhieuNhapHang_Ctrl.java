@@ -5,12 +5,12 @@ import com.example.pharmacy.common.request.PhieuNhapItemRequest;
 import com.example.pharmacy.common.request.PhieuNhapRequest;
 import com.example.pharmacy.client.TienIch.VNDFormatter;
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMNhaCungCap.ThemNhaCungCap_Ctrl;
-import com.example.pharmacy.common.model.CTPN_TSPTL_CHTDVT;
-import com.example.pharmacy.common.model.ChiTietDonViTinh;
-import com.example.pharmacy.common.model.ChiTietPhieuNhap;
-import com.example.pharmacy.common.model.NhaCungCap;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.CTPN_TSPTL_CHTDVTDto;
+import com.example.pharmacy.common.model.ChiTietDonViTinhDto;
+import com.example.pharmacy.common.model.ChiTietPhieuNhapDto;
+import com.example.pharmacy.common.model.NhaCungCapDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import com.example.pharmacy.client.service.NhaCungCapService;
 import com.example.pharmacy.client.service.PhieuNhapService;
 import com.example.pharmacy.client.service.ThuocService;
@@ -48,20 +48,20 @@ import java.util.List;
 import java.util.Optional;
 
 public class LapPhieuNhapHang_Ctrl {
-    public TableColumn<CTPN_TSPTL_CHTDVT, String> colSTT;
-    public TableColumn<CTPN_TSPTL_CHTDVT, String> colMaThuoc;
-    public TableColumn<CTPN_TSPTL_CHTDVT, String> colTenThuoc;
-    public TableColumn<CTPN_TSPTL_CHTDVT, String> colLoHang;
-    public TableColumn<CTPN_TSPTL_CHTDVT, LocalDate> colHanSuDung;
-    public TableColumn<CTPN_TSPTL_CHTDVT, Integer> colSoLuong;
-    public TableColumn<CTPN_TSPTL_CHTDVT, Double> colDonGiaNhap;
-    public TableColumn<CTPN_TSPTL_CHTDVT, Float> colChietKhau;
-    public TableColumn<CTPN_TSPTL_CHTDVT, Float> colThue;
-    public TableColumn<CTPN_TSPTL_CHTDVT, String> colXoa;
-    public TableColumn<CTPN_TSPTL_CHTDVT, String> colDonViNhap;
-    public TableColumn<CTPN_TSPTL_CHTDVT, LocalDate> colNSX;
-    public TableColumn<CTPN_TSPTL_CHTDVT, String> colThanhTien;
-    public TableView<CTPN_TSPTL_CHTDVT> tblNhapThuoc;
+    public TableColumn<CTPN_TSPTL_CHTDVTDto, String> colSTT;
+    public TableColumn<CTPN_TSPTL_CHTDVTDto, String> colMaThuoc;
+    public TableColumn<CTPN_TSPTL_CHTDVTDto, String> colTenThuoc;
+    public TableColumn<CTPN_TSPTL_CHTDVTDto, String> colLoHang;
+    public TableColumn<CTPN_TSPTL_CHTDVTDto, LocalDate> colHanSuDung;
+    public TableColumn<CTPN_TSPTL_CHTDVTDto, Integer> colSoLuong;
+    public TableColumn<CTPN_TSPTL_CHTDVTDto, Double> colDonGiaNhap;
+    public TableColumn<CTPN_TSPTL_CHTDVTDto, Float> colChietKhau;
+    public TableColumn<CTPN_TSPTL_CHTDVTDto, Float> colThue;
+    public TableColumn<CTPN_TSPTL_CHTDVTDto, String> colXoa;
+    public TableColumn<CTPN_TSPTL_CHTDVTDto, String> colDonViNhap;
+    public TableColumn<CTPN_TSPTL_CHTDVTDto, LocalDate> colNSX;
+    public TableColumn<CTPN_TSPTL_CHTDVTDto, String> colThanhTien;
+    public TableView<CTPN_TSPTL_CHTDVTDto> tblNhapThuoc;
     public ComboBox<String> cbxNCC;
     public TextField txtMaPhieuNhap;
     public DatePicker txtNgayNhap;
@@ -72,16 +72,16 @@ public class LapPhieuNhapHang_Ctrl {
     public TextField txtThanhTien;
     public TextField txtTimKiemChiTietDonViTinh;
     public ListView<String> listViewNhaCungCap;
-    public ListView<ChiTietDonViTinh> listViewChiTietDonViTinh;
+    public ListView<ChiTietDonViTinhDto> listViewChiTietDonViTinh;
 
-    private final ObservableList<CTPN_TSPTL_CHTDVT> listNhapThuoc = FXCollections.observableArrayList();
-    private ObservableList<ChiTietDonViTinh> allChiTietDonViTinh = FXCollections.observableArrayList();
-    private ObservableList<NhaCungCap> listNCC = FXCollections.observableArrayList();
+    private final ObservableList<CTPN_TSPTL_CHTDVTDto> listNhapThuoc = FXCollections.observableArrayList();
+    private ObservableList<ChiTietDonViTinhDto> allChiTietDonViTinh = FXCollections.observableArrayList();
+    private ObservableList<NhaCungCapDto> listNCC = FXCollections.observableArrayList();
     private final NhaCungCapService nhaCungCapService = new NhaCungCapService();
     private final ThuocService thuocService = new ThuocService();
     private final PhieuNhapService phieuNhapService = new PhieuNhapService();
     private final VNDFormatter vndFormatter = new VNDFormatter();
-    private NhaCungCap ncc;
+    private NhaCungCapDto ncc;
     private int maLoHienTai = 0;
 
     public void initialize() {
@@ -99,14 +99,14 @@ public class LapPhieuNhapHang_Ctrl {
     }
 
     private void loadDataAsync() {
-        List<ChiTietDonViTinh> data = thuocService.findAll().stream()
+        List<ChiTietDonViTinhDto> data = thuocService.findAll().stream()
                 .flatMap(thuoc -> thuoc.getDsCTDVT().stream())
                 .toList();
         allChiTietDonViTinh = FXCollections.observableArrayList(data);
         listViewChiTietDonViTinh.setItems(allChiTietDonViTinh);
         listViewChiTietDonViTinh.setCellFactory(view -> new ListCell<>() {
             @Override
-            protected void updateItem(ChiTietDonViTinh item, boolean empty) {
+            protected void updateItem(ChiTietDonViTinhDto item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText(null);
@@ -120,7 +120,7 @@ public class LapPhieuNhapHang_Ctrl {
     public void taiDanhSachNCC() {
         listNCC = FXCollections.observableArrayList(nhaCungCapService.findAll());
         ObservableList<String> nccList = FXCollections.observableArrayList();
-        for (NhaCungCap item : listNCC) {
+        for (NhaCungCapDto item : listNCC) {
             nccList.add(item.getMaNCC() + " - " + item.getTenNCC());
         }
         cbxNCC.setItems(nccList);
@@ -146,7 +146,7 @@ public class LapPhieuNhapHang_Ctrl {
             }
             String keyword = newVal.toLowerCase().trim();
             ObservableList<String> filtered = FXCollections.observableArrayList();
-            for (NhaCungCap item : listNCC) {
+            for (NhaCungCapDto item : listNCC) {
                 String label = item.getMaNCC() + " - " + item.getTenNCC();
                 if (label.toLowerCase().contains(keyword)) {
                     filtered.add(label);
@@ -176,8 +176,8 @@ public class LapPhieuNhapHang_Ctrl {
                 return;
             }
             String keyword = newVal.toLowerCase().trim();
-            ObservableList<ChiTietDonViTinh> filtered = FXCollections.observableArrayList();
-            for (ChiTietDonViTinh item : allChiTietDonViTinh) {
+            ObservableList<ChiTietDonViTinhDto> filtered = FXCollections.observableArrayList();
+            for (ChiTietDonViTinhDto item : allChiTietDonViTinh) {
                 if (item.getThuoc().getMaThuoc().toLowerCase().contains(keyword)
                         || item.getThuoc().getTenThuoc().toLowerCase().contains(keyword)
                         || item.getDvt().getTenDonViTinh().toLowerCase().contains(keyword)) {
@@ -222,10 +222,10 @@ public class LapPhieuNhapHang_Ctrl {
 
         setDatePickerCell(colNSX, true);
         setDatePickerCell(colHanSuDung, false);
-        setIntegerCell(colSoLuong, CTPN_TSPTL_CHTDVT::getChiTietPhieuNhap, (row, value) -> row.getChiTietPhieuNhap().setSoLuong(Math.max(1, value)));
-        setDoubleCell(colDonGiaNhap, CTPN_TSPTL_CHTDVT::getChiTietPhieuNhap, (row, value) -> row.getChiTietPhieuNhap().setGiaNhap(Math.max(0, value)));
-        setFloatCell(colChietKhau, CTPN_TSPTL_CHTDVT::getChiTietPhieuNhap, (row, value) -> row.getChiTietPhieuNhap().setChietKhau(Math.max(0, value)), "Chiet khau");
-        setFloatCell(colThue, CTPN_TSPTL_CHTDVT::getChiTietPhieuNhap, (row, value) -> row.getChiTietPhieuNhap().setThue(Math.max(0, value)), "Thue");
+        setIntegerCell(colSoLuong, CTPN_TSPTL_CHTDVTDto::getChiTietPhieuNhap, (row, value) -> row.getChiTietPhieuNhap().setSoLuong(Math.max(1, value)));
+        setDoubleCell(colDonGiaNhap, CTPN_TSPTL_CHTDVTDto::getChiTietPhieuNhap, (row, value) -> row.getChiTietPhieuNhap().setGiaNhap(Math.max(0, value)));
+        setFloatCell(colChietKhau, CTPN_TSPTL_CHTDVTDto::getChiTietPhieuNhap, (row, value) -> row.getChiTietPhieuNhap().setChietKhau(Math.max(0, value)), "Chiet khau");
+        setFloatCell(colThue, CTPN_TSPTL_CHTDVTDto::getChiTietPhieuNhap, (row, value) -> row.getChiTietPhieuNhap().setThue(Math.max(0, value)), "Thue");
         colThanhTien.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(formatVnd(tinhTongDong(cellData.getValue()))));
         colXoa.setCellFactory(tc -> new TableCell<>() {
             private final Button btnXoa = new Button("X");
@@ -250,7 +250,7 @@ public class LapPhieuNhapHang_Ctrl {
         });
     }
 
-    private void setDatePickerCell(TableColumn<CTPN_TSPTL_CHTDVT, LocalDate> column, boolean nsxColumn) {
+    private void setDatePickerCell(TableColumn<CTPN_TSPTL_CHTDVTDto, LocalDate> column, boolean nsxColumn) {
         column.setCellFactory(col -> new TableCell<>() {
             private final DatePicker datePicker = new DatePicker();
             private boolean updating = false;
@@ -271,9 +271,9 @@ public class LapPhieuNhapHang_Ctrl {
                 datePicker.setEditable(false);
                 datePicker.valueProperty().addListener((obs, oldVal, newVal) -> {
                     if (updating) return;
-                    CTPN_TSPTL_CHTDVT row = getCurrentRow();
+                    CTPN_TSPTL_CHTDVTDto row = getCurrentRow();
                     if (row == null || newVal == null) return;
-                    Thuoc_SP_TheoLo lo = row.getChiTietSP_theoLo();
+                    Thuoc_SP_TheoLoDto lo = row.getChiTietSP_theoLo();
                     if (nsxColumn) {
                         if (lo.getHsd() != null && newVal.isAfter(lo.getHsd().toLocalDate())) {
                             showWarning("NSX khong duoc sau HSD.");
@@ -296,7 +296,7 @@ public class LapPhieuNhapHang_Ctrl {
                 });
             }
 
-            private CTPN_TSPTL_CHTDVT getCurrentRow() {
+            private CTPN_TSPTL_CHTDVTDto getCurrentRow() {
                 return getIndex() >= 0 && getIndex() < tblNhapThuoc.getItems().size()
                         ? tblNhapThuoc.getItems().get(getIndex())
                         : null;
@@ -318,14 +318,14 @@ public class LapPhieuNhapHang_Ctrl {
     }
 
     private interface DetailAccessor<T> {
-        ChiTietPhieuNhap get(CTPN_TSPTL_CHTDVT row);
+        ChiTietPhieuNhapDto get(CTPN_TSPTL_CHTDVTDto row);
     }
 
     private interface RowValueSetter<T extends Number> {
-        void set(CTPN_TSPTL_CHTDVT row, T value);
+        void set(CTPN_TSPTL_CHTDVTDto row, T value);
     }
 
-    private void setIntegerCell(TableColumn<CTPN_TSPTL_CHTDVT, Integer> column,
+    private void setIntegerCell(TableColumn<CTPN_TSPTL_CHTDVTDto, Integer> column,
                                 DetailAccessor<Integer> accessor,
                                 RowValueSetter<Integer> setter) {
         column.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(accessor.get(cellData.getValue()).getSoLuong()));
@@ -362,7 +362,7 @@ public class LapPhieuNhapHang_Ctrl {
         });
     }
 
-    private void setDoubleCell(TableColumn<CTPN_TSPTL_CHTDVT, Double> column,
+    private void setDoubleCell(TableColumn<CTPN_TSPTL_CHTDVTDto, Double> column,
                                DetailAccessor<Double> accessor,
                                RowValueSetter<Double> setter) {
         column.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(accessor.get(cellData.getValue()).getGiaNhap()));
@@ -399,12 +399,12 @@ public class LapPhieuNhapHang_Ctrl {
         });
     }
 
-    private void setFloatCell(TableColumn<CTPN_TSPTL_CHTDVT, Float> column,
+    private void setFloatCell(TableColumn<CTPN_TSPTL_CHTDVTDto, Float> column,
                               DetailAccessor<Float> accessor,
                               RowValueSetter<Float> setter,
                               String fieldName) {
         column.setCellValueFactory(cellData -> {
-            ChiTietPhieuNhap detail = accessor.get(cellData.getValue());
+            ChiTietPhieuNhapDto detail = accessor.get(cellData.getValue());
             float value = column == colChietKhau ? detail.getChietKhau() : detail.getThue();
             return new ReadOnlyObjectWrapper<>(value);
         });
@@ -449,8 +449,8 @@ public class LapPhieuNhapHang_Ctrl {
             txtTimKiemChiTietDonViTinh.clear();
             listViewChiTietDonViTinh.setVisible(false);
 
-            CTPN_TSPTL_CHTDVT item = new CTPN_TSPTL_CHTDVT();
-            ChiTietDonViTinh ctdvt = new ChiTietDonViTinh();
+            CTPN_TSPTL_CHTDVTDto item = new CTPN_TSPTL_CHTDVTDto();
+            ChiTietDonViTinhDto ctdvt = new ChiTietDonViTinhDto();
             ctdvt.setThuoc(newVal.getThuoc());
             ctdvt.setDvt(newVal.getDvt());
             ctdvt.setHeSoQuyDoi(newVal.getHeSoQuyDoi());
@@ -459,7 +459,7 @@ public class LapPhieuNhapHang_Ctrl {
             ctdvt.setDonViCoBan(newVal.isDonViCoBan());
 
             String maLo = String.format("TMP-LH-%04d", ++maLoHienTai);
-            ChiTietPhieuNhap ctpn = new ChiTietPhieuNhap();
+            ChiTietPhieuNhapDto ctpn = new ChiTietPhieuNhapDto();
             ctpn.setThuoc(newVal.getThuoc());
             ctpn.setMaLH(maLo);
             ctpn.setSoLuong(1);
@@ -467,7 +467,7 @@ public class LapPhieuNhapHang_Ctrl {
             ctpn.setChietKhau(0);
             ctpn.setThue(0);
 
-            Thuoc_SP_TheoLo lo = new Thuoc_SP_TheoLo();
+            Thuoc_SP_TheoLoDto lo = new Thuoc_SP_TheoLoDto();
             lo.setThuoc(newVal.getThuoc());
             lo.setMaLH(maLo);
             lo.setNsx(Date.valueOf(LocalDate.now()));
@@ -483,14 +483,14 @@ public class LapPhieuNhapHang_Ctrl {
         });
     }
 
-    public void themVaoBangNhap(CTPN_TSPTL_CHTDVT ct) {
+    public void themVaoBangNhap(CTPN_TSPTL_CHTDVTDto ct) {
         listNhapThuoc.add(ct);
         tblNhapThuoc.refresh();
         capNhatTongTien();
     }
 
     private void listenerListNhapThuoc() {
-        listNhapThuoc.addListener((ListChangeListener<CTPN_TSPTL_CHTDVT>) change -> capNhatTongTien());
+        listNhapThuoc.addListener((ListChangeListener<CTPN_TSPTL_CHTDVTDto>) change -> capNhatTongTien());
     }
 
     private void capNhatTongTien() {
@@ -499,8 +499,8 @@ public class LapPhieuNhapHang_Ctrl {
         double tongTienThue = 0;
         double thanhTien = 0;
 
-        for (CTPN_TSPTL_CHTDVT item : listNhapThuoc) {
-            ChiTietPhieuNhap ctpn = item.getChiTietPhieuNhap();
+        for (CTPN_TSPTL_CHTDVTDto item : listNhapThuoc) {
+            ChiTietPhieuNhapDto ctpn = item.getChiTietPhieuNhap();
             double tienHang = ctpn.getGiaNhap() * ctpn.getSoLuong();
             double tienChietKhau = tienHang * (ctpn.getChietKhau() / 100.0);
             double tienThue = (tienHang - tienChietKhau) * (ctpn.getThue() / 100.0);
@@ -517,8 +517,8 @@ public class LapPhieuNhapHang_Ctrl {
         txtThanhTien.setText(formatVnd(thanhTien));
     }
 
-    private double tinhTongDong(CTPN_TSPTL_CHTDVT item) {
-        ChiTietPhieuNhap ctpn = item.getChiTietPhieuNhap();
+    private double tinhTongDong(CTPN_TSPTL_CHTDVTDto item) {
+        ChiTietPhieuNhapDto ctpn = item.getChiTietPhieuNhap();
         double tienHang = ctpn.getGiaNhap() * ctpn.getSoLuong();
         double tienChietKhau = tienHang * (ctpn.getChietKhau() / 100.0);
         double tienThue = (tienHang - tienChietKhau) * (ctpn.getThue() / 100.0);
@@ -534,9 +534,9 @@ public class LapPhieuNhapHang_Ctrl {
             showWarning("Vui long chon nha cung cap.");
             return;
         }
-        for (CTPN_TSPTL_CHTDVT item : listNhapThuoc) {
-            ChiTietPhieuNhap ctpn = item.getChiTietPhieuNhap();
-            Thuoc_SP_TheoLo lo = item.getChiTietSP_theoLo();
+        for (CTPN_TSPTL_CHTDVTDto item : listNhapThuoc) {
+            ChiTietPhieuNhapDto ctpn = item.getChiTietPhieuNhap();
+            Thuoc_SP_TheoLoDto lo = item.getChiTietSP_theoLo();
             if (lo.getNsx() == null || lo.getHsd() == null) {
                 showWarning("NSX va HSD bat buoc phai co cho tat ca cac dong.");
                 return;
@@ -570,7 +570,7 @@ public class LapPhieuNhapHang_Ctrl {
         request.setGhiChu(txtGhiChu.getText());
         request.setMaNhaCungCap(ncc.getMaNCC());
 
-        for (CTPN_TSPTL_CHTDVT item : listNhapThuoc) {
+        for (CTPN_TSPTL_CHTDVTDto item : listNhapThuoc) {
             PhieuNhapItemRequest row = new PhieuNhapItemRequest();
             row.setMaThuoc(item.getChiTietDonViTinh().getThuoc().getMaThuoc());
             row.setMaLo(null);
@@ -631,13 +631,13 @@ public class LapPhieuNhapHang_Ctrl {
         showInfo("Nhap hang bang Excel dang duoc noi lai o batch sau. Hien tai hay them thuoc bang o tim kiem.");
     }
 
-    public void themThuocTuExcel(List<CTPN_TSPTL_CHTDVT> excelList) {
-        for (CTPN_TSPTL_CHTDVT item : excelList) {
+    public void themThuocTuExcel(List<CTPN_TSPTL_CHTDVTDto> excelList) {
+        for (CTPN_TSPTL_CHTDVTDto item : excelList) {
             themVaoBangNhap(item);
         }
     }
 
-    public boolean isSameThuoc(Thuoc_SanPham left, Thuoc_SanPham right) {
+    public boolean isSameThuoc(Thuoc_SanPhamDto left, Thuoc_SanPhamDto right) {
         if (left == null || right == null) {
             return false;
         }

@@ -2,10 +2,10 @@ package com.example.pharmacy.server.bootstrap.rmi;
 
 import com.example.pharmacy.common.remote.KhuyenMaiRemote;
 import com.example.pharmacy.server.service.KhuyenMaiService;
-import com.example.pharmacy.common.model.ChiTietKhuyenMai;
-import com.example.pharmacy.common.model.KhuyenMai;
-import com.example.pharmacy.common.model.LoaiKhuyenMai;
-import com.example.pharmacy.common.model.Thuoc_SP_TangKem;
+import com.example.pharmacy.common.model.ChiTietKhuyenMaiDto;
+import com.example.pharmacy.common.model.KhuyenMaiDto;
+import com.example.pharmacy.common.model.LoaiKhuyenMaiDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TangKemDto;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -22,17 +22,17 @@ public class KhuyenMaiRemoteAdapter extends UnicastRemoteObject implements Khuye
     }
 
     @Override
-    public List<KhuyenMai> findAll() throws RemoteException {
+    public List<KhuyenMaiDto> findAll() throws RemoteException {
         return khuyenMaiService.findAll();
     }
 
     @Override
-    public KhuyenMai findById(String maKhuyenMai) throws RemoteException {
+    public KhuyenMaiDto findById(String maKhuyenMai) throws RemoteException {
         return khuyenMaiService.findById(maKhuyenMai);
     }
 
     @Override
-    public List<KhuyenMai> searchByKeyword(String keyword) throws RemoteException {
+    public List<KhuyenMaiDto> searchByKeyword(String keyword) throws RemoteException {
         return khuyenMaiService.searchByKeyword(keyword);
     }
 
@@ -42,38 +42,38 @@ public class KhuyenMaiRemoteAdapter extends UnicastRemoteObject implements Khuye
     }
 
     @Override
-    public List<LoaiKhuyenMai> findAllLoaiKhuyenMai() throws RemoteException {
+    public List<LoaiKhuyenMaiDto> findAllLoaiKhuyenMai() throws RemoteException {
         return khuyenMaiService.findAllLoaiKhuyenMai();
     }
 
     @Override
-    public LoaiKhuyenMai findLoaiKhuyenMaiById(String maLoaiKhuyenMai) throws RemoteException {
+    public LoaiKhuyenMaiDto findLoaiKhuyenMaiById(String maLoaiKhuyenMai) throws RemoteException {
         return khuyenMaiService.findLoaiKhuyenMaiById(maLoaiKhuyenMai);
     }
 
     @Override
-    public LoaiKhuyenMai findLoaiKhuyenMaiByTen(String tenLoaiKhuyenMai) throws RemoteException {
+    public LoaiKhuyenMaiDto findLoaiKhuyenMaiByTen(String tenLoaiKhuyenMai) throws RemoteException {
         return khuyenMaiService.findLoaiKhuyenMaiByTen(tenLoaiKhuyenMai);
     }
 
     @Override
-    public List<ChiTietKhuyenMai> findChiTietByMaKM(String maKhuyenMai) throws RemoteException {
+    public List<ChiTietKhuyenMaiDto> findChiTietByMaKM(String maKhuyenMai) throws RemoteException {
         return khuyenMaiService.findChiTietByMaKM(maKhuyenMai);
     }
 
     @Override
-    public List<Thuoc_SP_TangKem> findQuaTangByMaKM(String maKhuyenMai) throws RemoteException {
+    public List<Thuoc_SP_TangKemDto> findQuaTangByMaKM(String maKhuyenMai) throws RemoteException {
         return khuyenMaiService.findQuaTangByMaKM(maKhuyenMai);
     }
 
     @Override
-    public boolean create(KhuyenMai khuyenMai, List<ChiTietKhuyenMai> chiTietKhuyenMais, List<Thuoc_SP_TangKem> quaTangKhuyenMais)
+    public boolean create(KhuyenMaiDto khuyenMai, List<ChiTietKhuyenMaiDto> chiTietKhuyenMais, List<Thuoc_SP_TangKemDto> quaTangKhuyenMais)
             throws RemoteException {
         return khuyenMaiService.create(khuyenMai, chiTietKhuyenMais, quaTangKhuyenMais);
     }
 
     @Override
-    public boolean update(KhuyenMai khuyenMai, List<ChiTietKhuyenMai> chiTietKhuyenMais, List<Thuoc_SP_TangKem> quaTangKhuyenMais)
+    public boolean update(KhuyenMaiDto khuyenMai, List<ChiTietKhuyenMaiDto> chiTietKhuyenMais, List<Thuoc_SP_TangKemDto> quaTangKhuyenMais)
             throws RemoteException {
         return khuyenMaiService.update(khuyenMai, chiTietKhuyenMais, quaTangKhuyenMais);
     }
@@ -84,12 +84,12 @@ public class KhuyenMaiRemoteAdapter extends UnicastRemoteObject implements Khuye
     }
 
     @Override
-    public List<KhuyenMai> findActiveOn(Date ngay) throws RemoteException {
+    public List<KhuyenMaiDto> findActiveOn(Date ngay) throws RemoteException {
         return khuyenMaiService.findActiveOn(ngay);
     }
 
     @Override
-    public List<KhuyenMai> findActiveInvoiceOn(Date ngay) throws RemoteException {
+    public List<KhuyenMaiDto> findActiveInvoiceOn(Date ngay) throws RemoteException {
         return khuyenMaiService.findActiveInvoiceOn(ngay);
     }
 }

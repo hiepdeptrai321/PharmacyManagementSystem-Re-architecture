@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMNhanVien;
 
 import com.example.pharmacy.client.TienIch.TuyChinhAlert;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.NhanVienDto;
 import com.example.pharmacy.client.service.NhanVienService;
 import com.example.pharmacy.client.view.CN_DanhMuc.DMNhanVien.DanhMucNhanVien_GUI;
 import com.example.pharmacy.client.view.CN_DanhMuc.DMNhanVien.ThemNhanVien_GUI;
@@ -24,17 +24,17 @@ import java.util.List;
 import java.util.Objects;
 
 public class DanhMucNhanVien_Ctrl extends Application {
-    public TableView<NhanVien> tblNhanVien;
-    public TableColumn<NhanVien, String> colSTT;
-    public TableColumn<NhanVien, String> colMaNV;
-    public TableColumn<NhanVien, String> colTenNV;
-    public TableColumn<NhanVien, String> colGioiTinh;
-    public TableColumn<NhanVien, String> colSDT;
-    public TableColumn<NhanVien, String> colNgaySinh;
-    public TableColumn<NhanVien, String> colEmail;
-    public TableColumn<NhanVien, String> colDiaChi;
-    public TableColumn<NhanVien, String> colTrangThai;
-    public TableColumn<NhanVien, String> colCapNhat;
+    public TableView<NhanVienDto> tblNhanVien;
+    public TableColumn<NhanVienDto, String> colSTT;
+    public TableColumn<NhanVienDto, String> colMaNV;
+    public TableColumn<NhanVienDto, String> colTenNV;
+    public TableColumn<NhanVienDto, String> colGioiTinh;
+    public TableColumn<NhanVienDto, String> colSDT;
+    public TableColumn<NhanVienDto, String> colNgaySinh;
+    public TableColumn<NhanVienDto, String> colEmail;
+    public TableColumn<NhanVienDto, String> colDiaChi;
+    public TableColumn<NhanVienDto, String> colTrangThai;
+    public TableColumn<NhanVienDto, String> colCapNhat;
     public Button btnLamMoi;
     public Button btnTim;
     public TextField txtTim;
@@ -55,14 +55,14 @@ public class DanhMucNhanVien_Ctrl extends Application {
     }
 
     public void loadData() {
-        ObservableList<NhanVien> data = FXCollections.observableArrayList(nhanVienService.findAll());
+        ObservableList<NhanVienDto> data = FXCollections.observableArrayList(nhanVienService.findAll());
         tblNhanVien.setItems(data);
         tblNhanVien.refresh();
     }
 
-    public void btnCapNhat(NhanVien nhanVien) {
+    public void btnCapNhat(NhanVienDto nhanVien) {
         try {
-            NhanVien copy = new NhanVien(nhanVien);
+            NhanVienDto copy = new NhanVienDto(nhanVien);
             var gui = new com.example.pharmacy.client.view.CN_DanhMuc.DMNhanVien.SuaXoaNhanVien_GUI();
             var ctrl = new com.example.pharmacy.client.controller.CN_DanhMuc.DMNhanVien.SuaXoaNhanVien_Ctrl();
 
@@ -107,7 +107,7 @@ public class DanhMucNhanVien_Ctrl extends Application {
 
     private void TimKiem() {
         String keyword = txtTim.getText();
-        List<NhanVien> filtered = nhanVienService.searchByKeyword(keyword);
+        List<NhanVienDto> filtered = nhanVienService.searchByKeyword(keyword);
         tblNhanVien.setItems(FXCollections.observableArrayList(filtered));
     }
 
@@ -137,7 +137,7 @@ public class DanhMucNhanVien_Ctrl extends Application {
 
             {
                 btn.setOnAction(event -> {
-                    NhanVien nhanVien = getTableView().getItems().get(getIndex());
+                    NhanVienDto nhanVien = getTableView().getItems().get(getIndex());
                     btnCapNhat(nhanVien);
                 });
                 btn.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");

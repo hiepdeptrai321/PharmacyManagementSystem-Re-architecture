@@ -1,23 +1,23 @@
 package com.example.pharmacy.client.service;
 
-import com.example.pharmacy.common.model.ChiTietHoaDon;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class DoiHangItem {
-    private final ChiTietHoaDon goc;
+    private final ChiTietHoaDonDto goc;
     private final IntegerProperty soLuongDoi = new SimpleIntegerProperty(1);
     private final StringProperty lyDo = new SimpleStringProperty("");
 
-    public DoiHangItem(ChiTietHoaDon goc, int soLuongDefault, String lyDoDefault) {
+    public DoiHangItem(ChiTietHoaDonDto goc, int soLuongDefault, String lyDoDefault) {
         this.goc = goc;
         setSoLuongDoi(Math.max(1, soLuongDefault));
         setLyDo(lyDoDefault == null ? "" : lyDoDefault);
     }
 
-    public ChiTietHoaDon getGoc() { return goc; }
+    public ChiTietHoaDonDto getGoc() { return goc; }
 
     public int getSoLuongDoi() { return soLuongDoi.get(); }
     public void setSoLuongDoi(int v) { soLuongDoi.set(v); }

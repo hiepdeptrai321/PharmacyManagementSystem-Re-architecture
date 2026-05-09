@@ -2,11 +2,11 @@ package com.example.pharmacy.server.repository.jdbc;
 
 import com.example.pharmacy.server.config.JdbcConnectionProvider;
 import com.example.pharmacy.server.repository.PhieuDatHangRepository;
-import com.example.pharmacy.common.model.ChiTietPhieuDatHang;
-import com.example.pharmacy.common.model.KhachHang;
-import com.example.pharmacy.common.model.NhanVien;
-import com.example.pharmacy.common.model.PhieuDatHang;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietPhieuDatHangDto;
+import com.example.pharmacy.common.model.KhachHangDto;
+import com.example.pharmacy.common.model.NhanVienDto;
+import com.example.pharmacy.common.model.PhieuDatHangDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -18,11 +18,11 @@ import java.util.List;
 
 public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implements PhieuDatHangRepository {
     private static final String INSERT_HEADER_SQL = """
-            INSERT INTO PhieuDatHang (MaPDat, NgayLap, SoTienCoc, GhiChu, MaKH, MaNV, TrangThai)
+            INSERT INTO PhieuDatHangDto (MaPDat, NgayLap, SoTienCoc, GhiChu, MaKH, MaNV, TrangThai)
             VALUES (?, ?, ?, ?, ?, ?, 0)
             """;
     private static final String INSERT_DETAIL_SQL = """
-            INSERT INTO ChiTietPhieuDatHang (MaPDat, MaThuoc, SoLuong, MaDVT, DonGia, GiamGia, TrangThai)
+            INSERT INTO ChiTietPhieuDatHangDto (MaPDat, MaThuoc, SoLuong, MaDVT, DonGia, GiamGia, TrangThai)
             VALUES (?, ?, ?, ?, ?, ?, 0)
             """;
     private static final String SELECT_ALL_SQL = """
@@ -36,9 +36,9 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
                    kh.SDT,
                    nv.MaNV,
                    nv.TenNV
-            FROM PhieuDatHang pd
-            JOIN KhachHang kh ON kh.MaKH = pd.MaKH
-            JOIN NhanVien nv ON nv.MaNV = pd.MaNV
+            FROM PhieuDatHangDto pd
+            JOIN KhachHangDto kh ON kh.MaKH = pd.MaKH
+            JOIN NhanVienDto nv ON nv.MaNV = pd.MaNV
             ORDER BY pd.NgayLap DESC, pd.MaPDat DESC
             """;
     private static final String SELECT_BY_ID_SQL = """
@@ -52,9 +52,9 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
                    kh.SDT,
                    nv.MaNV,
                    nv.TenNV
-            FROM PhieuDatHang pd
-            JOIN KhachHang kh ON kh.MaKH = pd.MaKH
-            JOIN NhanVien nv ON nv.MaNV = pd.MaNV
+            FROM PhieuDatHangDto pd
+            JOIN KhachHangDto kh ON kh.MaKH = pd.MaKH
+            JOIN NhanVienDto nv ON nv.MaNV = pd.MaNV
             WHERE pd.MaPDat = ?
             """;
     private static final String SELECT_DETAILS_SQL = """
@@ -66,35 +66,35 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
                    ct.GiamGia,
                    ct.TrangThai,
                    ts.TenThuoc
-            FROM ChiTietPhieuDatHang ct
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = ct.MaThuoc
+            FROM ChiTietPhieuDatHangDto ct
+            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = ct.MaThuoc
             WHERE ct.MaPDat = ?
             ORDER BY ts.TenThuoc ASC, ct.MaDVT ASC
             """;
     private static final String SELECT_HEADER_STATUS_SQL = """
             SELECT TrangThai
-            FROM PhieuDatHang
+            FROM PhieuDatHangDto
             WHERE MaPDat = ?
             """;
     private static final String SELECT_AVAILABLE_LOTS_SQL = """
             SELECT MaLH, SoLuongTon, SoLuongDat, SoLuongGiu
-            FROM Thuoc_SP_TheoLo
+            FROM Thuoc_SP_TheoLoDto
             WHERE MaThuoc = ?
             ORDER BY COALESCE(HSD, DATE('9999-12-31')) ASC, MaLH ASC
             FOR UPDATE
             """;
     private static final String UPDATE_LOT_RESERVE_SQL = """
-            UPDATE Thuoc_SP_TheoLo
+            UPDATE Thuoc_SP_TheoLoDto
             SET SoLuongDat = SoLuongDat + ?, SoLuongGiu = SoLuongGiu + ?
             WHERE MaLH = ?
             """;
     private static final String UPDATE_DETAIL_STATUS_SQL = """
-            UPDATE ChiTietPhieuDatHang
+            UPDATE ChiTietPhieuDatHangDto
             SET TrangThai = ?
             WHERE MaPDat = ? AND MaThuoc = ? AND MaDVT = ?
             """;
     private static final String UPDATE_HEADER_STATUS_SQL = """
-            UPDATE PhieuDatHang
+            UPDATE PhieuDatHangDto
             SET TrangThai = ?
             WHERE MaPDat = ?
             """;
@@ -104,7 +104,7 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
     }
 
     @Override
-    public void insertHeader(PhieuDatHang phieuDatHang, String maPhieuDat, String employeeId) {
+    public void insertHeader(PhieuDatHangDto phieuDatHang, String maPhieuDat, String employeeId) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -125,7 +125,7 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
     }
 
     @Override
-    public void insertDetail(String maPhieuDat, ChiTietPhieuDatHang detail) {
+    public void insertDetail(String maPhieuDat, ChiTietPhieuDatHangDto detail) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -146,9 +146,9 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
     }
 
     @Override
-    public List<PhieuDatHang> findAll() {
+    public List<PhieuDatHangDto> findAll() {
         Connection connection = null;
-        List<PhieuDatHang> list = new ArrayList<>();
+        List<PhieuDatHangDto> list = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL);
@@ -166,7 +166,7 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
     }
 
     @Override
-    public PhieuDatHang findById(String maPhieuDat) {
+    public PhieuDatHangDto findById(String maPhieuDat) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -187,9 +187,9 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
     }
 
     @Override
-    public List<ChiTietPhieuDatHang> findDetailsByMaPhieuDat(String maPhieuDat) {
+    public List<ChiTietPhieuDatHangDto> findDetailsByMaPhieuDat(String maPhieuDat) {
         Connection connection = null;
-        List<ChiTietPhieuDatHang> list = new ArrayList<>();
+        List<ChiTietPhieuDatHangDto> list = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_DETAILS_SQL)) {
@@ -221,9 +221,9 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
                 return true;
             }
 
-            List<ChiTietPhieuDatHang> details = findDetailsByMaPhieuDat(maPhieuDat);
+            List<ChiTietPhieuDatHangDto> details = findDetailsByMaPhieuDat(maPhieuDat);
             boolean allReady = true;
-            for (ChiTietPhieuDatHang detail : details) {
+            for (ChiTietPhieuDatHangDto detail : details) {
                 boolean detailReady = reserveLotsForDetail(connection, detail);
                 updateDetailStatus(connection, maPhieuDat, detail, detailReady);
                 if (!detailReady) {
@@ -240,8 +240,8 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
         }
     }
 
-    private PhieuDatHang mapHeader(ResultSet resultSet) throws Exception {
-        PhieuDatHang phieuDatHang = new PhieuDatHang();
+    private PhieuDatHangDto mapHeader(ResultSet resultSet) throws Exception {
+        PhieuDatHangDto phieuDatHang = new PhieuDatHangDto();
         phieuDatHang.setMaPDat(resultSet.getString("MaPDat"));
         Date ngayLap = resultSet.getDate("NgayLap");
         phieuDatHang.setNgayLap(ngayLap == null ? null : Timestamp.valueOf(ngayLap.toLocalDate().atStartOfDay()));
@@ -249,26 +249,26 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
         phieuDatHang.setGhiChu(resultSet.getString("GhiChu"));
         phieuDatHang.setTrangthai(resultSet.getInt("TrangThai"));
 
-        KhachHang khachHang = new KhachHang();
+        KhachHangDto khachHang = new KhachHangDto();
         khachHang.setMaKH(resultSet.getString("MaKH"));
         khachHang.setTenKH(resultSet.getString("TenKH"));
         khachHang.setSdt(resultSet.getString("SDT"));
         phieuDatHang.setKhachHang(khachHang);
 
-        NhanVien nhanVien = new NhanVien();
+        NhanVienDto nhanVien = new NhanVienDto();
         nhanVien.setMaNV(resultSet.getString("MaNV"));
         nhanVien.setTenNV(resultSet.getString("TenNV"));
         phieuDatHang.setNhanVien(nhanVien);
         return phieuDatHang;
     }
 
-    private ChiTietPhieuDatHang mapDetail(ResultSet resultSet) throws Exception {
-        ChiTietPhieuDatHang detail = new ChiTietPhieuDatHang();
-        PhieuDatHang phieuDatHang = new PhieuDatHang();
+    private ChiTietPhieuDatHangDto mapDetail(ResultSet resultSet) throws Exception {
+        ChiTietPhieuDatHangDto detail = new ChiTietPhieuDatHangDto();
+        PhieuDatHangDto phieuDatHang = new PhieuDatHangDto();
         phieuDatHang.setMaPDat(resultSet.getString("MaPDat"));
         detail.setPhieuDatHang(phieuDatHang);
 
-        Thuoc_SanPham thuoc = new Thuoc_SanPham();
+        Thuoc_SanPhamDto thuoc = new Thuoc_SanPhamDto();
         thuoc.setMaThuoc(resultSet.getString("MaThuoc"));
         thuoc.setTenThuoc(resultSet.getString("TenThuoc"));
         detail.setThuoc(thuoc);
@@ -293,7 +293,7 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
         }
     }
 
-    private boolean reserveLotsForDetail(Connection connection, ChiTietPhieuDatHang detail) throws Exception {
+    private boolean reserveLotsForDetail(Connection connection, ChiTietPhieuDatHangDto detail) throws Exception {
         List<LotAvailability> availabilities = loadLots(connection, detail.getThuoc().getMaThuoc());
         int remaining = detail.getSoLuong();
         int totalAvailable = availabilities.stream()
@@ -341,7 +341,7 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
         return list;
     }
 
-    private void updateDetailStatus(Connection connection, String maPhieuDat, ChiTietPhieuDatHang detail, boolean ready) throws Exception {
+    private void updateDetailStatus(Connection connection, String maPhieuDat, ChiTietPhieuDatHangDto detail, boolean ready) throws Exception {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_DETAIL_STATUS_SQL)) {
             statement.setBoolean(1, ready);
             statement.setString(2, maPhieuDat);

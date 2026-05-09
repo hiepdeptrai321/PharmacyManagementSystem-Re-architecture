@@ -3,7 +3,7 @@ package com.example.pharmacy.client.service;
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.client.service.KeHangClientService;
 import com.example.pharmacy.client.service.RmiKeHangClientService;
-import com.example.pharmacy.common.model.KeHang;
+import com.example.pharmacy.common.model.KeHangDto;
 
 import java.util.List;
 
@@ -11,15 +11,15 @@ public class KeHangService {
     private final KeHangClientService keHangClientService =
             new RmiKeHangClientService(new RmiClientProvider());
 
-    public List<KeHang> findAll() {
+    public List<KeHangDto> findAll() {
         return keHangClientService.findAll();
     }
 
-    public KeHang findById(String maKeHang) {
+    public KeHangDto findById(String maKeHang) {
         return keHangClientService.findById(maKeHang);
     }
 
-    public KeHang selectByTenKe(String tenKe) {
+    public KeHangDto selectByTenKe(String tenKe) {
         return keHangClientService.findByTenKe(tenKe);
     }
 
@@ -27,11 +27,11 @@ public class KeHangService {
         return keHangClientService.generateNewMaKeHang();
     }
 
-    public boolean create(KeHang keHang) {
+    public boolean create(KeHangDto keHang) {
         return keHangClientService.create(keHang);
     }
 
-    public boolean update(KeHang keHang) {
+    public boolean update(KeHangDto keHang) {
         return keHangClientService.update(keHang);
     }
 
@@ -45,12 +45,12 @@ public class KeHangService {
 
     public List<String> getAllTenKe() {
         return findAll().stream()
-                .map(KeHang::getTenKe)
+                .map(KeHangDto::getTenKe)
                 .filter(tenKe -> tenKe != null && !tenKe.isBlank())
                 .toList();
     }
 
-    public List<KeHang> searchByKeyword(String keyword) {
+    public List<KeHangDto> searchByKeyword(String keyword) {
         String tuKhoa = keyword == null ? "" : keyword.trim().toLowerCase();
         if (tuKhoa.isEmpty()) {
             return findAll();

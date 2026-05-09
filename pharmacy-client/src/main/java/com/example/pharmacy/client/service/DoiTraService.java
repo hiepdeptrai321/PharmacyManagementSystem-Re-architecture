@@ -7,12 +7,12 @@ import com.example.pharmacy.common.request.CreatePhieuDoiItemRequest;
 import com.example.pharmacy.common.request.CreatePhieuDoiRequest;
 import com.example.pharmacy.common.request.CreatePhieuTraItemRequest;
 import com.example.pharmacy.common.request.CreatePhieuTraRequest;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.ChiTietPhieuDoiHang;
-import com.example.pharmacy.common.model.ChiTietPhieuTraHang;
-import com.example.pharmacy.common.model.HoaDon;
-import com.example.pharmacy.common.model.PhieuDoiHang;
-import com.example.pharmacy.common.model.PhieuTraHang;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.ChiTietPhieuDoiHangDto;
+import com.example.pharmacy.common.model.ChiTietPhieuTraHangDto;
+import com.example.pharmacy.common.model.HoaDonDto;
+import com.example.pharmacy.common.model.PhieuDoiHangDto;
+import com.example.pharmacy.common.model.PhieuTraHangDto;
 import com.example.pharmacy.common.session.UserContext;
 import com.example.pharmacy.client.session.UserContextMapper;
 
@@ -23,11 +23,11 @@ public class DoiTraService {
     private final DoiTraClientService doiTraClientService =
             new RmiDoiTraClientService(new RmiClientProvider());
 
-    public HoaDon findHoaDonGocForDoiTra(String maHoaDon) {
+    public HoaDonDto findHoaDonGocForDoiTra(String maHoaDon) {
         return doiTraClientService.findHoaDonGocForDoiTra(maHoaDon);
     }
 
-    public List<ChiTietHoaDon> findHoaDonDetailsForDoiTra(String maHoaDon) {
+    public List<ChiTietHoaDonDto> findHoaDonDetailsForDoiTra(String maHoaDon) {
         return doiTraClientService.findHoaDonDetailsForDoiTra(maHoaDon);
     }
 
@@ -55,32 +55,32 @@ public class DoiTraService {
         );
     }
 
-    public List<PhieuDoiHang> findAllPhieuDoi() {
+    public List<PhieuDoiHangDto> findAllPhieuDoi() {
         return doiTraClientService.findAllPhieuDoi();
     }
 
-    public PhieuDoiHang findPhieuDoiById(String maPhieuDoi) {
+    public PhieuDoiHangDto findPhieuDoiById(String maPhieuDoi) {
         return doiTraClientService.findPhieuDoiById(maPhieuDoi);
     }
 
-    public List<ChiTietPhieuDoiHang> findChiTietPhieuDoiByMaPD(String maPhieuDoi) {
+    public List<ChiTietPhieuDoiHangDto> findChiTietPhieuDoiByMaPD(String maPhieuDoi) {
         return doiTraClientService.findChiTietPhieuDoiByMaPD(maPhieuDoi);
     }
 
-    public List<PhieuTraHang> findAllPhieuTra() {
+    public List<PhieuTraHangDto> findAllPhieuTra() {
         return doiTraClientService.findAllPhieuTra();
     }
 
-    public PhieuTraHang findPhieuTraById(String maPhieuTra) {
+    public PhieuTraHangDto findPhieuTraById(String maPhieuTra) {
         return doiTraClientService.findPhieuTraById(maPhieuTra);
     }
 
-    public List<ChiTietPhieuTraHang> findChiTietPhieuTraByMaPT(String maPhieuTra) {
+    public List<ChiTietPhieuTraHangDto> findChiTietPhieuTraByMaPT(String maPhieuTra) {
         return doiTraClientService.findChiTietPhieuTraByMaPT(maPhieuTra);
     }
 
     public CreatePhieuDoiRequest buildCreatePhieuDoiRequest(
-            HoaDon hoaDonGoc,
+            HoaDonDto hoaDonGoc,
             List<DoiHangItem> items,
             String ghiChu
     ) {
@@ -106,7 +106,7 @@ public class DoiTraService {
     }
 
     public CreatePhieuTraRequest buildCreatePhieuTraRequest(
-            HoaDon hoaDonGoc,
+            HoaDonDto hoaDonGoc,
             List<TraHangItem> items,
             String ghiChu
     ) {

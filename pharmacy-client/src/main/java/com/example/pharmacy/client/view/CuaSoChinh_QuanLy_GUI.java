@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view;
 
 import com.example.pharmacy.client.controller.CuaSoChinh_QuanLy_Ctrl;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
@@ -365,11 +365,11 @@ public class CuaSoChinh_QuanLy_GUI {
         MenuItem miCapNhatGia, miCapNhatTonKho, miCapNhatKM;
         Pane pnlChung;
         LineChart<String, Number> chartDoanhThuThangNay;
-        TableView<Thuoc_SP_TheoLo> tblThuocHetHan, tblThuocSapHetHan;
-        TableColumn<Thuoc_SP_TheoLo, String> colMaThuocHetHan, colLoHangHetHan;
-        TableColumn<Thuoc_SP_TheoLo, Date> colHSDHetHan;
-        TableColumn<Thuoc_SP_TheoLo, String> colMaThuocSapHetHan, colLoHangSapHetHan;
-        TableColumn<Thuoc_SP_TheoLo, Date> colHSDSapHetHan;
+        TableView<Thuoc_SP_TheoLoDto> tblThuocHetHan, tblThuocSapHetHan;
+        TableColumn<Thuoc_SP_TheoLoDto, String> colMaThuocHetHan, colLoHangHetHan;
+        TableColumn<Thuoc_SP_TheoLoDto, Date> colHSDHetHan;
+        TableColumn<Thuoc_SP_TheoLoDto, String> colMaThuocSapHetHan, colLoHangSapHetHan;
+        TableColumn<Thuoc_SP_TheoLoDto, Date> colHSDSapHetHan;
         Label lbl_SoLuongHangHetHan, lbl_SoLuongHangSapHetHan;
         Label lblDoanhThuThangTruoc, lblDoanhThuThangNay, lblHoaDonThangTruoc, lblHoaDonThangNay;
         ImageView logo;

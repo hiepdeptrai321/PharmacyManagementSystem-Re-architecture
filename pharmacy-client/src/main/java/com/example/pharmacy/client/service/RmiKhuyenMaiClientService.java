@@ -2,10 +2,10 @@ package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.common.remote.KhuyenMaiRemote;
-import com.example.pharmacy.common.model.ChiTietKhuyenMai;
-import com.example.pharmacy.common.model.KhuyenMai;
-import com.example.pharmacy.common.model.LoaiKhuyenMai;
-import com.example.pharmacy.common.model.Thuoc_SP_TangKem;
+import com.example.pharmacy.common.model.ChiTietKhuyenMaiDto;
+import com.example.pharmacy.common.model.KhuyenMaiDto;
+import com.example.pharmacy.common.model.LoaiKhuyenMaiDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TangKemDto;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -21,7 +21,7 @@ public class RmiKhuyenMaiClientService implements KhuyenMaiClientService {
     }
 
     @Override
-    public List<KhuyenMai> findAll() {
+    public List<KhuyenMaiDto> findAll() {
         try {
             return remote().findAll();
         } catch (RemoteException | NotBoundException exception) {
@@ -31,7 +31,7 @@ public class RmiKhuyenMaiClientService implements KhuyenMaiClientService {
     }
 
     @Override
-    public KhuyenMai findById(String maKhuyenMai) {
+    public KhuyenMaiDto findById(String maKhuyenMai) {
         try {
             return remote().findById(maKhuyenMai);
         } catch (RemoteException | NotBoundException exception) {
@@ -41,7 +41,7 @@ public class RmiKhuyenMaiClientService implements KhuyenMaiClientService {
     }
 
     @Override
-    public List<KhuyenMai> searchByKeyword(String keyword) {
+    public List<KhuyenMaiDto> searchByKeyword(String keyword) {
         try {
             return remote().searchByKeyword(keyword);
         } catch (RemoteException | NotBoundException exception) {
@@ -61,7 +61,7 @@ public class RmiKhuyenMaiClientService implements KhuyenMaiClientService {
     }
 
     @Override
-    public List<LoaiKhuyenMai> findAllLoaiKhuyenMai() {
+    public List<LoaiKhuyenMaiDto> findAllLoaiKhuyenMai() {
         try {
             return remote().findAllLoaiKhuyenMai();
         } catch (RemoteException | NotBoundException exception) {
@@ -71,7 +71,7 @@ public class RmiKhuyenMaiClientService implements KhuyenMaiClientService {
     }
 
     @Override
-    public LoaiKhuyenMai findLoaiKhuyenMaiById(String maLoaiKhuyenMai) {
+    public LoaiKhuyenMaiDto findLoaiKhuyenMaiById(String maLoaiKhuyenMai) {
         try {
             return remote().findLoaiKhuyenMaiById(maLoaiKhuyenMai);
         } catch (RemoteException | NotBoundException exception) {
@@ -81,7 +81,7 @@ public class RmiKhuyenMaiClientService implements KhuyenMaiClientService {
     }
 
     @Override
-    public LoaiKhuyenMai findLoaiKhuyenMaiByTen(String tenLoaiKhuyenMai) {
+    public LoaiKhuyenMaiDto findLoaiKhuyenMaiByTen(String tenLoaiKhuyenMai) {
         try {
             return remote().findLoaiKhuyenMaiByTen(tenLoaiKhuyenMai);
         } catch (RemoteException | NotBoundException exception) {
@@ -91,7 +91,7 @@ public class RmiKhuyenMaiClientService implements KhuyenMaiClientService {
     }
 
     @Override
-    public List<ChiTietKhuyenMai> findChiTietByMaKM(String maKhuyenMai) {
+    public List<ChiTietKhuyenMaiDto> findChiTietByMaKM(String maKhuyenMai) {
         try {
             return remote().findChiTietByMaKM(maKhuyenMai);
         } catch (RemoteException | NotBoundException exception) {
@@ -101,7 +101,7 @@ public class RmiKhuyenMaiClientService implements KhuyenMaiClientService {
     }
 
     @Override
-    public List<Thuoc_SP_TangKem> findQuaTangByMaKM(String maKhuyenMai) {
+    public List<Thuoc_SP_TangKemDto> findQuaTangByMaKM(String maKhuyenMai) {
         try {
             return remote().findQuaTangByMaKM(maKhuyenMai);
         } catch (RemoteException | NotBoundException exception) {
@@ -111,7 +111,7 @@ public class RmiKhuyenMaiClientService implements KhuyenMaiClientService {
     }
 
     @Override
-    public boolean create(KhuyenMai khuyenMai, List<ChiTietKhuyenMai> chiTietKhuyenMais, List<Thuoc_SP_TangKem> quaTangKhuyenMais) {
+    public boolean create(KhuyenMaiDto khuyenMai, List<ChiTietKhuyenMaiDto> chiTietKhuyenMais, List<Thuoc_SP_TangKemDto> quaTangKhuyenMais) {
         try {
             return remote().create(khuyenMai, chiTietKhuyenMais, quaTangKhuyenMais);
         } catch (RemoteException | NotBoundException exception) {
@@ -121,7 +121,7 @@ public class RmiKhuyenMaiClientService implements KhuyenMaiClientService {
     }
 
     @Override
-    public boolean update(KhuyenMai khuyenMai, List<ChiTietKhuyenMai> chiTietKhuyenMais, List<Thuoc_SP_TangKem> quaTangKhuyenMais) {
+    public boolean update(KhuyenMaiDto khuyenMai, List<ChiTietKhuyenMaiDto> chiTietKhuyenMais, List<Thuoc_SP_TangKemDto> quaTangKhuyenMais) {
         try {
             return remote().update(khuyenMai, chiTietKhuyenMais, quaTangKhuyenMais);
         } catch (RemoteException | NotBoundException exception) {
@@ -141,7 +141,7 @@ public class RmiKhuyenMaiClientService implements KhuyenMaiClientService {
     }
 
     @Override
-    public List<KhuyenMai> findActiveOn(Date ngay) {
+    public List<KhuyenMaiDto> findActiveOn(Date ngay) {
         try {
             return remote().findActiveOn(ngay);
         } catch (RemoteException | NotBoundException exception) {
@@ -151,7 +151,7 @@ public class RmiKhuyenMaiClientService implements KhuyenMaiClientService {
     }
 
     @Override
-    public List<KhuyenMai> findActiveInvoiceOn(Date ngay) {
+    public List<KhuyenMaiDto> findActiveInvoiceOn(Date ngay) {
         try {
             return remote().findActiveInvoiceOn(ngay);
         } catch (RemoteException | NotBoundException exception) {

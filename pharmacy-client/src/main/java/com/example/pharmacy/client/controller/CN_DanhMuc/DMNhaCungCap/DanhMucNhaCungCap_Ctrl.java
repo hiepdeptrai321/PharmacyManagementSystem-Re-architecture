@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMNhaCungCap;
 
 import com.example.pharmacy.client.TienIch.TuyChinhAlert;
-import com.example.pharmacy.common.model.NhaCungCap;
+import com.example.pharmacy.common.model.NhaCungCapDto;
 import com.example.pharmacy.client.service.NhaCungCapService;
 import com.example.pharmacy.client.view.CN_DanhMuc.DMNCC.DanhMucNhaCungCap_GUI;
 import javafx.application.Application;
@@ -21,16 +21,16 @@ import java.util.List;
 public class DanhMucNhaCungCap_Ctrl extends Application {
 
     public TableColumn colChiTietNhaCungCap;
-    public TableColumn<NhaCungCap, String> colChiTiet;
-    public TableView<NhaCungCap> tblNhaCungCap;
-    public TableColumn<NhaCungCap, String> colMaNCC;
-    public TableColumn<NhaCungCap, String> colTenNCC;
-    public TableColumn<NhaCungCap, String> colDiaChi;
-    public TableColumn<NhaCungCap, String> colSDT;
-    public TableColumn<NhaCungCap, String> colEmail;
-    public TableColumn<NhaCungCap, String> colGhiChu;
-    private TableColumn<NhaCungCap, String> colTenCongTy;
-    public TableColumn<NhaCungCap, String> colSTT;
+    public TableColumn<NhaCungCapDto, String> colChiTiet;
+    public TableView<NhaCungCapDto> tblNhaCungCap;
+    public TableColumn<NhaCungCapDto, String> colMaNCC;
+    public TableColumn<NhaCungCapDto, String> colTenNCC;
+    public TableColumn<NhaCungCapDto, String> colDiaChi;
+    public TableColumn<NhaCungCapDto, String> colSDT;
+    public TableColumn<NhaCungCapDto, String> colEmail;
+    public TableColumn<NhaCungCapDto, String> colGhiChu;
+    private TableColumn<NhaCungCapDto, String> colTenCongTy;
+    public TableColumn<NhaCungCapDto, String> colSTT;
     public TextField txtTimKiem;
     public Button btnLamMoi;
     public Button btnThemNCC;
@@ -48,7 +48,7 @@ public class DanhMucNhaCungCap_Ctrl extends Application {
     }
 
     public void loadNhaCungCap() {
-        List<NhaCungCap> list = nhaCungCapService.findAll();
+        List<NhaCungCapDto> list = nhaCungCapService.findAll();
 
         colSTT.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(tblNhaCungCap.getItems().indexOf(cellData.getValue()) + 1))
@@ -76,7 +76,7 @@ public class DanhMucNhaCungCap_Ctrl extends Application {
             private final Button btn = new Button("Chi tiết");
             {
                 btn.setOnAction(event -> {
-                    NhaCungCap ncc = getTableView().getItems().get(getIndex());
+                    NhaCungCapDto ncc = getTableView().getItems().get(getIndex());
                     suaXoaNhaCungCap(ncc);
                 });
                 btn.setStyle("-fx-text-fill: white;-fx-background-color: #218cff;");
@@ -97,7 +97,7 @@ public class DanhMucNhaCungCap_Ctrl extends Application {
                 .showWithController(stage, this);
     }
 
-    private void suaXoaNhaCungCap(NhaCungCap ncc) {
+    private void suaXoaNhaCungCap(NhaCungCapDto ncc) {
         try {
             var gui = new com.example.pharmacy.client.view.CN_DanhMuc.DMNCC.SuaXoaNhaCungCap_GUI();
             var ctrl = new com.example.pharmacy.client.controller.CN_DanhMuc.DMNhaCungCap.SuaXoaNhaCungCap_Ctrl();
@@ -139,7 +139,7 @@ public class DanhMucNhaCungCap_Ctrl extends Application {
 
     private void TimKiem() {
         String keyword = txtTimKiem.getText().trim().toLowerCase();
-        List<NhaCungCap> filtered = nhaCungCapService.searchByKeyword(keyword);
+        List<NhaCungCapDto> filtered = nhaCungCapService.searchByKeyword(keyword);
         tblNhaCungCap.getItems().setAll(filtered);
     }
 

@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_XuLy.LapPhieuDoi;
 
 import com.example.pharmacy.client.controller.CN_XuLy.LapPhieuDoi.LapPhieuDoiHang_Ctrl;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
 import com.example.pharmacy.client.service.DoiHangItem;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -93,7 +93,7 @@ public class LapPhieuDoi_GUI {
         AnchorPane.setTopAnchor(lblSPGoc, 180.0);
         AnchorPane.setLeftAnchor(lblSPGoc, 40.0);
 
-        TableView<ChiTietHoaDon> tblSanPhamGoc = new TableView<>();
+        TableView<ChiTietHoaDonDto> tblSanPhamGoc = new TableView<>();
         tblSanPhamGoc.setId("tblSanPhamGoc");
         tblSanPhamGoc.setPrefSize(1156, 248);
         tblSanPhamGoc.getStyleClass().add("main-table");
@@ -101,28 +101,28 @@ public class LapPhieuDoi_GUI {
         AnchorPane.setLeftAnchor(tblSanPhamGoc, 40.0);
         AnchorPane.setRightAnchor(tblSanPhamGoc, 450.0);
 
-        TableColumn<ChiTietHoaDon, String> colSTTGoc = new TableColumn<>("STT");
+        TableColumn<ChiTietHoaDonDto, String> colSTTGoc = new TableColumn<>("STT");
         colSTTGoc.setPrefWidth(50);
 
-        TableColumn<ChiTietHoaDon, String> colTenSPGoc = new TableColumn<>("Tên sản phẩm");
+        TableColumn<ChiTietHoaDonDto, String> colTenSPGoc = new TableColumn<>("Tên sản phẩm");
         colTenSPGoc.setPrefWidth(374);
 
-        TableColumn<ChiTietHoaDon, String> colSoLuongGoc = new TableColumn<>("Số lượng");
+        TableColumn<ChiTietHoaDonDto, String> colSoLuongGoc = new TableColumn<>("Số lượng");
         colSoLuongGoc.setPrefWidth(110);
 
-        TableColumn<ChiTietHoaDon, String> colDonViGoc = new TableColumn<>("Đơn vị");
+        TableColumn<ChiTietHoaDonDto, String> colDonViGoc = new TableColumn<>("Đơn vị");
         colDonViGoc.setPrefWidth(132);
 
-        TableColumn<ChiTietHoaDon, String> colDonGiaGoc = new TableColumn<>("Đơn giá");
+        TableColumn<ChiTietHoaDonDto, String> colDonGiaGoc = new TableColumn<>("Đơn giá");
         colDonGiaGoc.setPrefWidth(151.67);
 
-        TableColumn<ChiTietHoaDon, String> colGiamGiaGoc = new TableColumn<>("Giảm giá");
+        TableColumn<ChiTietHoaDonDto, String> colGiamGiaGoc = new TableColumn<>("Giảm giá");
         colGiamGiaGoc.setPrefWidth(143.67);
 
-        TableColumn<ChiTietHoaDon, String> colThanhTienGoc = new TableColumn<>("Thành tiền");
+        TableColumn<ChiTietHoaDonDto, String> colThanhTienGoc = new TableColumn<>("Thành tiền");
         colThanhTienGoc.setPrefWidth(131.33);
 
-        TableColumn<ChiTietHoaDon, Void> colDoi = new TableColumn<>("Đổi");
+        TableColumn<ChiTietHoaDonDto, Void> colDoi = new TableColumn<>("Đổi");
         colDoi.setPrefWidth(61);
 
         tblSanPhamGoc.getColumns().addAll(colSTTGoc, colTenSPGoc, colSoLuongGoc, colDonViGoc,

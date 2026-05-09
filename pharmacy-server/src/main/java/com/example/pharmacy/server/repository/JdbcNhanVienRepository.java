@@ -12,7 +12,7 @@ import java.util.Optional;
 public class JdbcNhanVienRepository implements NhanVienRepository {
     private static final String FIND_BY_USERNAME_SQL = """
             SELECT MaNV, TaiKhoan, MatKhau, TenNV, VaiTro, TrangThai, TrangThaiXoa
-            FROM NhanVien
+            FROM NhanVienDto
             WHERE TaiKhoan = ?
             LIMIT 1
             """;
@@ -46,7 +46,7 @@ public class JdbcNhanVienRepository implements NhanVienRepository {
                 }
             }
         } catch (Exception exception) {
-            throw new IllegalStateException("Could not query NhanVien by username.", exception);
+            throw new IllegalStateException("Could not query NhanVienDto by username.", exception);
         } finally {
             connectionProvider.close(connection);
         }

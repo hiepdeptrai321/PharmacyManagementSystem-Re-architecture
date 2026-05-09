@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_TimKiem.TKNhaCungCap;
 
 import com.example.pharmacy.client.controller.CN_TimKiem.TKNhaCungCap.TimKiemNCC_Ctrl;
-import com.example.pharmacy.common.model.NhaCungCap;
+import com.example.pharmacy.common.model.NhaCungCapDto;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -118,36 +118,36 @@ public class TimKiemNCC_GUI {
 
         // --- Bảng (trong ScrollPane) ---
         ScrollPane scrollPane = new ScrollPane();
-        TableView<NhaCungCap> tbNCC = new TableView<>();
+        TableView<NhaCungCapDto> tbNCC = new TableView<>();
         tbNCC.setId("tbNCC");
         tbNCC.setPrefHeight(738.0);
         tbNCC.setPrefWidth(1613.0);
 
-        TableColumn<NhaCungCap, String> cotSTT = new TableColumn<>("STT");
+        TableColumn<NhaCungCapDto, String> cotSTT = new TableColumn<>("STT");
         cotSTT.setPrefWidth(64.0);
         cotSTT.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<NhaCungCap, String> cotMNCC = new TableColumn<>("Mã nhà cung cấp");
+        TableColumn<NhaCungCapDto, String> cotMNCC = new TableColumn<>("Mã nhà cung cấp");
         cotMNCC.setPrefWidth(152.0);
         cotMNCC.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<NhaCungCap, String> cotTenNCC = new TableColumn<>("Tên nhà cung cấp");
+        TableColumn<NhaCungCapDto, String> cotTenNCC = new TableColumn<>("Tên nhà cung cấp");
         cotTenNCC.setPrefWidth(331.0);
 
-        TableColumn<NhaCungCap, String> cotEmil = new TableColumn<>("Email");
+        TableColumn<NhaCungCapDto, String> cotEmil = new TableColumn<>("Email");
         cotEmil.setMinWidth(0.0);
         cotEmil.setPrefWidth(280.0);
 
-        TableColumn<NhaCungCap, String> cotSDT = new TableColumn<>("Số điện thoại");
+        TableColumn<NhaCungCapDto, String> cotSDT = new TableColumn<>("Số điện thoại");
         cotSDT.setMinWidth(6.0);
         cotSDT.setPrefWidth(256.0);
         cotSDT.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<NhaCungCap, String> cotDiaChi = new TableColumn<>("Địa chỉ");
+        TableColumn<NhaCungCapDto, String> cotDiaChi = new TableColumn<>("Địa chỉ");
         cotDiaChi.setMinWidth(0.0);
         cotDiaChi.setPrefWidth(415.0);
 
-        TableColumn<NhaCungCap, String> cotChiTiet = new TableColumn<>();
+        TableColumn<NhaCungCapDto, String> cotChiTiet = new TableColumn<>();
         cotChiTiet.setMinWidth(0.0);
         cotChiTiet.setPrefWidth(100.0);
         cotChiTiet.setStyle("-fx-alignment: CENTER;");
@@ -185,7 +185,7 @@ public class TimKiemNCC_GUI {
             ctrl.txtTimKiem = txtTimKiem;
             ctrl.btnTim = btnTim;
             ctrl.btnLamMoi = btnLamMoi;
-            ctrl.tbNCC = (TableView<NhaCungCap>) tbNCC;
+            ctrl.tbNCC = (TableView<NhaCungCapDto>) tbNCC;
             ctrl.cotSTT = cotSTT;
             ctrl.cotMNCC = cotMNCC;
             ctrl.cotTenNCC = cotTenNCC;

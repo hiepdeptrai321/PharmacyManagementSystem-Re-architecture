@@ -2,7 +2,7 @@ package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.common.remote.CaiDatRemote;
-import com.example.pharmacy.common.model.CaiDat;
+import com.example.pharmacy.common.model.CaiDatDto;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -17,7 +17,7 @@ public class RmiCaiDatClientService implements CaiDatClientService {
     }
 
     @Override
-    public List<CaiDat> findAll() {
+    public List<CaiDatDto> findAll() {
         try {
             return remote().findAll();
         } catch (RemoteException | NotBoundException exception) {
@@ -27,7 +27,7 @@ public class RmiCaiDatClientService implements CaiDatClientService {
     }
 
     @Override
-    public boolean update(CaiDat caiDat) {
+    public boolean update(CaiDatDto caiDat) {
         try {
             return remote().update(caiDat);
         } catch (RemoteException | NotBoundException exception) {

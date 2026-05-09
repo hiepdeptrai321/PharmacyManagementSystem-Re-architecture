@@ -1,28 +1,28 @@
 package com.example.pharmacy.client.service;
 
-import com.example.pharmacy.common.model.LuongNhanVien;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.LuongNhanVienDto;
+import com.example.pharmacy.common.model.NhanVienDto;
 
 import java.util.List;
 
 public interface NhanVienClientService {
-    List<NhanVien> findAll();
+    List<NhanVienDto> findAll();
 
-    NhanVien findById(String maNhanVien);
+    NhanVienDto findById(String maNhanVien);
 
     String generateNewMaNhanVien();
 
-    boolean create(NhanVien nhanVien);
+    boolean create(NhanVienDto nhanVien);
 
-    boolean update(NhanVien nhanVien);
+    boolean update(NhanVienDto nhanVien);
 
     boolean softDelete(String maNhanVien);
 
     boolean isUsernameAvailable(String username, String excludedMaNhanVien);
 
-    List<LuongNhanVien> findLuongByMaNhanVien(String maNhanVien);
+    List<LuongNhanVienDto> findLuongByMaNhanVien(String maNhanVien);
 
     String generateNewMaLuongNhanVien();
 
-    boolean saveLuongNhanVien(LuongNhanVien luongNhanVien);
+    boolean saveLuongNhanVien(LuongNhanVienDto luongNhanVien);
 }

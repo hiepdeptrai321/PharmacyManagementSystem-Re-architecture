@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_TimKiem.TKPhieuNhapHang;
 
 import com.example.pharmacy.client.controller.CN_TimKiem.TKPhieuNhapHang.TimKiemPhieuNhap_Ctrl;
-import com.example.pharmacy.common.model.PhieuNhap;
+import com.example.pharmacy.common.model.PhieuNhapDto;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -286,8 +286,8 @@ public class TKPhieuNhapHang_GUI {
         ComboBox<String> chonNhanVien;
         CheckBox cboxTrangThai;
         DatePicker txtNgayNhapMin, txtNgayNhapMax;
-        TableView<PhieuNhap> tblPhieuNhap;
-        TableColumn<PhieuNhap, String> colMaPN, colNgayNhap, colNhaCungCap, colNhanVien, colGhiChu, colTrangThai;
-        TableColumn<PhieuNhap, String> colChiTiet;
+        TableView<PhieuNhapDto> tblPhieuNhap;
+        TableColumn<PhieuNhapDto, String> colMaPN, colNgayNhap, colNhaCungCap, colNhanVien, colGhiChu, colTrangThai;
+        TableColumn<PhieuNhapDto, String> colChiTiet;
     }
 }

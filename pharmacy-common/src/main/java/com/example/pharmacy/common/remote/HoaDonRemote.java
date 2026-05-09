@@ -3,8 +3,8 @@ package com.example.pharmacy.common.remote;
 import com.example.pharmacy.common.dto.UserContext;
 import com.example.pharmacy.common.request.CreateHoaDonRequest;
 import com.example.pharmacy.common.request.HoaDonSearchRequest;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.HoaDon;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.HoaDonDto;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -17,11 +17,11 @@ public interface HoaDonRemote extends Remote {
 
     String createInvoice(CreateHoaDonRequest request, UserContext actor) throws RemoteException;
 
-    List<HoaDon> findAll() throws RemoteException;
+    List<HoaDonDto> findAll() throws RemoteException;
 
-    HoaDon findById(String maHoaDon) throws RemoteException;
+    HoaDonDto findById(String maHoaDon) throws RemoteException;
 
-    List<ChiTietHoaDon> findDetailsByMaHD(String maHoaDon) throws RemoteException;
+    List<ChiTietHoaDonDto> findDetailsByMaHD(String maHoaDon) throws RemoteException;
 
-    List<HoaDon> search(HoaDonSearchRequest request) throws RemoteException;
+    List<HoaDonDto> search(HoaDonSearchRequest request) throws RemoteException;
 }

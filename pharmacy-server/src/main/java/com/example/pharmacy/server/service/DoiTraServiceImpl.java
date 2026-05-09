@@ -10,12 +10,12 @@ import com.example.pharmacy.common.request.CreatePhieuTraItemRequest;
 import com.example.pharmacy.common.request.CreatePhieuTraRequest;
 import com.example.pharmacy.server.repository.DoiTraRepository;
 import com.example.pharmacy.server.transaction.TransactionManager;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.ChiTietPhieuDoiHang;
-import com.example.pharmacy.common.model.ChiTietPhieuTraHang;
-import com.example.pharmacy.common.model.HoaDon;
-import com.example.pharmacy.common.model.PhieuDoiHang;
-import com.example.pharmacy.common.model.PhieuTraHang;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.ChiTietPhieuDoiHangDto;
+import com.example.pharmacy.common.model.ChiTietPhieuTraHangDto;
+import com.example.pharmacy.common.model.HoaDonDto;
+import com.example.pharmacy.common.model.PhieuDoiHangDto;
+import com.example.pharmacy.common.model.PhieuTraHangDto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class DoiTraServiceImpl implements DoiTraService {
     }
 
     @Override
-    public HoaDon findHoaDonGocForDoiTra(String maHoaDon) {
+    public HoaDonDto findHoaDonGocForDoiTra(String maHoaDon) {
         if (isBlank(maHoaDon)) {
             return null;
         }
@@ -49,7 +49,7 @@ public class DoiTraServiceImpl implements DoiTraService {
     }
 
     @Override
-    public List<ChiTietHoaDon> findHoaDonDetailsForDoiTra(String maHoaDon) {
+    public List<ChiTietHoaDonDto> findHoaDonDetailsForDoiTra(String maHoaDon) {
         if (isBlank(maHoaDon)) {
             return List.of();
         }
@@ -77,14 +77,14 @@ public class DoiTraServiceImpl implements DoiTraService {
         validateActor(actor);
         validateCreatePhieuDoiRequest(request);
         return transactionManager.execute(() -> {
-            HoaDon hoaDonGoc = requireEligibleHoaDon(request.getMaHoaDonGoc(), true);
-            List<ChiTietHoaDon> invoiceDetails = doiTraRepository.findHoaDonDetails(request.getMaHoaDonGoc().trim());
+            HoaDonDto hoaDonGoc = requireEligibleHoaDon(request.getMaHoaDonGoc(), true);
+            List<ChiTietHoaDonDto> invoiceDetails = doiTraRepository.findHoaDonDetails(request.getMaHoaDonGoc().trim());
             String maPhieuDoi = codeGenerationService.nextCode(BusinessCodeType.PHIEU_DOI_HANG);
 
             doiTraRepository.insertPhieuDoiHeader(maPhieuDoi, request, actor.getEmployeeId());
 
             for (CreatePhieuDoiItemRequest item : request.getItems()) {
-                ChiTietHoaDon invoiceLine = requireInvoiceLine(invoiceDetails, item.getMaLoHang(), item.getMaDonViTinh());
+                ChiTietHoaDonDto invoiceLine = requireInvoiceLine(invoiceDetails, item.getMaLoHang(), item.getMaDonViTinh());
                 int soldQty = invoiceLine.getSoLuong();
                 int daDoi = doiTraRepository.getSoLuongDaDoi(request.getMaHoaDonGoc().trim(), item.getMaLoHang().trim(), item.getMaDonViTinh().trim());
                 int remaining = soldQty - daDoi;
@@ -105,7 +105,7 @@ public class DoiTraServiceImpl implements DoiTraService {
                 }
             }
 
-            auditService.logAction(actor, AuditAction.CREATE, "PhieuDoiHang", maPhieuDoi,
+            auditService.logAction(actor, AuditAction.CREATE, "PhieuDoiHangDto", maPhieuDoi,
                     "Lap phieu doi voi " + request.getItems().size() + " dong chi tiet.");
             return maPhieuDoi;
         });
@@ -116,8 +116,8 @@ public class DoiTraServiceImpl implements DoiTraService {
         validateActor(actor);
         validateCreatePhieuTraRequest(request);
         return transactionManager.execute(() -> {
-            HoaDon hoaDonGoc = requireEligibleHoaDon(request.getMaHoaDonGoc(), true);
-            List<ChiTietHoaDon> invoiceDetails = doiTraRepository.findHoaDonDetails(request.getMaHoaDonGoc().trim());
+            HoaDonDto hoaDonGoc = requireEligibleHoaDon(request.getMaHoaDonGoc(), true);
+            List<ChiTietHoaDonDto> invoiceDetails = doiTraRepository.findHoaDonDetails(request.getMaHoaDonGoc().trim());
             if (invoiceDetails.stream().anyMatch(detail -> detail.getGiamGia() > 0)) {
                 throw new BusinessException("Khong the tra hang voi hoa don co ap dung giam gia tren dong san pham.");
             }
@@ -126,7 +126,7 @@ public class DoiTraServiceImpl implements DoiTraService {
             doiTraRepository.insertPhieuTraHeader(maPhieuTra, request, actor.getEmployeeId());
 
             for (CreatePhieuTraItemRequest item : request.getItems()) {
-                ChiTietHoaDon invoiceLine = requireInvoiceLine(invoiceDetails, item.getMaLoHang(), item.getMaDonViTinh());
+                ChiTietHoaDonDto invoiceLine = requireInvoiceLine(invoiceDetails, item.getMaLoHang(), item.getMaDonViTinh());
                 int soldQty = invoiceLine.getSoLuong();
                 int daTra = doiTraRepository.getSoLuongDaTra(request.getMaHoaDonGoc().trim(), item.getMaLoHang().trim(), item.getMaDonViTinh().trim());
                 int remaining = soldQty - daTra;
@@ -150,7 +150,7 @@ public class DoiTraServiceImpl implements DoiTraService {
                 }
             }
 
-            auditService.logAction(actor, AuditAction.RETURN, "PhieuTraHang", maPhieuTra,
+            auditService.logAction(actor, AuditAction.RETURN, "PhieuTraHangDto", maPhieuTra,
                     "Lap phieu tra voi " + request.getItems().size() + " dong chi tiet.");
             return maPhieuTra;
         });
@@ -163,24 +163,24 @@ public class DoiTraServiceImpl implements DoiTraService {
             throw new BusinessException("Ma hoa don va ma khach hang khong duoc de trong.");
         }
         transactionManager.execute(() -> {
-            HoaDon hoaDon = doiTraRepository.findHoaDonGoc(maHoaDon.trim());
+            HoaDonDto hoaDon = doiTraRepository.findHoaDonGoc(maHoaDon.trim());
             if (hoaDon == null) {
                 throw new BusinessException("Khong tim thay hoa don de cap nhat khach hang.");
             }
             doiTraRepository.attachKhachHangToHoaDon(maHoaDon.trim(), maKhachHang.trim());
-            auditService.logAction(actor, AuditAction.UPDATE, "HoaDon", maHoaDon.trim(),
+            auditService.logAction(actor, AuditAction.UPDATE, "HoaDonDto", maHoaDon.trim(),
                     "Bo sung khach hang " + maKhachHang.trim() + " cho hoa don phuc vu doi/tra.");
             return null;
         });
     }
 
     @Override
-    public List<PhieuDoiHang> findAllPhieuDoi() {
+    public List<PhieuDoiHangDto> findAllPhieuDoi() {
         return doiTraRepository.findAllPhieuDoi();
     }
 
     @Override
-    public PhieuDoiHang findPhieuDoiById(String maPhieuDoi) {
+    public PhieuDoiHangDto findPhieuDoiById(String maPhieuDoi) {
         if (isBlank(maPhieuDoi)) {
             return null;
         }
@@ -188,7 +188,7 @@ public class DoiTraServiceImpl implements DoiTraService {
     }
 
     @Override
-    public List<ChiTietPhieuDoiHang> findChiTietPhieuDoiByMaPD(String maPhieuDoi) {
+    public List<ChiTietPhieuDoiHangDto> findChiTietPhieuDoiByMaPD(String maPhieuDoi) {
         if (isBlank(maPhieuDoi)) {
             return List.of();
         }
@@ -196,12 +196,12 @@ public class DoiTraServiceImpl implements DoiTraService {
     }
 
     @Override
-    public List<PhieuTraHang> findAllPhieuTra() {
+    public List<PhieuTraHangDto> findAllPhieuTra() {
         return doiTraRepository.findAllPhieuTra();
     }
 
     @Override
-    public PhieuTraHang findPhieuTraById(String maPhieuTra) {
+    public PhieuTraHangDto findPhieuTraById(String maPhieuTra) {
         if (isBlank(maPhieuTra)) {
             return null;
         }
@@ -209,15 +209,15 @@ public class DoiTraServiceImpl implements DoiTraService {
     }
 
     @Override
-    public List<ChiTietPhieuTraHang> findChiTietPhieuTraByMaPT(String maPhieuTra) {
+    public List<ChiTietPhieuTraHangDto> findChiTietPhieuTraByMaPT(String maPhieuTra) {
         if (isBlank(maPhieuTra)) {
             return List.of();
         }
         return doiTraRepository.findChiTietPhieuTraByMaPT(maPhieuTra.trim());
     }
 
-    private HoaDon requireEligibleHoaDon(String maHoaDon, boolean requireCustomer) {
-        HoaDon hoaDon = doiTraRepository.findHoaDonGoc(maHoaDon.trim());
+    private HoaDonDto requireEligibleHoaDon(String maHoaDon, boolean requireCustomer) {
+        HoaDonDto hoaDon = doiTraRepository.findHoaDonGoc(maHoaDon.trim());
         if (hoaDon == null) {
             throw new BusinessException("Khong tim thay hoa don goc.");
         }
@@ -234,7 +234,7 @@ public class DoiTraServiceImpl implements DoiTraService {
         return hoaDon;
     }
 
-    private ChiTietHoaDon requireInvoiceLine(List<ChiTietHoaDon> details, String maLoHang, String maDonViTinh) {
+    private ChiTietHoaDonDto requireInvoiceLine(List<ChiTietHoaDonDto> details, String maLoHang, String maDonViTinh) {
         return details.stream()
                 .filter(detail -> detail.getLoHang() != null
                         && detail.getLoHang().getMaLH() != null
@@ -342,7 +342,7 @@ public class DoiTraServiceImpl implements DoiTraService {
         return Math.max(1, (int) Math.round(value));
     }
 
-    private String safeTenThuoc(ChiTietHoaDon detail) {
+    private String safeTenThuoc(ChiTietHoaDonDto detail) {
         return detail != null && detail.getLoHang() != null && detail.getLoHang().getThuoc() != null
                 ? Objects.toString(detail.getLoHang().getThuoc().getTenThuoc(), "")
                 : "";

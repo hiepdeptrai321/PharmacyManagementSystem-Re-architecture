@@ -1,8 +1,8 @@
 package com.example.pharmacy.client.view.CN_DanhMuc.DMKhuyenMai;
 
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMKhuyenMai.ThemKhuyenMai_Ctrl;
-import com.example.pharmacy.common.model.LoaiKhuyenMai;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.LoaiKhuyenMaiDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -69,7 +69,7 @@ public class ThemKhuyenMai_GUI {
         GridPane.setColumnSpan(tfTenKM, 3);
 
         Label lblLoai = new Label("Loại KM:");
-        ComboBox<LoaiKhuyenMai> cbLoaiKM = new ComboBox<>();
+        ComboBox<LoaiKhuyenMaiDto> cbLoaiKM = new ComboBox<>();
         cbLoaiKM.setPrefHeight(25);
         cbLoaiKM.setPromptText("Chọn loại khuyến mãi");
         GridPane.setColumnIndex(lblLoai, 0);
@@ -161,7 +161,7 @@ public class ThemKhuyenMai_GUI {
 
         tbDSThuoc.getColumns().addAll(colMaThuoc, colTenThuoc, colSLAP, colSLTD, colDonVi, colXoaCT);
 
-        ListView<Thuoc_SanPham> listViewThuoc = new ListView<>();
+        ListView<Thuoc_SanPhamDto> listViewThuoc = new ListView<>();
         listViewThuoc.setLayoutX(72);
         listViewThuoc.setLayoutY(32);
         listViewThuoc.setPrefSize(853, 135);
@@ -207,7 +207,7 @@ public class ThemKhuyenMai_GUI {
 
         tbTangKem.getColumns().addAll(colMaQua, colTenQua, colSLTang, colDonViQua, colXoaQua);
 
-        ListView<Thuoc_SanPham> listViewQua = new ListView<>();
+        ListView<Thuoc_SanPhamDto> listViewQua = new ListView<>();
         listViewQua.setLayoutX(90);
         listViewQua.setLayoutY(33);
         listViewQua.setPrefSize(838, 135);

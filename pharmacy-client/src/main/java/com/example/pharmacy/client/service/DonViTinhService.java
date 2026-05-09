@@ -3,7 +3,7 @@ package com.example.pharmacy.client.service;
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.client.service.DonViTinhClientService;
 import com.example.pharmacy.client.service.RmiDonViTinhClientService;
-import com.example.pharmacy.common.model.DonViTinh;
+import com.example.pharmacy.common.model.DonViTinhDto;
 
 import java.util.List;
 
@@ -11,15 +11,15 @@ public class DonViTinhService {
     private final DonViTinhClientService donViTinhClientService =
             new RmiDonViTinhClientService(new RmiClientProvider());
 
-    public List<DonViTinh> findAll() {
+    public List<DonViTinhDto> findAll() {
         return donViTinhClientService.findAll();
     }
 
-    public DonViTinh findById(String maDvt) {
+    public DonViTinhDto findById(String maDvt) {
         return donViTinhClientService.findById(maDvt);
     }
 
-    public DonViTinh selectByTenDVT(String tenDvt) {
+    public DonViTinhDto selectByTenDVT(String tenDvt) {
         return donViTinhClientService.findByTenDonViTinh(tenDvt);
     }
 
@@ -27,11 +27,11 @@ public class DonViTinhService {
         return donViTinhClientService.generateNewMaDVT();
     }
 
-    public boolean insert(DonViTinh donViTinh) {
+    public boolean insert(DonViTinhDto donViTinh) {
         return donViTinhClientService.create(donViTinh);
     }
 
-    public boolean update(DonViTinh donViTinh) {
+    public boolean update(DonViTinhDto donViTinh) {
         return donViTinhClientService.update(donViTinh);
     }
 

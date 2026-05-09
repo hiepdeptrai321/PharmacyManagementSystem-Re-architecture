@@ -1,19 +1,19 @@
 package com.example.pharmacy.client.service;
 
-import com.example.pharmacy.common.model.KhachHang;
+import com.example.pharmacy.common.model.KhachHangDto;
 
 import java.util.List;
 
 public interface KhachHangClientService {
-    List<KhachHang> findAll();
+    List<KhachHangDto> findAll();
 
-    KhachHang findById(String maKhachHang);
+    KhachHangDto findById(String maKhachHang);
 
     String generateNewMaKH();
 
-    boolean create(KhachHang khachHang);
+    boolean create(KhachHangDto khachHang);
 
-    boolean save(KhachHang khachHang);
+    boolean save(KhachHangDto khachHang);
 
     boolean deleteById(String maKhachHang);
 }

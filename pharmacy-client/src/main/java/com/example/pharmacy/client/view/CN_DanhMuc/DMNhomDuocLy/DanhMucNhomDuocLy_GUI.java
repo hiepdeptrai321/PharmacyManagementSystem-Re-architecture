@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_DanhMuc.DMNhomDuocLy;
 
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMNhomDuocLy.DanhMucNhomDuocLy_Ctrl;
-import com.example.pharmacy.common.model.NhomDuocLy;
+import com.example.pharmacy.common.model.NhomDuocLyDto;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -105,26 +105,26 @@ public class DanhMucNhomDuocLy_GUI {
         btnTim.setStyle(" -fx-background-color: #0c81ff; -fx-text-fill: white;");
 
         // --- Bảng ---
-        TableView<NhomDuocLy> tbNhomDuocLy = new TableView<>();
+        TableView<NhomDuocLyDto> tbNhomDuocLy = new TableView<>();
         tbNhomDuocLy.setId("tablethuoc");
         tbNhomDuocLy.setLayoutX(12.0);
         tbNhomDuocLy.setLayoutY(102.0);
         tbNhomDuocLy.setPrefHeight(785.0);
         tbNhomDuocLy.setPrefWidth(1624.0);
 
-        TableColumn<NhomDuocLy, String> cotSTT = new TableColumn<>("STT");
+        TableColumn<NhomDuocLyDto, String> cotSTT = new TableColumn<>("STT");
         cotSTT.setPrefWidth(90.33);
         cotSTT.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<NhomDuocLy, String> cotMaNDL = new TableColumn<>("Mã nhóm dược lý");
+        TableColumn<NhomDuocLyDto, String> cotMaNDL = new TableColumn<>("Mã nhóm dược lý");
         cotMaNDL.setPrefWidth(260.67);
         cotMaNDL.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<NhomDuocLy, String> cotTenNDL = new TableColumn<>("Tên nhóm dược lý");
+        TableColumn<NhomDuocLyDto, String> cotTenNDL = new TableColumn<>("Tên nhóm dược lý");
         cotTenNDL.setMinWidth(0.0);
         cotTenNDL.setPrefWidth(1139.0);
 
-        TableColumn<NhomDuocLy, String> colChiTiet = new TableColumn<>();
+        TableColumn<NhomDuocLyDto, String> colChiTiet = new TableColumn<>();
         colChiTiet.setPrefWidth(117.0);
         colChiTiet.setStyle("-fx-alignment: CENTER;");
 
@@ -146,7 +146,7 @@ public class DanhMucNhomDuocLy_GUI {
         ctrl.cotSTT = cotSTT;
         ctrl.cotTenNDL = cotTenNDL;
         ctrl.colChiTiet = colChiTiet;
-        ctrl.tbNhomDuocLy = (TableView<NhomDuocLy>) tbNhomDuocLy;
+        ctrl.tbNhomDuocLy = (TableView<NhomDuocLyDto>) tbNhomDuocLy;
         ctrl.txtTimKiem = txtTimKiem;
 
         // --- Khởi chạy Controller ---

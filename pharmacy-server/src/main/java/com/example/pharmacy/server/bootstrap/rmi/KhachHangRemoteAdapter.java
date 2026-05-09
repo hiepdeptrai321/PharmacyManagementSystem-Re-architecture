@@ -2,7 +2,7 @@ package com.example.pharmacy.server.bootstrap.rmi;
 
 import com.example.pharmacy.common.remote.KhachHangRemote;
 import com.example.pharmacy.server.service.KhachHangService;
-import com.example.pharmacy.common.model.KhachHang;
+import com.example.pharmacy.common.model.KhachHangDto;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -18,12 +18,12 @@ public class KhachHangRemoteAdapter extends UnicastRemoteObject implements Khach
     }
 
     @Override
-    public List<KhachHang> findAll() throws RemoteException {
+    public List<KhachHangDto> findAll() throws RemoteException {
         return khachHangService.findAll();
     }
 
     @Override
-    public KhachHang findById(String maKhachHang) throws RemoteException {
+    public KhachHangDto findById(String maKhachHang) throws RemoteException {
         return khachHangService.findById(maKhachHang);
     }
 
@@ -33,12 +33,12 @@ public class KhachHangRemoteAdapter extends UnicastRemoteObject implements Khach
     }
 
     @Override
-    public boolean create(KhachHang khachHang) throws RemoteException {
+    public boolean create(KhachHangDto khachHang) throws RemoteException {
         return khachHangService.create(khachHang);
     }
 
     @Override
-    public boolean save(KhachHang khachHang) throws RemoteException {
+    public boolean save(KhachHangDto khachHang) throws RemoteException {
         return khachHangService.save(khachHang);
     }
 

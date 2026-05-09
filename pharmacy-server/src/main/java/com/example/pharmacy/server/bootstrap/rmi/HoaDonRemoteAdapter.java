@@ -5,8 +5,8 @@ import com.example.pharmacy.common.remote.HoaDonRemote;
 import com.example.pharmacy.common.request.CreateHoaDonRequest;
 import com.example.pharmacy.common.request.HoaDonSearchRequest;
 import com.example.pharmacy.server.service.HoaDonService;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.HoaDon;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.HoaDonDto;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -32,22 +32,22 @@ public class HoaDonRemoteAdapter extends UnicastRemoteObject implements HoaDonRe
     }
 
     @Override
-    public List<HoaDon> findAll() throws RemoteException {
+    public List<HoaDonDto> findAll() throws RemoteException {
         return hoaDonService.findAll();
     }
 
     @Override
-    public HoaDon findById(String maHoaDon) throws RemoteException {
+    public HoaDonDto findById(String maHoaDon) throws RemoteException {
         return hoaDonService.findById(maHoaDon);
     }
 
     @Override
-    public List<ChiTietHoaDon> findDetailsByMaHD(String maHoaDon) throws RemoteException {
+    public List<ChiTietHoaDonDto> findDetailsByMaHD(String maHoaDon) throws RemoteException {
         return hoaDonService.findDetailsByMaHD(maHoaDon);
     }
 
     @Override
-    public List<HoaDon> search(HoaDonSearchRequest request) throws RemoteException {
+    public List<HoaDonDto> search(HoaDonSearchRequest request) throws RemoteException {
         return hoaDonService.search(request);
     }
 }

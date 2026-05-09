@@ -6,8 +6,8 @@ import com.example.pharmacy.common.enums.BusinessCodeType;
 import com.example.pharmacy.common.exception.BusinessException;
 import com.example.pharmacy.server.repository.PhieuDatHangRepository;
 import com.example.pharmacy.server.transaction.TransactionManager;
-import com.example.pharmacy.common.model.ChiTietPhieuDatHang;
-import com.example.pharmacy.common.model.PhieuDatHang;
+import com.example.pharmacy.common.model.ChiTietPhieuDatHangDto;
+import com.example.pharmacy.common.model.PhieuDatHangDto;
 
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +36,7 @@ public class PhieuDatHangServiceImpl implements PhieuDatHangService {
     }
 
     @Override
-    public String create(PhieuDatHang phieuDatHang, List<ChiTietPhieuDatHang> details, UserContext actor) {
+    public String create(PhieuDatHangDto phieuDatHang, List<ChiTietPhieuDatHangDto> details, UserContext actor) {
         validate(phieuDatHang, details, actor);
         return transactionManager.execute(() -> {
             String maPhieuDat = isBlank(phieuDatHang.getMaPDat())
@@ -44,23 +44,23 @@ public class PhieuDatHangServiceImpl implements PhieuDatHangService {
                     : phieuDatHang.getMaPDat().trim();
 
             phieuDatHangRepository.insertHeader(phieuDatHang, maPhieuDat, actor.getEmployeeId());
-            for (ChiTietPhieuDatHang detail : details) {
+            for (ChiTietPhieuDatHangDto detail : details) {
                 phieuDatHangRepository.insertDetail(maPhieuDat, detail);
             }
 
-            auditService.logAction(actor, AuditAction.CREATE, "PhieuDatHang", maPhieuDat,
+            auditService.logAction(actor, AuditAction.CREATE, "PhieuDatHangDto", maPhieuDat,
                     "Tao phieu dat hang voi " + details.size() + " dong chi tiet.");
             return maPhieuDat;
         });
     }
 
     @Override
-    public List<PhieuDatHang> findAll() {
+    public List<PhieuDatHangDto> findAll() {
         return phieuDatHangRepository.findAll();
     }
 
     @Override
-    public PhieuDatHang findById(String maPhieuDat) {
+    public PhieuDatHangDto findById(String maPhieuDat) {
         if (isBlank(maPhieuDat)) {
             return null;
         }
@@ -68,7 +68,7 @@ public class PhieuDatHangServiceImpl implements PhieuDatHangService {
     }
 
     @Override
-    public List<ChiTietPhieuDatHang> findDetailsByMaPhieuDat(String maPhieuDat) {
+    public List<ChiTietPhieuDatHangDto> findDetailsByMaPhieuDat(String maPhieuDat) {
         if (isBlank(maPhieuDat)) {
             return List.of();
         }
@@ -86,18 +86,18 @@ public class PhieuDatHangServiceImpl implements PhieuDatHangService {
 
         return transactionManager.execute(() -> {
             boolean approved = phieuDatHangRepository.approve(maPhieuDat.trim());
-            auditService.logAction(actor, AuditAction.APPROVE, "PhieuDatHang", maPhieuDat.trim(),
+            auditService.logAction(actor, AuditAction.APPROVE, "PhieuDatHangDto", maPhieuDat.trim(),
                     approved ? "Duyet phieu dat hang thanh cong." : "Duyet phieu dat hang nhung chua du hang.");
             return approved;
         });
     }
 
-    private void validate(PhieuDatHang phieuDatHang, List<ChiTietPhieuDatHang> details, UserContext actor) {
+    private void validate(PhieuDatHangDto phieuDatHang, List<ChiTietPhieuDatHangDto> details, UserContext actor) {
         if (actor == null || isBlank(actor.getEmployeeId())) {
             throw new BusinessException("UserContext khong hop le de tao phieu dat hang.");
         }
         if (phieuDatHang == null) {
-            throw new BusinessException("PhieuDatHang khong duoc null.");
+            throw new BusinessException("PhieuDatHangDto khong duoc null.");
         }
         if (phieuDatHang.getKhachHang() == null || isBlank(phieuDatHang.getKhachHang().getMaKH())) {
             throw new BusinessException("Khach hang bat buoc phai co.");
@@ -105,7 +105,7 @@ public class PhieuDatHangServiceImpl implements PhieuDatHangService {
         if (details == null || details.isEmpty()) {
             throw new BusinessException("Phieu dat hang phai co it nhat mot dong chi tiet.");
         }
-        for (ChiTietPhieuDatHang detail : details) {
+        for (ChiTietPhieuDatHangDto detail : details) {
             if (detail == null || detail.getThuoc() == null || isBlank(detail.getThuoc().getMaThuoc()) || isBlank(detail.getDvt())) {
                 throw new BusinessException("Chi tiet phieu dat hang thieu ma thuoc hoac ma don vi tinh.");
             }

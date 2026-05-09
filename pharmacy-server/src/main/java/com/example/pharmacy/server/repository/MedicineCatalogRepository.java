@@ -1,12 +1,12 @@
 package com.example.pharmacy.server.repository;
 
 import com.example.pharmacy.common.request.CreateThuocRequest;
-import com.example.pharmacy.common.model.ChiTietHoatChat;
-import com.example.pharmacy.common.model.HoatChat;
-import com.example.pharmacy.common.model.LoaiHang;
-import com.example.pharmacy.common.model.ThuocTonKho;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietHoatChatDto;
+import com.example.pharmacy.common.model.HoatChatDto;
+import com.example.pharmacy.common.model.LoaiHangDto;
+import com.example.pharmacy.common.model.ThuocTonKhoDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 
 import java.util.List;
 
@@ -15,25 +15,25 @@ public interface MedicineCatalogRepository {
 
     void insertBaseUnit(String maThuoc, CreateThuocRequest request);
 
-    List<Thuoc_SanPham> findAllMedicines();
+    List<Thuoc_SanPhamDto> findAllMedicines();
 
-    List<LoaiHang> findAllLoaiHang();
+    List<LoaiHangDto> findAllLoaiHang();
 
     List<String> findAllLoaiHangNames();
 
-    List<HoatChat> findAllHoatChat();
+    List<HoatChatDto> findAllHoatChat();
 
-    List<ChiTietHoatChat> findChiTietHoatChatByMaThuoc(String maThuoc);
+    List<ChiTietHoatChatDto> findChiTietHoatChatByMaThuoc(String maThuoc);
 
-    boolean insertMedicine(Thuoc_SanPham thuoc);
+    boolean insertMedicine(Thuoc_SanPhamDto thuoc);
 
     void insertBaseUnit(String maThuoc, String maDonViTinhCoBan);
 
-    void insertChiTietHoatChat(String maThuoc, ChiTietHoatChat chiTietHoatChat);
+    void insertChiTietHoatChat(String maThuoc, ChiTietHoatChatDto chiTietHoatChat);
 
-    boolean updateMedicine(Thuoc_SanPham thuoc);
+    boolean updateMedicine(Thuoc_SanPhamDto thuoc);
 
-    void updateChiTietHoatChat(String maThuoc, ChiTietHoatChat chiTietHoatChat);
+    void updateChiTietHoatChat(String maThuoc, ChiTietHoatChatDto chiTietHoatChat);
 
     void deleteChiTietHoatChat(String maThuoc, String maHoatChat);
 
@@ -43,7 +43,7 @@ public interface MedicineCatalogRepository {
 
     String getTenDonViTinhCoBan(String maThuoc);
 
-    List<ThuocTonKho> getThuocTonKho();
+    List<ThuocTonKhoDto> getThuocTonKho();
 
-    List<Thuoc_SP_TheoLo> findAllLots();
+    List<Thuoc_SP_TheoLoDto> findAllLots();
 }

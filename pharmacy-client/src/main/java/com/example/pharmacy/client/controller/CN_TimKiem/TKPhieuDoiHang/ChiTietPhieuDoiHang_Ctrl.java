@@ -1,8 +1,8 @@
 package com.example.pharmacy.client.controller.CN_TimKiem.TKPhieuDoiHang;
 
 import com.example.pharmacy.client.TienIch.DoiNgay;
-import com.example.pharmacy.common.model.ChiTietPhieuDoiHang;
-import com.example.pharmacy.common.model.PhieuDoiHang;
+import com.example.pharmacy.common.model.ChiTietPhieuDoiHangDto;
+import com.example.pharmacy.common.model.PhieuDoiHangDto;
 import com.example.pharmacy.client.service.DoiTraService;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.font.constants.StandardFonts;
@@ -42,21 +42,21 @@ public class ChiTietPhieuDoiHang_Ctrl extends Application {
 
     public Button btnDong;
     public Button btnInPhieuDoi;
-    public TableColumn<ChiTietPhieuDoiHang, String> colLyDo;
-    public TableColumn<ChiTietPhieuDoiHang, String> colSTT;
-    public TableColumn<ChiTietPhieuDoiHang, String> colSoLuong;
-    public TableColumn<ChiTietPhieuDoiHang, String> colDonVi;
-    public TableColumn<ChiTietPhieuDoiHang, String> colTenSP;
+    public TableColumn<ChiTietPhieuDoiHangDto, String> colLyDo;
+    public TableColumn<ChiTietPhieuDoiHangDto, String> colSTT;
+    public TableColumn<ChiTietPhieuDoiHangDto, String> colSoLuong;
+    public TableColumn<ChiTietPhieuDoiHangDto, String> colDonVi;
+    public TableColumn<ChiTietPhieuDoiHangDto, String> colTenSP;
     public Label lblGhiChuValue;
     public Label lblMaPhieuDoiValue;
     public Label lblNgayLapValue;
     public Label lblSDTKhachHangValue;
     public Label lblTenKhachHangValue;
     public Label lblTenNhanVienValue;
-    public TableView<ChiTietPhieuDoiHang> tblChiTietPhieuDoi;
+    public TableView<ChiTietPhieuDoiHangDto> tblChiTietPhieuDoi;
 
     private final DoiTraService doiTraService = new DoiTraService();
-    private PhieuDoiHang phieuDoiHang;
+    private PhieuDoiHangDto phieuDoiHang;
     private boolean initialized;
 
     @Override
@@ -77,7 +77,7 @@ public class ChiTietPhieuDoiHang_Ctrl extends Application {
         btnInPhieuDoi.setOnAction(e -> xuLyXuatPDFDoiHang());
     }
 
-    public void setPhieuDoiHang(PhieuDoiHang phieuDoiHang) {
+    public void setPhieuDoiHang(PhieuDoiHangDto phieuDoiHang) {
         this.phieuDoiHang = phieuDoiHang;
         hienThiThongTin();
     }
@@ -94,7 +94,7 @@ public class ChiTietPhieuDoiHang_Ctrl extends Application {
         lblSDTKhachHangValue.setText(phieuDoiHang.getKhachHang() == null ? "" : safe(phieuDoiHang.getKhachHang().getSdt()));
         lblGhiChuValue.setText(safe(phieuDoiHang.getGhiChu()));
 
-        List<ChiTietPhieuDoiHang> details = doiTraService.findChiTietPhieuDoiByMaPD(phieuDoiHang.getMaPD());
+        List<ChiTietPhieuDoiHangDto> details = doiTraService.findChiTietPhieuDoiByMaPD(phieuDoiHang.getMaPD());
         tblChiTietPhieuDoi.getItems().setAll(details);
 
         colSTT.setCellValueFactory(cd -> new SimpleStringProperty(String.valueOf(tblChiTietPhieuDoi.getItems().indexOf(cd.getValue()) + 1)));
@@ -176,7 +176,7 @@ public class ChiTietPhieuDoiHang_Ctrl extends Application {
         addHeader(table, "Ly do doi");
 
         int stt = 1;
-        for (ChiTietPhieuDoiHang item : tblChiTietPhieuDoi.getItems()) {
+        for (ChiTietPhieuDoiHangDto item : tblChiTietPhieuDoi.getItems()) {
             table.addCell(String.valueOf(stt++));
             table.addCell(item.getThuoc() == null ? "" : safe(item.getThuoc().getTenThuoc()));
             table.addCell(String.valueOf(item.getSoLuong())).setTextAlignment(TextAlignment.CENTER);

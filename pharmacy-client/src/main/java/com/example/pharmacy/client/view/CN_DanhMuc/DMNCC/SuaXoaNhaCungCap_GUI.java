@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_DanhMuc.DMNCC;
 
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMNhaCungCap.SuaXoaNhaCungCap_Ctrl;
-import com.example.pharmacy.common.model.NhaCungCap;
+import com.example.pharmacy.common.model.NhaCungCapDto;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -54,7 +54,7 @@ public class SuaXoaNhaCungCap_GUI extends Application {
     }
 
     /** Inject controller + nạp sẵn dữ liệu NCC, rồi hiển thị. */
-    public void showWithController(Stage stage, SuaXoaNhaCungCap_Ctrl ctrl, NhaCungCap ncc) {
+    public void showWithController(Stage stage, SuaXoaNhaCungCap_Ctrl ctrl, NhaCungCapDto ncc) {
         Pane root = buildUI();
         injectToController(ctrl);
         wireHandlers(ctrl);

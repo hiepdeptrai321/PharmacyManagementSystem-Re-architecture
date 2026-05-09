@@ -12,12 +12,12 @@ import java.sql.ResultSet;
 public class JdbcEmployeeWriteRepository extends AbstractJdbcRepository implements EmployeeWriteRepository {
     private static final String EXISTS_BY_USERNAME_SQL = """
             SELECT 1
-            FROM NhanVien
+            FROM NhanVienDto
             WHERE TaiKhoan = ?
             LIMIT 1
             """;
     private static final String INSERT_EMPLOYEE_SQL = """
-            INSERT INTO NhanVien (
+            INSERT INTO NhanVienDto (
                 MaNV, TenNV, SDT, Email, NgaySinh, GioiTinh, DiaChi, VaiTro,
                 TrangThai, TaiKhoan, MatKhau, NgayVaoLam, NgayKetThuc, TrangThaiXoa
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)

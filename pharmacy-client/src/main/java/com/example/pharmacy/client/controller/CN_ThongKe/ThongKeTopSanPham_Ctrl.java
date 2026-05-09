@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.controller.CN_ThongKe;
 
-import com.example.pharmacy.common.model.ThongKeTopSanPham;
+import com.example.pharmacy.common.model.ThongKeTopSanPhamDto;
 import com.example.pharmacy.client.service.ThongKeService;
 import com.example.pharmacy.client.view.CN_ThongKe.ThongKeTopSanPham_GUI;
 
@@ -47,13 +47,13 @@ public class ThongKeTopSanPham_Ctrl extends Application {
     public BarChart<String, Number> barChart;
     public CategoryAxis xAxis;
     public NumberAxis yAxis;
-    public TableView<ThongKeTopSanPham> table;
-    public TableColumn<ThongKeTopSanPham, Integer> colSTT, colSL;
-    public TableColumn<ThongKeTopSanPham, String> colMa, colTen, colDVT;
-    public TableColumn<ThongKeTopSanPham, Double> colTien;
+    public TableView<ThongKeTopSanPhamDto> table;
+    public TableColumn<ThongKeTopSanPhamDto, Integer> colSTT, colSL;
+    public TableColumn<ThongKeTopSanPhamDto, String> colMa, colTen, colDVT;
+    public TableColumn<ThongKeTopSanPhamDto, Double> colTien;
 
     private final ThongKeService thongKeService = new ThongKeService();
-    private ObservableList<ThongKeTopSanPham> listData = FXCollections.observableArrayList();
+    private ObservableList<ThongKeTopSanPhamDto> listData = FXCollections.observableArrayList();
     private DecimalFormat moneyFormat = new DecimalFormat("#,##0 VNĐ");
     public static final String FONT_PATH = "C:/Windows/Fonts/arial.ttf";
 
@@ -155,7 +155,7 @@ public class ThongKeTopSanPham_Ctrl extends Application {
     private void updateCharts(boolean useQuantity) {
         // 1. Tính tổng trước để làm PieChart
         double totalValueTemp = 0;
-        for (ThongKeTopSanPham sp : listData) {
+        for (ThongKeTopSanPhamDto sp : listData) {
             totalValueTemp += useQuantity ? sp.getSoLuong() : sp.getTongTien();
         }
         final double totalValue = totalValueTemp;
@@ -179,7 +179,7 @@ public class ThongKeTopSanPham_Ctrl extends Application {
             int limit = Math.min(listData.size(), 5); // Chỉ lấy Top 5 vẽ biểu đồ
 
             for (int i = 0; i < limit; i++) {
-                ThongKeTopSanPham sp = listData.get(i);
+                ThongKeTopSanPhamDto sp = listData.get(i);
                 double value = useQuantity ? sp.getSoLuong() : sp.getTongTien();
 
                 // Dữ liệu PieChart
@@ -267,7 +267,7 @@ public class ThongKeTopSanPham_Ctrl extends Application {
                 cell.setCellStyle(headerStyle);
             }
             int rowNum = 1;
-            for (ThongKeTopSanPham sp : listData) {
+            for (ThongKeTopSanPhamDto sp : listData) {
                 Row row = sheet.createRow(rowNum++);
                 row.createCell(0).setCellValue(sp.getStt());
                 row.createCell(1).setCellValue(sp.getMaThuoc());
@@ -299,7 +299,7 @@ public class ThongKeTopSanPham_Ctrl extends Application {
         String[] headers = {"Hạng", "Mã Thuốc", "Tên Thuốc", "ĐVT", "Số Lượng", "Doanh Thu"};
         for (String h : headers) tablePDF.addHeaderCell(new com.itextpdf.layout.element.Cell().add(new Paragraph(h).setBold()));
 
-        for (ThongKeTopSanPham sp : listData) {
+        for (ThongKeTopSanPhamDto sp : listData) {
             tablePDF.addCell(String.valueOf(sp.getStt()));
             tablePDF.addCell(sp.getMaThuoc());
             tablePDF.addCell(sp.getTenThuoc());

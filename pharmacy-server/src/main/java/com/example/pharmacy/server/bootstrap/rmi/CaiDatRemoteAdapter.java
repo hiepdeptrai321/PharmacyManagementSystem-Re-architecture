@@ -2,7 +2,7 @@ package com.example.pharmacy.server.bootstrap.rmi;
 
 import com.example.pharmacy.common.remote.CaiDatRemote;
 import com.example.pharmacy.server.service.CaiDatService;
-import com.example.pharmacy.common.model.CaiDat;
+import com.example.pharmacy.common.model.CaiDatDto;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -18,12 +18,12 @@ public class CaiDatRemoteAdapter extends UnicastRemoteObject implements CaiDatRe
     }
 
     @Override
-    public List<CaiDat> findAll() throws RemoteException {
+    public List<CaiDatDto> findAll() throws RemoteException {
         return caiDatService.findAll();
     }
 
     @Override
-    public boolean update(CaiDat caiDat) throws RemoteException {
+    public boolean update(CaiDatDto caiDat) throws RemoteException {
         return caiDatService.update(caiDat);
     }
 }

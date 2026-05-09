@@ -5,11 +5,11 @@ import com.example.pharmacy.client.TienIch.VNDFormatter;
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMKhachHang.ThemKhachHang_Ctrl;
 import com.example.pharmacy.client.controller.CN_TimKiem.TKKhachHang.TimKiemKhachHangTrongHD_Ctrl;
 import com.example.pharmacy.client.controller.CN_TimKiem.TKPhieuDatHang.ChiTietPhieuDatHang_Ctrl;
-import com.example.pharmacy.common.model.ChiTietDonViTinh;
-import com.example.pharmacy.common.model.ChiTietPhieuDatHang;
-import com.example.pharmacy.common.model.KhachHang;
-import com.example.pharmacy.common.model.PhieuDatHang;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietDonViTinhDto;
+import com.example.pharmacy.common.model.ChiTietPhieuDatHangDto;
+import com.example.pharmacy.common.model.KhachHangDto;
+import com.example.pharmacy.common.model.PhieuDatHangDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import com.example.pharmacy.client.service.PhieuDatHangService;
 import com.example.pharmacy.client.service.ThuocService;
 import com.example.pharmacy.client.session.SessionContext;
@@ -58,14 +58,14 @@ public class LapPhieuDatHang_Ctrl {
     public Button btnDatHangVaIn;
     public Pane searchPane;
     public TextField tfTimSanPham;
-    public TableView<ChiTietPhieuDatHang> tbSanPham;
-    public TableColumn<ChiTietPhieuDatHang, String> colSTT;
-    public TableColumn<ChiTietPhieuDatHang, String> colTenSP;
-    public TableColumn<ChiTietPhieuDatHang, String> colSoLuong;
-    public TableColumn<ChiTietPhieuDatHang, String> colDonVi;
-    public TableColumn<ChiTietPhieuDatHang, String> colDonGia;
-    public TableColumn<ChiTietPhieuDatHang, String> colThanhTien;
-    public TableColumn<ChiTietPhieuDatHang, String> colXoa;
+    public TableView<ChiTietPhieuDatHangDto> tbSanPham;
+    public TableColumn<ChiTietPhieuDatHangDto, String> colSTT;
+    public TableColumn<ChiTietPhieuDatHangDto, String> colTenSP;
+    public TableColumn<ChiTietPhieuDatHangDto, String> colSoLuong;
+    public TableColumn<ChiTietPhieuDatHangDto, String> colDonVi;
+    public TableColumn<ChiTietPhieuDatHangDto, String> colDonGia;
+    public TableColumn<ChiTietPhieuDatHangDto, String> colThanhTien;
+    public TableColumn<ChiTietPhieuDatHangDto, String> colXoa;
     public Pane infoPane;
     public TextField tfMa;
     public DatePicker dpNgayLap;
@@ -84,12 +84,12 @@ public class LapPhieuDatHang_Ctrl {
     public Button btnTimKH;
     public Button btnThemKH;
 
-    public KhachHang khachHang;
+    public KhachHangDto khachHang;
 
     private final ContextMenu goiYMenu = new ContextMenu();
     private final PauseTransition pause = new PauseTransition(Duration.millis(250));
-    private final ObservableList<ChiTietPhieuDatHang> dsChiTietPD = FXCollections.observableArrayList();
-    private final IdentityHashMap<ChiTietPhieuDatHang, ChiTietDonViTinh> dvtTheoDong = new IdentityHashMap<>();
+    private final ObservableList<ChiTietPhieuDatHangDto> dsChiTietPD = FXCollections.observableArrayList();
+    private final IdentityHashMap<ChiTietPhieuDatHangDto, ChiTietDonViTinhDto> dvtTheoDong = new IdentityHashMap<>();
     private final ThuocService thuocService = new ThuocService();
     private final PhieuDatHangService phieuDatHangService = new PhieuDatHangService();
     private final VNDFormatter vndFormatter = new VNDFormatter();
@@ -125,7 +125,7 @@ public class LapPhieuDatHang_Ctrl {
         initTienCocEvents();
         xuLyGoiYSanPham();
 
-        dsChiTietPD.addListener((ListChangeListener<ChiTietPhieuDatHang>) change -> capNhatTongTienPhieuDat());
+        dsChiTietPD.addListener((ListChangeListener<ChiTietPhieuDatHangDto>) change -> capNhatTongTienPhieuDat());
     }
 
     public void loadCbLoaiDon() {
@@ -170,7 +170,7 @@ public class LapPhieuDatHang_Ctrl {
             return;
         }
 
-        List<Thuoc_SanPham> results = thuocService.searchByKeyword(tuKhoa).stream().limit(5).toList();
+        List<Thuoc_SanPhamDto> results = thuocService.searchByKeyword(tuKhoa).stream().limit(5).toList();
         if (results.isEmpty()) {
             goiYMenu.hide();
             return;
@@ -178,7 +178,7 @@ public class LapPhieuDatHang_Ctrl {
 
         goiYMenu.getItems().clear();
         goiYMenu.setStyle("-fx-min-width: 500; -fx-pref-width: 500;");
-        for (Thuoc_SanPham sp : results) {
+        for (Thuoc_SanPhamDto sp : results) {
             String tenDvt = sp.getTenDVTCoBan() == null ? "" : sp.getTenDVTCoBan();
             Label nameLbl = new Label(sp.getTenThuoc());
             nameLbl.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
@@ -203,18 +203,18 @@ public class LapPhieuDatHang_Ctrl {
         }
     }
 
-    private void themVaoBang(Thuoc_SanPham sp, String tenDvtChon) {
+    private void themVaoBang(Thuoc_SanPhamDto sp, String tenDvtChon) {
         if (sp == null) {
             return;
         }
-        ChiTietDonViTinh selected = chonDonViTheoTen(sp, tenDvtChon);
+        ChiTietDonViTinhDto selected = chonDonViTheoTen(sp, tenDvtChon);
         if (selected == null || selected.getDvt() == null) {
             showAlert(Alert.AlertType.WARNING, "Can bo sung don vi tinh co ban cho thuoc truoc khi dat hang.");
             return;
         }
 
-        for (ChiTietPhieuDatHang row : dsChiTietPD) {
-            ChiTietDonViTinh currentDvt = dvtTheoDong.get(row);
+        for (ChiTietPhieuDatHangDto row : dsChiTietPD) {
+            ChiTietDonViTinhDto currentDvt = dvtTheoDong.get(row);
             if (row.getThuoc() != null
                     && sp.getMaThuoc().equals(row.getThuoc().getMaThuoc())
                     && currentDvt != null
@@ -227,7 +227,7 @@ public class LapPhieuDatHang_Ctrl {
             }
         }
 
-        ChiTietPhieuDatHang detail = new ChiTietPhieuDatHang();
+        ChiTietPhieuDatHangDto detail = new ChiTietPhieuDatHangDto();
         detail.setThuoc(sp);
         detail.setSoLuong(1);
         detail.setDonGia(selected.getGiaBan());
@@ -239,18 +239,18 @@ public class LapPhieuDatHang_Ctrl {
         capNhatTongTienPhieuDat();
     }
 
-    private ChiTietDonViTinh chonDonViTheoTen(Thuoc_SanPham sp, String tenDvt) {
+    private ChiTietDonViTinhDto chonDonViTheoTen(Thuoc_SanPhamDto sp, String tenDvt) {
         if (sp == null || sp.getDsCTDVT() == null || sp.getDsCTDVT().isEmpty()) {
             return null;
         }
         if (tenDvt != null && !tenDvt.isBlank()) {
-            for (ChiTietDonViTinh ct : sp.getDsCTDVT()) {
+            for (ChiTietDonViTinhDto ct : sp.getDsCTDVT()) {
                 if (ct.getDvt() != null && tenDvt.equalsIgnoreCase(ct.getDvt().getTenDonViTinh())) {
                     return ct;
                 }
             }
         }
-        for (ChiTietDonViTinh ct : sp.getDsCTDVT()) {
+        for (ChiTietDonViTinhDto ct : sp.getDsCTDVT()) {
             if (ct.isDonViCoBan()) {
                 return ct;
             }
@@ -293,7 +293,7 @@ public class LapPhieuDatHang_Ctrl {
             }
 
             private void adjust(int delta) {
-                ChiTietPhieuDatHang row = getCurrentRow();
+                ChiTietPhieuDatHangDto row = getCurrentRow();
                 if (row == null) {
                     return;
                 }
@@ -304,7 +304,7 @@ public class LapPhieuDatHang_Ctrl {
             }
 
             private void commitFromText() {
-                ChiTietPhieuDatHang row = getCurrentRow();
+                ChiTietPhieuDatHangDto row = getCurrentRow();
                 if (row == null) {
                     return;
                 }
@@ -318,7 +318,7 @@ public class LapPhieuDatHang_Ctrl {
                 capNhatTongTienPhieuDat();
             }
 
-            private ChiTietPhieuDatHang getCurrentRow() {
+            private ChiTietPhieuDatHangDto getCurrentRow() {
                 return getIndex() >= 0 && getIndex() < getTableView().getItems().size()
                         ? getTableView().getItems().get(getIndex())
                         : null;
@@ -330,7 +330,7 @@ public class LapPhieuDatHang_Ctrl {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    ChiTietPhieuDatHang row = getCurrentRow();
+                    ChiTietPhieuDatHangDto row = getCurrentRow();
                     tf.setText(row == null ? "1" : String.valueOf(row.getSoLuong()));
                     setGraphic(box);
                     setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
@@ -347,7 +347,7 @@ public class LapPhieuDatHang_Ctrl {
                     if (getIndex() < 0 || getIndex() >= tbSanPham.getItems().size()) {
                         return;
                     }
-                    ChiTietPhieuDatHang row = tbSanPham.getItems().get(getIndex());
+                    ChiTietPhieuDatHangDto row = tbSanPham.getItems().get(getIndex());
                     dsChiTietPD.remove(row);
                     dvtTheoDong.remove(row);
                     capNhatTongTienPhieuDat();
@@ -363,15 +363,15 @@ public class LapPhieuDatHang_Ctrl {
         });
     }
 
-    private String layTenDonVi(ChiTietPhieuDatHang row) {
-        ChiTietDonViTinh ct = dvtTheoDong.get(row);
+    private String layTenDonVi(ChiTietPhieuDatHangDto row) {
+        ChiTietDonViTinhDto ct = dvtTheoDong.get(row);
         if (ct != null && ct.getDvt() != null) {
             return ct.getDvt().getTenDonViTinh();
         }
         return "";
     }
 
-    private double tinhThanhTien(ChiTietPhieuDatHang row) {
+    private double tinhThanhTien(ChiTietPhieuDatHangDto row) {
         double thanhTien = row.getSoLuong() * row.getDonGia();
         if (row.getGiamGia() > 0) {
             thanhTien = thanhTien - row.getGiamGia();
@@ -419,7 +419,7 @@ public class LapPhieuDatHang_Ctrl {
 
     private void capNhatTongTienPhieuDat() {
         BigDecimal tongTienHang = BigDecimal.ZERO;
-        for (ChiTietPhieuDatHang row : dsChiTietPD) {
+        for (ChiTietPhieuDatHangDto row : dsChiTietPD) {
             tongTienHang = tongTienHang.add(BigDecimal.valueOf(tinhThanhTien(row)));
         }
         BigDecimal vat = tongTienHang.multiply(new BigDecimal("0.05")).setScale(0, RoundingMode.HALF_UP);
@@ -447,7 +447,7 @@ public class LapPhieuDatHang_Ctrl {
             return;
         }
 
-        PhieuDatHang phieuDatHang = new PhieuDatHang();
+        PhieuDatHangDto phieuDatHang = new PhieuDatHangDto();
         phieuDatHang.setMaPDat(tfMa == null ? null : tfMa.getText());
         phieuDatHang.setNgayLap(Timestamp.valueOf((dpNgayLap == null || dpNgayLap.getValue() == null
                 ? LocalDate.now()
@@ -457,7 +457,7 @@ public class LapPhieuDatHang_Ctrl {
         phieuDatHang.setKhachHang(khachHang);
 
         String maPhieuDat = phieuDatHangService.create(phieuDatHang, List.copyOf(dsChiTietPD), SessionContext.requireCurrentUser());
-        PhieuDatHang saved = phieuDatHangService.findById(maPhieuDat);
+        PhieuDatHangDto saved = phieuDatHangService.findById(maPhieuDat);
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Thanh cong");

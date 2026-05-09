@@ -8,8 +8,8 @@ import com.example.pharmacy.common.request.PhieuNhapItemRequest;
 import com.example.pharmacy.common.request.PhieuNhapRequest;
 import com.example.pharmacy.server.repository.PurchaseOrderRepository;
 import com.example.pharmacy.server.transaction.TransactionManager;
-import com.example.pharmacy.common.model.ChiTietPhieuNhap;
-import com.example.pharmacy.common.model.PhieuNhap;
+import com.example.pharmacy.common.model.ChiTietPhieuNhapDto;
+import com.example.pharmacy.common.model.PhieuNhapDto;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -60,19 +60,19 @@ public class PhieuNhapServiceImpl implements PhieuNhapService {
                 purchaseOrderRepository.updatePricing(item.getMaThuoc(), item.getMaDvt(), item);
             }
 
-            auditService.logAction(actor, AuditAction.IMPORT, "PhieuNhap", maPhieuNhap,
+            auditService.logAction(actor, AuditAction.IMPORT, "PhieuNhapDto", maPhieuNhap,
                     "Tao phieu nhap voi " + request.getItems().size() + " dong chi tiet.");
             return maPhieuNhap;
         });
     }
 
     @Override
-    public List<PhieuNhap> findAll() {
+    public List<PhieuNhapDto> findAll() {
         return purchaseOrderRepository.findAll();
     }
 
     @Override
-    public PhieuNhap findById(String maPhieuNhap) {
+    public PhieuNhapDto findById(String maPhieuNhap) {
         if (isBlank(maPhieuNhap)) {
             return null;
         }
@@ -80,7 +80,7 @@ public class PhieuNhapServiceImpl implements PhieuNhapService {
     }
 
     @Override
-    public List<ChiTietPhieuNhap> findDetailsByMaPhieuNhap(String maPhieuNhap) {
+    public List<ChiTietPhieuNhapDto> findDetailsByMaPhieuNhap(String maPhieuNhap) {
         if (isBlank(maPhieuNhap)) {
             return List.of();
         }

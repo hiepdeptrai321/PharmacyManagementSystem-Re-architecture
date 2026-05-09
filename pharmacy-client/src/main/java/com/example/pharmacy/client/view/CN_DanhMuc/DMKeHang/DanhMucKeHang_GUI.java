@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_DanhMuc.DMKeHang;
 
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMKeHang.DanhMucKeHang_Ctrl;
-import com.example.pharmacy.common.model.KeHang;
+import com.example.pharmacy.common.model.KeHangDto;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -104,26 +104,26 @@ public class DanhMucKeHang_GUI {
         btnTim.setStyle(" -fx-background-color: #0c81ff; -fx-text-fill: white;");
 
         // --- Bảng ---
-        TableView<KeHang> tblKeHang = new TableView<>();
+        TableView<KeHangDto> tblKeHang = new TableView<>();
         tblKeHang.setId("tablethuoc");
         tblKeHang.setLayoutX(12.0);
         tblKeHang.setLayoutY(102.0);
         tblKeHang.setPrefHeight(785.0);
         tblKeHang.setPrefWidth(1624.0);
 
-        TableColumn<KeHang, String> cotSTT = new TableColumn<>("STT");
+        TableColumn<KeHangDto, String> cotSTT = new TableColumn<>("STT");
         cotSTT.setPrefWidth(90.33);
         cotSTT.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<KeHang, String> cotMaKe = new TableColumn<>("Mã Kệ");
+        TableColumn<KeHangDto, String> cotMaKe = new TableColumn<>("Mã Kệ");
         cotMaKe.setPrefWidth(260.67);
         cotMaKe.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<KeHang, String> cotTenKe = new TableColumn<>("Tên Kệ");
+        TableColumn<KeHangDto, String> cotTenKe = new TableColumn<>("Tên Kệ");
         cotTenKe.setMinWidth(0.0);
         cotTenKe.setPrefWidth(1143.0);
 
-        TableColumn<KeHang, String> colChiTiet = new TableColumn<>();
+        TableColumn<KeHangDto, String> colChiTiet = new TableColumn<>();
         colChiTiet.setPrefWidth(111.0);
         colChiTiet.setStyle("-fx-alignment: CENTER;");
 
@@ -144,7 +144,7 @@ public class DanhMucKeHang_GUI {
         ctrl.cotSTT = cotSTT;
         ctrl.cotTenKe = cotTenKe;
         ctrl.colChiTiet = colChiTiet;
-        ctrl.tblKeHang = (TableView<KeHang>) tblKeHang;
+        ctrl.tblKeHang = (TableView<KeHangDto>) tblKeHang;
         ctrl.txtTimKiem = txtTimKiem;
 
         // --- BƯỚC 2: Khởi chạy Controller ---

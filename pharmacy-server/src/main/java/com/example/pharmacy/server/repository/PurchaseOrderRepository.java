@@ -2,8 +2,8 @@ package com.example.pharmacy.server.repository;
 
 import com.example.pharmacy.common.request.PhieuNhapItemRequest;
 import com.example.pharmacy.common.request.PhieuNhapRequest;
-import com.example.pharmacy.common.model.ChiTietPhieuNhap;
-import com.example.pharmacy.common.model.PhieuNhap;
+import com.example.pharmacy.common.model.ChiTietPhieuNhapDto;
+import com.example.pharmacy.common.model.PhieuNhapDto;
 
 import java.util.List;
 
@@ -16,11 +16,11 @@ public interface PurchaseOrderRepository {
 
     void updatePricing(String maThuoc, String maDvt, PhieuNhapItemRequest item);
 
-    List<PhieuNhap> findAll();
+    List<PhieuNhapDto> findAll();
 
-    PhieuNhap findById(String maPhieuNhap);
+    PhieuNhapDto findById(String maPhieuNhap);
 
-    List<ChiTietPhieuNhap> findDetailsByMaPhieuNhap(String maPhieuNhap);
+    List<ChiTietPhieuNhapDto> findDetailsByMaPhieuNhap(String maPhieuNhap);
 
     long findMaxLotNumber();
 }

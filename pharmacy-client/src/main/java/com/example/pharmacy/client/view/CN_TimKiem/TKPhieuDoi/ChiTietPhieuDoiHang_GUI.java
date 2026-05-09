@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_TimKiem.TKPhieuDoi;
 
 import com.example.pharmacy.client.controller.CN_TimKiem.TKPhieuDoiHang.ChiTietPhieuDoiHang_Ctrl;
-import com.example.pharmacy.common.model.ChiTietPhieuDoiHang;
+import com.example.pharmacy.common.model.ChiTietPhieuDoiHangDto;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -41,26 +41,26 @@ public class ChiTietPhieuDoiHang_GUI {
         lblTitleLeft.setLayoutX(9);
         lblTitleLeft.setLayoutY(43);
 
-        TableView<ChiTietPhieuDoiHang> tblChiTietPhieuDoi = new TableView<>();
+        TableView<ChiTietPhieuDoiHangDto> tblChiTietPhieuDoi = new TableView<>();
         tblChiTietPhieuDoi.setId("tblChiTietPhieuDoi");
         tblChiTietPhieuDoi.setLayoutX(11);
         tblChiTietPhieuDoi.setLayoutY(73);
         tblChiTietPhieuDoi.setPrefSize(1134, 806);
         tblChiTietPhieuDoi.getStyleClass().add("main-table");
 
-        TableColumn<ChiTietPhieuDoiHang, String> colSTT = new TableColumn<>("STT");
+        TableColumn<ChiTietPhieuDoiHangDto, String> colSTT = new TableColumn<>("STT");
         colSTT.setPrefWidth(73.66);
 
-        TableColumn<ChiTietPhieuDoiHang, String> colTenSP = new TableColumn<>("Tên sản phẩm/Hoạt chất");
+        TableColumn<ChiTietPhieuDoiHangDto, String> colTenSP = new TableColumn<>("Tên sản phẩm/Hoạt chất");
         colTenSP.setPrefWidth(475);
 
-        TableColumn<ChiTietPhieuDoiHang, String> colSoLuong = new TableColumn<>("Số lượng đổi");
+        TableColumn<ChiTietPhieuDoiHangDto, String> colSoLuong = new TableColumn<>("Số lượng đổi");
         colSoLuong.setPrefWidth(145.66);
 
-        TableColumn<ChiTietPhieuDoiHang, String> colDonVi = new TableColumn<>("Đơn vị");
+        TableColumn<ChiTietPhieuDoiHangDto, String> colDonVi = new TableColumn<>("Đơn vị");
         colDonVi.setPrefWidth(113.66);
 
-        TableColumn<ChiTietPhieuDoiHang, String> colLyDo = new TableColumn<>("Lý do đổi");
+        TableColumn<ChiTietPhieuDoiHangDto, String> colLyDo = new TableColumn<>("Lý do đổi");
         colLyDo.setPrefWidth(323.33);
 
         tblChiTietPhieuDoi.getColumns().addAll(colSTT, colTenSP, colSoLuong, colDonVi, colLyDo);

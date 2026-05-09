@@ -1,8 +1,8 @@
 package com.example.pharmacy.client.controller.CN_TimKiem.TKThuoc;
 
 import com.example.pharmacy.client.TienIch.LoadingOverlay;
-import com.example.pharmacy.common.model.LoaiHang;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.LoaiHangDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import com.example.pharmacy.client.service.ThuocService;
 import com.example.pharmacy.client.view.CN_TimKiem.TKThuoc.ChiTietThuoc_GUI;
 import com.example.pharmacy.client.view.CN_TimKiem.TKThuoc.TKThuoc_GUI;
@@ -30,15 +30,15 @@ import java.util.Objects;
 
 public class TimKiemThuoc_Ctrl extends Application {
 
-    public TableColumn<Thuoc_SanPham, String> colTenThuoc;
-    public TableColumn<Thuoc_SanPham, String> colMaThuoc;
-    public TableColumn<Thuoc_SanPham, String> colHamLuong;
-    public TableColumn<Thuoc_SanPham, String> colXuatXu;
-    public TableColumn<Thuoc_SanPham, String> colSDK_GPNK;
-    public TableColumn<Thuoc_SanPham, String> colLoaiHang;
-    public TableColumn<Thuoc_SanPham, String> colViTri;
-    public TableColumn<Thuoc_SanPham, String> colChiTiet;
-    public TableView<Thuoc_SanPham> tbl_Thuoc;
+    public TableColumn<Thuoc_SanPhamDto, String> colTenThuoc;
+    public TableColumn<Thuoc_SanPhamDto, String> colMaThuoc;
+    public TableColumn<Thuoc_SanPhamDto, String> colHamLuong;
+    public TableColumn<Thuoc_SanPhamDto, String> colXuatXu;
+    public TableColumn<Thuoc_SanPhamDto, String> colSDK_GPNK;
+    public TableColumn<Thuoc_SanPhamDto, String> colLoaiHang;
+    public TableColumn<Thuoc_SanPhamDto, String> colViTri;
+    public TableColumn<Thuoc_SanPhamDto, String> colChiTiet;
+    public TableView<Thuoc_SanPhamDto> tbl_Thuoc;
     public ComboBox<String> cbxLoaiHang;
     public ComboBox<String> cbxXuatSu;
     public TextField txtHamLuongMin;
@@ -49,8 +49,8 @@ public class TimKiemThuoc_Ctrl extends Application {
     public StackPane rootTablePane;
 
     private final ThuocService thuocService = new ThuocService();
-    private final ObservableList<Thuoc_SanPham> duLieuChinh = FXCollections.observableArrayList();
-    private FilteredList<Thuoc_SanPham> duLieu;
+    private final ObservableList<Thuoc_SanPhamDto> duLieuChinh = FXCollections.observableArrayList();
+    private FilteredList<Thuoc_SanPhamDto> duLieu;
     private LoadingOverlay loadingOverlay;
 
     @Override
@@ -85,22 +85,22 @@ public class TimKiemThuoc_Ctrl extends Application {
     }
 
     private void taiDuLieu() {
-        Task<List<Thuoc_SanPham>> task = new Task<>() {
+        Task<List<Thuoc_SanPhamDto>> task = new Task<>() {
             @Override
-            protected List<Thuoc_SanPham> call() {
+            protected List<Thuoc_SanPhamDto> call() {
                 return thuocService.findAll();
             }
         };
 
         task.setOnRunning(e -> loadingOverlay.show());
         task.setOnSucceeded(e -> Platform.runLater(() -> {
-            List<Thuoc_SanPham> list = task.getValue();
+            List<Thuoc_SanPhamDto> list = task.getValue();
             duLieuChinh.setAll(list);
 
             List<String> loaiHangs = list.stream()
-                    .map(Thuoc_SanPham::getLoaiHang)
+                    .map(Thuoc_SanPhamDto::getLoaiHang)
                     .filter(Objects::nonNull)
-                    .map(LoaiHang::getTenLoaiHang)
+                    .map(LoaiHangDto::getTenLoaiHang)
                     .filter(Objects::nonNull)
                     .map(String::trim)
                     .filter(s -> !s.isEmpty())
@@ -109,7 +109,7 @@ public class TimKiemThuoc_Ctrl extends Application {
                     .toList();
 
             List<String> xuatXus = list.stream()
-                    .map(Thuoc_SanPham::getNuocSX)
+                    .map(Thuoc_SanPhamDto::getNuocSX)
                     .filter(s -> s != null && !s.isBlank())
                     .distinct()
                     .sorted()
@@ -133,7 +133,7 @@ public class TimKiemThuoc_Ctrl extends Application {
         thread.start();
     }
 
-    private void btnChiTietClick(Thuoc_SanPham sp) {
+    private void btnChiTietClick(Thuoc_SanPhamDto sp) {
         try {
             ChiTietThuoc_Ctrl ctrl = new ChiTietThuoc_Ctrl();
             ChiTietThuoc_GUI gui = new ChiTietThuoc_GUI();
@@ -176,7 +176,7 @@ public class TimKiemThuoc_Ctrl extends Application {
 
             {
                 btn.setOnAction(event -> {
-                    Thuoc_SanPham temp = getTableView().getItems().get(getIndex());
+                    Thuoc_SanPhamDto temp = getTableView().getItems().get(getIndex());
                     btnChiTietClick(temp);
                 });
                 btn.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");

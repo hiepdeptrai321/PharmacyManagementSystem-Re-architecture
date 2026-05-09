@@ -3,10 +3,10 @@ package com.example.pharmacy.server.service;
 import com.example.pharmacy.common.enums.BusinessCodeType;
 import com.example.pharmacy.server.repository.PromotionRepository;
 import com.example.pharmacy.server.transaction.TransactionManager;
-import com.example.pharmacy.common.model.ChiTietKhuyenMai;
-import com.example.pharmacy.common.model.KhuyenMai;
-import com.example.pharmacy.common.model.LoaiKhuyenMai;
-import com.example.pharmacy.common.model.Thuoc_SP_TangKem;
+import com.example.pharmacy.common.model.ChiTietKhuyenMaiDto;
+import com.example.pharmacy.common.model.KhuyenMaiDto;
+import com.example.pharmacy.common.model.LoaiKhuyenMaiDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TangKemDto;
 
 import java.sql.Date;
 import java.util.List;
@@ -28,12 +28,12 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
     }
 
     @Override
-    public List<KhuyenMai> findAll() {
+    public List<KhuyenMaiDto> findAll() {
         return promotionRepository.findAll();
     }
 
     @Override
-    public KhuyenMai findById(String maKhuyenMai) {
+    public KhuyenMaiDto findById(String maKhuyenMai) {
         if (maKhuyenMai == null || maKhuyenMai.isBlank()) {
             return null;
         }
@@ -41,7 +41,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
     }
 
     @Override
-    public List<KhuyenMai> searchByKeyword(String keyword) {
+    public List<KhuyenMaiDto> searchByKeyword(String keyword) {
         String tuKhoa = keyword == null ? "" : keyword.trim().toLowerCase();
         if (tuKhoa.isEmpty()) {
             return findAll();
@@ -55,12 +55,12 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
     }
 
     @Override
-    public List<LoaiKhuyenMai> findAllLoaiKhuyenMai() {
+    public List<LoaiKhuyenMaiDto> findAllLoaiKhuyenMai() {
         return promotionRepository.findAllLoaiKhuyenMai();
     }
 
     @Override
-    public LoaiKhuyenMai findLoaiKhuyenMaiById(String maLoaiKhuyenMai) {
+    public LoaiKhuyenMaiDto findLoaiKhuyenMaiById(String maLoaiKhuyenMai) {
         if (maLoaiKhuyenMai == null || maLoaiKhuyenMai.isBlank()) {
             return null;
         }
@@ -68,7 +68,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
     }
 
     @Override
-    public LoaiKhuyenMai findLoaiKhuyenMaiByTen(String tenLoaiKhuyenMai) {
+    public LoaiKhuyenMaiDto findLoaiKhuyenMaiByTen(String tenLoaiKhuyenMai) {
         if (tenLoaiKhuyenMai == null || tenLoaiKhuyenMai.isBlank()) {
             return null;
         }
@@ -76,7 +76,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
     }
 
     @Override
-    public List<ChiTietKhuyenMai> findChiTietByMaKM(String maKhuyenMai) {
+    public List<ChiTietKhuyenMaiDto> findChiTietByMaKM(String maKhuyenMai) {
         if (maKhuyenMai == null || maKhuyenMai.isBlank()) {
             return List.of();
         }
@@ -84,7 +84,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
     }
 
     @Override
-    public List<Thuoc_SP_TangKem> findQuaTangByMaKM(String maKhuyenMai) {
+    public List<Thuoc_SP_TangKemDto> findQuaTangByMaKM(String maKhuyenMai) {
         if (maKhuyenMai == null || maKhuyenMai.isBlank()) {
             return List.of();
         }
@@ -92,7 +92,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
     }
 
     @Override
-    public boolean create(KhuyenMai khuyenMai, List<ChiTietKhuyenMai> chiTietKhuyenMais, List<Thuoc_SP_TangKem> quaTangKhuyenMais) {
+    public boolean create(KhuyenMaiDto khuyenMai, List<ChiTietKhuyenMaiDto> chiTietKhuyenMais, List<Thuoc_SP_TangKemDto> quaTangKhuyenMais) {
         if (khuyenMai == null) {
             return false;
         }
@@ -114,7 +114,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
     }
 
     @Override
-    public boolean update(KhuyenMai khuyenMai, List<ChiTietKhuyenMai> chiTietKhuyenMais, List<Thuoc_SP_TangKem> quaTangKhuyenMais) {
+    public boolean update(KhuyenMaiDto khuyenMai, List<ChiTietKhuyenMaiDto> chiTietKhuyenMais, List<Thuoc_SP_TangKemDto> quaTangKhuyenMais) {
         if (khuyenMai == null || khuyenMai.getMaKM() == null || khuyenMai.getMaKM().isBlank()) {
             return false;
         }
@@ -151,7 +151,7 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
     }
 
     @Override
-    public List<KhuyenMai> findActiveOn(Date ngay) {
+    public List<KhuyenMaiDto> findActiveOn(Date ngay) {
         if (ngay == null) {
             return List.of();
         }
@@ -159,18 +159,18 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
     }
 
     @Override
-    public List<KhuyenMai> findActiveInvoiceOn(Date ngay) {
+    public List<KhuyenMaiDto> findActiveInvoiceOn(Date ngay) {
         if (ngay == null) {
             return List.of();
         }
         return promotionRepository.findActiveInvoiceOn(ngay);
     }
 
-    private void saveChiTiet(KhuyenMai khuyenMai, List<ChiTietKhuyenMai> chiTietKhuyenMais) {
+    private void saveChiTiet(KhuyenMaiDto khuyenMai, List<ChiTietKhuyenMaiDto> chiTietKhuyenMais) {
         if (chiTietKhuyenMais == null) {
             return;
         }
-        for (ChiTietKhuyenMai chiTietKhuyenMai : chiTietKhuyenMais) {
+        for (ChiTietKhuyenMaiDto chiTietKhuyenMai : chiTietKhuyenMais) {
             if (chiTietKhuyenMai == null || chiTietKhuyenMai.getThuoc() == null) {
                 continue;
             }
@@ -179,11 +179,11 @@ public class KhuyenMaiServiceImpl implements KhuyenMaiService {
         }
     }
 
-    private void saveQuaTang(KhuyenMai khuyenMai, List<Thuoc_SP_TangKem> quaTangKhuyenMais) {
+    private void saveQuaTang(KhuyenMaiDto khuyenMai, List<Thuoc_SP_TangKemDto> quaTangKhuyenMais) {
         if (quaTangKhuyenMais == null) {
             return;
         }
-        for (Thuoc_SP_TangKem quaTangKhuyenMai : quaTangKhuyenMais) {
+        for (Thuoc_SP_TangKemDto quaTangKhuyenMai : quaTangKhuyenMais) {
             if (quaTangKhuyenMai == null || quaTangKhuyenMai.getThuocTangKem() == null) {
                 continue;
             }

@@ -3,8 +3,8 @@ package com.example.pharmacy.server.service;
 import com.example.pharmacy.common.dto.UserContext;
 import com.example.pharmacy.common.request.CreateHoaDonRequest;
 import com.example.pharmacy.common.request.HoaDonSearchRequest;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.HoaDon;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.HoaDonDto;
 
 import java.util.List;
 
@@ -13,11 +13,11 @@ public interface HoaDonService {
 
     String createInvoice(CreateHoaDonRequest request, UserContext actor);
 
-    List<HoaDon> findAll();
+    List<HoaDonDto> findAll();
 
-    HoaDon findById(String maHoaDon);
+    HoaDonDto findById(String maHoaDon);
 
-    List<ChiTietHoaDon> findDetailsByMaHD(String maHoaDon);
+    List<ChiTietHoaDonDto> findDetailsByMaHD(String maHoaDon);
 
-    List<HoaDon> search(HoaDonSearchRequest request);
+    List<HoaDonDto> search(HoaDonSearchRequest request);
 }

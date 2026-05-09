@@ -1,9 +1,9 @@
 package com.example.pharmacy.client.controller.CN_TimKiem.TKPhieuTraHang;
 
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.ChiTietPhieuTraHang;
-import com.example.pharmacy.common.model.HoaDon;
-import com.example.pharmacy.common.model.PhieuTraHang;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.ChiTietPhieuTraHangDto;
+import com.example.pharmacy.common.model.HoaDonDto;
+import com.example.pharmacy.common.model.PhieuTraHangDto;
 import com.example.pharmacy.client.service.DoiTraService;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.font.constants.StandardFonts;
@@ -50,17 +50,17 @@ import static javafx.scene.control.Alert.AlertType.INFORMATION;
 public class ChiTietPhieuTraHang_Ctrl {
     private static final String FONT_PATH = "C:/Windows/Fonts/arial.ttf";
 
-    public PhieuTraHang phieuTraHang;
-    public TableColumn<ChiTietPhieuTraHang, String> colDonGia;
+    public PhieuTraHangDto phieuTraHang;
+    public TableColumn<ChiTietPhieuTraHangDto, String> colDonGia;
     public Button btnDong;
     public Button btnInPhieuTra;
     public Label lblTongTienHDGocValue;
     public Label lblSoTienTraLaiValue;
-    public TableColumn<ChiTietPhieuTraHang, String> colLyDo;
-    public TableColumn<ChiTietPhieuTraHang, String> colSTT;
-    public TableColumn<ChiTietPhieuTraHang, String> colSoLuong;
-    public TableColumn<ChiTietPhieuTraHang, String> colTenSP;
-    public TableColumn<ChiTietPhieuTraHang, Double> colThanhTien;
+    public TableColumn<ChiTietPhieuTraHangDto, String> colLyDo;
+    public TableColumn<ChiTietPhieuTraHangDto, String> colSTT;
+    public TableColumn<ChiTietPhieuTraHangDto, String> colSoLuong;
+    public TableColumn<ChiTietPhieuTraHangDto, String> colTenSP;
+    public TableColumn<ChiTietPhieuTraHangDto, Double> colThanhTien;
     public Label lblGhiChuValue;
     public Label lblMaPhieuTraValue;
     public Label lblNgayLapValue;
@@ -70,7 +70,7 @@ public class ChiTietPhieuTraHang_Ctrl {
     public Label lblTenKhachHangValue;
     public Label lblTenNV;
     public Label lblTenNhanVienValue;
-    public TableView<ChiTietPhieuTraHang> tblChiTietPhieuTra;
+    public TableView<ChiTietPhieuTraHangDto> tblChiTietPhieuTra;
 
     private final DoiTraService doiTraService = new DoiTraService();
     private boolean uiReady;
@@ -90,7 +90,7 @@ public class ChiTietPhieuTraHang_Ctrl {
         tryRender();
     }
 
-    public void setPhieuTraHang(PhieuTraHang phieuTraHang) {
+    public void setPhieuTraHang(PhieuTraHangDto phieuTraHang) {
         this.phieuTraHang = phieuTraHang;
         tryRender();
     }
@@ -118,7 +118,7 @@ public class ChiTietPhieuTraHang_Ctrl {
         }
         lblGhiChuValue.setText(safe(phieuTraHang.getGhiChu()));
 
-        List<ChiTietPhieuTraHang> details = doiTraService.findChiTietPhieuTraByMaPT(phieuTraHang.getMaPT());
+        List<ChiTietPhieuTraHangDto> details = doiTraService.findChiTietPhieuTraByMaPT(phieuTraHang.getMaPT());
         tblChiTietPhieuTra.getItems().setAll(details);
 
         colSTT.setCellValueFactory(cd -> new SimpleStringProperty(String.valueOf(tblChiTietPhieuTra.getItems().indexOf(cd.getValue()) + 1)));
@@ -138,14 +138,14 @@ public class ChiTietPhieuTraHang_Ctrl {
             }
         });
 
-        HoaDon hoaDonGoc = phieuTraHang.getHoaDon();
+        HoaDonDto hoaDonGoc = phieuTraHang.getHoaDon();
         double tongTienHDGoc = 0;
         if (hoaDonGoc != null && hoaDonGoc.getMaHD() != null) {
-            List<ChiTietHoaDon> invoiceDetails = doiTraService.findHoaDonDetailsForDoiTra(hoaDonGoc.getMaHD());
-            tongTienHDGoc = invoiceDetails.stream().mapToDouble(ChiTietHoaDon::tinhThanhTien).sum();
+            List<ChiTietHoaDonDto> invoiceDetails = doiTraService.findHoaDonDetailsForDoiTra(hoaDonGoc.getMaHD());
+            tongTienHDGoc = invoiceDetails.stream().mapToDouble(ChiTietHoaDonDto::tinhThanhTien).sum();
         }
         lblTongTienHDGocValue.setText(formatVNDTable(tongTienHDGoc));
-        double tongTienTra = details.stream().mapToDouble(ChiTietPhieuTraHang::getThanhTienTra).sum();
+        double tongTienTra = details.stream().mapToDouble(ChiTietPhieuTraHangDto::getThanhTienTra).sum();
         lblSoTienTraLaiValue.setText(formatVNDTable(tongTienTra));
     }
 
@@ -219,7 +219,7 @@ public class ChiTietPhieuTraHang_Ctrl {
 
         int stt = 1;
         double tongTra = 0;
-        for (ChiTietPhieuTraHang item : tblChiTietPhieuTra.getItems()) {
+        for (ChiTietPhieuTraHangDto item : tblChiTietPhieuTra.getItems()) {
             table.addCell(String.valueOf(stt++));
             table.addCell(item.getThuoc() == null ? "" : safe(item.getThuoc().getTenThuoc()));
             table.addCell(String.valueOf(item.getSoLuong())).setTextAlignment(TextAlignment.CENTER);

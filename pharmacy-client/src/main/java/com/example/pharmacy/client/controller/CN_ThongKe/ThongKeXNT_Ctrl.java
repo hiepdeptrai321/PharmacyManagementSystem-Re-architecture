@@ -1,8 +1,8 @@
 package com.example.pharmacy.client.controller.CN_ThongKe;
 
 // Các import logic (DAO, Model, POI, iText) giữ nguyên
-import com.example.pharmacy.common.model.ThongKeTonKho;
-import com.example.pharmacy.common.model.ThuocHetHan;
+import com.example.pharmacy.common.model.ThongKeTonKhoDto;
+import com.example.pharmacy.common.model.ThuocHetHanDto;
 import com.example.pharmacy.client.service.ThongKeService;
 
 import com.example.pharmacy.client.view.CN_ThongKe.ThongKeXNT_GUI;
@@ -51,20 +51,20 @@ public class ThongKeXNT_Ctrl extends Application {
 
     // --- 1. KHAI BÁO PUBLIC CÁC THÀNH PHẦN GIAO DIỆN ---
     // Bảng Tồn kho
-    public TableView<ThongKeTonKho> tbTon;
-    public TableColumn<ThongKeTonKho, Integer> ColTDK;
-    public TableColumn<ThongKeTonKho, String> colDVT;
-    public TableColumn<ThongKeTonKho, String> colMaThuoc;
-    public TableColumn<ThongKeTonKho, Integer> colNTK;
-    public TableColumn<ThongKeTonKho, String> colTenThuoc;
-    public TableColumn<ThongKeTonKho, Integer> colTCK;
-    public TableColumn<ThongKeTonKho, Integer> colXTK;
+    public TableView<ThongKeTonKhoDto> tbTon;
+    public TableColumn<ThongKeTonKhoDto, Integer> ColTDK;
+    public TableColumn<ThongKeTonKhoDto, String> colDVT;
+    public TableColumn<ThongKeTonKhoDto, String> colMaThuoc;
+    public TableColumn<ThongKeTonKhoDto, Integer> colNTK;
+    public TableColumn<ThongKeTonKhoDto, String> colTenThuoc;
+    public TableColumn<ThongKeTonKhoDto, Integer> colTCK;
+    public TableColumn<ThongKeTonKhoDto, Integer> colXTK;
     // Bảng Hết hạn
-    public TableView<ThuocHetHan> tbHetHan;
-    public TableColumn<ThuocHetHan, String> colMaThuocHH;
-    public TableColumn<ThuocHetHan, LocalDate> colNgayHH;
-    public TableColumn<ThuocHetHan, Integer> colSoLuong;
-    public TableColumn<ThuocHetHan, String> cotTenThuocHH;
+    public TableView<ThuocHetHanDto> tbHetHan;
+    public TableColumn<ThuocHetHanDto, String> colMaThuocHH;
+    public TableColumn<ThuocHetHanDto, LocalDate> colNgayHH;
+    public TableColumn<ThuocHetHanDto, Integer> colSoLuong;
+    public TableColumn<ThuocHetHanDto, String> cotTenThuocHH;
     // Panel bên trái
     public Button btnXuat;
     public ComboBox<String> cboThoiGian;
@@ -76,8 +76,8 @@ public class ThongKeXNT_Ctrl extends Application {
     public Label lblDen;
 
     // --- 2. CÁC BIẾN LOGIC (GIỮ NGUYÊN) ---
-    private ObservableList<ThongKeTonKho> masterDataTonKho = FXCollections.observableArrayList();
-    private ObservableList<ThuocHetHan> dataHetHan = FXCollections.observableArrayList();
+    private ObservableList<ThongKeTonKhoDto> masterDataTonKho = FXCollections.observableArrayList();
+    private ObservableList<ThuocHetHanDto> dataHetHan = FXCollections.observableArrayList();
     private final ThongKeService thongKeService = new ThongKeService();
     public static final String FONT_PATH = "C:/Windows/Fonts/arial.ttf";
 
@@ -166,7 +166,7 @@ public class ThongKeXNT_Ctrl extends Application {
     }
 
     private void setupSearchFilter() {
-        FilteredList<ThongKeTonKho> filteredData = new FilteredList<>(masterDataTonKho, p -> true);
+        FilteredList<ThongKeTonKhoDto> filteredData = new FilteredList<>(masterDataTonKho, p -> true);
 
         txtTimNhanh.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(thongKe -> {
@@ -180,7 +180,7 @@ public class ThongKeXNT_Ctrl extends Application {
             });
         });
 
-        SortedList<ThongKeTonKho> sortedData = new SortedList<>(filteredData);
+        SortedList<ThongKeTonKhoDto> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(tbTon.comparatorProperty());
         tbTon.setItems(sortedData);
     }
@@ -339,7 +339,7 @@ public class ThongKeXNT_Ctrl extends Application {
             }
 
             int rowNum1 = 1;
-            for (ThongKeTonKho tk : masterDataTonKho) {
+            for (ThongKeTonKhoDto tk : masterDataTonKho) {
                 Row row = sheet1.createRow(rowNum1++);
                 row.createCell(0).setCellValue(tk.getMaThuoc());
                 row.createCell(1).setCellValue(tk.getTenThuoc());
@@ -396,7 +396,7 @@ public class ThongKeXNT_Ctrl extends Application {
         table1.addHeaderCell(new com.itextpdf.layout.element.Cell().add(new Paragraph("Xuất trong kỳ").setBold()));
         table1.addHeaderCell(new com.itextpdf.layout.element.Cell().add(new Paragraph("Tồn cuối kỳ").setBold()));
 
-        for (ThongKeTonKho tk : masterDataTonKho) {
+        for (ThongKeTonKhoDto tk : masterDataTonKho) {
             table1.addCell(tk.getMaThuoc());
             table1.addCell(tk.getTenThuoc());
             table1.addCell(tk.getDvt());

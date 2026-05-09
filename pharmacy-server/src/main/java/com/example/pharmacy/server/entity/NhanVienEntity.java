@@ -4,11 +4,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Date;
 
 @Entity
 @Table(name = "NhanVien")
+@Getter @Setter @NoArgsConstructor
 public class NhanVienEntity {
     @Id
     @Column(name = "MaNV", nullable = false, length = 10)
@@ -52,116 +56,4 @@ public class NhanVienEntity {
 
     @Column(name = "TrangThaiXoa", nullable = false)
     private boolean trangThaiXoa;
-
-    public String getMaNV() {
-        return maNV;
-    }
-
-    public void setMaNV(String maNV) {
-        this.maNV = maNV;
-    }
-
-    public String getTenNV() {
-        return tenNV;
-    }
-
-    public void setTenNV(String tenNV) {
-        this.tenNV = tenNV;
-    }
-
-    public String getSdt() {
-        return sdt;
-    }
-
-    public void setSdt(String sdt) {
-        this.sdt = sdt;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Date getNgaySinh() {
-        return ngaySinh;
-    }
-
-    public void setNgaySinh(Date ngaySinh) {
-        this.ngaySinh = ngaySinh;
-    }
-
-    public boolean isGioiTinh() {
-        return gioiTinh;
-    }
-
-    public void setGioiTinh(boolean gioiTinh) {
-        this.gioiTinh = gioiTinh;
-    }
-
-    public String getDiaChi() {
-        return diaChi;
-    }
-
-    public void setDiaChi(String diaChi) {
-        this.diaChi = diaChi;
-    }
-
-    public String getVaiTro() {
-        return vaiTro;
-    }
-
-    public void setVaiTro(String vaiTro) {
-        this.vaiTro = vaiTro;
-    }
-
-    public boolean isTrangThai() {
-        return trangThai;
-    }
-
-    public void setTrangThai(boolean trangThai) {
-        this.trangThai = trangThai;
-    }
-
-    public String getTaiKhoan() {
-        return taiKhoan;
-    }
-
-    public void setTaiKhoan(String taiKhoan) {
-        this.taiKhoan = taiKhoan;
-    }
-
-    public String getMatKhau() {
-        return matKhau;
-    }
-
-    public void setMatKhau(String matKhau) {
-        this.matKhau = matKhau;
-    }
-
-    public Date getNgayVaoLam() {
-        return ngayVaoLam;
-    }
-
-    public void setNgayVaoLam(Date ngayVaoLam) {
-        this.ngayVaoLam = ngayVaoLam;
-    }
-
-    public Date getNgayKetThuc() {
-        return ngayKetThuc;
-    }
-
-    public void setNgayKetThuc(Date ngayKetThuc) {
-        this.ngayKetThuc = ngayKetThuc;
-    }
-
-    public boolean isTrangThaiXoa() {
-        return trangThaiXoa;
-    }
-
-    public void setTrangThaiXoa(boolean trangThaiXoa) {
-        this.trangThaiXoa = trangThaiXoa;
-    }
 }

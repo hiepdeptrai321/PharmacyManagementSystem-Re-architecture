@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMNhanVien;
 
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.NhanVienDto;
 import com.example.pharmacy.client.service.NhanVienService;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 public class SuaTaiKhoan_Ctrl {
     public TextField txtTaiKhoan;
     public TextField txtMatKhau;
-    public NhanVien nhanVien;
+    public NhanVienDto nhanVien;
     public boolean isSaved = false;
 
     private final NhanVienService nhanVienService = new NhanVienService();
@@ -18,13 +18,13 @@ public class SuaTaiKhoan_Ctrl {
     public void initialize() {
     }
 
-    public void loadTaiKhoan(NhanVien nhanVien) {
+    public void loadTaiKhoan(NhanVienDto nhanVien) {
         txtTaiKhoan.setText(nhanVien.getTaiKhoan());
         txtMatKhau.setText(nhanVien.getMatKhau());
         this.nhanVien = nhanVien;
     }
 
-    public NhanVien getUpdatedNhanVien() {
+    public NhanVienDto getUpdatedNhanVien() {
         return nhanVien;
     }
 

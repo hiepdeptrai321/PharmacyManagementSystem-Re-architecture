@@ -3,12 +3,12 @@ package com.example.pharmacy.client.service;
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.client.service.RmiThuocClientService;
 import com.example.pharmacy.client.service.ThuocClientService;
-import com.example.pharmacy.common.model.ChiTietHoatChat;
-import com.example.pharmacy.common.model.HoatChat;
-import com.example.pharmacy.common.model.LoaiHang;
-import com.example.pharmacy.common.model.ThuocTonKho;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietHoatChatDto;
+import com.example.pharmacy.common.model.HoatChatDto;
+import com.example.pharmacy.common.model.LoaiHangDto;
+import com.example.pharmacy.common.model.ThuocTonKhoDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class ThuocService {
     private final ThuocClientService thuocClientService =
             new RmiThuocClientService(new RmiClientProvider());
 
-    public List<Thuoc_SanPham> findAll() {
+    public List<Thuoc_SanPhamDto> findAll() {
         return thuocClientService.findAll();
     }
 
@@ -24,7 +24,7 @@ public class ThuocService {
         return thuocClientService.generateNewMaThuoc();
     }
 
-    public List<LoaiHang> findAllLoaiHang() {
+    public List<LoaiHangDto> findAllLoaiHang() {
         return thuocClientService.findAllLoaiHang();
     }
 
@@ -32,7 +32,7 @@ public class ThuocService {
         return thuocClientService.findAllLoaiHangNames();
     }
 
-    public LoaiHang findByTenLoaiHang(String tenLoaiHang) {
+    public LoaiHangDto findByTenLoaiHang(String tenLoaiHang) {
         if (tenLoaiHang == null || tenLoaiHang.isBlank()) {
             return null;
         }
@@ -42,19 +42,19 @@ public class ThuocService {
                 .orElse(null);
     }
 
-    public List<HoatChat> getAllHoatChat() {
+    public List<HoatChatDto> getAllHoatChat() {
         return thuocClientService.findAllHoatChat();
     }
 
-    public List<ChiTietHoatChat> findChiTietHoatChatByMaThuoc(String maThuoc) {
+    public List<ChiTietHoatChatDto> findChiTietHoatChatByMaThuoc(String maThuoc) {
         return thuocClientService.findChiTietHoatChatByMaThuoc(maThuoc);
     }
 
-    public boolean create(Thuoc_SanPham thuoc, List<ChiTietHoatChat> chiTietHoatChats, String maDonViTinhCoBan) {
+    public boolean create(Thuoc_SanPhamDto thuoc, List<ChiTietHoatChatDto> chiTietHoatChats, String maDonViTinhCoBan) {
         return thuocClientService.create(thuoc, chiTietHoatChats, maDonViTinhCoBan);
     }
 
-    public boolean update(Thuoc_SanPham thuoc, List<ChiTietHoatChat> chiTietHoatChats) {
+    public boolean update(Thuoc_SanPhamDto thuoc, List<ChiTietHoatChatDto> chiTietHoatChats) {
         return thuocClientService.update(thuoc, chiTietHoatChats);
     }
 
@@ -70,15 +70,15 @@ public class ThuocService {
         return thuocClientService.getTenDonViTinhCoBan(maThuoc);
     }
 
-    public List<ThuocTonKho> getThuocTonKho() {
+    public List<ThuocTonKhoDto> getThuocTonKho() {
         return thuocClientService.getThuocTonKho();
     }
 
-    public List<Thuoc_SP_TheoLo> getAllTheoLo() {
+    public List<Thuoc_SP_TheoLoDto> getAllTheoLo() {
         return thuocClientService.getAllTheoLo();
     }
 
-    public List<Thuoc_SanPham> searchByKeyword(String keyword) {
+    public List<Thuoc_SanPhamDto> searchByKeyword(String keyword) {
         String tuKhoa = keyword == null ? "" : keyword.trim().toLowerCase();
         if (tuKhoa.isEmpty()) {
             return findAll();

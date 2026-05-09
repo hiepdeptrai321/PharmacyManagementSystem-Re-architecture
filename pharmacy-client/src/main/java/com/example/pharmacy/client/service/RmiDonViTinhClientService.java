@@ -2,7 +2,7 @@ package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.common.remote.DonViTinhRemote;
-import com.example.pharmacy.common.model.DonViTinh;
+import com.example.pharmacy.common.model.DonViTinhDto;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -17,7 +17,7 @@ public class RmiDonViTinhClientService implements DonViTinhClientService {
     }
 
     @Override
-    public List<DonViTinh> findAll() {
+    public List<DonViTinhDto> findAll() {
         try {
             return remote().findAll();
         } catch (RemoteException | NotBoundException exception) {
@@ -27,7 +27,7 @@ public class RmiDonViTinhClientService implements DonViTinhClientService {
     }
 
     @Override
-    public DonViTinh findById(String maDonViTinh) {
+    public DonViTinhDto findById(String maDonViTinh) {
         try {
             return remote().findById(maDonViTinh);
         } catch (RemoteException | NotBoundException exception) {
@@ -37,7 +37,7 @@ public class RmiDonViTinhClientService implements DonViTinhClientService {
     }
 
     @Override
-    public DonViTinh findByTenDonViTinh(String tenDonViTinh) {
+    public DonViTinhDto findByTenDonViTinh(String tenDonViTinh) {
         try {
             return remote().findByTenDonViTinh(tenDonViTinh);
         } catch (RemoteException | NotBoundException exception) {
@@ -57,7 +57,7 @@ public class RmiDonViTinhClientService implements DonViTinhClientService {
     }
 
     @Override
-    public boolean create(DonViTinh donViTinh) {
+    public boolean create(DonViTinhDto donViTinh) {
         try {
             return remote().create(donViTinh);
         } catch (RemoteException | NotBoundException exception) {
@@ -67,7 +67,7 @@ public class RmiDonViTinhClientService implements DonViTinhClientService {
     }
 
     @Override
-    public boolean update(DonViTinh donViTinh) {
+    public boolean update(DonViTinhDto donViTinh) {
         try {
             return remote().update(donViTinh);
         } catch (RemoteException | NotBoundException exception) {

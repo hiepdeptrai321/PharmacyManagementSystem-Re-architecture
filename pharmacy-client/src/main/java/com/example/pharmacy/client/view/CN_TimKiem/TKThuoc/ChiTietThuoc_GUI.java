@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_TimKiem.TKThuoc;
 
 import com.example.pharmacy.client.controller.CN_TimKiem.TKThuoc.ChiTietThuoc_Ctrl;
-import com.example.pharmacy.common.model.ChiTietHoatChat;
+import com.example.pharmacy.common.model.ChiTietHoatChatDto;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -257,8 +257,8 @@ public class ChiTietThuoc_GUI extends Application {
                 txtQCDongGoi, txtSDK_GPNK, txtDuongDung, txtViTri, txtLoaiHang, txtNhomDuocLy;
         ImageView imgThuoc;
 
-        TableView<ChiTietHoatChat> tblHoatChat;
-        TableColumn<ChiTietHoatChat, String> colMaHoatChat, colTenHoatChat, colHamLuongTbl;
+        TableView<ChiTietHoatChatDto> tblHoatChat;
+        TableColumn<ChiTietHoatChatDto, String> colMaHoatChat, colTenHoatChat, colHamLuongTbl;
 
         Pane btnHuyPane;
     }

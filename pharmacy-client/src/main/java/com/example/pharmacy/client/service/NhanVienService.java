@@ -3,8 +3,8 @@ package com.example.pharmacy.client.service;
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.client.service.NhanVienClientService;
 import com.example.pharmacy.client.service.RmiNhanVienClientService;
-import com.example.pharmacy.common.model.LuongNhanVien;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.LuongNhanVienDto;
+import com.example.pharmacy.common.model.NhanVienDto;
 
 import java.util.List;
 
@@ -12,11 +12,11 @@ public class NhanVienService {
     private final NhanVienClientService nhanVienClientService =
             new RmiNhanVienClientService(new RmiClientProvider());
 
-    public List<NhanVien> findAll() {
+    public List<NhanVienDto> findAll() {
         return nhanVienClientService.findAll();
     }
 
-    public NhanVien findById(String maNhanVien) {
+    public NhanVienDto findById(String maNhanVien) {
         return nhanVienClientService.findById(maNhanVien);
     }
 
@@ -24,11 +24,11 @@ public class NhanVienService {
         return nhanVienClientService.generateNewMaNhanVien();
     }
 
-    public boolean create(NhanVien nhanVien) {
+    public boolean create(NhanVienDto nhanVien) {
         return nhanVienClientService.create(nhanVien);
     }
 
-    public boolean update(NhanVien nhanVien) {
+    public boolean update(NhanVienDto nhanVien) {
         return nhanVienClientService.update(nhanVien);
     }
 
@@ -40,7 +40,7 @@ public class NhanVienService {
         return nhanVienClientService.isUsernameAvailable(username, excludedMaNhanVien);
     }
 
-    public List<LuongNhanVien> findLuongByMaNhanVien(String maNhanVien) {
+    public List<LuongNhanVienDto> findLuongByMaNhanVien(String maNhanVien) {
         return nhanVienClientService.findLuongByMaNhanVien(maNhanVien);
     }
 
@@ -48,11 +48,11 @@ public class NhanVienService {
         return nhanVienClientService.generateNewMaLuongNhanVien();
     }
 
-    public boolean saveLuongNhanVien(LuongNhanVien luongNhanVien) {
+    public boolean saveLuongNhanVien(LuongNhanVienDto luongNhanVien) {
         return nhanVienClientService.saveLuongNhanVien(luongNhanVien);
     }
 
-    public List<NhanVien> searchByKeyword(String keyword) {
+    public List<NhanVienDto> searchByKeyword(String keyword) {
         String tuKhoa = keyword == null ? "" : keyword.trim().toLowerCase();
         if (tuKhoa.isEmpty()) {
             return findAll();

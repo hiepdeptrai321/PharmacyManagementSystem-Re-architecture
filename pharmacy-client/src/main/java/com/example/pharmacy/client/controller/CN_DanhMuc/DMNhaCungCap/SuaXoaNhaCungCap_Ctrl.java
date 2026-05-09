@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMNhaCungCap;
 
-import com.example.pharmacy.common.model.NhaCungCap;
+import com.example.pharmacy.common.model.NhaCungCapDto;
 import com.example.pharmacy.client.service.NhaCungCapService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -38,7 +38,7 @@ public class SuaXoaNhaCungCap_Ctrl {
     @FXML
     public Pane nutXoa;
 
-    private NhaCungCap ncc;
+    private NhaCungCapDto ncc;
     private DanhMucNhaCungCap_Ctrl danhMucNhaCungCap_ctrl;
     private final NhaCungCapService nhaCungCapService = new NhaCungCapService();
 
@@ -49,7 +49,7 @@ public class SuaXoaNhaCungCap_Ctrl {
         ThemDuLieuThuoc();
     }
 
-    public void loadData(NhaCungCap ncc) {
+    public void loadData(NhaCungCapDto ncc) {
         this.ncc = ncc;
     }
 

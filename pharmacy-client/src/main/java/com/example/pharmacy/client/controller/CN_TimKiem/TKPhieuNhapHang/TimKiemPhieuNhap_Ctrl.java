@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.controller.CN_TimKiem.TKPhieuNhapHang;
 
 import com.example.pharmacy.client.TienIch.DoiNgay;
-import com.example.pharmacy.common.model.PhieuNhap;
+import com.example.pharmacy.common.model.PhieuNhapDto;
 import com.example.pharmacy.client.service.NhaCungCapService;
 import com.example.pharmacy.client.service.NhanVienService;
 import com.example.pharmacy.client.service.PhieuNhapService;
@@ -31,7 +31,7 @@ import java.sql.Timestamp;
 import java.util.stream.Collectors;
 
 public class TimKiemPhieuNhap_Ctrl {
-    public TableColumn<PhieuNhap, String> colChiTiet;
+    public TableColumn<PhieuNhapDto, String> colChiTiet;
     public ComboBox<String> cbxTimKiem;
     public TextField txtTimKiem;
     public DatePicker txtNgayNhapMax;
@@ -39,17 +39,17 @@ public class TimKiemPhieuNhap_Ctrl {
     public ComboBox<String> chonNhanVien;
     public ComboBox<String> cbxChonNhaCC;
     public CheckBox cboxTrangThai;
-    public TableView<PhieuNhap> tblPhieuNhap;
-    public TableColumn<PhieuNhap, String> colMaPN;
-    public TableColumn<PhieuNhap, String> colNhaCungCap;
-    public TableColumn<PhieuNhap, String> colNgayNhap;
-    public TableColumn<PhieuNhap, String> colTrangThai;
-    public TableColumn<PhieuNhap, String> colGhiChu;
-    public TableColumn<PhieuNhap, String> colNhanVien;
+    public TableView<PhieuNhapDto> tblPhieuNhap;
+    public TableColumn<PhieuNhapDto, String> colMaPN;
+    public TableColumn<PhieuNhapDto, String> colNhaCungCap;
+    public TableColumn<PhieuNhapDto, String> colNgayNhap;
+    public TableColumn<PhieuNhapDto, String> colTrangThai;
+    public TableColumn<PhieuNhapDto, String> colGhiChu;
+    public TableColumn<PhieuNhapDto, String> colNhanVien;
     public TitledPane tpBoLoc;
 
-    private final ObservableList<PhieuNhap> duLieuChinh = FXCollections.observableArrayList();
-    private FilteredList<PhieuNhap> duLieu;
+    private final ObservableList<PhieuNhapDto> duLieuChinh = FXCollections.observableArrayList();
+    private FilteredList<PhieuNhapDto> duLieu;
     private boolean tpBoLocOnClick = false;
 
     private final PhieuNhapService phieuNhapService = new PhieuNhapService();
@@ -141,7 +141,7 @@ public class TimKiemPhieuNhap_Ctrl {
         });
     }
 
-    private TableCell<PhieuNhap, String> leftAlignedCell() {
+    private TableCell<PhieuNhapDto, String> leftAlignedCell() {
         return new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -157,7 +157,7 @@ public class TimKiemPhieuNhap_Ctrl {
         };
     }
 
-    private void btnChiTietClick(PhieuNhap phieuNhap) {
+    private void btnChiTietClick(PhieuNhapDto phieuNhap) {
         try {
             ChiTietPhieuNhap_Ctrl ctrl = new ChiTietPhieuNhap_Ctrl();
             ChiTietPhieuNhapHang_GUI gui = new ChiTietPhieuNhapHang_GUI();
