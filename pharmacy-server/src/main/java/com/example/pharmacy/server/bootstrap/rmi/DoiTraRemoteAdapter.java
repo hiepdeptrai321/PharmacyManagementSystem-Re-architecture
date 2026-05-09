@@ -5,12 +5,12 @@ import com.example.pharmacy.common.remote.DoiTraRemote;
 import com.example.pharmacy.common.request.CreatePhieuDoiRequest;
 import com.example.pharmacy.common.request.CreatePhieuTraRequest;
 import com.example.pharmacy.server.service.DoiTraService;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.ChiTietPhieuDoiHang;
-import com.example.pharmacy.common.model.ChiTietPhieuTraHang;
-import com.example.pharmacy.common.model.HoaDon;
-import com.example.pharmacy.common.model.PhieuDoiHang;
-import com.example.pharmacy.common.model.PhieuTraHang;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.ChiTietPhieuDoiHangDto;
+import com.example.pharmacy.common.model.ChiTietPhieuTraHangDto;
+import com.example.pharmacy.common.model.HoaDonDto;
+import com.example.pharmacy.common.model.PhieuDoiHangDto;
+import com.example.pharmacy.common.model.PhieuTraHangDto;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -26,12 +26,12 @@ public class DoiTraRemoteAdapter extends UnicastRemoteObject implements DoiTraRe
     }
 
     @Override
-    public HoaDon findHoaDonGocForDoiTra(String maHoaDon) throws RemoteException {
+    public HoaDonDto findHoaDonGocForDoiTra(String maHoaDon) throws RemoteException {
         return doiTraService.findHoaDonGocForDoiTra(maHoaDon);
     }
 
     @Override
-    public List<ChiTietHoaDon> findHoaDonDetailsForDoiTra(String maHoaDon) throws RemoteException {
+    public List<ChiTietHoaDonDto> findHoaDonDetailsForDoiTra(String maHoaDon) throws RemoteException {
         return doiTraService.findHoaDonDetailsForDoiTra(maHoaDon);
     }
 
@@ -61,32 +61,32 @@ public class DoiTraRemoteAdapter extends UnicastRemoteObject implements DoiTraRe
     }
 
     @Override
-    public List<PhieuDoiHang> findAllPhieuDoi() throws RemoteException {
+    public List<PhieuDoiHangDto> findAllPhieuDoi() throws RemoteException {
         return doiTraService.findAllPhieuDoi();
     }
 
     @Override
-    public PhieuDoiHang findPhieuDoiById(String maPhieuDoi) throws RemoteException {
+    public PhieuDoiHangDto findPhieuDoiById(String maPhieuDoi) throws RemoteException {
         return doiTraService.findPhieuDoiById(maPhieuDoi);
     }
 
     @Override
-    public List<ChiTietPhieuDoiHang> findChiTietPhieuDoiByMaPD(String maPhieuDoi) throws RemoteException {
+    public List<ChiTietPhieuDoiHangDto> findChiTietPhieuDoiByMaPD(String maPhieuDoi) throws RemoteException {
         return doiTraService.findChiTietPhieuDoiByMaPD(maPhieuDoi);
     }
 
     @Override
-    public List<PhieuTraHang> findAllPhieuTra() throws RemoteException {
+    public List<PhieuTraHangDto> findAllPhieuTra() throws RemoteException {
         return doiTraService.findAllPhieuTra();
     }
 
     @Override
-    public PhieuTraHang findPhieuTraById(String maPhieuTra) throws RemoteException {
+    public PhieuTraHangDto findPhieuTraById(String maPhieuTra) throws RemoteException {
         return doiTraService.findPhieuTraById(maPhieuTra);
     }
 
     @Override
-    public List<ChiTietPhieuTraHang> findChiTietPhieuTraByMaPT(String maPhieuTra) throws RemoteException {
+    public List<ChiTietPhieuTraHangDto> findChiTietPhieuTraByMaPT(String maPhieuTra) throws RemoteException {
         return doiTraService.findChiTietPhieuTraByMaPT(maPhieuTra);
     }
 }

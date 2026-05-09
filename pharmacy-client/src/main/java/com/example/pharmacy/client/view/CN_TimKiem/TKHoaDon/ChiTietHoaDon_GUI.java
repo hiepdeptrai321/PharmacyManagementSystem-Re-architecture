@@ -18,7 +18,7 @@ public class ChiTietHoaDon_GUI {
         AnchorPane root = buildUI(ctrl);
         Scene scene = new Scene(root, 1646, 895);
         try {
-            String css = "/com/example/pharmacy/client/css/ChiTietHoaDon.css";
+            String css = "/com/example/pharmacy/client/css/ChiTietHoaDonDto.css";
             if (getClass().getResource(css) != null)
                 scene.getStylesheets().add(getClass().getResource(css).toExternalForm());
         } catch (Exception ignored) {

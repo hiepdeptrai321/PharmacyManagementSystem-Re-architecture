@@ -4,8 +4,8 @@ import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.common.dto.UserContext;
 import com.example.pharmacy.common.remote.PhieuNhapRemote;
 import com.example.pharmacy.common.request.PhieuNhapRequest;
-import com.example.pharmacy.common.model.ChiTietPhieuNhap;
-import com.example.pharmacy.common.model.PhieuNhap;
+import com.example.pharmacy.common.model.ChiTietPhieuNhapDto;
+import com.example.pharmacy.common.model.PhieuNhapDto;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -39,7 +39,7 @@ public class RmiPhieuNhapClientService implements PhieuNhapClientService {
     }
 
     @Override
-    public List<PhieuNhap> findAll() {
+    public List<PhieuNhapDto> findAll() {
         try {
             return remote().findAll();
         } catch (RemoteException | NotBoundException exception) {
@@ -49,7 +49,7 @@ public class RmiPhieuNhapClientService implements PhieuNhapClientService {
     }
 
     @Override
-    public PhieuNhap findById(String maPhieuNhap) {
+    public PhieuNhapDto findById(String maPhieuNhap) {
         try {
             return remote().findById(maPhieuNhap);
         } catch (RemoteException | NotBoundException exception) {
@@ -59,7 +59,7 @@ public class RmiPhieuNhapClientService implements PhieuNhapClientService {
     }
 
     @Override
-    public List<ChiTietPhieuNhap> findDetailsByMaPhieuNhap(String maPhieuNhap) {
+    public List<ChiTietPhieuNhapDto> findDetailsByMaPhieuNhap(String maPhieuNhap) {
         try {
             return remote().findDetailsByMaPhieuNhap(maPhieuNhap);
         } catch (RemoteException | NotBoundException exception) {

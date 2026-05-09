@@ -1,17 +1,14 @@
 package com.example.pharmacy.server.service;
 
 import com.example.pharmacy.common.enums.BusinessCodeType;
-import com.example.pharmacy.common.enums.UserRole;
 import com.example.pharmacy.server.entity.LuongNhanVienEntity;
 import com.example.pharmacy.server.entity.NhanVienEntity;
+import com.example.pharmacy.server.mapper.NhanVienMapper;
 import com.example.pharmacy.server.repository.LuongNhanVienRepository;
 import com.example.pharmacy.server.repository.NhanVienManagementRepository;
-import com.example.pharmacy.common.model.LuongNhanVien;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.LuongNhanVienDto;
+import com.example.pharmacy.common.model.NhanVienDto;
 
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,17 +26,17 @@ public class NhanVienServiceImpl implements NhanVienService {
     }
 
     @Override
-    public List<NhanVien> findAll() {
+    public List<NhanVienDto> findAll() {
         return nhanVienRepository.findAllNotDeleted().stream()
-                .map(this::toModel)
+                .map(NhanVienMapper::toDto)
                 .toList();
     }
 
     @Override
-    public NhanVien findById(String maNhanVien) {
+    public NhanVienDto findById(String maNhanVien) {
         return nhanVienRepository.findById(maNhanVien)
                 .filter(entity -> !entity.isTrangThaiXoa())
-                .map(this::toModel)
+                .map(NhanVienMapper::toDto)
                 .orElse(null);
     }
 
@@ -49,7 +46,7 @@ public class NhanVienServiceImpl implements NhanVienService {
     }
 
     @Override
-    public boolean create(NhanVien nhanVien) {
+    public boolean create(NhanVienDto nhanVien) {
         if (!isValidEmployeeRequest(nhanVien)) {
             return false;
         }
@@ -57,7 +54,7 @@ public class NhanVienServiceImpl implements NhanVienService {
             if (!isUsernameAvailable(nhanVien.getTaiKhoan(), null)) {
                 return false;
             }
-            NhanVienEntity entity = toEntity(nhanVien, null);
+            NhanVienEntity entity = NhanVienMapper.toEntity(nhanVien, null);
             if (entity.getMaNV() == null || entity.getMaNV().isBlank()) {
                 entity.setMaNV(generateNewMaNhanVien());
                 nhanVien.setMaNV(entity.getMaNV());
@@ -70,7 +67,7 @@ public class NhanVienServiceImpl implements NhanVienService {
     }
 
     @Override
-    public boolean update(NhanVien nhanVien) {
+    public boolean update(NhanVienDto nhanVien) {
         if (nhanVien == null || nhanVien.getMaNV() == null || nhanVien.getMaNV().isBlank()) {
             return false;
         }
@@ -82,7 +79,7 @@ public class NhanVienServiceImpl implements NhanVienService {
             if (!isUsernameAvailable(nhanVien.getTaiKhoan(), nhanVien.getMaNV())) {
                 return false;
             }
-            nhanVienRepository.update(toEntity(nhanVien, existing));
+            nhanVienRepository.update(NhanVienMapper.toEntity(nhanVien, existing));
             return true;
         } catch (RuntimeException exception) {
             return false;
@@ -110,12 +107,12 @@ public class NhanVienServiceImpl implements NhanVienService {
     }
 
     @Override
-    public List<LuongNhanVien> findLuongByMaNhanVien(String maNhanVien) {
+    public List<LuongNhanVienDto> findLuongByMaNhanVien(String maNhanVien) {
         if (maNhanVien == null || maNhanVien.isBlank()) {
             return List.of();
         }
         return luongNhanVienRepository.findByMaNhanVien(maNhanVien).stream()
-                .map(this::toLuongModel)
+                .map(NhanVienMapper::toLuongDto)
                 .toList();
     }
 
@@ -125,13 +122,13 @@ public class NhanVienServiceImpl implements NhanVienService {
     }
 
     @Override
-    public boolean saveLuongNhanVien(LuongNhanVien luongNhanVien) {
+    public boolean saveLuongNhanVien(LuongNhanVienDto luongNhanVien) {
         if (luongNhanVien == null || luongNhanVien.getNhanVien() == null
                 || luongNhanVien.getNhanVien().getMaNV() == null || luongNhanVien.getNhanVien().getMaNV().isBlank()) {
             return false;
         }
         try {
-            LuongNhanVienEntity entity = toLuongEntity(luongNhanVien);
+            LuongNhanVienEntity entity = NhanVienMapper.toLuongEntity(luongNhanVien);
             if (entity.getMaLNV() == null || entity.getMaLNV().isBlank()) {
                 entity.setMaLNV(generateNewMaLuongNhanVien());
                 luongNhanVien.setMaLNV(entity.getMaLNV());
@@ -148,83 +145,12 @@ public class NhanVienServiceImpl implements NhanVienService {
         }
     }
 
-    private boolean isValidEmployeeRequest(NhanVien nhanVien) {
+    private boolean isValidEmployeeRequest(NhanVienDto nhanVien) {
         return nhanVien != null
                 && nhanVien.getTenNV() != null && !nhanVien.getTenNV().isBlank()
                 && nhanVien.getSdt() != null && !nhanVien.getSdt().isBlank()
                 && nhanVien.getNgaySinh() != null
                 && nhanVien.getTaiKhoan() != null && !nhanVien.getTaiKhoan().isBlank()
                 && nhanVien.getMatKhau() != null && !nhanVien.getMatKhau().isBlank();
-    }
-
-    private NhanVienEntity toEntity(NhanVien model, NhanVienEntity existing) {
-        NhanVienEntity entity = existing == null ? new NhanVienEntity() : existing;
-        entity.setMaNV(model.getMaNV());
-        entity.setTenNV(model.getTenNV());
-        entity.setSdt(model.getSdt());
-        entity.setEmail(model.getEmail());
-        entity.setNgaySinh(model.getNgaySinh());
-        entity.setGioiTinh(model.isGioiTinh());
-        entity.setDiaChi(model.getDiaChi());
-        entity.setTrangThai(model.isTrangThai());
-        entity.setTaiKhoan(model.getTaiKhoan() == null || model.getTaiKhoan().isBlank() ? entity.getTaiKhoan() : model.getTaiKhoan().trim());
-        entity.setMatKhau(model.getMatKhau() == null || model.getMatKhau().isBlank() ? entity.getMatKhau() : model.getMatKhau());
-        entity.setNgayVaoLam(model.getNgayVaoLam() != null ? model.getNgayVaoLam() : Date.valueOf(LocalDate.now()));
-        entity.setNgayKetThuc(model.getNgayNghiLam());
-        entity.setTrangThaiXoa(model.isTrangThaiXoa());
-
-        String vaiTro = model.getVaiTro();
-        if (vaiTro == null || vaiTro.isBlank()) {
-            vaiTro = existing != null && existing.getVaiTro() != null && !existing.getVaiTro().isBlank()
-                    ? existing.getVaiTro()
-                    : UserRole.STAFF.toLegacyValue();
-        }
-        entity.setVaiTro(vaiTro);
-        return entity;
-    }
-
-    private NhanVien toModel(NhanVienEntity entity) {
-        return new NhanVien(
-                entity.getMaNV(),
-                entity.getTenNV(),
-                entity.getSdt(),
-                entity.getEmail(),
-                entity.getNgaySinh(),
-                entity.isGioiTinh(),
-                entity.getDiaChi(),
-                entity.isTrangThai(),
-                entity.getTaiKhoan(),
-                entity.getMatKhau(),
-                entity.getNgayVaoLam(),
-                entity.getNgayKetThuc(),
-                entity.isTrangThaiXoa(),
-                entity.getVaiTro()
-        );
-    }
-
-    private LuongNhanVienEntity toLuongEntity(LuongNhanVien model) {
-        LuongNhanVienEntity entity = new LuongNhanVienEntity();
-        entity.setMaLNV(model.getMaLNV());
-        entity.setTuNgay(model.getTuNgay());
-        entity.setDenNgay(model.getDenNgay());
-        entity.setLuongCoBan(BigDecimal.valueOf(model.getLuongCoBan()));
-        entity.setPhuCap(BigDecimal.valueOf(model.getPhuCap()));
-        entity.setGhiChu(model.getGhiChu());
-        entity.setMaNV(model.getNhanVien().getMaNV());
-        return entity;
-    }
-
-    private LuongNhanVien toLuongModel(LuongNhanVienEntity entity) {
-        NhanVien nhanVien = new NhanVien();
-        nhanVien.setMaNV(entity.getMaNV());
-        return new LuongNhanVien(
-                entity.getMaLNV(),
-                entity.getTuNgay(),
-                entity.getDenNgay(),
-                entity.getLuongCoBan() == null ? 0.0 : entity.getLuongCoBan().doubleValue(),
-                entity.getPhuCap() == null ? 0.0 : entity.getPhuCap().doubleValue(),
-                entity.getGhiChu(),
-                nhanVien
-        );
     }
 }

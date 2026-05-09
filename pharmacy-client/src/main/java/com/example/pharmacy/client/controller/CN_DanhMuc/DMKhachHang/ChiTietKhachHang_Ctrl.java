@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMKhachHang;
 
-import com.example.pharmacy.common.model.KhachHang;
+import com.example.pharmacy.common.model.KhachHangDto;
 import com.example.pharmacy.client.service.KhachHangService;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -33,7 +33,7 @@ public class ChiTietKhachHang_Ctrl extends Application {
     public Label errSDT;
 
     private final KhachHangService khachHangService = new KhachHangService();
-    private KhachHang khachHang;
+    private KhachHangDto khachHang;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -60,7 +60,7 @@ public class ChiTietKhachHang_Ctrl extends Application {
         }
     }
 
-    public void hienThiThongTin(KhachHang kh) {
+    public void hienThiThongTin(KhachHangDto kh) {
         if (kh != null) {
             this.khachHang = kh;
         }
@@ -113,7 +113,7 @@ public class ChiTietKhachHang_Ctrl extends Application {
             }
 
             if (khachHang == null) {
-                khachHang = new KhachHang();
+                khachHang = new KhachHangDto();
             }
 
             khachHang.setTenKH(txtTenKH.getText().trim());

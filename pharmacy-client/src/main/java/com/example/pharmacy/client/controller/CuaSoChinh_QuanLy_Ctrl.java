@@ -7,14 +7,14 @@ import com.example.pharmacy.client.service.TonKhoClientService;
 import com.example.pharmacy.client.service.RmiTonKhoClientService;
 import com.example.pharmacy.common.request.DateRangeRequest;
 import com.example.pharmacy.client.TienIch.VNDFormatter;
-import com.example.pharmacy.common.model.ThongKeBanHang;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
+import com.example.pharmacy.common.model.ThongKeBanHangDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
 import com.example.pharmacy.client.session.SessionContext;
 import com.example.pharmacy.common.session.UserContext;
 import com.example.pharmacy.client.view.CuaSoChinh_QuanLy_GUI;
 import com.example.pharmacy.client.view.DangNhap_GUI;
 import com.example.pharmacy.client.view.ViewEmbedder;
-import com.example.pharmacy.client.view.CN_XuLy.CaiDat.caiDat_GUI;
+import com.example.pharmacy.client.view.CN_XuLy.CaiDatDto.caiDat_GUI;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -53,14 +53,14 @@ public class CuaSoChinh_QuanLy_Ctrl extends Application {
     public Menu menuXuLy;
     public Label txtNguoiDung;
     public Label txtNgayThangNam;
-    public TableView<Thuoc_SP_TheoLo> tblThuocHetHan;
-    public TableColumn<Thuoc_SP_TheoLo, String> colMaThuocHetHan;
-    public TableColumn<Thuoc_SP_TheoLo, String> colLoHangHetHan;
-    public TableColumn<Thuoc_SP_TheoLo, java.sql.Date> colHSDHetHan;
-    public TableView<Thuoc_SP_TheoLo> tblThuocSapHetHan;
-    public TableColumn<Thuoc_SP_TheoLo, String> colMaThuocSapHetHan;
-    public TableColumn<Thuoc_SP_TheoLo, String> colLoHangSapHetHan;
-    public TableColumn<Thuoc_SP_TheoLo, java.sql.Date> colHSDSapHetHan;
+    public TableView<Thuoc_SP_TheoLoDto> tblThuocHetHan;
+    public TableColumn<Thuoc_SP_TheoLoDto, String> colMaThuocHetHan;
+    public TableColumn<Thuoc_SP_TheoLoDto, String> colLoHangHetHan;
+    public TableColumn<Thuoc_SP_TheoLoDto, java.sql.Date> colHSDHetHan;
+    public TableView<Thuoc_SP_TheoLoDto> tblThuocSapHetHan;
+    public TableColumn<Thuoc_SP_TheoLoDto, String> colMaThuocSapHetHan;
+    public TableColumn<Thuoc_SP_TheoLoDto, String> colLoHangSapHetHan;
+    public TableColumn<Thuoc_SP_TheoLoDto, java.sql.Date> colHSDSapHetHan;
     public Label lbl_SoLuongHangHetHan;
     public Label lbl_SoLuongHangSapHetHan;
     public LineChart chartDoanhThuThangNay;
@@ -111,14 +111,14 @@ public class CuaSoChinh_QuanLy_Ctrl extends Application {
             prevMonth.setFromDate(startPrev);
             prevMonth.setToDate(now.withDayOfMonth(1).minusDays(1));
 
-            List<ThongKeBanHang> dataThis = reportService.getThongKeBanHangByDateRange(thisMonth);
-            List<ThongKeBanHang> dataPrev = reportService.getThongKeBanHangByDateRange(prevMonth);
+            List<ThongKeBanHangDto> dataThis = reportService.getThongKeBanHangByDateRange(thisMonth);
+            List<ThongKeBanHangDto> dataPrev = reportService.getThongKeBanHangByDateRange(prevMonth);
 
             if (dataThis != null && dataPrev != null) {
-                int invoicesThis = dataThis.stream().mapToInt(ThongKeBanHang::getSoLuongHoaDon).sum();
-                double revenueThis = dataThis.stream().mapToDouble(ThongKeBanHang::getDoanhThu).sum();
-                int invoicesPrev = dataPrev.stream().mapToInt(ThongKeBanHang::getSoLuongHoaDon).sum();
-                double revenuePrev = dataPrev.stream().mapToDouble(ThongKeBanHang::getDoanhThu).sum();
+                int invoicesThis = dataThis.stream().mapToInt(ThongKeBanHangDto::getSoLuongHoaDon).sum();
+                double revenueThis = dataThis.stream().mapToDouble(ThongKeBanHangDto::getDoanhThu).sum();
+                int invoicesPrev = dataPrev.stream().mapToInt(ThongKeBanHangDto::getSoLuongHoaDon).sum();
+                double revenuePrev = dataPrev.stream().mapToDouble(ThongKeBanHangDto::getDoanhThu).sum();
 
                 VNDFormatter vndFormatter = new VNDFormatter();
                 lblHoaDonThangNay.setText(invoicesThis + " Hóa đơn");
@@ -130,7 +130,7 @@ public class CuaSoChinh_QuanLy_Ctrl extends Application {
                 XYChart.Series<String, Number> series = new XYChart.Series<>();
                 series.setName("Doanh thu");
                 chartDoanhThuThangNay.setLegendVisible(false);
-                for (ThongKeBanHang tk : dataThis) {
+                for (ThongKeBanHangDto tk : dataThis) {
                     String label = tk.getThoiGian() == null ? "" : tk.getThoiGian();
                     series.getData().add(new XYChart.Data<>(label, tk.getDoanhThu()));
                 }

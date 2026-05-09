@@ -3,11 +3,11 @@ package com.example.pharmacy.client.service;
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.common.remote.ReportRemote;
 import com.example.pharmacy.common.request.DateRangeRequest;
-import com.example.pharmacy.common.model.HoaDonDisplay;
-import com.example.pharmacy.common.model.ThongKeBanHang;
-import com.example.pharmacy.common.model.ThongKeTonKho;
-import com.example.pharmacy.common.model.ThongKeTopSanPham;
-import com.example.pharmacy.common.model.ThuocHetHan;
+import com.example.pharmacy.common.model.HoaDonDisplayDto;
+import com.example.pharmacy.common.model.ThongKeBanHangDto;
+import com.example.pharmacy.common.model.ThongKeTonKhoDto;
+import com.example.pharmacy.common.model.ThongKeTopSanPhamDto;
+import com.example.pharmacy.common.model.ThuocHetHanDto;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -22,7 +22,7 @@ public class RmiReportClientService implements ReportClientService {
     }
 
     @Override
-    public List<ThongKeBanHang> getThongKeBanHang(String preset) {
+    public List<ThongKeBanHangDto> getThongKeBanHang(String preset) {
         try {
             return remote().getThongKeBanHang(preset);
         } catch (RemoteException | NotBoundException exception) {
@@ -32,7 +32,7 @@ public class RmiReportClientService implements ReportClientService {
     }
 
     @Override
-    public List<ThongKeBanHang> getThongKeBanHangByDateRange(DateRangeRequest request) {
+    public List<ThongKeBanHangDto> getThongKeBanHangByDateRange(DateRangeRequest request) {
         try {
             return remote().getThongKeBanHangByDateRange(request);
         } catch (RemoteException | NotBoundException exception) {
@@ -42,7 +42,7 @@ public class RmiReportClientService implements ReportClientService {
     }
 
     @Override
-    public List<HoaDonDisplay> getHoaDonTheoThoiGian(String preset) {
+    public List<HoaDonDisplayDto> getHoaDonTheoThoiGian(String preset) {
         try {
             return remote().getHoaDonTheoThoiGian(preset);
         } catch (RemoteException | NotBoundException exception) {
@@ -52,7 +52,7 @@ public class RmiReportClientService implements ReportClientService {
     }
 
     @Override
-    public List<HoaDonDisplay> getHoaDonTheoDateRange(DateRangeRequest request) {
+    public List<HoaDonDisplayDto> getHoaDonTheoDateRange(DateRangeRequest request) {
         try {
             return remote().getHoaDonTheoDateRange(request);
         } catch (RemoteException | NotBoundException exception) {
@@ -62,7 +62,7 @@ public class RmiReportClientService implements ReportClientService {
     }
 
     @Override
-    public List<ThongKeTopSanPham> getTopBanChay(DateRangeRequest request, int limit) {
+    public List<ThongKeTopSanPhamDto> getTopBanChay(DateRangeRequest request, int limit) {
         try {
             return remote().getTopBanChay(request, limit);
         } catch (RemoteException | NotBoundException exception) {
@@ -72,7 +72,7 @@ public class RmiReportClientService implements ReportClientService {
     }
 
     @Override
-    public List<ThongKeTopSanPham> getTopDoanhThu(DateRangeRequest request, int limit) {
+    public List<ThongKeTopSanPhamDto> getTopDoanhThu(DateRangeRequest request, int limit) {
         try {
             return remote().getTopDoanhThu(request, limit);
         } catch (RemoteException | NotBoundException exception) {
@@ -82,7 +82,7 @@ public class RmiReportClientService implements ReportClientService {
     }
 
     @Override
-    public List<ThongKeTonKho> getThongKeXnt(DateRangeRequest request) {
+    public List<ThongKeTonKhoDto> getThongKeXnt(DateRangeRequest request) {
         try {
             return remote().getThongKeXnt(request);
         } catch (RemoteException | NotBoundException exception) {
@@ -92,7 +92,7 @@ public class RmiReportClientService implements ReportClientService {
     }
 
     @Override
-    public List<ThuocHetHan> getThuocHetHan() {
+    public List<ThuocHetHanDto> getThuocHetHan() {
         try {
             return remote().getThuocHetHan();
         } catch (RemoteException | NotBoundException exception) {

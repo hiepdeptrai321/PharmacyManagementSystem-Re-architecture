@@ -2,8 +2,8 @@ package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.common.remote.NhanVienRemote;
-import com.example.pharmacy.common.model.LuongNhanVien;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.LuongNhanVienDto;
+import com.example.pharmacy.common.model.NhanVienDto;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -18,7 +18,7 @@ public class RmiNhanVienClientService implements NhanVienClientService {
     }
 
     @Override
-    public List<NhanVien> findAll() {
+    public List<NhanVienDto> findAll() {
         try {
             return remote().findAll();
         } catch (RemoteException | NotBoundException exception) {
@@ -28,7 +28,7 @@ public class RmiNhanVienClientService implements NhanVienClientService {
     }
 
     @Override
-    public NhanVien findById(String maNhanVien) {
+    public NhanVienDto findById(String maNhanVien) {
         try {
             return remote().findById(maNhanVien);
         } catch (RemoteException | NotBoundException exception) {
@@ -48,7 +48,7 @@ public class RmiNhanVienClientService implements NhanVienClientService {
     }
 
     @Override
-    public boolean create(NhanVien nhanVien) {
+    public boolean create(NhanVienDto nhanVien) {
         try {
             return remote().create(nhanVien);
         } catch (RemoteException | NotBoundException exception) {
@@ -58,7 +58,7 @@ public class RmiNhanVienClientService implements NhanVienClientService {
     }
 
     @Override
-    public boolean update(NhanVien nhanVien) {
+    public boolean update(NhanVienDto nhanVien) {
         try {
             return remote().update(nhanVien);
         } catch (RemoteException | NotBoundException exception) {
@@ -88,7 +88,7 @@ public class RmiNhanVienClientService implements NhanVienClientService {
     }
 
     @Override
-    public List<LuongNhanVien> findLuongByMaNhanVien(String maNhanVien) {
+    public List<LuongNhanVienDto> findLuongByMaNhanVien(String maNhanVien) {
         try {
             return remote().findLuongByMaNhanVien(maNhanVien);
         } catch (RemoteException | NotBoundException exception) {
@@ -108,7 +108,7 @@ public class RmiNhanVienClientService implements NhanVienClientService {
     }
 
     @Override
-    public boolean saveLuongNhanVien(LuongNhanVien luongNhanVien) {
+    public boolean saveLuongNhanVien(LuongNhanVienDto luongNhanVien) {
         try {
             return remote().saveLuongNhanVien(luongNhanVien);
         } catch (RemoteException | NotBoundException exception) {

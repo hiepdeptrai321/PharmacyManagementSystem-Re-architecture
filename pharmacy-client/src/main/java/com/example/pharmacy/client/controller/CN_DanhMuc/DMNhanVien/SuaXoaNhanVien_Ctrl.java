@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMNhanVien;
 
-import com.example.pharmacy.common.model.LuongNhanVien;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.LuongNhanVienDto;
+import com.example.pharmacy.common.model.NhanVienDto;
 import com.example.pharmacy.client.service.NhanVienService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -33,17 +33,17 @@ public class SuaXoaNhanVien_Ctrl {
     public TextField txtNgayKT;
     public ComboBox<String> cbxTrangThai;
     public DatePicker txtNgaySinh;
-    public TableView<LuongNhanVien> tblLuongNV;
-    public TableColumn<LuongNhanVien, String> colMaLuong;
-    public TableColumn<LuongNhanVien, String> colTuNgay;
-    public TableColumn<LuongNhanVien, String> colDenNgay;
-    public TableColumn<LuongNhanVien, Double> colLuongCoBan;
-    public TableColumn<LuongNhanVien, Double> colPhuCap;
-    public TableColumn<LuongNhanVien, String> colGhiChu;
+    public TableView<LuongNhanVienDto> tblLuongNV;
+    public TableColumn<LuongNhanVienDto, String> colMaLuong;
+    public TableColumn<LuongNhanVienDto, String> colTuNgay;
+    public TableColumn<LuongNhanVienDto, String> colDenNgay;
+    public TableColumn<LuongNhanVienDto, Double> colLuongCoBan;
+    public TableColumn<LuongNhanVienDto, Double> colPhuCap;
+    public TableColumn<LuongNhanVienDto, String> colGhiChu;
 
     private final NhanVienService nhanVienService = new NhanVienService();
-    private List<LuongNhanVien> listLuong;
-    private NhanVien nhanVien;
+    private List<LuongNhanVienDto> listLuong;
+    private NhanVienDto nhanVien;
     public DanhMucNhanVien_Ctrl danhMucNhanVien_Ctrl;
 
     public void initialize() {
@@ -52,12 +52,12 @@ public class SuaXoaNhanVien_Ctrl {
         configureLuongTable();
     }
 
-    public void load(NhanVien nhanVien) {
+    public void load(NhanVienDto nhanVien) {
         loadDataNhanVien(nhanVien);
         this.nhanVien = nhanVien;
     }
 
-    public void loadDataNhanVien(NhanVien nhanVien) {
+    public void loadDataNhanVien(NhanVienDto nhanVien) {
         txtMaNV.setText(nhanVien.getMaNV());
         txtTenNV.setText(nhanVien.getTenNV());
         txtSDT.setText(nhanVien.getSdt());
@@ -87,7 +87,7 @@ public class SuaXoaNhanVien_Ctrl {
             gui.showWithController(dialog, ctrl, nhanVien);
 
             if (ctrl.isSaved) {
-                NhanVien updated = ctrl.getUpdatedNhanVien();
+                NhanVienDto updated = ctrl.getUpdatedNhanVien();
                 if (updated != null) {
                     nhanVien.setTaiKhoan(updated.getTaiKhoan());
                     nhanVien.setMatKhau(updated.getMatKhau());
@@ -104,10 +104,10 @@ public class SuaXoaNhanVien_Ctrl {
             var ctrl = new com.example.pharmacy.client.controller.CN_DanhMuc.DMNhanVien.ThietLapLuongNV_Ctrl();
             var gui = new com.example.pharmacy.client.view.CN_DanhMuc.DMNhanVien.ThietLapLuongNV_GUI();
 
-            LuongNhanVien luongHienHanh = listLuong == null ? null : listLuong.stream()
+            LuongNhanVienDto luongHienHanh = listLuong == null ? null : listLuong.stream()
                     .filter(lnv -> lnv.getDenNgay() == null)
                     .findFirst()
-                    .map(lnv -> new LuongNhanVien(
+                    .map(lnv -> new LuongNhanVienDto(
                             lnv.getMaLNV(),
                             lnv.getTuNgay(),
                             lnv.getDenNgay(),
@@ -119,7 +119,7 @@ public class SuaXoaNhanVien_Ctrl {
                     .orElse(null);
 
             if (luongHienHanh == null) {
-                luongHienHanh = new LuongNhanVien(null, null, null, 0.0, 0.0, "", nhanVien);
+                luongHienHanh = new LuongNhanVienDto(null, null, null, 0.0, 0.0, "", nhanVien);
             }
 
             Stage dialog = new Stage();
@@ -134,7 +134,7 @@ public class SuaXoaNhanVien_Ctrl {
             }
 
             if (listLuong != null) {
-                for (LuongNhanVien lnv : listLuong) {
+                for (LuongNhanVienDto lnv : listLuong) {
                     if (lnv.getDenNgay() == null) {
                         lnv.setDenNgay(Date.valueOf(LocalDate.now()));
                         nhanVienService.saveLuongNhanVien(lnv);
@@ -143,8 +143,8 @@ public class SuaXoaNhanVien_Ctrl {
                 }
             }
 
-            LuongNhanVien updated = ctrl.luongNhanVien;
-            LuongNhanVien moi = new LuongNhanVien();
+            LuongNhanVienDto updated = ctrl.luongNhanVien;
+            LuongNhanVienDto moi = new LuongNhanVienDto();
             moi.setMaLNV(nhanVienService.generateNewMaLuongNhanVien());
             moi.setTuNgay(Date.valueOf(LocalDate.now().plusDays(1)));
             moi.setDenNgay(null);
@@ -169,7 +169,7 @@ public class SuaXoaNhanVien_Ctrl {
             return;
         }
 
-        NhanVien updated = new NhanVien();
+        NhanVienDto updated = new NhanVienDto();
         updated.setMaNV(txtMaNV.getText().trim());
         updated.setTenNV(txtTenNV.getText().trim());
         updated.setSdt(txtSDT.getText().trim());

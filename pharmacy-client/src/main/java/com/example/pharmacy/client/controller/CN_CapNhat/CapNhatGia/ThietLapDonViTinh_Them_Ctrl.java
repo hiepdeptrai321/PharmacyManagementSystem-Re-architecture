@@ -1,9 +1,9 @@
 package com.example.pharmacy.client.controller.CN_CapNhat.CapNhatGia;
 
 import com.example.pharmacy.client.TienIch.TuyChinhAlert;
-import com.example.pharmacy.common.model.ChiTietDonViTinh;
-import com.example.pharmacy.common.model.DonViTinh;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietDonViTinhDto;
+import com.example.pharmacy.common.model.DonViTinhDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import com.example.pharmacy.client.service.DonViTinhService;
 import javafx.application.Platform;
 import javafx.scene.control.*;
@@ -25,8 +25,8 @@ public class ThietLapDonViTinh_Them_Ctrl {
     public ComboBox cbDVT;
     public Button btnThem, btnHuy;
     private String maThuoc;
-    private Consumer<ChiTietDonViTinh> onAdded;
-    ChiTietDonViTinh ctdvt = new ChiTietDonViTinh();
+    private Consumer<ChiTietDonViTinhDto> onAdded;
+    ChiTietDonViTinhDto ctdvt = new ChiTietDonViTinhDto();
     private final DonViTinhService donViTinhService = new DonViTinhService();
 
     // 2. KHỞI TẠO (INITIALIZE)
@@ -109,8 +109,8 @@ public class ThietLapDonViTinh_Them_Ctrl {
 
     public void loadCbDVT(){
         cbDVT.getItems().clear();
-        List<DonViTinh> list = donViTinhService.findAll();
-        for(DonViTinh donViTinh : list){
+        List<DonViTinhDto> list = donViTinhService.findAll();
+        for(DonViTinhDto donViTinh : list){
             cbDVT.getItems().add(donViTinh.getTenDonViTinh());
         }
     }
@@ -139,7 +139,7 @@ public class ThietLapDonViTinh_Them_Ctrl {
     public void btnThemClick(MouseEvent mouseEvent) {
         if (!kiemTraData()) return;
 
-        DonViTinh dvt = donViTinhService.selectByTenDVT(cbDVT.getSelectionModel().getSelectedItem().toString());
+        DonViTinhDto dvt = donViTinhService.selectByTenDVT(cbDVT.getSelectionModel().getSelectedItem().toString());
 
         Float heSo = parseNumberVN(tfHeSo.getText().trim());
         Double giaNhap = parseVNDFormat(tfGiaNhap.getText().trim());
@@ -150,7 +150,7 @@ public class ThietLapDonViTinh_Them_Ctrl {
         ctdvt.setGiaNhap(giaNhap);
         ctdvt.setGiaBan(giaBan);
         ctdvt.setDonViCoBan(checkDVCB.isSelected());
-        Thuoc_SanPham thuoc = new Thuoc_SanPham();
+        Thuoc_SanPhamDto thuoc = new Thuoc_SanPhamDto();
         thuoc.setMaThuoc(maThuoc);
         ctdvt.setThuoc(thuoc);
 
@@ -164,7 +164,7 @@ public class ThietLapDonViTinh_Them_Ctrl {
 
 
     //2 tham số cho luồng thêm mới
-    public void setContext(String maThuoc, Consumer<ChiTietDonViTinh> onAdded) {
+    public void setContext(String maThuoc, Consumer<ChiTietDonViTinhDto> onAdded) {
         this.maThuoc = maThuoc;
         this.onAdded = onAdded;
     }

@@ -4,9 +4,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "NhomDuocLy")
+@Getter @Setter @NoArgsConstructor
 public class NhomDuocLyEntity {
     @Id
     @Column(name = "MaNDL", nullable = false, length = 10)
@@ -17,28 +21,4 @@ public class NhomDuocLyEntity {
 
     @Column(name = "MoTa", columnDefinition = "TEXT")
     private String moTa;
-
-    public String getMaNDL() {
-        return maNDL;
-    }
-
-    public void setMaNDL(String maNDL) {
-        this.maNDL = maNDL;
-    }
-
-    public String getTenNDL() {
-        return tenNDL;
-    }
-
-    public void setTenNDL(String tenNDL) {
-        this.tenNDL = tenNDL;
-    }
-
-    public String getMoTa() {
-        return moTa;
-    }
-
-    public void setMoTa(String moTa) {
-        this.moTa = moTa;
-    }
 }

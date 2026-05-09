@@ -1,8 +1,8 @@
 package com.example.pharmacy.client.view.CN_ThongKe;
 
 import com.example.pharmacy.client.controller.CN_ThongKe.ThongKeXNT_Ctrl;
-import com.example.pharmacy.common.model.ThongKeTonKho;
-import com.example.pharmacy.common.model.ThuocHetHan;
+import com.example.pharmacy.common.model.ThongKeTonKhoDto;
+import com.example.pharmacy.common.model.ThuocHetHanDto;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -24,21 +24,21 @@ public class ThongKeXNT_GUI {
         // --- Tạo các thành phần giao diện ---
 
         // 1. Bảng Tồn kho
-        TableView<ThongKeTonKho> tbTon = new TableView<>();
-        TableColumn<ThongKeTonKho, Integer> ColTDK = new TableColumn<>("Tồn đầu kỳ");
-        TableColumn<ThongKeTonKho, String> colDVT = new TableColumn<>("ĐVT");
-        TableColumn<ThongKeTonKho, String> colMaThuoc = new TableColumn<>("Mã thuốc");
-        TableColumn<ThongKeTonKho, Integer> colNTK = new TableColumn<>("Nhập trong kỳ");
-        TableColumn<ThongKeTonKho, String> colTenThuoc = new TableColumn<>("Tên thuốc");
-        TableColumn<ThongKeTonKho, Integer> colTCK = new TableColumn<>("Tồn cuối kỳ");
-        TableColumn<ThongKeTonKho, Integer> colXTK = new TableColumn<>("Xuất trong kỳ");
+        TableView<ThongKeTonKhoDto> tbTon = new TableView<>();
+        TableColumn<ThongKeTonKhoDto, Integer> ColTDK = new TableColumn<>("Tồn đầu kỳ");
+        TableColumn<ThongKeTonKhoDto, String> colDVT = new TableColumn<>("ĐVT");
+        TableColumn<ThongKeTonKhoDto, String> colMaThuoc = new TableColumn<>("Mã thuốc");
+        TableColumn<ThongKeTonKhoDto, Integer> colNTK = new TableColumn<>("Nhập trong kỳ");
+        TableColumn<ThongKeTonKhoDto, String> colTenThuoc = new TableColumn<>("Tên thuốc");
+        TableColumn<ThongKeTonKhoDto, Integer> colTCK = new TableColumn<>("Tồn cuối kỳ");
+        TableColumn<ThongKeTonKhoDto, Integer> colXTK = new TableColumn<>("Xuất trong kỳ");
 
         // 2. Bảng Hết hạn
-        TableView<ThuocHetHan> tbHetHan = new TableView<>();
-        TableColumn<ThuocHetHan, String> colMaThuocHH = new TableColumn<>("Mã Thuốc");
-        TableColumn<ThuocHetHan, LocalDate> colNgayHH = new TableColumn<>("Ngày hết hạn");
-        TableColumn<ThuocHetHan, Integer> colSoLuong = new TableColumn<>("Số Lượng");
-        TableColumn<ThuocHetHan, String> cotTenThuocHH = new TableColumn<>("Tên Thuốc");
+        TableView<ThuocHetHanDto> tbHetHan = new TableView<>();
+        TableColumn<ThuocHetHanDto, String> colMaThuocHH = new TableColumn<>("Mã Thuốc");
+        TableColumn<ThuocHetHanDto, LocalDate> colNgayHH = new TableColumn<>("Ngày hết hạn");
+        TableColumn<ThuocHetHanDto, Integer> colSoLuong = new TableColumn<>("Số Lượng");
+        TableColumn<ThuocHetHanDto, String> cotTenThuocHH = new TableColumn<>("Tên Thuốc");
 
         // Panel bên trái (Giữ nguyên)
         Button btnXuat = new Button("Xuất File 💾");
@@ -159,7 +159,7 @@ public class ThongKeXNT_GUI {
 
         // --- Tạo Scene ---
         Scene scene = new Scene(root);
-        String cssPath = "/com/example/pharmacy/client/css/ThongKeBanHang.css";
+        String cssPath = "/com/example/pharmacy/client/css/ThongKeBanHangDto.css";
         java.net.URL cssUrl = getClass().getResource(cssPath);
         if (cssUrl != null) root.getStylesheets().add(cssUrl.toExternalForm());
 

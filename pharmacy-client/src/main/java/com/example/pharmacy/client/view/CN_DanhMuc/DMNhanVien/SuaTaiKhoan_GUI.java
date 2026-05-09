@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_DanhMuc.DMNhanVien;
 
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMNhanVien.SuaTaiKhoan_Ctrl;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.NhanVienDto;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -24,7 +24,7 @@ public class SuaTaiKhoan_GUI {
     public Button btnLuu;
     public Button btnHuy;
 
-    public void showWithController(Stage dialog, SuaTaiKhoan_Ctrl ctrl, NhanVien nhanVien) {
+    public void showWithController(Stage dialog, SuaTaiKhoan_Ctrl ctrl, NhanVienDto nhanVien) {
         AnchorPane root = buildUI();
 
         ctrl.txtTaiKhoan = txtTaiKhoan;

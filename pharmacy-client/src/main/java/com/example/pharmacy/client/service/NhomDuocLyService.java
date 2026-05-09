@@ -3,7 +3,7 @@ package com.example.pharmacy.client.service;
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.client.service.NhomDuocLyClientService;
 import com.example.pharmacy.client.service.RmiNhomDuocLyClientService;
-import com.example.pharmacy.common.model.NhomDuocLy;
+import com.example.pharmacy.common.model.NhomDuocLyDto;
 
 import java.util.List;
 
@@ -11,11 +11,11 @@ public class NhomDuocLyService {
     private final NhomDuocLyClientService nhomDuocLyClientService =
             new RmiNhomDuocLyClientService(new RmiClientProvider());
 
-    public List<NhomDuocLy> findAll() {
+    public List<NhomDuocLyDto> findAll() {
         return nhomDuocLyClientService.findAll();
     }
 
-    public NhomDuocLy findById(String maNhomDuocLy) {
+    public NhomDuocLyDto findById(String maNhomDuocLy) {
         return nhomDuocLyClientService.findById(maNhomDuocLy);
     }
 
@@ -23,11 +23,11 @@ public class NhomDuocLyService {
         return nhomDuocLyClientService.generateNewMaNhomDuocLy();
     }
 
-    public boolean create(NhomDuocLy nhomDuocLy) {
+    public boolean create(NhomDuocLyDto nhomDuocLy) {
         return nhomDuocLyClientService.create(nhomDuocLy);
     }
 
-    public boolean update(NhomDuocLy nhomDuocLy) {
+    public boolean update(NhomDuocLyDto nhomDuocLy) {
         return nhomDuocLyClientService.update(nhomDuocLy);
     }
 
@@ -41,12 +41,12 @@ public class NhomDuocLyService {
 
     public List<String> getAllTenNhomDuocLy() {
         return findAll().stream()
-                .map(NhomDuocLy::getTenNDL)
+                .map(NhomDuocLyDto::getTenNDL)
                 .filter(tenNDL -> tenNDL != null && !tenNDL.isBlank())
                 .toList();
     }
 
-    public NhomDuocLy selectByTenNhomDuocLy(String tenNhomDuocLy) {
+    public NhomDuocLyDto selectByTenNhomDuocLy(String tenNhomDuocLy) {
         if (tenNhomDuocLy == null || tenNhomDuocLy.isBlank()) {
             return null;
         }
@@ -56,7 +56,7 @@ public class NhomDuocLyService {
                 .orElse(null);
     }
 
-    public List<NhomDuocLy> searchByKeyword(String keyword) {
+    public List<NhomDuocLyDto> searchByKeyword(String keyword) {
         String tuKhoa = keyword == null ? "" : keyword.trim().toLowerCase();
         if (tuKhoa.isEmpty()) {
             return findAll();

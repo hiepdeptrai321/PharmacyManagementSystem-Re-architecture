@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMNhomDuocLy;
 
 import com.example.pharmacy.client.TienIch.TuyChinhAlert;
-import com.example.pharmacy.common.model.NhomDuocLy;
+import com.example.pharmacy.common.model.NhomDuocLyDto;
 import com.example.pharmacy.client.service.NhomDuocLyService;
 import com.example.pharmacy.client.view.CN_DanhMuc.DMNhomDuocLy.ThemNhomDuocLy_GUI;
 import com.example.pharmacy.client.view.CN_DanhMuc.DMNhomDuocLy.XoaSuaNhomDuocLy_GUI;
@@ -27,11 +27,11 @@ public class DanhMucNhomDuocLy_Ctrl extends Application {
     public Button btnLamMoi;
     public Button btnTim;
     public Button btnXoa;
-    public TableColumn<NhomDuocLy, String> cotMaNDL;
-    public TableColumn<NhomDuocLy, String> cotSTT;
-    public TableColumn<NhomDuocLy, String> cotTenNDL;
-    public TableColumn<NhomDuocLy, String> colChiTiet;
-    public TableView<NhomDuocLy> tbNhomDuocLy;
+    public TableColumn<NhomDuocLyDto, String> cotMaNDL;
+    public TableColumn<NhomDuocLyDto, String> cotSTT;
+    public TableColumn<NhomDuocLyDto, String> cotTenNDL;
+    public TableColumn<NhomDuocLyDto, String> colChiTiet;
+    public TableView<NhomDuocLyDto> tbNhomDuocLy;
     public TextField txtTimKiem;
 
     private final NhomDuocLyService nhomDuocLyService = new NhomDuocLyService();
@@ -51,8 +51,8 @@ public class DanhMucNhomDuocLy_Ctrl extends Application {
     }
 
     public void loadTable() {
-        List<NhomDuocLy> list = nhomDuocLyService.findAll();
-        ObservableList<NhomDuocLy> data = FXCollections.observableArrayList(list);
+        List<NhomDuocLyDto> list = nhomDuocLyService.findAll();
+        ObservableList<NhomDuocLyDto> data = FXCollections.observableArrayList(list);
         cotSTT.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(tbNhomDuocLy.getItems().indexOf(cellData.getValue()) + 1)));
         cotMaNDL.setCellValueFactory(new PropertyValueFactory<>("maNDL"));
@@ -74,7 +74,7 @@ public class DanhMucNhomDuocLy_Ctrl extends Application {
             private final Button btn = new Button("Chi tiet");
             {
                 btn.setOnAction(event -> {
-                    NhomDuocLy ndl = getTableView().getItems().get(getIndex());
+                    NhomDuocLyDto ndl = getTableView().getItems().get(getIndex());
                     btnChiTietClick(ndl);
                 });
                 btn.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
@@ -92,7 +92,7 @@ public class DanhMucNhomDuocLy_Ctrl extends Application {
 
     private void timKiem() {
         String keyword = txtTimKiem.getText().trim().toLowerCase();
-        List<NhomDuocLy> filtered = nhomDuocLyService.searchByKeyword(keyword);
+        List<NhomDuocLyDto> filtered = nhomDuocLyService.searchByKeyword(keyword);
         tbNhomDuocLy.setItems(FXCollections.observableArrayList(filtered));
     }
 
@@ -120,7 +120,7 @@ public class DanhMucNhomDuocLy_Ctrl extends Application {
         }
     }
 
-    public void btnChiTietClick(NhomDuocLy ndl) {
+    public void btnChiTietClick(NhomDuocLyDto ndl) {
         try {
             Stage stage = new Stage();
         TuyChinhAlert.setAppIcon(stage);

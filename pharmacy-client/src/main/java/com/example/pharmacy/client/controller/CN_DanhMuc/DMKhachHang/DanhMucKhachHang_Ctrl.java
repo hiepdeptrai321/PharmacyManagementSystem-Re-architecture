@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMKhachHang;
 
-import com.example.pharmacy.common.model.KhachHang;
+import com.example.pharmacy.common.model.KhachHangDto;
 import com.example.pharmacy.client.service.KhachHangService;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -25,14 +25,14 @@ public class DanhMucKhachHang_Ctrl extends Application {
     public Button btnTim;
     public Button btnLamMoi;
     public Button btnthemKH;
-    public TableColumn<KhachHang, String> cotChiTiet;
-    public TableColumn<KhachHang, String> cotGioiTinh;
-    public TableColumn<KhachHang, String> cotMaKH;
-    public TableColumn<KhachHang, String> cotDiaChi;
-    public TableColumn<KhachHang, String> cotSDT;
-    public TableColumn<KhachHang, String> cotSTT;
-    public TableColumn<KhachHang, String> cotTenKH;
-    public TableView<KhachHang> tbKhachHang;
+    public TableColumn<KhachHangDto, String> cotChiTiet;
+    public TableColumn<KhachHangDto, String> cotGioiTinh;
+    public TableColumn<KhachHangDto, String> cotMaKH;
+    public TableColumn<KhachHangDto, String> cotDiaChi;
+    public TableColumn<KhachHangDto, String> cotSDT;
+    public TableColumn<KhachHangDto, String> cotSTT;
+    public TableColumn<KhachHangDto, String> cotTenKH;
+    public TableView<KhachHangDto> tbKhachHang;
     public TextField txtTim;
 
     private final KhachHangService khachHangService = new KhachHangService();
@@ -48,7 +48,7 @@ public class DanhMucKhachHang_Ctrl extends Application {
     public void initialize() {
         btnLamMoi.setOnAction(e -> LamMoi());
         btnTim.setOnAction(e -> TimKiem());
-        btnthemKH.setOnAction(e -> btnThemClick(new KhachHang()));
+        btnthemKH.setOnAction(e -> btnThemClick(new KhachHangDto()));
         txtTim.setOnAction(e -> TimKiem());
 
         Platform.runLater(()->{
@@ -58,14 +58,14 @@ public class DanhMucKhachHang_Ctrl extends Application {
 
     // --- LOGIC GIỮ NGUYÊN ---
     public void loadTable() {
-        List<KhachHang> list = khachHangService.findAll();
-        ObservableList<KhachHang> data = FXCollections.observableArrayList(list);
+        List<KhachHangDto> list = khachHangService.findAll();
+        ObservableList<KhachHangDto> data = FXCollections.observableArrayList(list);
         cotSTT.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(tbKhachHang.getItems().indexOf(cellData.getValue()) + 1))
         );
         cotMaKH.setCellValueFactory(new PropertyValueFactory<>("MaKH"));
         cotTenKH.setCellValueFactory(new PropertyValueFactory<>("TenKH"));
-        cotTenKH.setCellFactory(col -> new TableCell<KhachHang, String>() {
+        cotTenKH.setCellFactory(col -> new TableCell<KhachHangDto, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -83,7 +83,7 @@ public class DanhMucKhachHang_Ctrl extends Application {
             String gioiTinhText = (gt != null && gt) ? "Nam" : "Nữ";
             return new SimpleStringProperty(gioiTinhText);
         });
-        cotGioiTinh.setCellFactory(col -> new TableCell<KhachHang, String>() {
+        cotGioiTinh.setCellFactory(col -> new TableCell<KhachHangDto, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -98,7 +98,7 @@ public class DanhMucKhachHang_Ctrl extends Application {
         });
 
         cotDiaChi.setCellValueFactory(new PropertyValueFactory<>("DiaChi"));
-        cotDiaChi.setCellFactory(col -> new TableCell<KhachHang, String>() {
+        cotDiaChi.setCellFactory(col -> new TableCell<KhachHangDto, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -113,11 +113,11 @@ public class DanhMucKhachHang_Ctrl extends Application {
         });
         cotSDT.setCellValueFactory(new PropertyValueFactory<>("sdt"));
 
-        cotChiTiet.setCellFactory(col -> new TableCell<KhachHang, String>() {
+        cotChiTiet.setCellFactory(col -> new TableCell<KhachHangDto, String>() {
             private final Button btn = new Button("Chi tiết");
             {
                 btn.setOnAction(event -> {
-                    KhachHang kh = getTableView().getItems().get(getIndex());
+                    KhachHangDto kh = getTableView().getItems().get(getIndex());
                     btnChiTietClick(kh);
                 });
                 btn.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
@@ -133,7 +133,7 @@ public class DanhMucKhachHang_Ctrl extends Application {
     }
 
     // --- ĐÃ CẬP NHẬT: Gọi GUI thuần ---
-    public void btnChiTietClick(KhachHang kh) {
+    public void btnChiTietClick(KhachHangDto kh) {
         try {
             Stage dialog = new Stage();
             dialog.initOwner(txtTim.getScene().getWindow());
@@ -154,7 +154,7 @@ public class DanhMucKhachHang_Ctrl extends Application {
     }
 
     // --- ĐÃ CẬP NHẬT: Gọi GUI thuần ---
-    public void btnThemClick(KhachHang kh) {
+    public void btnThemClick(KhachHangDto kh) {
         try {
             Stage dialog = new Stage();
             dialog.initOwner(tbKhachHang.getScene().getWindow());
@@ -181,7 +181,7 @@ public class DanhMucKhachHang_Ctrl extends Application {
 
     private void TimKiem() {
         String keyword = txtTim.getText().trim().toLowerCase();
-        List<KhachHang> filtered = khachHangService.searchByKeyword(keyword);
+        List<KhachHangDto> filtered = khachHangService.searchByKeyword(keyword);
         tbKhachHang.setItems(FXCollections.observableArrayList(filtered));
     }
 }

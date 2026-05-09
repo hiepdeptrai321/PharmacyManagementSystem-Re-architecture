@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.controller.CN_TimKiem.TKKhachHang;
 
 import com.example.pharmacy.client.TienIch.DoiNgay;
-import com.example.pharmacy.common.model.KhachHang;
+import com.example.pharmacy.common.model.KhachHangDto;
 import com.example.pharmacy.client.service.KhachHangService;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,22 +27,22 @@ public class TimKiemKhachHang_Ctrl extends Application {
     public Button btnLamMoi;
     public Button btnTim;
     public ComboBox<String> cboTimKiem;
-    public TableColumn<KhachHang, String> cotDiaChi;
-    public TableColumn<KhachHang, String> cotEmail;
-    public TableColumn<KhachHang, String> cotGT;
-    public TableColumn<KhachHang, String> cotMaKH;
-    public TableColumn<KhachHang, String> cotNgaySinh;
-    public TableColumn<KhachHang, String> cotSDT;
-    public TableColumn<KhachHang, String> cotTenKH;
-    public TableColumn<KhachHang, String> cotSTT;
-    public TableView<KhachHang> tbKhachHang;
+    public TableColumn<KhachHangDto, String> cotDiaChi;
+    public TableColumn<KhachHangDto, String> cotEmail;
+    public TableColumn<KhachHangDto, String> cotGT;
+    public TableColumn<KhachHangDto, String> cotMaKH;
+    public TableColumn<KhachHangDto, String> cotNgaySinh;
+    public TableColumn<KhachHangDto, String> cotSDT;
+    public TableColumn<KhachHangDto, String> cotTenKH;
+    public TableColumn<KhachHangDto, String> cotSTT;
+    public TableView<KhachHangDto> tbKhachHang;
     public Pane mainPane;
     public TextField txtTimKiem;
 
     private final KhachHangService khachHangService = new KhachHangService();
-    private Consumer<KhachHang> onSelected;
+    private Consumer<KhachHangDto> onSelected;
 
-    public void setOnSelected(Consumer<KhachHang> onSelected) {
+    public void setOnSelected(Consumer<KhachHangDto> onSelected) {
         this.onSelected = onSelected;
     }
 
@@ -66,8 +66,8 @@ public class TimKiemKhachHang_Ctrl extends Application {
     }
 
     public void loadTable() {
-        List<KhachHang> list = khachHangService.findAll();
-        ObservableList<KhachHang> data = FXCollections.observableArrayList(list);
+        List<KhachHangDto> list = khachHangService.findAll();
+        ObservableList<KhachHangDto> data = FXCollections.observableArrayList(list);
         cotSTT.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(tbKhachHang.getItems().indexOf(cellData.getValue()) + 1))
         );
@@ -135,7 +135,7 @@ public class TimKiemKhachHang_Ctrl extends Application {
     private void TimKiem() {
         String criteria = cboTimKiem.getValue();
         String keyword = txtTimKiem.getText().trim().toLowerCase();
-        List<KhachHang> filtered = khachHangService.search(criteria, keyword);
+        List<KhachHangDto> filtered = khachHangService.search(criteria, keyword);
         tbKhachHang.setItems(FXCollections.observableArrayList(filtered));
     }
 }

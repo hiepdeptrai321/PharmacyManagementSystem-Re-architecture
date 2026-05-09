@@ -2,8 +2,9 @@ package com.example.pharmacy.server.service;
 
 import com.example.pharmacy.common.enums.BusinessCodeType;
 import com.example.pharmacy.server.entity.NhaCungCapEntity;
+import com.example.pharmacy.server.mapper.NhaCungCapMapper;
 import com.example.pharmacy.server.repository.NhaCungCapRepository;
-import com.example.pharmacy.common.model.NhaCungCap;
+import com.example.pharmacy.common.model.NhaCungCapDto;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,13 +19,13 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
     }
 
     @Override
-    public List<NhaCungCap> findAll() {
-        return nhaCungCapRepository.findAll().stream().map(this::toModel).toList();
+    public List<NhaCungCapDto> findAll() {
+        return nhaCungCapRepository.findAll().stream().map(NhaCungCapMapper::toDto).toList();
     }
 
     @Override
-    public NhaCungCap findById(String maNhaCungCap) {
-        return nhaCungCapRepository.findById(maNhaCungCap).map(this::toModel).orElse(null);
+    public NhaCungCapDto findById(String maNhaCungCap) {
+        return nhaCungCapRepository.findById(maNhaCungCap).map(NhaCungCapMapper::toDto).orElse(null);
     }
 
     @Override
@@ -33,12 +34,12 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
     }
 
     @Override
-    public boolean create(NhaCungCap nhaCungCap) {
+    public boolean create(NhaCungCapDto nhaCungCap) {
         if (nhaCungCap == null) {
             return false;
         }
         try {
-            NhaCungCapEntity entity = toEntity(nhaCungCap);
+            NhaCungCapEntity entity = NhaCungCapMapper.toEntity(nhaCungCap);
             if (entity.getMaNCC() == null || entity.getMaNCC().isBlank()) {
                 entity.setMaNCC(generateNewMaNCC());
                 nhaCungCap.setMaNCC(entity.getMaNCC());
@@ -51,12 +52,12 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
     }
 
     @Override
-    public boolean update(NhaCungCap nhaCungCap) {
+    public boolean update(NhaCungCapDto nhaCungCap) {
         if (nhaCungCap == null || nhaCungCap.getMaNCC() == null || nhaCungCap.getMaNCC().isBlank()) {
             return false;
         }
         try {
-            nhaCungCapRepository.update(toEntity(nhaCungCap));
+            nhaCungCapRepository.update(NhaCungCapMapper.toEntity(nhaCungCap));
             return true;
         } catch (RuntimeException exception) {
             return false;
@@ -73,33 +74,5 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
         } catch (RuntimeException exception) {
             return false;
         }
-    }
-
-    private NhaCungCap toModel(NhaCungCapEntity entity) {
-        NhaCungCap nhaCungCap = new NhaCungCap();
-        nhaCungCap.setMaNCC(entity.getMaNCC());
-        nhaCungCap.setTenNCC(entity.getTenNCC());
-        nhaCungCap.setDiaChi(entity.getDiaChi());
-        nhaCungCap.setSDT(entity.getSdt());
-        nhaCungCap.setEmail(entity.getEmail());
-        nhaCungCap.setGPKD(entity.getGpKD());
-        nhaCungCap.setGhiChu(entity.getGhiChu());
-        nhaCungCap.setTenCongTy(entity.getTenCongTy());
-        nhaCungCap.setMSThue(entity.getMsThue());
-        return nhaCungCap;
-    }
-
-    private NhaCungCapEntity toEntity(NhaCungCap model) {
-        NhaCungCapEntity entity = new NhaCungCapEntity();
-        entity.setMaNCC(model.getMaNCC());
-        entity.setTenNCC(model.getTenNCC());
-        entity.setDiaChi(model.getDiaChi());
-        entity.setSdt(model.getSDT());
-        entity.setEmail(model.getEmail());
-        entity.setGpKD(model.getGPKD());
-        entity.setGhiChu(model.getGhiChu());
-        entity.setTenCongTy(model.getTenCongTy());
-        entity.setMsThue(model.getMSThue());
-        return entity;
     }
 }

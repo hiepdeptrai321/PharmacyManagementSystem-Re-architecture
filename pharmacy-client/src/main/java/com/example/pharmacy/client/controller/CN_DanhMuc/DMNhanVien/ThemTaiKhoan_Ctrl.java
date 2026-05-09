@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMNhanVien;
 
 import com.example.pharmacy.common.enums.UserRole;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.NhanVienDto;
 import com.example.pharmacy.client.service.NhanVienService;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
@@ -12,7 +12,7 @@ public class ThemTaiKhoan_Ctrl {
     public TextField txtTaiKhoan;
     public TextField txtMatKhau;
 
-    public NhanVien nhanVien;
+    public NhanVienDto nhanVien;
     public boolean isSaved = false;
 
     private final NhanVienService nhanVienService = new NhanVienService();
@@ -20,8 +20,8 @@ public class ThemTaiKhoan_Ctrl {
     public void initialize() {
     }
 
-    public void loadTaiKhoan(NhanVien nv) {
-        nhanVien = nv == null ? new NhanVien() : new NhanVien(nv);
+    public void loadTaiKhoan(NhanVienDto nv) {
+        nhanVien = nv == null ? new NhanVienDto() : new NhanVienDto(nv);
         if (nhanVien.getTaiKhoan() != null) {
             txtTaiKhoan.setText(nhanVien.getTaiKhoan());
         }
@@ -30,7 +30,7 @@ public class ThemTaiKhoan_Ctrl {
         }
     }
 
-    public NhanVien getUpdatedNhanVien() {
+    public NhanVienDto getUpdatedNhanVien() {
         return nhanVien;
     }
 
@@ -40,7 +40,7 @@ public class ThemTaiKhoan_Ctrl {
         }
 
         if (nhanVien == null) {
-            nhanVien = new NhanVien();
+            nhanVien = new NhanVienDto();
         }
         nhanVien.setTaiKhoan(txtTaiKhoan.getText().trim());
         nhanVien.setMatKhau(txtMatKhau.getText());

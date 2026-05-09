@@ -4,9 +4,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "ThongSoUngDung")
+@Getter @Setter @NoArgsConstructor
 public class ThongSoUngDungEntity {
     @Id
     @Column(name = "TenThongSo", nullable = false, length = 50)
@@ -14,20 +18,4 @@ public class ThongSoUngDungEntity {
 
     @Column(name = "GiaTri", length = 255)
     private String giaTri;
-
-    public String getTenThongSo() {
-        return tenThongSo;
-    }
-
-    public void setTenThongSo(String tenThongSo) {
-        this.tenThongSo = tenThongSo;
-    }
-
-    public String getGiaTri() {
-        return giaTri;
-    }
-
-    public void setGiaTri(String giaTri) {
-        this.giaTri = giaTri;
-    }
 }

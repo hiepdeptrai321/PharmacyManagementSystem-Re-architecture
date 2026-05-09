@@ -2,7 +2,7 @@ package com.example.pharmacy.server.bootstrap.rmi;
 
 import com.example.pharmacy.common.remote.NhomDuocLyRemote;
 import com.example.pharmacy.server.service.NhomDuocLyService;
-import com.example.pharmacy.common.model.NhomDuocLy;
+import com.example.pharmacy.common.model.NhomDuocLyDto;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -18,12 +18,12 @@ public class NhomDuocLyRemoteAdapter extends UnicastRemoteObject implements Nhom
     }
 
     @Override
-    public List<NhomDuocLy> findAll() throws RemoteException {
+    public List<NhomDuocLyDto> findAll() throws RemoteException {
         return nhomDuocLyService.findAll();
     }
 
     @Override
-    public NhomDuocLy findById(String maNhomDuocLy) throws RemoteException {
+    public NhomDuocLyDto findById(String maNhomDuocLy) throws RemoteException {
         return nhomDuocLyService.findById(maNhomDuocLy);
     }
 
@@ -33,12 +33,12 @@ public class NhomDuocLyRemoteAdapter extends UnicastRemoteObject implements Nhom
     }
 
     @Override
-    public boolean create(NhomDuocLy nhomDuocLy) throws RemoteException {
+    public boolean create(NhomDuocLyDto nhomDuocLy) throws RemoteException {
         return nhomDuocLyService.create(nhomDuocLy);
     }
 
     @Override
-    public boolean update(NhomDuocLy nhomDuocLy) throws RemoteException {
+    public boolean update(NhomDuocLyDto nhomDuocLy) throws RemoteException {
         return nhomDuocLyService.update(nhomDuocLy);
     }
 

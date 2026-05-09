@@ -1,8 +1,8 @@
 package com.example.pharmacy.client.controller.CN_TimKiem.TKPhieuDatHang;
 
-import com.example.pharmacy.common.model.ChiTietPhieuDatHang;
-import com.example.pharmacy.common.model.DonViTinh;
-import com.example.pharmacy.common.model.PhieuDatHang;
+import com.example.pharmacy.common.model.ChiTietPhieuDatHangDto;
+import com.example.pharmacy.common.model.DonViTinhDto;
+import com.example.pharmacy.common.model.PhieuDatHangDto;
 import com.example.pharmacy.client.service.DonViTinhService;
 import com.example.pharmacy.client.service.PhieuDatHangService;
 import com.example.pharmacy.client.session.SessionContext;
@@ -27,16 +27,16 @@ import static javafx.scene.control.Alert.AlertType.ERROR;
 import static javafx.scene.control.Alert.AlertType.WARNING;
 
 public class ChiTietPhieuDatHang_Ctrl {
-    public static PhieuDatHang phieuDatHang;
-    public TableColumn<ChiTietPhieuDatHang, Number> colSTT;
-    public TableColumn<ChiTietPhieuDatHang, String> colTenSP;
-    public TableColumn<ChiTietPhieuDatHang, Integer> colSoLuong;
-    public TableColumn<ChiTietPhieuDatHang, String> colDonVi;
-    public TableColumn<ChiTietPhieuDatHang, Double> colDonGia;
-    public TableColumn<ChiTietPhieuDatHang, String> colNhaCungCap;
-    public TableColumn<ChiTietPhieuDatHang, String> colThanhTien;
-    public TableColumn<ChiTietPhieuDatHang, String> colTT;
-    public TableView<ChiTietPhieuDatHang> tblChiTietPhieuDat;
+    public static PhieuDatHangDto phieuDatHang;
+    public TableColumn<ChiTietPhieuDatHangDto, Number> colSTT;
+    public TableColumn<ChiTietPhieuDatHangDto, String> colTenSP;
+    public TableColumn<ChiTietPhieuDatHangDto, Integer> colSoLuong;
+    public TableColumn<ChiTietPhieuDatHangDto, String> colDonVi;
+    public TableColumn<ChiTietPhieuDatHangDto, Double> colDonGia;
+    public TableColumn<ChiTietPhieuDatHangDto, String> colNhaCungCap;
+    public TableColumn<ChiTietPhieuDatHangDto, String> colThanhTien;
+    public TableColumn<ChiTietPhieuDatHangDto, String> colTT;
+    public TableView<ChiTietPhieuDatHangDto> tblChiTietPhieuDat;
     public Label lblMaPhieuDatValue;
     public Label lblNgayLapValue;
     public Label lblTenNhanVienValue;
@@ -67,7 +67,7 @@ public class ChiTietPhieuDatHang_Ctrl {
         hienThiThongTin();
     }
 
-    public void setPhieuDatHang(PhieuDatHang pDat) {
+    public void setPhieuDatHang(PhieuDatHangDto pDat) {
         phieuDatHang = pDat;
     }
 
@@ -96,7 +96,7 @@ public class ChiTietPhieuDatHang_Ctrl {
         lblGhiChuValue.setText(phieuDatHang.getGhiChu() == null ? "" : phieuDatHang.getGhiChu());
         Platform.runLater(() -> lbTT.setText(getTrangThaiText(phieuDatHang.getTrangthai())));
 
-        List<ChiTietPhieuDatHang> list = phieuDatHangService.findDetailsByMaPhieuDat(phieuDatHang.getMaPDat());
+        List<ChiTietPhieuDatHangDto> list = phieuDatHangService.findDetailsByMaPhieuDat(phieuDatHang.getMaPDat());
         tblChiTietPhieuDat.getItems().setAll(list);
 
         colSTT.setCellValueFactory(cellData ->
@@ -105,13 +105,13 @@ public class ChiTietPhieuDatHang_Ctrl {
         colTenSP.setCellValueFactory(cel -> new SimpleStringProperty(cel.getValue().getThuoc().getTenThuoc()));
         colSoLuong.setCellValueFactory(new PropertyValueFactory<>("soLuong"));
         colDonVi.setCellValueFactory(cel -> {
-            DonViTinh donViTinh = donViTinhService.findById(cel.getValue().getDvt());
+            DonViTinhDto donViTinh = donViTinhService.findById(cel.getValue().getDvt());
             return new SimpleStringProperty(donViTinh == null ? "" : donViTinh.getTenDonViTinh());
         });
         colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
         colNhaCungCap.setCellValueFactory(cel -> new SimpleStringProperty(String.format("%.2f", cel.getValue().getGiamGia())));
         colThanhTien.setCellValueFactory(cel -> {
-            ChiTietPhieuDatHang item = cel.getValue();
+            ChiTietPhieuDatHangDto item = cel.getValue();
             double thanhTien = item.getSoLuong() * item.getDonGia();
             if (item.getGiamGia() != 0) {
                 thanhTien = thanhTien * (1 - item.getGiamGia() / 100.0);
@@ -122,7 +122,7 @@ public class ChiTietPhieuDatHang_Ctrl {
 
         double tongTruocChietKhau = 0.0;
         double tongGiamGia = 0.0;
-        for (ChiTietPhieuDatHang item : list) {
+        for (ChiTietPhieuDatHangDto item : list) {
             double line = item.getSoLuong() * item.getDonGia();
             tongTruocChietKhau += line;
             tongGiamGia += item.getGiamGia() == 0 ? 0 : line * item.getGiamGia() / 100.0;

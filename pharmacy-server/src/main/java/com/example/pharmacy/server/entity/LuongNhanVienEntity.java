@@ -4,12 +4,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 
 @Entity
 @Table(name = "LuongNhanVien")
+@Getter @Setter @NoArgsConstructor
 public class LuongNhanVienEntity {
     @Id
     @Column(name = "MaLNV", nullable = false, length = 10)
@@ -32,60 +36,4 @@ public class LuongNhanVienEntity {
 
     @Column(name = "MaNV", nullable = false, length = 10)
     private String maNV;
-
-    public String getMaLNV() {
-        return maLNV;
-    }
-
-    public void setMaLNV(String maLNV) {
-        this.maLNV = maLNV;
-    }
-
-    public Date getTuNgay() {
-        return tuNgay;
-    }
-
-    public void setTuNgay(Date tuNgay) {
-        this.tuNgay = tuNgay;
-    }
-
-    public Date getDenNgay() {
-        return denNgay;
-    }
-
-    public void setDenNgay(Date denNgay) {
-        this.denNgay = denNgay;
-    }
-
-    public BigDecimal getLuongCoBan() {
-        return luongCoBan;
-    }
-
-    public void setLuongCoBan(BigDecimal luongCoBan) {
-        this.luongCoBan = luongCoBan;
-    }
-
-    public BigDecimal getPhuCap() {
-        return phuCap;
-    }
-
-    public void setPhuCap(BigDecimal phuCap) {
-        this.phuCap = phuCap;
-    }
-
-    public String getGhiChu() {
-        return ghiChu;
-    }
-
-    public void setGhiChu(String ghiChu) {
-        this.ghiChu = ghiChu;
-    }
-
-    public String getMaNV() {
-        return maNV;
-    }
-
-    public void setMaNV(String maNV) {
-        this.maNV = maNV;
-    }
 }

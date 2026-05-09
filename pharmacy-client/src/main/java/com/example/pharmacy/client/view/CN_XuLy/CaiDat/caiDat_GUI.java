@@ -1,6 +1,6 @@
-package com.example.pharmacy.client.view.CN_XuLy.CaiDat;
+package com.example.pharmacy.client.view.CN_XuLy.CaiDatDto;
 
-import com.example.pharmacy.client.controller.CN_XuLy.CaiDat.caiDat_Ctrl;
+import com.example.pharmacy.client.controller.CN_XuLy.CaiDatDto.caiDat_Ctrl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;

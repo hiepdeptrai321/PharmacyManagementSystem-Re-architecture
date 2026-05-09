@@ -1,19 +1,19 @@
 package com.example.pharmacy.server.service;
 
-import com.example.pharmacy.common.model.NhomDuocLy;
+import com.example.pharmacy.common.model.NhomDuocLyDto;
 
 import java.util.List;
 
 public interface NhomDuocLyService {
-    List<NhomDuocLy> findAll();
+    List<NhomDuocLyDto> findAll();
 
-    NhomDuocLy findById(String maNhomDuocLy);
+    NhomDuocLyDto findById(String maNhomDuocLy);
 
     String generateNewMaNhomDuocLy();
 
-    boolean create(NhomDuocLy nhomDuocLy);
+    boolean create(NhomDuocLyDto nhomDuocLy);
 
-    boolean update(NhomDuocLy nhomDuocLy);
+    boolean update(NhomDuocLyDto nhomDuocLy);
 
     boolean deleteById(String maNhomDuocLy);
 

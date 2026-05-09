@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_TimKiem.TKPhieuTra;
 
 import com.example.pharmacy.client.controller.CN_TimKiem.TKPhieuTraHang.ChiTietPhieuTraHang_Ctrl;
-import com.example.pharmacy.common.model.ChiTietPhieuTraHang;
+import com.example.pharmacy.common.model.ChiTietPhieuTraHangDto;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -100,7 +100,7 @@ public class ChiTietPhieuTraHang_GUI extends Application {
         lblNgayLapValue.getStyleClass().add("value-label");
 
         // - TableView Chi Tiết
-        TableView<ChiTietPhieuTraHang> tblChiTietPhieuTra = new TableView<>();
+        TableView<ChiTietPhieuTraHangDto> tblChiTietPhieuTra = new TableView<>();
         tblChiTietPhieuTra.setId("tblChiTietPhieuTra");
         tblChiTietPhieuTra.setLayoutX(15.0);
         tblChiTietPhieuTra.setLayoutY(80.0);
@@ -110,37 +110,37 @@ public class ChiTietPhieuTraHang_GUI extends Application {
         tblChiTietPhieuTra.setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
 
         // Cột STT
-        TableColumn<ChiTietPhieuTraHang, String> colSTT = new TableColumn<>("STT");
+        TableColumn<ChiTietPhieuTraHangDto, String> colSTT = new TableColumn<>("STT");
         colSTT.setId("colSTT");
         colSTT.setPrefWidth(61.333335876464844);
         colSTT.setStyle("-fx-alignment: CENTER;");
 
         // Cột Tên SP
-        TableColumn<ChiTietPhieuTraHang, String> colTenSP = new TableColumn<>("Tên sản phẩm/Hoạt chất");
+        TableColumn<ChiTietPhieuTraHangDto, String> colTenSP = new TableColumn<>("Tên sản phẩm/Hoạt chất");
         colTenSP.setId("colTenSP");
         colTenSP.setPrefWidth(439.6666259765625);
         colTenSP.setStyle("-fx-alignment: CENTER;");
 
         // Cột Số lượng
-        TableColumn<ChiTietPhieuTraHang, String> colSoLuong = new TableColumn<>("Số lượng trả");
+        TableColumn<ChiTietPhieuTraHangDto, String> colSoLuong = new TableColumn<>("Số lượng trả");
         colSoLuong.setId("colSoLuong");
         colSoLuong.setPrefWidth(138.0);
         colSoLuong.setStyle("-fx-alignment: CENTER;");
 
         // Cột Đơn giá
-        TableColumn<ChiTietPhieuTraHang, String> colDonGia = new TableColumn<>("Đơn giá trả");
+        TableColumn<ChiTietPhieuTraHangDto, String> colDonGia = new TableColumn<>("Đơn giá trả");
         colDonGia.setId("colDonGia");
         colDonGia.setPrefWidth(133.33331298828125);
         colDonGia.setStyle("-fx-alignment: CENTER;");
 
         // Cột Lý do
-        TableColumn<ChiTietPhieuTraHang, String> colLyDo = new TableColumn<>("Lý do trả");
+        TableColumn<ChiTietPhieuTraHangDto, String> colLyDo = new TableColumn<>("Lý do trả");
         colLyDo.setId("colLyDo");
         colLyDo.setPrefWidth(242.0);
         colLyDo.setStyle("-fx-alignment: CENTER;");
 
         // Cột Thành tiền
-        TableColumn<ChiTietPhieuTraHang, Double> colThanhTien = new TableColumn<>("Thành tiền trả");
+        TableColumn<ChiTietPhieuTraHangDto, Double> colThanhTien = new TableColumn<>("Thành tiền trả");
         colThanhTien.setId("colThanhTien");
         colThanhTien.setPrefWidth(116.0);
         colThanhTien.setStyle("-fx-alignment: CENTER;");

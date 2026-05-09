@@ -4,11 +4,11 @@ import com.example.pharmacy.common.request.PhieuNhapItemRequest;
 import com.example.pharmacy.common.request.PhieuNhapRequest;
 import com.example.pharmacy.server.config.JdbcConnectionProvider;
 import com.example.pharmacy.server.repository.PurchaseOrderRepository;
-import com.example.pharmacy.common.model.ChiTietPhieuNhap;
-import com.example.pharmacy.common.model.NhaCungCap;
-import com.example.pharmacy.common.model.NhanVien;
-import com.example.pharmacy.common.model.PhieuNhap;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietPhieuNhapDto;
+import com.example.pharmacy.common.model.NhaCungCapDto;
+import com.example.pharmacy.common.model.NhanVienDto;
+import com.example.pharmacy.common.model.PhieuNhapDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -19,21 +19,21 @@ import java.util.List;
 
 public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implements PurchaseOrderRepository {
     private static final String INSERT_HEADER_SQL = """
-            INSERT INTO PhieuNhap (MaPN, NgayNhap, TrangThai, GhiChu, MaNCC, MaNV)
+            INSERT INTO PhieuNhapDto (MaPN, NgayNhap, TrangThai, GhiChu, MaNCC, MaNV)
             VALUES (?, ?, 1, ?, ?, ?)
             """;
     private static final String INSERT_DETAIL_SQL = """
-            INSERT INTO ChiTietPhieuNhap (
+            INSERT INTO ChiTietPhieuNhapDto (
                 MaPN, MaThuoc, MaLH, SoLuong, MaDVT, GiaNhap, ChietKhau, Thue
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """;
     private static final String INSERT_LOT_SQL = """
-            INSERT INTO Thuoc_SP_TheoLo (
+            INSERT INTO Thuoc_SP_TheoLoDto (
                 MaPN, MaThuoc, MaLH, SoLuongTon, SoLuongDat, SoLuongGiu, NSX, HSD
             ) VALUES (?, ?, ?, ?, 0, 0, ?, ?)
             """;
     private static final String UPDATE_PRICING_SQL = """
-            UPDATE ChiTietDonViTinh
+            UPDATE ChiTietDonViTinhDto
             SET GiaNhap = ?, GiaBan = COALESCE(?, GiaBan)
             WHERE MaThuoc = ? AND MaDVT = ?
             """;
@@ -51,10 +51,10 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
                        - ((ct.SoLuong * ct.GiaNhap) * ct.ChietKhau / 100)
                        + (((ct.SoLuong * ct.GiaNhap) - ((ct.SoLuong * ct.GiaNhap) * ct.ChietKhau / 100)) * ct.Thue / 100)
                    ), 0) AS TongTien
-            FROM PhieuNhap pn
-            JOIN NhaCungCap ncc ON ncc.MaNCC = pn.MaNCC
-            JOIN NhanVien nv ON nv.MaNV = pn.MaNV
-            LEFT JOIN ChiTietPhieuNhap ct ON ct.MaPN = pn.MaPN
+            FROM PhieuNhapDto pn
+            JOIN NhaCungCapDto ncc ON ncc.MaNCC = pn.MaNCC
+            JOIN NhanVienDto nv ON nv.MaNV = pn.MaNV
+            LEFT JOIN ChiTietPhieuNhapDto ct ON ct.MaPN = pn.MaPN
             GROUP BY pn.MaPN, pn.NgayNhap, pn.TrangThai, pn.GhiChu, ncc.MaNCC, ncc.TenNCC, nv.MaNV, nv.TenNV
             ORDER BY pn.NgayNhap DESC, pn.MaPN DESC
             """;
@@ -72,10 +72,10 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
                        - ((ct.SoLuong * ct.GiaNhap) * ct.ChietKhau / 100)
                        + (((ct.SoLuong * ct.GiaNhap) - ((ct.SoLuong * ct.GiaNhap) * ct.ChietKhau / 100)) * ct.Thue / 100)
                    ), 0) AS TongTien
-            FROM PhieuNhap pn
-            JOIN NhaCungCap ncc ON ncc.MaNCC = pn.MaNCC
-            JOIN NhanVien nv ON nv.MaNV = pn.MaNV
-            LEFT JOIN ChiTietPhieuNhap ct ON ct.MaPN = pn.MaPN
+            FROM PhieuNhapDto pn
+            JOIN NhaCungCapDto ncc ON ncc.MaNCC = pn.MaNCC
+            JOIN NhanVienDto nv ON nv.MaNV = pn.MaNV
+            LEFT JOIN ChiTietPhieuNhapDto ct ON ct.MaPN = pn.MaPN
             WHERE pn.MaPN = ?
             GROUP BY pn.MaPN, pn.NgayNhap, pn.TrangThai, pn.GhiChu, ncc.MaNCC, ncc.TenNCC, nv.MaNV, nv.TenNV
             """;
@@ -88,8 +88,8 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
                    ct.ChietKhau,
                    ct.Thue,
                    ts.TenThuoc
-            FROM ChiTietPhieuNhap ct
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = ct.MaThuoc
+            FROM ChiTietPhieuNhapDto ct
+            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = ct.MaThuoc
             WHERE ct.MaPN = ?
             ORDER BY ct.MaLH ASC, ct.MaThuoc ASC
             """;
@@ -174,7 +174,7 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
                 statement.setString(4, maDvt);
                 int updated = statement.executeUpdate();
                 if (updated == 0) {
-                    throw new IllegalStateException("No ChiTietDonViTinh row found for " + maThuoc + " / " + maDvt);
+                    throw new IllegalStateException("No ChiTietDonViTinhDto row found for " + maThuoc + " / " + maDvt);
                 }
             }
         } catch (Exception exception) {
@@ -185,9 +185,9 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
     }
 
     @Override
-    public List<PhieuNhap> findAll() {
+    public List<PhieuNhapDto> findAll() {
         Connection connection = null;
-        List<PhieuNhap> list = new ArrayList<>();
+        List<PhieuNhapDto> list = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL);
@@ -205,7 +205,7 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
     }
 
     @Override
-    public PhieuNhap findById(String maPhieuNhap) {
+    public PhieuNhapDto findById(String maPhieuNhap) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -226,9 +226,9 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
     }
 
     @Override
-    public List<ChiTietPhieuNhap> findDetailsByMaPhieuNhap(String maPhieuNhap) {
+    public List<ChiTietPhieuNhapDto> findDetailsByMaPhieuNhap(String maPhieuNhap) {
         Connection connection = null;
-        List<ChiTietPhieuNhap> list = new ArrayList<>();
+        List<ChiTietPhieuNhapDto> list = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_DETAILS_SQL)) {
@@ -253,7 +253,7 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(
-                    "SELECT COALESCE(MAX(CAST(SUBSTRING(MaLH, 3) AS UNSIGNED)), 0) FROM Thuoc_SP_TheoLo WHERE MaLH REGEXP '^LH[0-9]+$'")) {
+                    "SELECT COALESCE(MAX(CAST(SUBSTRING(MaLH, 3) AS UNSIGNED)), 0) FROM Thuoc_SP_TheoLoDto WHERE MaLH REGEXP '^LH[0-9]+$'")) {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     return resultSet.next() ? resultSet.getLong(1) : 0;
                 }
@@ -265,8 +265,8 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
         }
     }
 
-    private PhieuNhap mapHeader(ResultSet resultSet) throws Exception {
-        PhieuNhap phieuNhap = new PhieuNhap();
+    private PhieuNhapDto mapHeader(ResultSet resultSet) throws Exception {
+        PhieuNhapDto phieuNhap = new PhieuNhapDto();
         phieuNhap.setMaPN(resultSet.getString("MaPN"));
         Date ngayNhap = resultSet.getDate("NgayNhap");
         phieuNhap.setNgayNhap(ngayNhap == null ? null : ngayNhap.toLocalDate());
@@ -274,25 +274,25 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
         phieuNhap.setGhiChu(resultSet.getString("GhiChu"));
         phieuNhap.setTongTien(resultSet.getDouble("TongTien"));
 
-        NhaCungCap nhaCungCap = new NhaCungCap();
+        NhaCungCapDto nhaCungCap = new NhaCungCapDto();
         nhaCungCap.setMaNCC(resultSet.getString("MaNCC"));
         nhaCungCap.setTenNCC(resultSet.getString("TenNCC"));
         phieuNhap.setNhaCungCap(nhaCungCap);
 
-        NhanVien nhanVien = new NhanVien();
+        NhanVienDto nhanVien = new NhanVienDto();
         nhanVien.setMaNV(resultSet.getString("MaNV"));
         nhanVien.setTenNV(resultSet.getString("TenNV"));
         phieuNhap.setNhanVien(nhanVien);
         return phieuNhap;
     }
 
-    private ChiTietPhieuNhap mapDetail(ResultSet resultSet) throws Exception {
-        ChiTietPhieuNhap detail = new ChiTietPhieuNhap();
-        PhieuNhap phieuNhap = new PhieuNhap();
+    private ChiTietPhieuNhapDto mapDetail(ResultSet resultSet) throws Exception {
+        ChiTietPhieuNhapDto detail = new ChiTietPhieuNhapDto();
+        PhieuNhapDto phieuNhap = new PhieuNhapDto();
         phieuNhap.setMaPN(resultSet.getString("MaPN"));
         detail.setPhieuNhap(phieuNhap);
 
-        Thuoc_SanPham thuoc = new Thuoc_SanPham();
+        Thuoc_SanPhamDto thuoc = new Thuoc_SanPhamDto();
         thuoc.setMaThuoc(resultSet.getString("MaThuoc"));
         thuoc.setTenThuoc(resultSet.getString("TenThuoc"));
         detail.setThuoc(thuoc);

@@ -5,12 +5,12 @@ import com.example.pharmacy.common.dto.UserContext;
 import com.example.pharmacy.common.remote.DoiTraRemote;
 import com.example.pharmacy.common.request.CreatePhieuDoiRequest;
 import com.example.pharmacy.common.request.CreatePhieuTraRequest;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.ChiTietPhieuDoiHang;
-import com.example.pharmacy.common.model.ChiTietPhieuTraHang;
-import com.example.pharmacy.common.model.HoaDon;
-import com.example.pharmacy.common.model.PhieuDoiHang;
-import com.example.pharmacy.common.model.PhieuTraHang;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.ChiTietPhieuDoiHangDto;
+import com.example.pharmacy.common.model.ChiTietPhieuTraHangDto;
+import com.example.pharmacy.common.model.HoaDonDto;
+import com.example.pharmacy.common.model.PhieuDoiHangDto;
+import com.example.pharmacy.common.model.PhieuTraHangDto;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -25,7 +25,7 @@ public class RmiDoiTraClientService implements DoiTraClientService {
     }
 
     @Override
-    public HoaDon findHoaDonGocForDoiTra(String maHoaDon) {
+    public HoaDonDto findHoaDonGocForDoiTra(String maHoaDon) {
         try {
             return remote().findHoaDonGocForDoiTra(maHoaDon);
         } catch (RemoteException | NotBoundException exception) {
@@ -35,7 +35,7 @@ public class RmiDoiTraClientService implements DoiTraClientService {
     }
 
     @Override
-    public List<ChiTietHoaDon> findHoaDonDetailsForDoiTra(String maHoaDon) {
+    public List<ChiTietHoaDonDto> findHoaDonDetailsForDoiTra(String maHoaDon) {
         try {
             return remote().findHoaDonDetailsForDoiTra(maHoaDon);
         } catch (RemoteException | NotBoundException exception) {
@@ -92,7 +92,7 @@ public class RmiDoiTraClientService implements DoiTraClientService {
     }
 
     @Override
-    public List<PhieuDoiHang> findAllPhieuDoi() {
+    public List<PhieuDoiHangDto> findAllPhieuDoi() {
         try {
             return remote().findAllPhieuDoi();
         } catch (RemoteException | NotBoundException exception) {
@@ -102,7 +102,7 @@ public class RmiDoiTraClientService implements DoiTraClientService {
     }
 
     @Override
-    public PhieuDoiHang findPhieuDoiById(String maPhieuDoi) {
+    public PhieuDoiHangDto findPhieuDoiById(String maPhieuDoi) {
         try {
             return remote().findPhieuDoiById(maPhieuDoi);
         } catch (RemoteException | NotBoundException exception) {
@@ -112,7 +112,7 @@ public class RmiDoiTraClientService implements DoiTraClientService {
     }
 
     @Override
-    public List<ChiTietPhieuDoiHang> findChiTietPhieuDoiByMaPD(String maPhieuDoi) {
+    public List<ChiTietPhieuDoiHangDto> findChiTietPhieuDoiByMaPD(String maPhieuDoi) {
         try {
             return remote().findChiTietPhieuDoiByMaPD(maPhieuDoi);
         } catch (RemoteException | NotBoundException exception) {
@@ -122,7 +122,7 @@ public class RmiDoiTraClientService implements DoiTraClientService {
     }
 
     @Override
-    public List<PhieuTraHang> findAllPhieuTra() {
+    public List<PhieuTraHangDto> findAllPhieuTra() {
         try {
             return remote().findAllPhieuTra();
         } catch (RemoteException | NotBoundException exception) {
@@ -132,7 +132,7 @@ public class RmiDoiTraClientService implements DoiTraClientService {
     }
 
     @Override
-    public PhieuTraHang findPhieuTraById(String maPhieuTra) {
+    public PhieuTraHangDto findPhieuTraById(String maPhieuTra) {
         try {
             return remote().findPhieuTraById(maPhieuTra);
         } catch (RemoteException | NotBoundException exception) {
@@ -142,7 +142,7 @@ public class RmiDoiTraClientService implements DoiTraClientService {
     }
 
     @Override
-    public List<ChiTietPhieuTraHang> findChiTietPhieuTraByMaPT(String maPhieuTra) {
+    public List<ChiTietPhieuTraHangDto> findChiTietPhieuTraByMaPT(String maPhieuTra) {
         try {
             return remote().findChiTietPhieuTraByMaPT(maPhieuTra);
         } catch (RemoteException | NotBoundException exception) {

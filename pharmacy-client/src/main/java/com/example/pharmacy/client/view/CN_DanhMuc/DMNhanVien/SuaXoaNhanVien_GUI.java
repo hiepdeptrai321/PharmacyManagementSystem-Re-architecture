@@ -1,8 +1,8 @@
 package com.example.pharmacy.client.view.CN_DanhMuc.DMNhanVien;
 
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMNhanVien.SuaXoaNhanVien_Ctrl;
-import com.example.pharmacy.common.model.LuongNhanVien;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.LuongNhanVienDto;
+import com.example.pharmacy.common.model.NhanVienDto;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -39,15 +39,15 @@ public class SuaXoaNhanVien_GUI {
     public Button btnHuy;
     public Button btnSuaTaiKhoan;
     public Button btnThayDoiLuong;
-    public TableView<LuongNhanVien> tblLuongNV;
-    public TableColumn<LuongNhanVien, String> colMaLuong;
-    public TableColumn<LuongNhanVien, String> colTuNgay;
-    public TableColumn<LuongNhanVien, String> colDenNgay;
-    public TableColumn<LuongNhanVien, Double> colLuongCoBan;
-    public TableColumn<LuongNhanVien, Double> colPhuCap;
-    public TableColumn<LuongNhanVien, String> colGhiChu;
+    public TableView<LuongNhanVienDto> tblLuongNV;
+    public TableColumn<LuongNhanVienDto, String> colMaLuong;
+    public TableColumn<LuongNhanVienDto, String> colTuNgay;
+    public TableColumn<LuongNhanVienDto, String> colDenNgay;
+    public TableColumn<LuongNhanVienDto, Double> colLuongCoBan;
+    public TableColumn<LuongNhanVienDto, Double> colPhuCap;
+    public TableColumn<LuongNhanVienDto, String> colGhiChu;
 
-    public void showWithController(Stage stage, SuaXoaNhanVien_Ctrl ctrl, NhanVien nhanVien) {
+    public void showWithController(Stage stage, SuaXoaNhanVien_Ctrl ctrl, NhanVienDto nhanVien) {
         AnchorPane root = buildUI();
 
         ctrl.txtMaNV = txtMaNV;

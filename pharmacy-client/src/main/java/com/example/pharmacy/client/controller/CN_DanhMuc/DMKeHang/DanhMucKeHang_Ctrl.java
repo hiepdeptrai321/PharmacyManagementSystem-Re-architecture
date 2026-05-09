@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMKeHang;
 
-import com.example.pharmacy.common.model.KeHang;
+import com.example.pharmacy.common.model.KeHangDto;
 import com.example.pharmacy.client.service.KeHangService;
 import com.example.pharmacy.client.view.CN_DanhMuc.DMKeHang.ThemKe_GUI;
 import com.example.pharmacy.client.view.CN_DanhMuc.DMKeHang.XoaSuaKeHang_GUI;
@@ -22,11 +22,11 @@ public class DanhMucKeHang_Ctrl extends Application {
     public Button btnThem;
     public Button btnLamMoi;
     public Button btnTim;
-    public TableColumn<KeHang, String> cotMaKe;
-    public TableColumn<KeHang, String> cotSTT;
-    public TableColumn<KeHang, String> cotTenKe;
-    public TableColumn<KeHang, String> colChiTiet;
-    public TableView<KeHang> tblKeHang;
+    public TableColumn<KeHangDto, String> cotMaKe;
+    public TableColumn<KeHangDto, String> cotSTT;
+    public TableColumn<KeHangDto, String> cotTenKe;
+    public TableColumn<KeHangDto, String> colChiTiet;
+    public TableView<KeHangDto> tblKeHang;
     public TextField txtTimKiem;
 
     private final KeHangService keHangService = new KeHangService();
@@ -40,13 +40,13 @@ public class DanhMucKeHang_Ctrl extends Application {
     public void initialize() {
         btnTim.setOnAction(e -> TimKiem());
         btnLamMoi.setOnAction(e -> LamMoi());
-        btnThem.setOnAction(e -> btnThemClick(new KeHang()));
+        btnThem.setOnAction(e -> btnThemClick(new KeHangDto()));
         txtTimKiem.setOnAction(e -> TimKiem());
         Platform.runLater(this::loadTable);
     }
 
     public void loadTable() {
-        List<KeHang> list = keHangService.findAll();
+        List<KeHangDto> list = keHangService.findAll();
         cotSTT.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(tblKeHang.getItems().indexOf(cellData.getValue()) + 1))
         );
@@ -69,7 +69,7 @@ public class DanhMucKeHang_Ctrl extends Application {
             private final Button btn = new Button("Chi tiết");
             {
                 btn.setOnAction(event -> {
-                    KeHang kh = getTableView().getItems().get(getIndex());
+                    KeHangDto kh = getTableView().getItems().get(getIndex());
                     btnChiTietClick(kh);
                 });
                 btn.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
@@ -87,7 +87,7 @@ public class DanhMucKeHang_Ctrl extends Application {
 
     private void TimKiem() {
         String keyword = txtTimKiem.getText().trim().toLowerCase();
-        List<KeHang> filtered = keHangService.searchByKeyword(keyword);
+        List<KeHangDto> filtered = keHangService.searchByKeyword(keyword);
         tblKeHang.getItems().setAll(filtered);
     }
 
@@ -96,7 +96,7 @@ public class DanhMucKeHang_Ctrl extends Application {
         loadTable();
     }
 
-    public void btnThemClick(KeHang ke) {
+    public void btnThemClick(KeHangDto ke) {
         try {
             Stage dialog = new Stage();
             dialog.initOwner(btnLamMoi.getScene().getWindow());
@@ -114,7 +114,7 @@ public class DanhMucKeHang_Ctrl extends Application {
         }
     }
 
-    public void btnChiTietClick(KeHang kh) {
+    public void btnChiTietClick(KeHangDto kh) {
         try {
             Stage dialog = new Stage();
             dialog.initOwner(btnLamMoi.getScene().getWindow());

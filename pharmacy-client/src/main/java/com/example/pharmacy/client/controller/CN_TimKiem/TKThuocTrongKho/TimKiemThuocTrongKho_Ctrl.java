@@ -1,8 +1,8 @@
 package com.example.pharmacy.client.controller.CN_TimKiem.TKThuocTrongKho;
 
 import com.example.pharmacy.client.TienIch.LoadingOverlay;
-import com.example.pharmacy.common.model.ThuocTonKho;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
+import com.example.pharmacy.common.model.ThuocTonKhoDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
 import com.example.pharmacy.client.service.ThuocService;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -77,51 +77,51 @@ public class TimKiemThuocTrongKho_Ctrl {
         runWithLoading(() -> {
             boolean isTheoLo = hienThiTheoLo != null && hienThiTheoLo.isSelected();
             if (isTheoLo) {
-                List<Thuoc_SP_TheoLo> list = thuocService.getAllTheoLo();
+                List<Thuoc_SP_TheoLoDto> list = thuocService.getAllTheoLo();
                 ObservableList<Object> data = FXCollections.observableArrayList(list);
                 Platform.runLater(() -> {
                     colSTT.setCellValueFactory(cellData ->
                             new SimpleStringProperty(String.valueOf(tbThuoc.getItems().indexOf(cellData.getValue()) + 1)));
                     colMaThuoc.setCellValueFactory(cellData -> {
-                        if (cellData.getValue() instanceof Thuoc_SP_TheoLo lo && lo.getThuoc() != null) {
+                        if (cellData.getValue() instanceof Thuoc_SP_TheoLoDto lo && lo.getThuoc() != null) {
                             return new SimpleStringProperty(lo.getThuoc().getMaThuoc());
                         }
                         return new SimpleStringProperty("");
                     });
                     colTenThuoc.setCellValueFactory(cellData -> {
-                        if (cellData.getValue() instanceof Thuoc_SP_TheoLo lo && lo.getThuoc() != null) {
+                        if (cellData.getValue() instanceof Thuoc_SP_TheoLoDto lo && lo.getThuoc() != null) {
                             return new SimpleStringProperty(lo.getThuoc().getTenThuoc());
                         }
                         return new SimpleStringProperty("");
                     });
                     colDVT.setCellValueFactory(cellData -> {
-                        if (cellData.getValue() instanceof Thuoc_SP_TheoLo lo && lo.getThuoc() != null) {
+                        if (cellData.getValue() instanceof Thuoc_SP_TheoLoDto lo && lo.getThuoc() != null) {
                             return new SimpleStringProperty(thuocService.getTenDVTByMaThuoc(lo.getThuoc().getMaThuoc()));
                         }
                         return new SimpleStringProperty("");
                     });
                     colMaLo.setCellValueFactory(cellData -> {
-                        if (cellData.getValue() instanceof Thuoc_SP_TheoLo lo) {
+                        if (cellData.getValue() instanceof Thuoc_SP_TheoLoDto lo) {
                             return new SimpleStringProperty(lo.getMaLH());
                         }
                         return new SimpleStringProperty("");
                     });
                     colNSX.setCellValueFactory(cellData -> {
-                        if (cellData.getValue() instanceof Thuoc_SP_TheoLo lo && lo.getNsx() != null) {
+                        if (cellData.getValue() instanceof Thuoc_SP_TheoLoDto lo && lo.getNsx() != null) {
                             return new SimpleStringProperty(
                                     com.example.pharmacy.client.TienIch.DoiNgay.dinhDangNgay(lo.getNsx()));
                         }
                         return new SimpleStringProperty("");
                     });
                     colHSD.setCellValueFactory(cellData -> {
-                        if (cellData.getValue() instanceof Thuoc_SP_TheoLo lo && lo.getHsd() != null) {
+                        if (cellData.getValue() instanceof Thuoc_SP_TheoLoDto lo && lo.getHsd() != null) {
                             return new SimpleStringProperty(
                                     com.example.pharmacy.client.TienIch.DoiNgay.dinhDangNgay(lo.getHsd()));
                         }
                         return new SimpleStringProperty("");
                     });
                     colSLTon.setCellValueFactory(cellData -> {
-                        if (cellData.getValue() instanceof Thuoc_SP_TheoLo lo) {
+                        if (cellData.getValue() instanceof Thuoc_SP_TheoLoDto lo) {
                             return new javafx.beans.property.SimpleIntegerProperty(lo.getSoLuongTon()).asObject();
                         }
                         return new javafx.beans.property.SimpleIntegerProperty(0).asObject();
@@ -129,37 +129,37 @@ public class TimKiemThuocTrongKho_Ctrl {
                     tbThuoc.setItems(data);
                 });
             } else {
-                List<ThuocTonKho> list = thuocService.getThuocTonKho();
+                List<ThuocTonKhoDto> list = thuocService.getThuocTonKho();
                 ObservableList<Object> data = FXCollections.observableArrayList(list);
                 Platform.runLater(() -> {
                     colSTT.setCellValueFactory(cellData ->
                             new SimpleStringProperty(String.valueOf(tbThuoc.getItems().indexOf(cellData.getValue()) + 1)));
                     colMaThuoc.setCellValueFactory(cellData -> {
-                        if (cellData.getValue() instanceof ThuocTonKho thuoc) {
+                        if (cellData.getValue() instanceof ThuocTonKhoDto thuoc) {
                             return new SimpleStringProperty(thuoc.getMaThuoc());
                         }
                         return new SimpleStringProperty("");
                     });
                     colTenThuoc.setCellValueFactory(cellData -> {
-                        if (cellData.getValue() instanceof ThuocTonKho thuoc) {
+                        if (cellData.getValue() instanceof ThuocTonKhoDto thuoc) {
                             return new SimpleStringProperty(thuoc.getTenThuoc());
                         }
                         return new SimpleStringProperty("");
                     });
                     colDVT.setCellValueFactory(cellData -> {
-                        if (cellData.getValue() instanceof ThuocTonKho thuoc) {
+                        if (cellData.getValue() instanceof ThuocTonKhoDto thuoc) {
                             return new SimpleStringProperty(thuoc.getDonViTinh());
                         }
                         return new SimpleStringProperty("");
                     });
                     colSoLoTon.setCellValueFactory(cellData -> {
-                        if (cellData.getValue() instanceof ThuocTonKho thuoc) {
+                        if (cellData.getValue() instanceof ThuocTonKhoDto thuoc) {
                             return new javafx.beans.property.SimpleIntegerProperty(thuoc.getSoLoTon()).asObject();
                         }
                         return new javafx.beans.property.SimpleIntegerProperty(0).asObject();
                     });
                     colSLTon.setCellValueFactory(cellData -> {
-                        if (cellData.getValue() instanceof ThuocTonKho thuoc) {
+                        if (cellData.getValue() instanceof ThuocTonKhoDto thuoc) {
                             return new javafx.beans.property.SimpleIntegerProperty(thuoc.getTongSoLuongTon()).asObject();
                         }
                         return new javafx.beans.property.SimpleIntegerProperty(0).asObject();
@@ -183,7 +183,7 @@ public class TimKiemThuocTrongKho_Ctrl {
 
             if (isTheoLo) {
                 for (Object item : tbThuoc.getItems()) {
-                    if (item instanceof Thuoc_SP_TheoLo lo && lo.getThuoc() != null) {
+                    if (item instanceof Thuoc_SP_TheoLoDto lo && lo.getThuoc() != null) {
                         String maThuoc = safeLower(lo.getThuoc().getMaThuoc());
                         String tenThuoc = safeLower(lo.getThuoc().getTenThuoc());
                         if (maThuoc.contains(keyword) || tenThuoc.contains(keyword)) {
@@ -193,7 +193,7 @@ public class TimKiemThuocTrongKho_Ctrl {
                 }
             } else {
                 for (Object item : tbThuoc.getItems()) {
-                    if (item instanceof ThuocTonKho thuoc) {
+                    if (item instanceof ThuocTonKhoDto thuoc) {
                         String maThuoc = safeLower(thuoc.getMaThuoc());
                         String tenThuoc = safeLower(thuoc.getTenThuoc());
                         if (maThuoc.contains(keyword) || tenThuoc.contains(keyword)) {

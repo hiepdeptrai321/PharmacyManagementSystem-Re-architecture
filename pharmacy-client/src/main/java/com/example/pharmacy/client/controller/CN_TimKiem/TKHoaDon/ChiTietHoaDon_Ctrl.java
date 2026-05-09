@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.controller.CN_TimKiem.TKHoaDon;
 
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.HoaDon;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.HoaDonDto;
 import com.example.pharmacy.client.service.ApDungKhuyenMai;
 import com.example.pharmacy.client.service.DichVuKhuyenMai;
 import com.example.pharmacy.client.service.HoaDonService;
@@ -26,15 +26,15 @@ import java.util.List;
 import java.util.Map;
 
 public class ChiTietHoaDon_Ctrl extends Application {
-    public TableView<ChiTietHoaDon> tblChiTietHoaDon;
-    public TableColumn<ChiTietHoaDon, Number> colNSTT;
-    public TableColumn<ChiTietHoaDon, String> colNTen;
-    public TableColumn<ChiTietHoaDon, Integer> colNSL;
-    public TableColumn<ChiTietHoaDon, String> colNDonVi;
-    public TableColumn<ChiTietHoaDon, Double> colNDonGia;
-    public TableColumn<ChiTietHoaDon, Double> colNChietKhau;
-    public TableColumn<ChiTietHoaDon, Double> colNThanhTien;
-    public TableColumn<ChiTietHoaDon, String> colMaLoHang;
+    public TableView<ChiTietHoaDonDto> tblChiTietHoaDon;
+    public TableColumn<ChiTietHoaDonDto, Number> colNSTT;
+    public TableColumn<ChiTietHoaDonDto, String> colNTen;
+    public TableColumn<ChiTietHoaDonDto, Integer> colNSL;
+    public TableColumn<ChiTietHoaDonDto, String> colNDonVi;
+    public TableColumn<ChiTietHoaDonDto, Double> colNDonGia;
+    public TableColumn<ChiTietHoaDonDto, Double> colNChietKhau;
+    public TableColumn<ChiTietHoaDonDto, Double> colNThanhTien;
+    public TableColumn<ChiTietHoaDonDto, String> colMaLoHang;
     public Label lblMaHoaDonValue;
     public Label lblNgayLapValue;
     public Label lblTenNhanVienValue;
@@ -52,7 +52,7 @@ public class ChiTietHoaDon_Ctrl extends Application {
     public Label lblMaDonThuocTitle;
     public Label lblMaDonThuocValue;
 
-    private HoaDon hoaDon;
+    private HoaDonDto hoaDon;
     private final HoaDonService hoaDonService = new HoaDonService();
     private final DichVuKhuyenMai dichVuKhuyenMai = new DichVuKhuyenMai();
     private final ThuocService thuocService = new ThuocService();
@@ -78,7 +78,7 @@ public class ChiTietHoaDon_Ctrl extends Application {
         });
     }
 
-    public void setHoaDon(HoaDon hoaDon) {
+    public void setHoaDon(HoaDonDto hoaDon) {
         this.hoaDon = hoaDon;
         hienThiThongTin();
     }
@@ -115,7 +115,7 @@ public class ChiTietHoaDon_Ctrl extends Application {
         lblMaDonThuocValue.setVisible(isEtc);
         lblMaDonThuocTitle.setVisible(isEtc);
 
-        List<ChiTietHoaDon> list = hoaDonService.findDetailsByMaHD(hoaDon.getMaHD());
+        List<ChiTietHoaDonDto> list = hoaDonService.findDetailsByMaHD(hoaDon.getMaHD());
         tblChiTietHoaDon.setItems(FXCollections.observableArrayList(list));
         configureTable();
         updateSummary(list);
@@ -124,7 +124,7 @@ public class ChiTietHoaDon_Ctrl extends Application {
     private void configureTable() {
         colNSTT.setCellValueFactory(cd -> new ReadOnlyObjectWrapper<>(tblChiTietHoaDon.getItems().indexOf(cd.getValue()) + 1));
         colNTen.setCellValueFactory(cell -> {
-            ChiTietHoaDon row = cell.getValue();
+            ChiTietHoaDonDto row = cell.getValue();
             String ten = row.getLoHang() != null && row.getLoHang().getThuoc() != null
                     ? safe(row.getLoHang().getThuoc().getTenThuoc()) + giftSuffix(row)
                     : "";
@@ -147,7 +147,7 @@ public class ChiTietHoaDon_Ctrl extends Application {
         colNThanhTien.setCellFactory(tc -> moneyCell());
     }
 
-    private javafx.scene.control.TableCell<ChiTietHoaDon, Double> moneyCell() {
+    private javafx.scene.control.TableCell<ChiTietHoaDonDto, Double> moneyCell() {
         return new javafx.scene.control.TableCell<>() {
             @Override
             protected void updateItem(Double item, boolean empty) {
@@ -158,10 +158,10 @@ public class ChiTietHoaDon_Ctrl extends Application {
         };
     }
 
-    private void updateSummary(List<ChiTietHoaDon> details) {
+    private void updateSummary(List<ChiTietHoaDonDto> details) {
         BigDecimal tongHang = BigDecimal.ZERO;
         BigDecimal giamTheoSp = BigDecimal.ZERO;
-        for (ChiTietHoaDon row : details) {
+        for (ChiTietHoaDonDto row : details) {
             BigDecimal line = BigDecimal.valueOf(row.getDonGia()).multiply(BigDecimal.valueOf(row.getSoLuong()));
             tongHang = tongHang.add(line);
             giamTheoSp = giamTheoSp.add(BigDecimal.valueOf(Math.max(0, row.getGiamGia())));
@@ -184,7 +184,7 @@ public class ChiTietHoaDon_Ctrl extends Application {
         lblGhiChuValue.setText("");
     }
 
-    private String giftSuffix(ChiTietHoaDon row) {
+    private String giftSuffix(ChiTietHoaDonDto row) {
         if (row == null || row.getLoHang() == null || row.getLoHang().getThuoc() == null) {
             return "";
         }

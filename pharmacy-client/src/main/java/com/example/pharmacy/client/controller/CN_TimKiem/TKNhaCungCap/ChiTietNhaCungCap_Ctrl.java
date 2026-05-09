@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.controller.CN_TimKiem.TKNhaCungCap;
 
-import com.example.pharmacy.common.model.NhaCungCap;
+import com.example.pharmacy.common.model.NhaCungCapDto;
 import javafx.fxml.FXML; // (Có thể giữ lại)
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -24,7 +24,7 @@ public class ChiTietNhaCungCap_Ctrl {
     public TextField maNCC;
     public TextField tenNCC;
 
-    private NhaCungCap nhaCungCap;
+    private NhaCungCapDto nhaCungCap;
 
     // --- ĐÃ CẬP NHẬT LOGIC `initialize` VÀ `hienThiThongTin` ---
 
@@ -49,7 +49,7 @@ public class ChiTietNhaCungCap_Ctrl {
     }
 
     // 2. Chỉ lưu dữ liệu
-    public void hienThiThongTin(NhaCungCap ncc) {
+    public void hienThiThongTin(NhaCungCapDto ncc) {
         if (ncc != null) {
             this.nhaCungCap = ncc;
         }

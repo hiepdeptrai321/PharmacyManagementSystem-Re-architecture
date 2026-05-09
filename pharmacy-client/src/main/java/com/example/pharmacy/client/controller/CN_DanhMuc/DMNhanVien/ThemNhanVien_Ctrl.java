@@ -2,7 +2,7 @@ package com.example.pharmacy.client.controller.CN_DanhMuc.DMNhanVien;
 
 import com.example.pharmacy.client.TienIch.TuyChinhAlert;
 import com.example.pharmacy.common.enums.UserRole;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.NhanVienDto;
 import com.example.pharmacy.client.service.NhanVienService;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
@@ -24,18 +24,18 @@ public class ThemNhanVien_Ctrl {
     public DatePicker txtNgaySinh;
 
     private final NhanVienService nhanVienService = new NhanVienService();
-    private NhanVien nhanVien = new NhanVien();
+    private NhanVienDto nhanVien = new NhanVienDto();
     public DanhMucNhanVien_Ctrl danhMucNhanVien_Ctrl;
 
     public void initialize() {
         cbxGioiTinh.getItems().setAll("Chọn giới tính", "Nam", "Nữ");
         cbxGioiTinh.getSelectionModel().selectFirst();
-        nhanVien = new NhanVien();
+        nhanVien = new NhanVienDto();
     }
 
     public void btnThemTaiKhoan(ActionEvent actionEvent) {
         try {
-            NhanVien copy = nhanVien != null ? new NhanVien(nhanVien) : new NhanVien();
+            NhanVienDto copy = nhanVien != null ? new NhanVienDto(nhanVien) : new NhanVienDto();
 
             var gui = new com.example.pharmacy.client.view.CN_DanhMuc.DMNhanVien.ThemTaiKhoan_GUI();
             var ctrl = new com.example.pharmacy.client.controller.CN_DanhMuc.DMNhanVien.ThemTaiKhoan_Ctrl();
@@ -51,7 +51,7 @@ public class ThemNhanVien_Ctrl {
             dialog.showAndWait();
 
             if (ctrl.isSaved) {
-                NhanVien updated = ctrl.getUpdatedNhanVien();
+                NhanVienDto updated = ctrl.getUpdatedNhanVien();
                 if (updated != null) {
                     nhanVien.setTaiKhoan(updated.getTaiKhoan());
                     nhanVien.setMatKhau(updated.getMatKhau());
@@ -68,7 +68,7 @@ public class ThemNhanVien_Ctrl {
             return;
         }
 
-        NhanVien nv = new NhanVien();
+        NhanVienDto nv = new NhanVienDto();
         nv.setTenNV(txtTenNV.getText().trim());
         nv.setSdt(txtSDT.getText().trim());
         nv.setEmail(txtEmail.getText().trim());

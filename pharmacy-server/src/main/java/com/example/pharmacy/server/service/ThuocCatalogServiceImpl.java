@@ -36,7 +36,7 @@ public class ThuocCatalogServiceImpl implements ThuocCatalogService {
             String maThuoc = codeGenerationService.nextCode(BusinessCodeType.THUOC);
             medicineCatalogRepository.insertMedicine(maThuoc, request);
             medicineCatalogRepository.insertBaseUnit(maThuoc, request);
-            auditService.logAction(actor, AuditAction.CREATE, "Thuoc_SanPham", maThuoc,
+            auditService.logAction(actor, AuditAction.CREATE, "Thuoc_SanPhamDto", maThuoc,
                     "Tao thuoc moi va don vi co ban " + request.getMaDonViCoBan());
             return maThuoc;
         });

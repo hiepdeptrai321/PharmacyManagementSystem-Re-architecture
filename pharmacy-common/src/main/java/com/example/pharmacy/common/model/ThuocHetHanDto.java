@@ -1,0 +1,34 @@
+package com.example.pharmacy.common.model;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDate;
+
+public class ThuocHetHanDto implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+    private String maThuocHH;
+    private String tenThuocHH;
+    private int soLuong;
+    private LocalDate ngayHetHan;
+
+    public ThuocHetHanDto() {}
+
+    public ThuocHetHanDto(String maThuocHH, String tenThuocHH, int soLuong, LocalDate ngayHetHan) {
+        this.maThuocHH = maThuocHH;
+        this.tenThuocHH = tenThuocHH;
+        this.soLuong = soLuong;
+        this.ngayHetHan = ngayHetHan;
+    }
+
+
+    public String getMaThuocHH() { return maThuocHH; }
+    public void setMaThuocHH(String maThuocHH) { this.maThuocHH = maThuocHH; }
+    public String getTenThuocHH() { return tenThuocHH; }
+    public void setTenThuocHH(String tenThuocHH) { this.tenThuocHH = tenThuocHH; }
+    public int getSoLuong() { return soLuong; }
+    public void setSoLuong(int soLuong) { this.soLuong = soLuong; }
+    public LocalDate getNgayHetHan() { return ngayHetHan; }
+    public void setNgayHetHan(LocalDate ngayHetHan) { this.ngayHetHan = ngayHetHan; }
+}
+    

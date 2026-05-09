@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_CapNhat.CapNhatSoLuong;
 
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import com.example.pharmacy.client.controller.CN_CapNhat.CapNhatSoLuong.CapNhatSoLuongThuoc_Ctrl;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -133,14 +133,14 @@ public class CapNhatSoLuongThuoc_GUI {
         ctrl.tfTimThuoc = tfTimThuoc;
         ctrl.btnTimThuoc = btnTimThuoc;
         ctrl.btnLamMoi = btnLamMoi;
-        ctrl.tbThuoc = (TableView<Thuoc_SP_TheoLo>) (TableView<?>) tbThuoc;
-        ctrl.colSTT = (TableColumn<Thuoc_SP_TheoLo, String>) (TableColumn<?, ?>) colSTT;
-        ctrl.colMaThuoc = (TableColumn<Thuoc_SP_TheoLo, String>) (TableColumn<?, ?>) colMaThuoc;
-        ctrl.colTenThuoc = (TableColumn<Thuoc_SP_TheoLo, String>) (TableColumn<?, ?>) colTenThuoc;
-        ctrl.colDVT = (TableColumn<Thuoc_SP_TheoLo, String>) (TableColumn<?, ?>) colDVT;
-        ctrl.colMaLo = (TableColumn<Thuoc_SP_TheoLo, String>) (TableColumn<?, ?>) colMaLo;
-        ctrl.colSLTon = (TableColumn<Thuoc_SP_TheoLo, Integer>) (TableColumn<?, ?>) colSLTon;
-        ctrl.colChiTiet = (TableColumn<Thuoc_SP_TheoLo, String>) (TableColumn<?, ?>) colChiTiet;
+        ctrl.tbThuoc = (TableView<Thuoc_SP_TheoLoDto>) (TableView<?>) tbThuoc;
+        ctrl.colSTT = (TableColumn<Thuoc_SP_TheoLoDto, String>) (TableColumn<?, ?>) colSTT;
+        ctrl.colMaThuoc = (TableColumn<Thuoc_SP_TheoLoDto, String>) (TableColumn<?, ?>) colMaThuoc;
+        ctrl.colTenThuoc = (TableColumn<Thuoc_SP_TheoLoDto, String>) (TableColumn<?, ?>) colTenThuoc;
+        ctrl.colDVT = (TableColumn<Thuoc_SP_TheoLoDto, String>) (TableColumn<?, ?>) colDVT;
+        ctrl.colMaLo = (TableColumn<Thuoc_SP_TheoLoDto, String>) (TableColumn<?, ?>) colMaLo;
+        ctrl.colSLTon = (TableColumn<Thuoc_SP_TheoLoDto, Integer>) (TableColumn<?, ?>) colSLTon;
+        ctrl.colChiTiet = (TableColumn<Thuoc_SP_TheoLoDto, String>) (TableColumn<?, ?>) colChiTiet;
         ctrl.rootTablePane = rootTablePane;
 
         // Initialize controller logic

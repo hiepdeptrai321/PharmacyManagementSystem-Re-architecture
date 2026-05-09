@@ -3,7 +3,7 @@ package com.example.pharmacy.client.service;
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.client.service.NhaCungCapClientService;
 import com.example.pharmacy.client.service.RmiNhaCungCapClientService;
-import com.example.pharmacy.common.model.NhaCungCap;
+import com.example.pharmacy.common.model.NhaCungCapDto;
 
 import java.util.List;
 
@@ -11,11 +11,11 @@ public class NhaCungCapService {
     private final NhaCungCapClientService nhaCungCapClientService =
             new RmiNhaCungCapClientService(new RmiClientProvider());
 
-    public List<NhaCungCap> findAll() {
+    public List<NhaCungCapDto> findAll() {
         return nhaCungCapClientService.findAll();
     }
 
-    public NhaCungCap findById(String maNcc) {
+    public NhaCungCapDto findById(String maNcc) {
         return nhaCungCapClientService.findById(maNcc);
     }
 
@@ -23,11 +23,11 @@ public class NhaCungCapService {
         return nhaCungCapClientService.generateNewMaNCC();
     }
 
-    public boolean create(NhaCungCap nhaCungCap) {
+    public boolean create(NhaCungCapDto nhaCungCap) {
         return nhaCungCapClientService.create(nhaCungCap);
     }
 
-    public boolean update(NhaCungCap nhaCungCap) {
+    public boolean update(NhaCungCapDto nhaCungCap) {
         return nhaCungCapClientService.update(nhaCungCap);
     }
 
@@ -35,7 +35,7 @@ public class NhaCungCapService {
         return nhaCungCapClientService.deleteById(maNcc);
     }
 
-    public List<NhaCungCap> searchByKeyword(String keyword) {
+    public List<NhaCungCapDto> searchByKeyword(String keyword) {
         String tuKhoa = keyword == null ? "" : keyword.trim().toLowerCase();
         if (tuKhoa.isEmpty()) {
             return findAll();

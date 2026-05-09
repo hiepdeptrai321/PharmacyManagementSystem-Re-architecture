@@ -2,8 +2,8 @@
 package com.example.pharmacy.client.controller.CN_TimKiem.TKHoatDong;
 
 import com.example.pharmacy.client.TienIch.TuyChinhAlert;
-import com.example.pharmacy.common.model.HoatDong;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.HoatDongDto;
+import com.example.pharmacy.common.model.NhanVienDto;
 import com.example.pharmacy.client.service.HoatDongService;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -24,14 +24,14 @@ public class TKHoatDong_Ctrl {
     public TextField tfTim;
     public Button btnTim;
     public Button btnLamMoi;
-    public TableView<HoatDong> tbHoatDong;
-    public TableColumn<HoatDong, String> colSTT;
-    public TableColumn<HoatDong, String> colMa;
-    public TableColumn<HoatDong, String> colLoai;
-    public TableColumn<HoatDong, String> colBang;
-    public TableColumn<HoatDong, String> colThoiGian;
-    public TableColumn<HoatDong, String> colNguoi;
-    public TableColumn<HoatDong, String> colChiTiet;
+    public TableView<HoatDongDto> tbHoatDong;
+    public TableColumn<HoatDongDto, String> colSTT;
+    public TableColumn<HoatDongDto, String> colMa;
+    public TableColumn<HoatDongDto, String> colLoai;
+    public TableColumn<HoatDongDto, String> colBang;
+    public TableColumn<HoatDongDto, String> colThoiGian;
+    public TableColumn<HoatDongDto, String> colNguoi;
+    public TableColumn<HoatDongDto, String> colChiTiet;
     public DatePicker dpTuNgay;
     public DatePicker dpDenNgay;
     public ComboBox<String> cbBoLoc;
@@ -123,11 +123,11 @@ public class TKHoatDong_Ctrl {
         });
 
         colNguoi.setCellValueFactory(cd -> {
-            NhanVien nv = cd.getValue().getNhanVien();
+            NhanVienDto nv = cd.getValue().getNhanVien();
             String s = nv == null ? "" : nv.getTenNV();
             return new javafx.beans.property.SimpleStringProperty(s);
         });
-        colNguoi.setCellFactory(col -> new TableCell<HoatDong, String>() {
+        colNguoi.setCellFactory(col -> new TableCell<HoatDongDto, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -141,11 +141,11 @@ public class TKHoatDong_Ctrl {
             }
         });
 
-        colChiTiet.setCellFactory(col -> new TableCell<HoatDong, String>() {
+        colChiTiet.setCellFactory(col -> new TableCell<HoatDongDto, String>() {
             private final Button btn = new Button("Chi tiết");
             {
                 btn.setOnAction(event -> {
-                    HoatDong hd = getTableView().getItems().get(getIndex());
+                    HoatDongDto hd = getTableView().getItems().get(getIndex());
                     showDetails(hd);
                 });
                 btn.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
@@ -160,7 +160,7 @@ public class TKHoatDong_Ctrl {
     }
 
     private void loadTable() {
-        List<HoatDong> list = hoatDongService.findAll();
+        List<HoatDongDto> list = hoatDongService.findAll();
         tbHoatDong.setItems(FXCollections.observableArrayList(list));
         tbHoatDong.refresh();
     }
@@ -171,7 +171,7 @@ public class TKHoatDong_Ctrl {
         LocalDate fromDate = dpTuNgay == null ? null : dpTuNgay.getValue();
         LocalDate toDate = dpDenNgay == null ? null : dpDenNgay.getValue();
 
-        List<HoatDong> filtered = hoatDongService.search(keyword, fromDate, toDate).stream()
+        List<HoatDongDto> filtered = hoatDongService.search(keyword, fromDate, toDate).stream()
                 .filter(h -> {
                     if (keyword.isEmpty()) {
                         return true;
@@ -186,7 +186,7 @@ public class TKHoatDong_Ctrl {
         tbHoatDong.refresh();
     }
 
-    private void showDetails(HoatDong hd) {
+    private void showDetails(HoatDongDto hd) {
         Stage chiTiet = new Stage();
         TuyChinhAlert.setAppIcon(chiTiet);
         try {

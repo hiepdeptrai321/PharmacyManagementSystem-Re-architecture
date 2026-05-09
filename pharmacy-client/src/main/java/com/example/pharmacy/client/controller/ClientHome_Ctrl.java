@@ -2,7 +2,7 @@ package com.example.pharmacy.client.controller;
 
 import com.example.pharmacy.client.session.SessionContext;
 import com.example.pharmacy.common.session.UserContext;
-import com.example.pharmacy.client.view.CN_XuLy.CaiDat.caiDat_GUI;
+import com.example.pharmacy.client.view.CN_XuLy.CaiDatDto.caiDat_GUI;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -229,7 +229,7 @@ public class ClientHome_Ctrl {
         openStage("Don vi tinh", stage -> {
             Label lblTitle = new Label("Don vi tinh");
             lblTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-            Label lblDescription = new Label("Cac luong DonViTinh da duoc migrate vao client moi. Ban co the them don vi tinh moi hoac mo Danh muc thuoc de thiet lap don vi tinh theo tung thuoc.");
+            Label lblDescription = new Label("Cac luong DonViTinhDto da duoc migrate vao client moi. Ban co the them don vi tinh moi hoac mo Danh muc thuoc de thiet lap don vi tinh theo tung thuoc.");
             lblDescription.setWrapText(true);
 
             Button btnThemDvt = new Button("Them don vi tinh moi");

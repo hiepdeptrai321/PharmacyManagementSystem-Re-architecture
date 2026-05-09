@@ -3,7 +3,7 @@ package com.example.pharmacy.client.service;
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.common.dto.UserContext;
 import com.example.pharmacy.common.remote.TonKhoRemote;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -18,7 +18,7 @@ public class RmiTonKhoClientService implements TonKhoClientService {
     }
 
     @Override
-    public List<Thuoc_SP_TheoLo> findAllLots() {
+    public List<Thuoc_SP_TheoLoDto> findAllLots() {
         try {
             return remote().findAllLots();
         } catch (RemoteException | NotBoundException exception) {
@@ -28,7 +28,7 @@ public class RmiTonKhoClientService implements TonKhoClientService {
     }
 
     @Override
-    public boolean updateLotQuantity(Thuoc_SP_TheoLo thuocTheoLo, UserContext actor) {
+    public boolean updateLotQuantity(Thuoc_SP_TheoLoDto thuocTheoLo, UserContext actor) {
         try {
             return remote().updateLotQuantity(thuocTheoLo, actor);
         } catch (RemoteException | NotBoundException exception) {

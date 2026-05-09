@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMNhomDuocLy;
 
-import com.example.pharmacy.common.model.NhomDuocLy;
+import com.example.pharmacy.common.model.NhomDuocLyDto;
 import com.example.pharmacy.client.service.NhomDuocLyService;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -50,7 +50,7 @@ public class ThemNhomDuocLy_Ctrl extends Application {
             return;
         }
 
-        NhomDuocLy nhomDuocLy = new NhomDuocLy(maNDL, tenNDL, moTa);
+        NhomDuocLyDto nhomDuocLy = new NhomDuocLyDto(maNDL, tenNDL, moTa);
         boolean success = nhomDuocLyService.create(nhomDuocLy);
 
         if (success) {

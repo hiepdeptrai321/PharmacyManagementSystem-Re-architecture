@@ -3,12 +3,12 @@ package com.example.pharmacy.server.service;
 import com.example.pharmacy.common.enums.BusinessCodeType;
 import com.example.pharmacy.server.repository.MedicineCatalogRepository;
 import com.example.pharmacy.server.transaction.TransactionManager;
-import com.example.pharmacy.common.model.ChiTietHoatChat;
-import com.example.pharmacy.common.model.HoatChat;
-import com.example.pharmacy.common.model.LoaiHang;
-import com.example.pharmacy.common.model.ThuocTonKho;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietHoatChatDto;
+import com.example.pharmacy.common.model.HoatChatDto;
+import com.example.pharmacy.common.model.LoaiHangDto;
+import com.example.pharmacy.common.model.ThuocTonKhoDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,7 +32,7 @@ public class ThuocServiceImpl implements ThuocService {
     }
 
     @Override
-    public List<Thuoc_SanPham> findAll() {
+    public List<Thuoc_SanPhamDto> findAll() {
         return medicineCatalogRepository.findAllMedicines();
     }
 
@@ -42,7 +42,7 @@ public class ThuocServiceImpl implements ThuocService {
     }
 
     @Override
-    public List<LoaiHang> findAllLoaiHang() {
+    public List<LoaiHangDto> findAllLoaiHang() {
         return medicineCatalogRepository.findAllLoaiHang();
     }
 
@@ -52,17 +52,17 @@ public class ThuocServiceImpl implements ThuocService {
     }
 
     @Override
-    public List<HoatChat> findAllHoatChat() {
+    public List<HoatChatDto> findAllHoatChat() {
         return medicineCatalogRepository.findAllHoatChat();
     }
 
     @Override
-    public List<ChiTietHoatChat> findChiTietHoatChatByMaThuoc(String maThuoc) {
+    public List<ChiTietHoatChatDto> findChiTietHoatChatByMaThuoc(String maThuoc) {
         return medicineCatalogRepository.findChiTietHoatChatByMaThuoc(maThuoc);
     }
 
     @Override
-    public boolean create(Thuoc_SanPham thuoc, List<ChiTietHoatChat> chiTietHoatChats, String maDonViTinhCoBan) {
+    public boolean create(Thuoc_SanPhamDto thuoc, List<ChiTietHoatChatDto> chiTietHoatChats, String maDonViTinhCoBan) {
         if (thuoc == null) {
             return false;
         }
@@ -76,7 +76,7 @@ public class ThuocServiceImpl implements ThuocService {
                 }
 
                 if (chiTietHoatChats != null) {
-                    for (ChiTietHoatChat chiTietHoatChat : chiTietHoatChats) {
+                    for (ChiTietHoatChatDto chiTietHoatChat : chiTietHoatChats) {
                         if (chiTietHoatChat == null || chiTietHoatChat.getHoatChat() == null) {
                             continue;
                         }
@@ -96,7 +96,7 @@ public class ThuocServiceImpl implements ThuocService {
     }
 
     @Override
-    public boolean update(Thuoc_SanPham thuoc, List<ChiTietHoatChat> chiTietHoatChats) {
+    public boolean update(Thuoc_SanPhamDto thuoc, List<ChiTietHoatChatDto> chiTietHoatChats) {
         if (thuoc == null || thuoc.getMaThuoc() == null || thuoc.getMaThuoc().isBlank()) {
             return false;
         }
@@ -107,11 +107,11 @@ public class ThuocServiceImpl implements ThuocService {
                     return false;
                 }
 
-                List<ChiTietHoatChat> existing = medicineCatalogRepository.findChiTietHoatChatByMaThuoc(thuoc.getMaThuoc());
+                List<ChiTietHoatChatDto> existing = medicineCatalogRepository.findChiTietHoatChatByMaThuoc(thuoc.getMaThuoc());
                 Set<String> currentKeys = new HashSet<>();
 
                 if (chiTietHoatChats != null) {
-                    for (ChiTietHoatChat chiTietHoatChat : chiTietHoatChats) {
+                    for (ChiTietHoatChatDto chiTietHoatChat : chiTietHoatChats) {
                         if (chiTietHoatChat == null || chiTietHoatChat.getHoatChat() == null) {
                             continue;
                         }
@@ -119,7 +119,7 @@ public class ThuocServiceImpl implements ThuocService {
                         String maHoatChat = chiTietHoatChat.getHoatChat().getMaHoatChat();
                         currentKeys.add(maHoatChat);
 
-                        ChiTietHoatChat existingChiTiet = existing.stream()
+                        ChiTietHoatChatDto existingChiTiet = existing.stream()
                                 .filter(item -> item.getHoatChat() != null && Objects.equals(item.getHoatChat().getMaHoatChat(), maHoatChat))
                                 .findFirst()
                                 .orElse(null);
@@ -132,7 +132,7 @@ public class ThuocServiceImpl implements ThuocService {
                     }
                 }
 
-                for (ChiTietHoatChat oldChiTiet : existing) {
+                for (ChiTietHoatChatDto oldChiTiet : existing) {
                     if (oldChiTiet.getHoatChat() == null) {
                         continue;
                     }
@@ -172,16 +172,16 @@ public class ThuocServiceImpl implements ThuocService {
     }
 
     @Override
-    public List<ThuocTonKho> getThuocTonKho() {
+    public List<ThuocTonKhoDto> getThuocTonKho() {
         return medicineCatalogRepository.getThuocTonKho();
     }
 
     @Override
-    public List<Thuoc_SP_TheoLo> getAllTheoLo() {
-        List<Thuoc_SP_TheoLo> rawLots = medicineCatalogRepository.findAllLots();
-        List<Thuoc_SP_TheoLo> safeLots = new ArrayList<>();
-        for (Thuoc_SP_TheoLo rawLot : rawLots) {
-            Thuoc_SP_TheoLo safeLot = new Thuoc_SP_TheoLo();
+    public List<Thuoc_SP_TheoLoDto> getAllTheoLo() {
+        List<Thuoc_SP_TheoLoDto> rawLots = medicineCatalogRepository.findAllLots();
+        List<Thuoc_SP_TheoLoDto> safeLots = new ArrayList<>();
+        for (Thuoc_SP_TheoLoDto rawLot : rawLots) {
+            Thuoc_SP_TheoLoDto safeLot = new Thuoc_SP_TheoLoDto();
             safeLot.setMaLH(rawLot.getMaLH());
             safeLot.setSoLuongTon(rawLot.getSoLuongTon());
             safeLot.setNsx(rawLot.getNsx());

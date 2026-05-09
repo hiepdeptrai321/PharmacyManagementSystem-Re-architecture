@@ -1,30 +1,30 @@
 package com.example.pharmacy.client.service;
 
-import com.example.pharmacy.common.model.ChiTietHoatChat;
-import com.example.pharmacy.common.model.HoatChat;
-import com.example.pharmacy.common.model.LoaiHang;
-import com.example.pharmacy.common.model.ThuocTonKho;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietHoatChatDto;
+import com.example.pharmacy.common.model.HoatChatDto;
+import com.example.pharmacy.common.model.LoaiHangDto;
+import com.example.pharmacy.common.model.ThuocTonKhoDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 
 import java.util.List;
 
 public interface ThuocClientService {
-    List<Thuoc_SanPham> findAll();
+    List<Thuoc_SanPhamDto> findAll();
 
     String generateNewMaThuoc();
 
-    List<LoaiHang> findAllLoaiHang();
+    List<LoaiHangDto> findAllLoaiHang();
 
     List<String> findAllLoaiHangNames();
 
-    List<HoatChat> findAllHoatChat();
+    List<HoatChatDto> findAllHoatChat();
 
-    List<ChiTietHoatChat> findChiTietHoatChatByMaThuoc(String maThuoc);
+    List<ChiTietHoatChatDto> findChiTietHoatChatByMaThuoc(String maThuoc);
 
-    boolean create(Thuoc_SanPham thuoc, List<ChiTietHoatChat> chiTietHoatChats, String maDonViTinhCoBan);
+    boolean create(Thuoc_SanPhamDto thuoc, List<ChiTietHoatChatDto> chiTietHoatChats, String maDonViTinhCoBan);
 
-    boolean update(Thuoc_SanPham thuoc, List<ChiTietHoatChat> chiTietHoatChats);
+    boolean update(Thuoc_SanPhamDto thuoc, List<ChiTietHoatChatDto> chiTietHoatChats);
 
     boolean softDelete(String maThuoc);
 
@@ -32,7 +32,7 @@ public interface ThuocClientService {
 
     String getTenDonViTinhCoBan(String maThuoc);
 
-    List<ThuocTonKho> getThuocTonKho();
+    List<ThuocTonKhoDto> getThuocTonKho();
 
-    List<Thuoc_SP_TheoLo> getAllTheoLo();
+    List<Thuoc_SP_TheoLoDto> getAllTheoLo();
 }

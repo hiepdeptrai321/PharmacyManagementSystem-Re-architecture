@@ -2,7 +2,7 @@ package com.example.pharmacy.client.controller.CN_CapNhat.CapNhatSoLuong;
 
 import com.example.pharmacy.client.TienIch.TuyChinhAlert;
 import com.example.pharmacy.client.TienIch.LoadingOverlay;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
 import com.example.pharmacy.client.service.TonKhoService;
 import com.example.pharmacy.client.service.ThuocService;
 import javafx.application.Application;
@@ -26,14 +26,14 @@ import java.util.List;
 public class CapNhatSoLuongThuoc_Ctrl extends Application {
     public TextField tfTimThuoc;
     public Button btnTimThuoc;
-    public TableView<Thuoc_SP_TheoLo> tbThuoc;
-    public TableColumn<Thuoc_SP_TheoLo, String> colSTT;
-    public TableColumn<Thuoc_SP_TheoLo, String> colMaThuoc;
-    public TableColumn<Thuoc_SP_TheoLo, String> colTenThuoc;
-    public TableColumn<Thuoc_SP_TheoLo, String> colDVT;
-    public TableColumn<Thuoc_SP_TheoLo, Integer> colSLTon;
-    public TableColumn<Thuoc_SP_TheoLo, String> colMaLo;
-    public TableColumn<Thuoc_SP_TheoLo, String> colChiTiet;
+    public TableView<Thuoc_SP_TheoLoDto> tbThuoc;
+    public TableColumn<Thuoc_SP_TheoLoDto, String> colSTT;
+    public TableColumn<Thuoc_SP_TheoLoDto, String> colMaThuoc;
+    public TableColumn<Thuoc_SP_TheoLoDto, String> colTenThuoc;
+    public TableColumn<Thuoc_SP_TheoLoDto, String> colDVT;
+    public TableColumn<Thuoc_SP_TheoLoDto, Integer> colSLTon;
+    public TableColumn<Thuoc_SP_TheoLoDto, String> colMaLo;
+    public TableColumn<Thuoc_SP_TheoLoDto, String> colChiTiet;
     public Button btnLamMoi;
     public StackPane rootTablePane;
 
@@ -61,8 +61,8 @@ public class CapNhatSoLuongThuoc_Ctrl extends Application {
 
     public void loadTable() {
         runWithLoading(() -> {
-            List<Thuoc_SP_TheoLo> list = tonKhoService.findAllLots();
-            ObservableList<Thuoc_SP_TheoLo> data = FXCollections.observableArrayList(list);
+            List<Thuoc_SP_TheoLoDto> list = tonKhoService.findAllLots();
+            ObservableList<Thuoc_SP_TheoLoDto> data = FXCollections.observableArrayList(list);
 
             Platform.runLater(() -> {
                 colSTT.setCellValueFactory(cellData ->
@@ -84,7 +84,7 @@ public class CapNhatSoLuongThuoc_Ctrl extends Application {
 
                     {
                         btn.setOnAction(event -> {
-                            Thuoc_SP_TheoLo thuocLo = getTableView().getItems().get(getIndex());
+                            Thuoc_SP_TheoLoDto thuocLo = getTableView().getItems().get(getIndex());
                             showSuaSoLuongThuoc(thuocLo);
                         });
                         btn.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
@@ -106,15 +106,15 @@ public class CapNhatSoLuongThuoc_Ctrl extends Application {
     public void timThuoc() {
         String keyword = tfTimThuoc.getText() == null ? "" : tfTimThuoc.getText().trim().toLowerCase();
         runWithLoading(() -> {
-            List<Thuoc_SP_TheoLo> list = tonKhoService.findAllLots().stream()
+            List<Thuoc_SP_TheoLoDto> list = tonKhoService.findAllLots().stream()
                     .filter(thuocTheoLo -> keyword.isEmpty() || matchesKeyword(thuocTheoLo, keyword))
                     .toList();
-            ObservableList<Thuoc_SP_TheoLo> data = FXCollections.observableArrayList(list);
+            ObservableList<Thuoc_SP_TheoLoDto> data = FXCollections.observableArrayList(list);
             Platform.runLater(() -> tbThuoc.setItems(data));
         });
     }
 
-    private boolean matchesKeyword(Thuoc_SP_TheoLo thuocTheoLo, String keyword) {
+    private boolean matchesKeyword(Thuoc_SP_TheoLoDto thuocTheoLo, String keyword) {
         return containsIgnoreCase(thuocTheoLo.getMaLH(), keyword)
                 || containsIgnoreCase(thuocTheoLo.getThuoc().getMaThuoc(), keyword)
                 || containsIgnoreCase(thuocTheoLo.getThuoc().getTenThuoc(), keyword);
@@ -124,7 +124,7 @@ public class CapNhatSoLuongThuoc_Ctrl extends Application {
         return value != null && value.toLowerCase().contains(keyword);
     }
 
-    private String getTenDvt(Thuoc_SP_TheoLo thuocTheoLo) {
+    private String getTenDvt(Thuoc_SP_TheoLoDto thuocTheoLo) {
         if (thuocTheoLo == null || thuocTheoLo.getThuoc() == null) {
             return "";
         }
@@ -154,7 +154,7 @@ public class CapNhatSoLuongThuoc_Ctrl extends Application {
         thread.start();
     }
 
-    private void showSuaSoLuongThuoc(Thuoc_SP_TheoLo thuocLo) {
+    private void showSuaSoLuongThuoc(Thuoc_SP_TheoLoDto thuocLo) {
         try {
             SuaSoLuongThuoc_Ctrl controller = new SuaSoLuongThuoc_Ctrl();
             Stage stage = new Stage();

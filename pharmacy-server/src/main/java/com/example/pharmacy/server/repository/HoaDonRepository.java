@@ -1,8 +1,8 @@
 package com.example.pharmacy.server.repository;
 
 import com.example.pharmacy.common.request.CreateHoaDonRequest;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.HoaDon;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.HoaDonDto;
 
 import java.sql.Date;
 import java.util.List;
@@ -26,9 +26,9 @@ public interface HoaDonRepository {
 
     void updatePreorderStatus(String maPhieuDat, int status);
 
-    List<HoaDon> findAll();
+    List<HoaDonDto> findAll();
 
-    HoaDon findById(String maHoaDon);
+    HoaDonDto findById(String maHoaDon);
 
-    List<ChiTietHoaDon> findDetailsByMaHD(String maHoaDon);
+    List<ChiTietHoaDonDto> findDetailsByMaHD(String maHoaDon);
 }

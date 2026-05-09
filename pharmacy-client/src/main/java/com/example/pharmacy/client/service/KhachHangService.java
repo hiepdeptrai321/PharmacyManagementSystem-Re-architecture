@@ -3,7 +3,7 @@ package com.example.pharmacy.client.service;
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.client.service.KhachHangClientService;
 import com.example.pharmacy.client.service.RmiKhachHangClientService;
-import com.example.pharmacy.common.model.KhachHang;
+import com.example.pharmacy.common.model.KhachHangDto;
 
 import java.util.List;
 
@@ -14,11 +14,11 @@ public class KhachHangService {
     private final KhachHangClientService khachHangClientService =
             new RmiKhachHangClientService(new RmiClientProvider());
 
-    public List<KhachHang> findAll() {
+    public List<KhachHangDto> findAll() {
         return khachHangClientService.findAll();
     }
 
-    public KhachHang findById(String maKhachHang) {
+    public KhachHangDto findById(String maKhachHang) {
         return khachHangClientService.findById(maKhachHang);
     }
 
@@ -26,11 +26,11 @@ public class KhachHangService {
         return khachHangClientService.generateNewMaKH();
     }
 
-    public boolean create(KhachHang khachHang) {
+    public boolean create(KhachHangDto khachHang) {
         return khachHangClientService.create(khachHang);
     }
 
-    public boolean save(KhachHang khachHang) {
+    public boolean save(KhachHangDto khachHang) {
         return khachHangClientService.save(khachHang);
     }
 
@@ -38,7 +38,7 @@ public class KhachHangService {
         return khachHangClientService.deleteById(maKhachHang);
     }
 
-    public List<KhachHang> searchByKeyword(String keyword) {
+    public List<KhachHangDto> searchByKeyword(String keyword) {
         String tuKhoa = normalize(keyword);
         if (tuKhoa.isEmpty()) {
             return findAll();
@@ -51,7 +51,7 @@ public class KhachHangService {
                 .toList();
     }
 
-    public List<KhachHang> search(String criteria, String keyword) {
+    public List<KhachHangDto> search(String criteria, String keyword) {
         String tuKhoa = normalize(keyword);
         if (tuKhoa.isEmpty()) {
             return findAll();
@@ -62,7 +62,7 @@ public class KhachHangService {
                 .toList();
     }
 
-    private boolean matches(KhachHang khachHang, String criteria, String keyword) {
+    private boolean matches(KhachHangDto khachHang, String criteria, String keyword) {
         if (SEARCH_BY_EMAIL.equals(criteria)) {
             return containsIgnoreCase(khachHang.getEmail(), keyword);
         }

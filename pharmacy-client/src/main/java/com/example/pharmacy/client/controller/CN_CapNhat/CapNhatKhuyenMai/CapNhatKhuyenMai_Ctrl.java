@@ -2,7 +2,7 @@ package com.example.pharmacy.client.controller.CN_CapNhat.CapNhatKhuyenMai;
 
 import com.example.pharmacy.client.TienIch.TuyChinhAlert;
 import com.example.pharmacy.client.TienIch.LoadingOverlay;
-import com.example.pharmacy.common.model.KhuyenMai;
+import com.example.pharmacy.common.model.KhuyenMaiDto;
 import com.example.pharmacy.client.service.KhuyenMaiService;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -24,17 +24,17 @@ import java.util.List;
 
 public class CapNhatKhuyenMai_Ctrl {
 
-    public TableView<KhuyenMai> tbKM;
+    public TableView<KhuyenMaiDto> tbKM;
     public TextField tfTimKM;
     public Button btnTimKM;
-    public TableColumn<KhuyenMai, String> colChiTiet;
-    public TableColumn<KhuyenMai, String> colSTT;
-    public TableColumn<KhuyenMai, String> colMaKM;
-    public TableColumn<KhuyenMai, String> colTenKM;
-    public TableColumn<KhuyenMai, String> colLoaiKM;
-    public TableColumn<KhuyenMai, Float> colGiaTri;
-    public TableColumn<KhuyenMai, String> colNBD;
-    public TableColumn<KhuyenMai, String> colNKT;
+    public TableColumn<KhuyenMaiDto, String> colChiTiet;
+    public TableColumn<KhuyenMaiDto, String> colSTT;
+    public TableColumn<KhuyenMaiDto, String> colMaKM;
+    public TableColumn<KhuyenMaiDto, String> colTenKM;
+    public TableColumn<KhuyenMaiDto, String> colLoaiKM;
+    public TableColumn<KhuyenMaiDto, Float> colGiaTri;
+    public TableColumn<KhuyenMaiDto, String> colNBD;
+    public TableColumn<KhuyenMaiDto, String> colNKT;
     public Button btnReset;
     public StackPane rootTablePane;
 
@@ -54,8 +54,8 @@ public class CapNhatKhuyenMai_Ctrl {
 
     public void loadTable() {
         runWithLoading(() -> {
-            List<KhuyenMai> list = khuyenMaiService.findAll();
-            ObservableList<KhuyenMai> data = FXCollections.observableArrayList(list);
+            List<KhuyenMaiDto> list = khuyenMaiService.findAll();
+            ObservableList<KhuyenMaiDto> data = FXCollections.observableArrayList(list);
             Platform.runLater(() -> {
                 colSTT.setCellValueFactory(cellData ->
                         new SimpleStringProperty(String.valueOf(tbKM.getItems().indexOf(cellData.getValue()) + 1)));
@@ -93,7 +93,7 @@ public class CapNhatKhuyenMai_Ctrl {
         });
     }
 
-    public void btnChiTietClick(KhuyenMai km) {
+    public void btnChiTietClick(KhuyenMaiDto km) {
         try {
             SuaKhuyenMai_Ctrl ctrl = new SuaKhuyenMai_Ctrl();
             Stage stage = new Stage();
@@ -121,7 +121,7 @@ public class CapNhatKhuyenMai_Ctrl {
     public void timKhuyenMai() {
         runWithLoading(() -> {
             String keyword = tfTimKM.getText().trim().toLowerCase();
-            List<KhuyenMai> filtered = khuyenMaiService.searchByKeyword(keyword);
+            List<KhuyenMaiDto> filtered = khuyenMaiService.searchByKeyword(keyword);
             Platform.runLater(() -> tbKM.setItems(FXCollections.observableArrayList(filtered)));
         });
     }

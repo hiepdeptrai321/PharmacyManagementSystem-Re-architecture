@@ -2,8 +2,9 @@ package com.example.pharmacy.server.service;
 
 import com.example.pharmacy.common.enums.BusinessCodeType;
 import com.example.pharmacy.server.entity.DonViTinhEntity;
+import com.example.pharmacy.server.mapper.DonViTinhMapper;
 import com.example.pharmacy.server.repository.DonViTinhRepository;
-import com.example.pharmacy.common.model.DonViTinh;
+import com.example.pharmacy.common.model.DonViTinhDto;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,18 +19,18 @@ public class DonViTinhServiceImpl implements DonViTinhService {
     }
 
     @Override
-    public List<DonViTinh> findAll() {
-        return donViTinhRepository.findAll().stream().map(this::toModel).toList();
+    public List<DonViTinhDto> findAll() {
+        return donViTinhRepository.findAll().stream().map(DonViTinhMapper::toDto).toList();
     }
 
     @Override
-    public DonViTinh findById(String maDonViTinh) {
-        return donViTinhRepository.findById(maDonViTinh).map(this::toModel).orElse(null);
+    public DonViTinhDto findById(String maDonViTinh) {
+        return donViTinhRepository.findById(maDonViTinh).map(DonViTinhMapper::toDto).orElse(null);
     }
 
     @Override
-    public DonViTinh findByTenDonViTinh(String tenDonViTinh) {
-        return donViTinhRepository.findByTenDonViTinh(tenDonViTinh).map(this::toModel).orElse(null);
+    public DonViTinhDto findByTenDonViTinh(String tenDonViTinh) {
+        return donViTinhRepository.findByTenDonViTinh(tenDonViTinh).map(DonViTinhMapper::toDto).orElse(null);
     }
 
     @Override
@@ -38,12 +39,12 @@ public class DonViTinhServiceImpl implements DonViTinhService {
     }
 
     @Override
-    public boolean create(DonViTinh donViTinh) {
+    public boolean create(DonViTinhDto donViTinh) {
         if (donViTinh == null) {
             return false;
         }
         try {
-            DonViTinhEntity entity = toEntity(donViTinh);
+            DonViTinhEntity entity = DonViTinhMapper.toEntity(donViTinh);
             if (entity.getMaDVT() == null || entity.getMaDVT().isBlank()) {
                 entity.setMaDVT(generateNewMaDVT());
                 donViTinh.setMaDVT(entity.getMaDVT());
@@ -56,12 +57,12 @@ public class DonViTinhServiceImpl implements DonViTinhService {
     }
 
     @Override
-    public boolean update(DonViTinh donViTinh) {
+    public boolean update(DonViTinhDto donViTinh) {
         if (donViTinh == null || donViTinh.getMaDVT() == null || donViTinh.getMaDVT().isBlank()) {
             return false;
         }
         try {
-            donViTinhRepository.update(toEntity(donViTinh));
+            donViTinhRepository.update(DonViTinhMapper.toEntity(donViTinh));
             return true;
         } catch (RuntimeException exception) {
             return false;
@@ -78,21 +79,5 @@ public class DonViTinhServiceImpl implements DonViTinhService {
         } catch (RuntimeException exception) {
             return false;
         }
-    }
-
-    private DonViTinh toModel(DonViTinhEntity entity) {
-        DonViTinh donViTinh = new DonViTinh();
-        donViTinh.setMaDVT(entity.getMaDVT());
-        donViTinh.setTenDonViTinh(entity.getTenDonViTinh());
-        donViTinh.setKiHieu(entity.getKiHieu());
-        return donViTinh;
-    }
-
-    private DonViTinhEntity toEntity(DonViTinh model) {
-        DonViTinhEntity entity = new DonViTinhEntity();
-        entity.setMaDVT(model.getMaDVT());
-        entity.setTenDonViTinh(model.getTenDonViTinh());
-        entity.setKiHieu(model.getKiHieu());
-        return entity;
     }
 }

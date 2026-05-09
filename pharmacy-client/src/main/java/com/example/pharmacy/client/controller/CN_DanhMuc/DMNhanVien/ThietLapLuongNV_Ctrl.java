@@ -1,8 +1,8 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMNhanVien;
 
 import com.example.pharmacy.client.TienIch.VNDFormatter;
-import com.example.pharmacy.common.model.LuongNhanVien;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.LuongNhanVienDto;
+import com.example.pharmacy.common.model.NhanVienDto;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -13,16 +13,16 @@ public class ThietLapLuongNV_Ctrl {
     public TextField txtTenNV;
     public TextField txtLuongHT;
     public TextArea txtGhiChu;
-    public NhanVien nhanVien;
+    public NhanVienDto nhanVien;
     public TextField txtPhuCapHienTai;
     public TextField txtLuongMoi;
     public TextField txtPhuCapMoi;
-    public LuongNhanVien luongNhanVien;
+    public LuongNhanVienDto luongNhanVien;
     public boolean isSaved = false;
 
     private final VNDFormatter vndFormatter = new VNDFormatter();
 
-    public void initialize(NhanVien nhanVien, LuongNhanVien luongNhanVien) {
+    public void initialize(NhanVienDto nhanVien, LuongNhanVienDto luongNhanVien) {
         vndFormatter.applyNumberFormatter(txtLuongMoi);
         vndFormatter.applyNumberFormatter(txtPhuCapMoi);
         txtMaNV.setText(nhanVien.getMaNV());

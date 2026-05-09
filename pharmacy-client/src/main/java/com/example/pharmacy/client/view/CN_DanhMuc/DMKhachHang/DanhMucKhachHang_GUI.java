@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_DanhMuc.DMKhachHang;
 
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMKhachHang.DanhMucKhachHang_Ctrl;
-import com.example.pharmacy.common.model.KhachHang;
+import com.example.pharmacy.common.model.KhachHangDto;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -104,38 +104,38 @@ public class DanhMucKhachHang_GUI {
         btnTim.setStyle(" -fx-background-color: #0c81ff; -fx-text-fill: white;");
 
         // --- Bảng ---
-        TableView<KhachHang> tbKhachHang = new TableView<>();
+        TableView<KhachHangDto> tbKhachHang = new TableView<>();
         tbKhachHang.setId("tablethuoc");
         tbKhachHang.setLayoutX(12.0);
         tbKhachHang.setLayoutY(97.0);
         tbKhachHang.setPrefHeight(791.0);
         tbKhachHang.setPrefWidth(1624.0);
 
-        TableColumn<KhachHang, String> cotSTT = new TableColumn<>("STT");
+        TableColumn<KhachHangDto, String> cotSTT = new TableColumn<>("STT");
         cotSTT.setPrefWidth(91.67);
         cotSTT.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<KhachHang, String> cotMaKH = new TableColumn<>("Mã khách hàng");
+        TableColumn<KhachHangDto, String> cotMaKH = new TableColumn<>("Mã khách hàng");
         cotMaKH.setPrefWidth(261.0);
         cotMaKH.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<KhachHang, String> cotTenKH = new TableColumn<>("Tên khách hàng");
+        TableColumn<KhachHangDto, String> cotTenKH = new TableColumn<>("Tên khách hàng");
         cotTenKH.setPrefWidth(401.0);
 
-        TableColumn<KhachHang, String> cotGioiTinh = new TableColumn<>("Giới tính");
+        TableColumn<KhachHangDto, String> cotGioiTinh = new TableColumn<>("Giới tính");
         cotGioiTinh.setMinWidth(0.0);
         cotGioiTinh.setPrefWidth(172.33);
 
-        TableColumn<KhachHang, String> cotSDT = new TableColumn<>("SĐT");
+        TableColumn<KhachHangDto, String> cotSDT = new TableColumn<>("SĐT");
         cotSDT.setMinWidth(0.0);
         cotSDT.setPrefWidth(294.0);
         cotSDT.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<KhachHang, String> cotDiaChi = new TableColumn<>("Địa chỉ");
+        TableColumn<KhachHangDto, String> cotDiaChi = new TableColumn<>("Địa chỉ");
         cotDiaChi.setMinWidth(0.0);
         cotDiaChi.setPrefWidth(287.0);
 
-        TableColumn<KhachHang, String> cotChiTiet = new TableColumn<>();
+        TableColumn<KhachHangDto, String> cotChiTiet = new TableColumn<>();
         cotChiTiet.setPrefWidth(97.0);
         cotChiTiet.setStyle("-fx-alignment: CENTER;");
 
@@ -153,7 +153,7 @@ public class DanhMucKhachHang_GUI {
         ctrl.btnTim = btnTim;
         ctrl.btnthemKH = btnthemKH;
         ctrl.btnLamMoi = btnLamMoi;
-        ctrl.tbKhachHang = (TableView<KhachHang>) tbKhachHang;
+        ctrl.tbKhachHang = (TableView<KhachHangDto>) tbKhachHang;
         ctrl.cotSTT = cotSTT;
         ctrl.cotMaKH = cotMaKH;
         ctrl.cotTenKH = cotTenKH;

@@ -2,7 +2,7 @@ package com.example.pharmacy.server.bootstrap.rmi;
 
 import com.example.pharmacy.common.remote.DonViTinhRemote;
 import com.example.pharmacy.server.service.DonViTinhService;
-import com.example.pharmacy.common.model.DonViTinh;
+import com.example.pharmacy.common.model.DonViTinhDto;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -18,17 +18,17 @@ public class DonViTinhRemoteAdapter extends UnicastRemoteObject implements DonVi
     }
 
     @Override
-    public List<DonViTinh> findAll() throws RemoteException {
+    public List<DonViTinhDto> findAll() throws RemoteException {
         return donViTinhService.findAll();
     }
 
     @Override
-    public DonViTinh findById(String maDonViTinh) throws RemoteException {
+    public DonViTinhDto findById(String maDonViTinh) throws RemoteException {
         return donViTinhService.findById(maDonViTinh);
     }
 
     @Override
-    public DonViTinh findByTenDonViTinh(String tenDonViTinh) throws RemoteException {
+    public DonViTinhDto findByTenDonViTinh(String tenDonViTinh) throws RemoteException {
         return donViTinhService.findByTenDonViTinh(tenDonViTinh);
     }
 
@@ -38,12 +38,12 @@ public class DonViTinhRemoteAdapter extends UnicastRemoteObject implements DonVi
     }
 
     @Override
-    public boolean create(DonViTinh donViTinh) throws RemoteException {
+    public boolean create(DonViTinhDto donViTinh) throws RemoteException {
         return donViTinhService.create(donViTinh);
     }
 
     @Override
-    public boolean update(DonViTinh donViTinh) throws RemoteException {
+    public boolean update(DonViTinhDto donViTinh) throws RemoteException {
         return donViTinhService.update(donViTinh);
     }
 

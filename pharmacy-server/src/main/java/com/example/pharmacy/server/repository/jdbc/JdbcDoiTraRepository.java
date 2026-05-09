@@ -6,17 +6,17 @@ import com.example.pharmacy.common.request.CreatePhieuTraItemRequest;
 import com.example.pharmacy.common.request.CreatePhieuTraRequest;
 import com.example.pharmacy.server.config.JdbcConnectionProvider;
 import com.example.pharmacy.server.repository.DoiTraRepository;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.ChiTietPhieuDoiHang;
-import com.example.pharmacy.common.model.ChiTietPhieuTraHang;
-import com.example.pharmacy.common.model.DonViTinh;
-import com.example.pharmacy.common.model.HoaDon;
-import com.example.pharmacy.common.model.KhachHang;
-import com.example.pharmacy.common.model.NhanVien;
-import com.example.pharmacy.common.model.PhieuDoiHang;
-import com.example.pharmacy.common.model.PhieuTraHang;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.ChiTietPhieuDoiHangDto;
+import com.example.pharmacy.common.model.ChiTietPhieuTraHangDto;
+import com.example.pharmacy.common.model.DonViTinhDto;
+import com.example.pharmacy.common.model.HoaDonDto;
+import com.example.pharmacy.common.model.KhachHangDto;
+import com.example.pharmacy.common.model.NhanVienDto;
+import com.example.pharmacy.common.model.PhieuDoiHangDto;
+import com.example.pharmacy.common.model.PhieuTraHangDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -39,9 +39,9 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
                    kh.MaKH,
                    kh.TenKH,
                    kh.SDT
-            FROM HoaDon hd
-            JOIN NhanVien nv ON nv.MaNV = hd.MaNV
-            LEFT JOIN KhachHang kh ON kh.MaKH = hd.MaKH
+            FROM HoaDonDto hd
+            JOIN NhanVienDto nv ON nv.MaNV = hd.MaNV
+            LEFT JOIN KhachHangDto kh ON kh.MaKH = hd.MaKH
             WHERE hd.MaHD = ?
             """;
     private static final String SELECT_HOA_DON_DETAILS_SQL = """
@@ -54,92 +54,92 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
                    lo.MaThuoc,
                    ts.TenThuoc,
                    dvt.TenDonViTinh
-            FROM ChiTietHoaDon ct
-            JOIN Thuoc_SP_TheoLo lo ON lo.MaLH = ct.MaLH
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
-            LEFT JOIN DonViTinh dvt ON dvt.MaDVT = ct.MaDVT
+            FROM ChiTietHoaDonDto ct
+            JOIN Thuoc_SP_TheoLoDto lo ON lo.MaLH = ct.MaLH
+            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = lo.MaThuoc
+            LEFT JOIN DonViTinhDto dvt ON dvt.MaDVT = ct.MaDVT
             WHERE ct.MaHD = ?
             ORDER BY ts.TenThuoc ASC, ct.MaLH ASC
             """;
     private static final String UPDATE_HOA_DON_CUSTOMER_SQL = """
-            UPDATE HoaDon
+            UPDATE HoaDonDto
             SET MaKH = ?
             WHERE MaHD = ?
             """;
     private static final String SELECT_SO_LUONG_DA_DOI_SQL = """
             SELECT COALESCE(SUM(ct.SoLuong), 0)
-            FROM ChiTietPhieuDoiHang ct
-            JOIN PhieuDoiHang pd ON pd.MaPD = ct.MaPD
+            FROM ChiTietPhieuDoiHangDto ct
+            JOIN PhieuDoiHangDto pd ON pd.MaPD = ct.MaPD
             WHERE pd.MaHD = ? AND ct.MaLH = ? AND ct.MaDVT = ?
             """;
     private static final String SELECT_SO_LUONG_DA_TRA_SQL = """
             SELECT COALESCE(SUM(ct.SoLuong), 0)
-            FROM ChiTietPhieuTraHang ct
-            JOIN PhieuTraHang pt ON pt.MaPT = ct.MaPT
+            FROM ChiTietPhieuTraHangDto ct
+            JOIN PhieuTraHangDto pt ON pt.MaPT = ct.MaPT
             WHERE pt.MaHD = ? AND ct.MaLH = ? AND ct.MaDVT = ?
             """;
     private static final String SELECT_UNIT_CONVERSION_SQL = """
             SELECT MaDVT, HeSoQuyDoi, DonViCoBan
-            FROM ChiTietDonViTinh
+            FROM ChiTietDonViTinhDto
             WHERE MaThuoc = ? AND MaDVT = ?
             """;
     private static final String SELECT_LOTS_FOR_UPDATE_SQL = """
             SELECT MaLH, SoLuongTon, HSD
-            FROM Thuoc_SP_TheoLo
+            FROM Thuoc_SP_TheoLoDto
             WHERE MaThuoc = ?
             ORDER BY COALESCE(HSD, DATE('9999-12-31')) ASC, MaLH ASC
             FOR UPDATE
             """;
     private static final String UPDATE_ADD_STOCK_SQL = """
-            UPDATE Thuoc_SP_TheoLo
+            UPDATE Thuoc_SP_TheoLoDto
             SET SoLuongTon = SoLuongTon + ?
             WHERE MaLH = ?
             """;
     private static final String UPDATE_DEDUCT_STOCK_SQL = """
-            UPDATE Thuoc_SP_TheoLo
+            UPDATE Thuoc_SP_TheoLoDto
             SET SoLuongTon = SoLuongTon - ?
             WHERE MaLH = ? AND SoLuongTon >= ?
             """;
     private static final String INSERT_PHIEU_DOI_HEADER_SQL = """
-            INSERT INTO PhieuDoiHang (MaPD, NgayLap, GhiChu, MaNV, MaKH, MaHD)
+            INSERT INTO PhieuDoiHangDto (MaPD, NgayLap, GhiChu, MaNV, MaKH, MaHD)
             VALUES (?, ?, ?, ?, ?, ?)
             """;
     private static final String INSERT_PHIEU_DOI_DETAIL_SQL = """
-            INSERT INTO ChiTietPhieuDoiHang (MaLH, MaPD, MaThuoc, SoLuong, MaDVT, LyDoDoi)
+            INSERT INTO ChiTietPhieuDoiHangDto (MaLH, MaPD, MaThuoc, SoLuong, MaDVT, LyDoDoi)
             VALUES (?, ?, ?, ?, ?, ?)
             """;
     private static final String INSERT_PHIEU_TRA_HEADER_SQL = """
-            INSERT INTO PhieuTraHang (MaPT, NgayLap, GhiChu, MaNV, MaHD, MaKH)
+            INSERT INTO PhieuTraHangDto (MaPT, NgayLap, GhiChu, MaNV, MaHD, MaKH)
             VALUES (?, ?, ?, ?, ?, ?)
             """;
     private static final String INSERT_PHIEU_TRA_DETAIL_SQL = """
-            INSERT INTO ChiTietPhieuTraHang (MaLH, MaPT, MaThuoc, SoLuong, MaDVT, DonGia, GiamGia, LyDoTra)
+            INSERT INTO ChiTietPhieuTraHangDto (MaLH, MaPT, MaThuoc, SoLuong, MaDVT, DonGia, GiamGia, LyDoTra)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """;
     private static final String SELECT_ALL_PHIEU_DOI_SQL = """
             SELECT pd.MaPD, pd.NgayLap, pd.GhiChu, pd.MaHD,
                    nv.MaNV, nv.TenNV,
                    kh.MaKH, kh.TenKH, kh.SDT
-            FROM PhieuDoiHang pd
-            JOIN NhanVien nv ON nv.MaNV = pd.MaNV
-            JOIN KhachHang kh ON kh.MaKH = pd.MaKH
+            FROM PhieuDoiHangDto pd
+            JOIN NhanVienDto nv ON nv.MaNV = pd.MaNV
+            JOIN KhachHangDto kh ON kh.MaKH = pd.MaKH
             ORDER BY pd.NgayLap DESC, pd.MaPD DESC
             """;
     private static final String SELECT_PHIEU_DOI_BY_ID_SQL = """
             SELECT pd.MaPD, pd.NgayLap, pd.GhiChu, pd.MaHD,
                    nv.MaNV, nv.TenNV,
                    kh.MaKH, kh.TenKH, kh.SDT
-            FROM PhieuDoiHang pd
-            JOIN NhanVien nv ON nv.MaNV = pd.MaNV
-            JOIN KhachHang kh ON kh.MaKH = pd.MaKH
+            FROM PhieuDoiHangDto pd
+            JOIN NhanVienDto nv ON nv.MaNV = pd.MaNV
+            JOIN KhachHangDto kh ON kh.MaKH = pd.MaKH
             WHERE pd.MaPD = ?
             """;
     private static final String SELECT_CT_PHIEU_DOI_SQL = """
             SELECT ct.MaLH, ct.MaPD, ct.MaThuoc, ct.SoLuong, ct.MaDVT, ct.LyDoDoi,
                    ts.TenThuoc, dvt.TenDonViTinh
-            FROM ChiTietPhieuDoiHang ct
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = ct.MaThuoc
-            LEFT JOIN DonViTinh dvt ON dvt.MaDVT = ct.MaDVT
+            FROM ChiTietPhieuDoiHangDto ct
+            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = ct.MaThuoc
+            LEFT JOIN DonViTinhDto dvt ON dvt.MaDVT = ct.MaDVT
             WHERE ct.MaPD = ?
             ORDER BY ts.TenThuoc ASC, ct.MaLH ASC
             """;
@@ -147,26 +147,26 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
             SELECT pt.MaPT, pt.NgayLap, pt.GhiChu, pt.MaHD,
                    nv.MaNV, nv.TenNV,
                    kh.MaKH, kh.TenKH, kh.SDT
-            FROM PhieuTraHang pt
-            JOIN NhanVien nv ON nv.MaNV = pt.MaNV
-            JOIN KhachHang kh ON kh.MaKH = pt.MaKH
+            FROM PhieuTraHangDto pt
+            JOIN NhanVienDto nv ON nv.MaNV = pt.MaNV
+            JOIN KhachHangDto kh ON kh.MaKH = pt.MaKH
             ORDER BY pt.NgayLap DESC, pt.MaPT DESC
             """;
     private static final String SELECT_PHIEU_TRA_BY_ID_SQL = """
             SELECT pt.MaPT, pt.NgayLap, pt.GhiChu, pt.MaHD,
                    nv.MaNV, nv.TenNV,
                    kh.MaKH, kh.TenKH, kh.SDT
-            FROM PhieuTraHang pt
-            JOIN NhanVien nv ON nv.MaNV = pt.MaNV
-            JOIN KhachHang kh ON kh.MaKH = pt.MaKH
+            FROM PhieuTraHangDto pt
+            JOIN NhanVienDto nv ON nv.MaNV = pt.MaNV
+            JOIN KhachHangDto kh ON kh.MaKH = pt.MaKH
             WHERE pt.MaPT = ?
             """;
     private static final String SELECT_CT_PHIEU_TRA_SQL = """
             SELECT ct.MaLH, ct.MaPT, ct.MaThuoc, ct.SoLuong, ct.MaDVT, ct.DonGia, ct.GiamGia, ct.LyDoTra,
                    ts.TenThuoc, dvt.TenDonViTinh
-            FROM ChiTietPhieuTraHang ct
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = ct.MaThuoc
-            LEFT JOIN DonViTinh dvt ON dvt.MaDVT = ct.MaDVT
+            FROM ChiTietPhieuTraHangDto ct
+            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = ct.MaThuoc
+            LEFT JOIN DonViTinhDto dvt ON dvt.MaDVT = ct.MaDVT
             WHERE ct.MaPT = ?
             ORDER BY ts.TenThuoc ASC, ct.MaLH ASC
             """;
@@ -176,7 +176,7 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
     }
 
     @Override
-    public HoaDon findHoaDonGoc(String maHoaDon) {
+    public HoaDonDto findHoaDonGoc(String maHoaDon) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -197,9 +197,9 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
     }
 
     @Override
-    public List<ChiTietHoaDon> findHoaDonDetails(String maHoaDon) {
+    public List<ChiTietHoaDonDto> findHoaDonDetails(String maHoaDon) {
         Connection connection = null;
-        List<ChiTietHoaDon> list = new ArrayList<>();
+        List<ChiTietHoaDonDto> list = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_HOA_DON_DETAILS_SQL)) {
@@ -419,20 +419,20 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
     }
 
     @Override
-    public List<PhieuDoiHang> findAllPhieuDoi() {
+    public List<PhieuDoiHangDto> findAllPhieuDoi() {
         return queryPhieuDoiList(SELECT_ALL_PHIEU_DOI_SQL, null);
     }
 
     @Override
-    public PhieuDoiHang findPhieuDoiById(String maPhieuDoi) {
-        List<PhieuDoiHang> list = queryPhieuDoiList(SELECT_PHIEU_DOI_BY_ID_SQL, maPhieuDoi);
+    public PhieuDoiHangDto findPhieuDoiById(String maPhieuDoi) {
+        List<PhieuDoiHangDto> list = queryPhieuDoiList(SELECT_PHIEU_DOI_BY_ID_SQL, maPhieuDoi);
         return list.isEmpty() ? null : list.get(0);
     }
 
     @Override
-    public List<ChiTietPhieuDoiHang> findChiTietPhieuDoiByMaPD(String maPhieuDoi) {
+    public List<ChiTietPhieuDoiHangDto> findChiTietPhieuDoiByMaPD(String maPhieuDoi) {
         Connection connection = null;
-        List<ChiTietPhieuDoiHang> list = new ArrayList<>();
+        List<ChiTietPhieuDoiHangDto> list = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_CT_PHIEU_DOI_SQL)) {
@@ -452,20 +452,20 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
     }
 
     @Override
-    public List<PhieuTraHang> findAllPhieuTra() {
+    public List<PhieuTraHangDto> findAllPhieuTra() {
         return queryPhieuTraList(SELECT_ALL_PHIEU_TRA_SQL, null);
     }
 
     @Override
-    public PhieuTraHang findPhieuTraById(String maPhieuTra) {
-        List<PhieuTraHang> list = queryPhieuTraList(SELECT_PHIEU_TRA_BY_ID_SQL, maPhieuTra);
+    public PhieuTraHangDto findPhieuTraById(String maPhieuTra) {
+        List<PhieuTraHangDto> list = queryPhieuTraList(SELECT_PHIEU_TRA_BY_ID_SQL, maPhieuTra);
         return list.isEmpty() ? null : list.get(0);
     }
 
     @Override
-    public List<ChiTietPhieuTraHang> findChiTietPhieuTraByMaPT(String maPhieuTra) {
+    public List<ChiTietPhieuTraHangDto> findChiTietPhieuTraByMaPT(String maPhieuTra) {
         Connection connection = null;
-        List<ChiTietPhieuTraHang> list = new ArrayList<>();
+        List<ChiTietPhieuTraHangDto> list = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_CT_PHIEU_TRA_SQL)) {
@@ -506,9 +506,9 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
         }
     }
 
-    private List<PhieuDoiHang> queryPhieuDoiList(String sql, String maPhieuDoi) {
+    private List<PhieuDoiHangDto> queryPhieuDoiList(String sql, String maPhieuDoi) {
         Connection connection = null;
-        List<PhieuDoiHang> list = new ArrayList<>();
+        List<PhieuDoiHangDto> list = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -529,9 +529,9 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
         }
     }
 
-    private List<PhieuTraHang> queryPhieuTraList(String sql, String maPhieuTra) {
+    private List<PhieuTraHangDto> queryPhieuTraList(String sql, String maPhieuTra) {
         Connection connection = null;
-        List<PhieuTraHang> list = new ArrayList<>();
+        List<PhieuTraHangDto> list = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -552,22 +552,22 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
         }
     }
 
-    private HoaDon mapHoaDonHeader(ResultSet resultSet) throws Exception {
-        HoaDon hoaDon = new HoaDon();
+    private HoaDonDto mapHoaDonHeader(ResultSet resultSet) throws Exception {
+        HoaDonDto hoaDon = new HoaDonDto();
         hoaDon.setMaHD(resultSet.getString("MaHD"));
         hoaDon.setNgayLap(resultSet.getTimestamp("NgayLap"));
         hoaDon.setTrangThai(resultSet.getBoolean("TrangThai"));
         hoaDon.setLoaiHoaDon(resultSet.getString("LoaiHoaDon"));
         hoaDon.setMaDonThuoc(resultSet.getString("MaDonThuoc"));
 
-        NhanVien nhanVien = new NhanVien();
+        NhanVienDto nhanVien = new NhanVienDto();
         nhanVien.setMaNV(resultSet.getString("MaNV"));
         nhanVien.setTenNV(resultSet.getString("TenNV"));
         hoaDon.setMaNV(nhanVien);
 
         String maKh = resultSet.getString("MaKH");
         if (maKh != null) {
-            KhachHang khachHang = new KhachHang();
+            KhachHangDto khachHang = new KhachHangDto();
             khachHang.setMaKH(maKh);
             khachHang.setTenKH(resultSet.getString("TenKH"));
             khachHang.setSdt(resultSet.getString("SDT"));
@@ -576,22 +576,22 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
         return hoaDon;
     }
 
-    private ChiTietHoaDon mapHoaDonDetail(ResultSet resultSet) throws Exception {
-        ChiTietHoaDon detail = new ChiTietHoaDon();
-        HoaDon hoaDon = new HoaDon();
+    private ChiTietHoaDonDto mapHoaDonDetail(ResultSet resultSet) throws Exception {
+        ChiTietHoaDonDto detail = new ChiTietHoaDonDto();
+        HoaDonDto hoaDon = new HoaDonDto();
         hoaDon.setMaHD(resultSet.getString("MaHD"));
         detail.setHoaDon(hoaDon);
 
-        Thuoc_SanPham thuoc = new Thuoc_SanPham();
+        Thuoc_SanPhamDto thuoc = new Thuoc_SanPhamDto();
         thuoc.setMaThuoc(resultSet.getString("MaThuoc"));
         thuoc.setTenThuoc(resultSet.getString("TenThuoc"));
 
-        Thuoc_SP_TheoLo loHang = new Thuoc_SP_TheoLo();
+        Thuoc_SP_TheoLoDto loHang = new Thuoc_SP_TheoLoDto();
         loHang.setMaLH(resultSet.getString("MaLH"));
         loHang.setThuoc(thuoc);
         detail.setLoHang(loHang);
 
-        DonViTinh donViTinh = new DonViTinh();
+        DonViTinhDto donViTinh = new DonViTinhDto();
         donViTinh.setMaDVT(resultSet.getString("MaDVT"));
         donViTinh.setTenDonViTinh(resultSet.getString("TenDonViTinh"));
         detail.setDvt(donViTinh);
@@ -602,47 +602,47 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
         return detail;
     }
 
-    private PhieuDoiHang mapPhieuDoiHeader(ResultSet resultSet) throws Exception {
-        PhieuDoiHang phieuDoiHang = new PhieuDoiHang();
+    private PhieuDoiHangDto mapPhieuDoiHeader(ResultSet resultSet) throws Exception {
+        PhieuDoiHangDto phieuDoiHang = new PhieuDoiHangDto();
         phieuDoiHang.setMaPD(resultSet.getString("MaPD"));
         phieuDoiHang.setNgayLap(resultSet.getTimestamp("NgayLap"));
         phieuDoiHang.setGhiChu(resultSet.getString("GhiChu"));
 
-        NhanVien nhanVien = new NhanVien();
+        NhanVienDto nhanVien = new NhanVienDto();
         nhanVien.setMaNV(resultSet.getString("MaNV"));
         nhanVien.setTenNV(resultSet.getString("TenNV"));
         phieuDoiHang.setNhanVien(nhanVien);
 
-        KhachHang khachHang = new KhachHang();
+        KhachHangDto khachHang = new KhachHangDto();
         khachHang.setMaKH(resultSet.getString("MaKH"));
         khachHang.setTenKH(resultSet.getString("TenKH"));
         khachHang.setSdt(resultSet.getString("SDT"));
         phieuDoiHang.setKhachHang(khachHang);
 
-        HoaDon hoaDon = new HoaDon();
+        HoaDonDto hoaDon = new HoaDonDto();
         hoaDon.setMaHD(resultSet.getString("MaHD"));
         phieuDoiHang.setHoaDon(hoaDon);
         return phieuDoiHang;
     }
 
-    private ChiTietPhieuDoiHang mapChiTietPhieuDoi(ResultSet resultSet) throws Exception {
-        ChiTietPhieuDoiHang detail = new ChiTietPhieuDoiHang();
+    private ChiTietPhieuDoiHangDto mapChiTietPhieuDoi(ResultSet resultSet) throws Exception {
+        ChiTietPhieuDoiHangDto detail = new ChiTietPhieuDoiHangDto();
 
-        PhieuDoiHang phieuDoiHang = new PhieuDoiHang();
+        PhieuDoiHangDto phieuDoiHang = new PhieuDoiHangDto();
         phieuDoiHang.setMaPD(resultSet.getString("MaPD"));
         detail.setPhieuDoiHang(phieuDoiHang);
 
-        Thuoc_SanPham thuoc = new Thuoc_SanPham();
+        Thuoc_SanPhamDto thuoc = new Thuoc_SanPhamDto();
         thuoc.setMaThuoc(resultSet.getString("MaThuoc"));
         thuoc.setTenThuoc(resultSet.getString("TenThuoc"));
         detail.setThuoc(thuoc);
 
-        Thuoc_SP_TheoLo loHang = new Thuoc_SP_TheoLo();
+        Thuoc_SP_TheoLoDto loHang = new Thuoc_SP_TheoLoDto();
         loHang.setMaLH(resultSet.getString("MaLH"));
         loHang.setThuoc(thuoc);
         detail.setLoHang(loHang);
 
-        DonViTinh donViTinh = new DonViTinh();
+        DonViTinhDto donViTinh = new DonViTinhDto();
         donViTinh.setMaDVT(resultSet.getString("MaDVT"));
         donViTinh.setTenDonViTinh(resultSet.getString("TenDonViTinh"));
         detail.setDvt(donViTinh);
@@ -652,47 +652,47 @@ public class JdbcDoiTraRepository extends AbstractJdbcRepository implements DoiT
         return detail;
     }
 
-    private PhieuTraHang mapPhieuTraHeader(ResultSet resultSet) throws Exception {
-        PhieuTraHang phieuTraHang = new PhieuTraHang();
+    private PhieuTraHangDto mapPhieuTraHeader(ResultSet resultSet) throws Exception {
+        PhieuTraHangDto phieuTraHang = new PhieuTraHangDto();
         phieuTraHang.setMaPT(resultSet.getString("MaPT"));
         phieuTraHang.setNgayLap(resultSet.getTimestamp("NgayLap"));
         phieuTraHang.setGhiChu(resultSet.getString("GhiChu"));
 
-        NhanVien nhanVien = new NhanVien();
+        NhanVienDto nhanVien = new NhanVienDto();
         nhanVien.setMaNV(resultSet.getString("MaNV"));
         nhanVien.setTenNV(resultSet.getString("TenNV"));
         phieuTraHang.setNhanVien(nhanVien);
 
-        KhachHang khachHang = new KhachHang();
+        KhachHangDto khachHang = new KhachHangDto();
         khachHang.setMaKH(resultSet.getString("MaKH"));
         khachHang.setTenKH(resultSet.getString("TenKH"));
         khachHang.setSdt(resultSet.getString("SDT"));
         phieuTraHang.setKhachHang(khachHang);
 
-        HoaDon hoaDon = new HoaDon();
+        HoaDonDto hoaDon = new HoaDonDto();
         hoaDon.setMaHD(resultSet.getString("MaHD"));
         phieuTraHang.setHoaDon(hoaDon);
         return phieuTraHang;
     }
 
-    private ChiTietPhieuTraHang mapChiTietPhieuTra(ResultSet resultSet) throws Exception {
-        ChiTietPhieuTraHang detail = new ChiTietPhieuTraHang();
+    private ChiTietPhieuTraHangDto mapChiTietPhieuTra(ResultSet resultSet) throws Exception {
+        ChiTietPhieuTraHangDto detail = new ChiTietPhieuTraHangDto();
 
-        PhieuTraHang phieuTraHang = new PhieuTraHang();
+        PhieuTraHangDto phieuTraHang = new PhieuTraHangDto();
         phieuTraHang.setMaPT(resultSet.getString("MaPT"));
         detail.setPhieuTraHang(phieuTraHang);
 
-        Thuoc_SanPham thuoc = new Thuoc_SanPham();
+        Thuoc_SanPhamDto thuoc = new Thuoc_SanPhamDto();
         thuoc.setMaThuoc(resultSet.getString("MaThuoc"));
         thuoc.setTenThuoc(resultSet.getString("TenThuoc"));
         detail.setThuoc(thuoc);
 
-        Thuoc_SP_TheoLo loHang = new Thuoc_SP_TheoLo();
+        Thuoc_SP_TheoLoDto loHang = new Thuoc_SP_TheoLoDto();
         loHang.setMaLH(resultSet.getString("MaLH"));
         loHang.setThuoc(thuoc);
         detail.setLoHang(loHang);
 
-        DonViTinh donViTinh = new DonViTinh();
+        DonViTinhDto donViTinh = new DonViTinhDto();
         donViTinh.setMaDVT(resultSet.getString("MaDVT"));
         donViTinh.setTenDonViTinh(resultSet.getString("TenDonViTinh"));
         detail.setDvt(donViTinh);

@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_TimKiem.TKPhieuNhapHang;
 
 import com.example.pharmacy.client.controller.CN_TimKiem.TKPhieuNhapHang.ChiTietPhieuNhap_Ctrl;
-import com.example.pharmacy.common.model.ChiTietPhieuNhap;
+import com.example.pharmacy.common.model.ChiTietPhieuNhapDto;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -209,8 +209,8 @@ public class ChiTietPhieuNhapHang_GUI extends Application {
 
     private void addStyles(Scene scene) {
         var css = Objects.requireNonNull(
-                getClass().getResource("/com/example/pharmacy/client/css/ChiTietPhieuNhap.css"),
-                "Không tìm thấy css/ChiTietPhieuNhap.css"
+                getClass().getResource("/com/example/pharmacy/client/css/ChiTietPhieuNhapDto.css"),
+                "Không tìm thấy css/ChiTietPhieuNhapDto.css"
         ).toExternalForm();
         scene.getStylesheets().add(css);
     }
@@ -222,10 +222,10 @@ public class ChiTietPhieuNhapHang_GUI extends Application {
         TextField txtMaPhieuNhap, txtNhaCungCap, txtNgayNhap, txtTrangThai, txtNhanVien;
         TextArea txtGhiChu;
 
-        TableView<ChiTietPhieuNhap> tblChiTietPhieuNhap;
-        TableColumn<ChiTietPhieuNhap, String> colMaThuoc, colTenThuoc, colMaLoHang;
-        TableColumn<ChiTietPhieuNhap, String> colSoLuong;
-        TableColumn<ChiTietPhieuNhap, String> colGiaNhap, colChietKhau, colThue;
+        TableView<ChiTietPhieuNhapDto> tblChiTietPhieuNhap;
+        TableColumn<ChiTietPhieuNhapDto, String> colMaThuoc, colTenThuoc, colMaLoHang;
+        TableColumn<ChiTietPhieuNhapDto, String> colSoLuong;
+        TableColumn<ChiTietPhieuNhapDto, String> colGiaNhap, colChietKhau, colThue;
 
         Label lblTongGiaNhap;
         Pane btnThoatPane;

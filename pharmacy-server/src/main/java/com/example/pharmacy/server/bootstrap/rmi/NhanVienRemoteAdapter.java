@@ -2,8 +2,8 @@ package com.example.pharmacy.server.bootstrap.rmi;
 
 import com.example.pharmacy.common.remote.NhanVienRemote;
 import com.example.pharmacy.server.service.NhanVienService;
-import com.example.pharmacy.common.model.LuongNhanVien;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.LuongNhanVienDto;
+import com.example.pharmacy.common.model.NhanVienDto;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -19,12 +19,12 @@ public class NhanVienRemoteAdapter extends UnicastRemoteObject implements NhanVi
     }
 
     @Override
-    public List<NhanVien> findAll() throws RemoteException {
+    public List<NhanVienDto> findAll() throws RemoteException {
         return nhanVienService.findAll();
     }
 
     @Override
-    public NhanVien findById(String maNhanVien) throws RemoteException {
+    public NhanVienDto findById(String maNhanVien) throws RemoteException {
         return nhanVienService.findById(maNhanVien);
     }
 
@@ -34,12 +34,12 @@ public class NhanVienRemoteAdapter extends UnicastRemoteObject implements NhanVi
     }
 
     @Override
-    public boolean create(NhanVien nhanVien) throws RemoteException {
+    public boolean create(NhanVienDto nhanVien) throws RemoteException {
         return nhanVienService.create(nhanVien);
     }
 
     @Override
-    public boolean update(NhanVien nhanVien) throws RemoteException {
+    public boolean update(NhanVienDto nhanVien) throws RemoteException {
         return nhanVienService.update(nhanVien);
     }
 
@@ -54,7 +54,7 @@ public class NhanVienRemoteAdapter extends UnicastRemoteObject implements NhanVi
     }
 
     @Override
-    public List<LuongNhanVien> findLuongByMaNhanVien(String maNhanVien) throws RemoteException {
+    public List<LuongNhanVienDto> findLuongByMaNhanVien(String maNhanVien) throws RemoteException {
         return nhanVienService.findLuongByMaNhanVien(maNhanVien);
     }
 
@@ -64,7 +64,7 @@ public class NhanVienRemoteAdapter extends UnicastRemoteObject implements NhanVi
     }
 
     @Override
-    public boolean saveLuongNhanVien(LuongNhanVien luongNhanVien) throws RemoteException {
+    public boolean saveLuongNhanVien(LuongNhanVienDto luongNhanVien) throws RemoteException {
         return nhanVienService.saveLuongNhanVien(luongNhanVien);
     }
 }

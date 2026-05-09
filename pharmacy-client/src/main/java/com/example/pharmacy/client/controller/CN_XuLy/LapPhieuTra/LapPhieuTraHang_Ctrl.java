@@ -3,12 +3,12 @@ package com.example.pharmacy.client.controller.CN_XuLy.LapPhieuTra;
 import com.example.pharmacy.client.TienIch.TuyChinhAlert;
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMKhachHang.ThemKhachHang_Ctrl;
 import com.example.pharmacy.client.controller.CN_TimKiem.TKPhieuTraHang.ChiTietPhieuTraHang_Ctrl;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.DonViTinh;
-import com.example.pharmacy.common.model.HoaDon;
-import com.example.pharmacy.common.model.KhachHang;
-import com.example.pharmacy.common.model.PhieuTraHang;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.DonViTinhDto;
+import com.example.pharmacy.common.model.HoaDonDto;
+import com.example.pharmacy.common.model.KhachHangDto;
+import com.example.pharmacy.common.model.PhieuTraHangDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
 import com.example.pharmacy.client.service.DoiTraService;
 import com.example.pharmacy.client.service.TraHangItem;
 import com.example.pharmacy.client.session.SessionContext;
@@ -71,15 +71,15 @@ public class LapPhieuTraHang_Ctrl extends Application {
     public Button btnTraHang;
     public Button btnHuy;
 
-    public TableView<ChiTietHoaDon> tblSanPhamHoaDon;
-    public TableColumn<ChiTietHoaDon, String> colSTTGoc;
-    public TableColumn<ChiTietHoaDon, String> colTenSPGoc;
-    public TableColumn<ChiTietHoaDon, String> colSLGoc;
-    public TableColumn<ChiTietHoaDon, String> colDonViGoc;
-    public TableColumn<ChiTietHoaDon, String> colDonGiaGoc;
-    public TableColumn<ChiTietHoaDon, String> colGiamGiaGoc;
-    public TableColumn<ChiTietHoaDon, String> colThanhTienGoc;
-    public TableColumn<ChiTietHoaDon, Void> colTra;
+    public TableView<ChiTietHoaDonDto> tblSanPhamHoaDon;
+    public TableColumn<ChiTietHoaDonDto, String> colSTTGoc;
+    public TableColumn<ChiTietHoaDonDto, String> colTenSPGoc;
+    public TableColumn<ChiTietHoaDonDto, String> colSLGoc;
+    public TableColumn<ChiTietHoaDonDto, String> colDonViGoc;
+    public TableColumn<ChiTietHoaDonDto, String> colDonGiaGoc;
+    public TableColumn<ChiTietHoaDonDto, String> colGiamGiaGoc;
+    public TableColumn<ChiTietHoaDonDto, String> colThanhTienGoc;
+    public TableColumn<ChiTietHoaDonDto, Void> colTra;
 
     public TableView<TraHangItem> tblChiTietTraHang;
     public TableColumn<TraHangItem, String> colSTTTra;
@@ -91,12 +91,12 @@ public class LapPhieuTraHang_Ctrl extends Application {
     public TableColumn<TraHangItem, Double> colThanhTienTra;
     public TableColumn<TraHangItem, Void> colBo;
 
-    private final ObservableList<ChiTietHoaDon> dsGoc = FXCollections.observableArrayList();
+    private final ObservableList<ChiTietHoaDonDto> dsGoc = FXCollections.observableArrayList();
     private final ObservableList<TraHangItem> dsTra = FXCollections.observableArrayList();
     private final Map<String, TraHangItem> traByKey = new HashMap<>();
     private final DoiTraService doiTraService = new DoiTraService();
 
-    private HoaDon hoaDonGoc;
+    private HoaDonDto hoaDonGoc;
     private boolean initialized;
 
     @Override
@@ -163,7 +163,7 @@ public class LapPhieuTraHang_Ctrl extends Application {
     private void setupTblGocColumns() {
         tblSanPhamHoaDon.setRowFactory(tv -> new TableRow<>() {
             @Override
-            protected void updateItem(ChiTietHoaDon item, boolean empty) {
+            protected void updateItem(ChiTietHoaDonDto item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setStyle("");
@@ -214,7 +214,7 @@ public class LapPhieuTraHang_Ctrl extends Application {
                     btn.getStyleClass().add("btn-doi");
                     setStyle("-fx-alignment: center;");
                     btn.setOnAction(e -> {
-                        ChiTietHoaDon goc = getTableView().getItems().get(getIndex());
+                        ChiTietHoaDonDto goc = getTableView().getItems().get(getIndex());
                         if (goc == null) {
                             return;
                         }
@@ -234,7 +234,7 @@ public class LapPhieuTraHang_Ctrl extends Application {
                         setGraphic(null);
                         return;
                     }
-                    ChiTietHoaDon goc = getTableView().getItems().get(getIndex());
+                    ChiTietHoaDonDto goc = getTableView().getItems().get(getIndex());
                     int slConTra = tinhSoLuongConTra(goc);
                     btn.setDisable(slConTra <= 0);
                     btn.setOpacity(slConTra <= 0 ? 0.5 : 1.0);
@@ -423,13 +423,13 @@ public class LapPhieuTraHang_Ctrl extends Application {
         }
 
         try {
-            HoaDon hd = doiTraService.findHoaDonGocForDoiTra(maHoaDon);
+            HoaDonDto hd = doiTraService.findHoaDonGocForDoiTra(maHoaDon);
             if (hd == null) {
                 hien(WARNING, "Khong tim thay", "Hoa don khong ton tai.");
                 return;
             }
 
-            List<ChiTietHoaDon> lines = doiTraService.findHoaDonDetailsForDoiTra(maHoaDon);
+            List<ChiTietHoaDonDto> lines = doiTraService.findHoaDonDetailsForDoiTra(maHoaDon);
             if (lines.isEmpty()) {
                 hien(WARNING, "Khong co san pham", "Hoa don khong co chi tiet.");
                 return;
@@ -564,7 +564,7 @@ public class LapPhieuTraHang_Ctrl extends Application {
         }
     }
 
-    private void moFormThemKhachHang(HoaDon hd) {
+    private void moFormThemKhachHang(HoaDonDto hd) {
         try {
             Stage stage = new Stage();
         TuyChinhAlert.setAppIcon(stage);
@@ -576,7 +576,7 @@ public class LapPhieuTraHang_Ctrl extends Application {
             ctrl.setOnSaved(kh -> {
                 UserContext actor = SessionContext.getCurrentUser();
                 doiTraService.attachKhachHangToHoaDon(hd.getMaHD(), kh.getMaKH(), actor);
-                HoaDon updated = doiTraService.findHoaDonGocForDoiTra(hd.getMaHD());
+                HoaDonDto updated = doiTraService.findHoaDonGocForDoiTra(hd.getMaHD());
                 if (updated != null) {
                     hoaDonGoc = updated;
                     fillInvoiceInfo(updated);
@@ -594,7 +594,7 @@ public class LapPhieuTraHang_Ctrl extends Application {
 
     private void moChiTietPhieuTra(String maPhieuTra) {
         try {
-            PhieuTraHang phieuTraHang = doiTraService.findPhieuTraById(maPhieuTra);
+            PhieuTraHangDto phieuTraHang = doiTraService.findPhieuTraById(maPhieuTra);
             if (phieuTraHang == null) {
                 hien(ERROR, "Loi", "Khong tim thay phieu tra vua tao.");
                 return;
@@ -611,7 +611,7 @@ public class LapPhieuTraHang_Ctrl extends Application {
         }
     }
 
-    private void xuLyChuyenSangTra(ChiTietHoaDon chiTietHoaDon) {
+    private void xuLyChuyenSangTra(ChiTietHoaDonDto chiTietHoaDon) {
         int slConTra = tinhSoLuongConTra(chiTietHoaDon);
         if (slConTra <= 0) {
             hien(WARNING, "Khong the tra", "San pham nay da duoc tra het.");
@@ -631,7 +631,7 @@ public class LapPhieuTraHang_Ctrl extends Application {
         tblChiTietTraHang.refresh();
     }
 
-    private int tinhSoLuongConTra(ChiTietHoaDon chiTietHoaDon) {
+    private int tinhSoLuongConTra(ChiTietHoaDonDto chiTietHoaDon) {
         if (chiTietHoaDon == null || chiTietHoaDon.getHoaDon() == null || chiTietHoaDon.getLoHang() == null || chiTietHoaDon.getDvt() == null) {
             return 0;
         }
@@ -649,7 +649,7 @@ public class LapPhieuTraHang_Ctrl extends Application {
     }
 
     private int maxSoLuongCoTheChon(TraHangItem currentItem) {
-        ChiTietHoaDon goc = currentItem.getGoc();
+        ChiTietHoaDonDto goc = currentItem.getGoc();
         if (goc == null || goc.getHoaDon() == null || goc.getLoHang() == null || goc.getDvt() == null) {
             return currentItem.getSoLuongTra();
         }
@@ -666,7 +666,7 @@ public class LapPhieuTraHang_Ctrl extends Application {
         return Math.max(1, slBan - slDaTra - slDangChonKhac);
     }
 
-    private boolean sameInvoiceLine(ChiTietHoaDon left, ChiTietHoaDon right) {
+    private boolean sameInvoiceLine(ChiTietHoaDonDto left, ChiTietHoaDonDto right) {
         if (left == null || right == null || left.getLoHang() == null || right.getLoHang() == null
                 || left.getDvt() == null || right.getDvt() == null || left.getHoaDon() == null || right.getHoaDon() == null) {
             return false;
@@ -676,13 +676,13 @@ public class LapPhieuTraHang_Ctrl extends Application {
                 && safe(left.getDvt().getMaDVT()).equalsIgnoreCase(safe(right.getDvt().getMaDVT()));
     }
 
-    private String keyTra(ChiTietHoaDon chiTietHoaDon) {
+    private String keyTra(ChiTietHoaDonDto chiTietHoaDon) {
         return safe(chiTietHoaDon.getHoaDon().getMaHD()) + "_"
                 + safe(chiTietHoaDon.getLoHang().getMaLH()) + "_"
                 + safe(chiTietHoaDon.getDvt().getMaDVT());
     }
 
-    private void fillInvoiceInfo(HoaDon hd) {
+    private void fillInvoiceInfo(HoaDonDto hd) {
         if (lblMaHDGoc != null) {
             lblMaHDGoc.setText(safe(hd.getMaHD()));
         }
@@ -697,8 +697,8 @@ public class LapPhieuTraHang_Ctrl extends Application {
         }
     }
 
-    private void capNhatTongTienGoc(List<ChiTietHoaDon> lines) {
-        double tong = lines.stream().mapToDouble(ChiTietHoaDon::tinhThanhTien).sum();
+    private void capNhatTongTienGoc(List<ChiTietHoaDonDto> lines) {
+        double tong = lines.stream().mapToDouble(ChiTietHoaDonDto::tinhThanhTien).sum();
         if (lblTongTienGoc != null) {
             lblTongTienGoc.setText(vnd(tong));
         }
@@ -714,23 +714,23 @@ public class LapPhieuTraHang_Ctrl extends Application {
         }
     }
 
-    private boolean chuaCoKhachHang(HoaDon hd) {
+    private boolean chuaCoKhachHang(HoaDonDto hd) {
         return hd == null || hd.getMaKH() == null || safe(hd.getMaKH().getMaKH()).isBlank();
     }
 
-    private String tenSP(ChiTietHoaDon row) {
+    private String tenSP(ChiTietHoaDonDto row) {
         if (row == null || row.getLoHang() == null) {
             return "";
         }
-        Thuoc_SP_TheoLo lo = row.getLoHang();
+        Thuoc_SP_TheoLoDto lo = row.getLoHang();
         return lo.getThuoc() != null ? safe(lo.getThuoc().getTenThuoc()) : "";
     }
 
-    private String tenDonVi(ChiTietHoaDon row) {
+    private String tenDonVi(ChiTietHoaDonDto row) {
         if (row == null) {
             return "";
         }
-        DonViTinh dvt = row.getDvt();
+        DonViTinhDto dvt = row.getDvt();
         if (dvt != null && dvt.getTenDonViTinh() != null) {
             return dvt.getTenDonViTinh();
         }

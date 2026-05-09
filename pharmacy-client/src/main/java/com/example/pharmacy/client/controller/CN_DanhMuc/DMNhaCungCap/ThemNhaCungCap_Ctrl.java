@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMNhaCungCap;
 
-import com.example.pharmacy.common.model.NhaCungCap;
+import com.example.pharmacy.common.model.NhaCungCapDto;
 import com.example.pharmacy.client.service.NhaCungCapService;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -44,7 +44,7 @@ public class ThemNhaCungCap_Ctrl {
     }
 
     public void btnThemNCC() {
-        NhaCungCap ncc = new NhaCungCap();
+        NhaCungCapDto ncc = new NhaCungCapDto();
         ncc.setTenNCC(txtTenNCC.getText());
         ncc.setDiaChi(txtDiaChi.getText());
         ncc.setSDT(txtSDT.getText());
@@ -77,7 +77,7 @@ public class ThemNhaCungCap_Ctrl {
         stage.close();
     }
 
-    private boolean kiemTraHopLe(NhaCungCap ncc) {
+    private boolean kiemTraHopLe(NhaCungCapDto ncc) {
         if (ncc.getTenNCC().isEmpty()) {
             hienThongBao("Loi", "Ten nha cung cap khong duoc de trong!");
             return false;

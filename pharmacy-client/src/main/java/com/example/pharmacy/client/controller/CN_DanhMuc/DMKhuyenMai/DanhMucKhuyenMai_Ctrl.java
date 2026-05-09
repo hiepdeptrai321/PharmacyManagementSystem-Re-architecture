@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMKhuyenMai;
 
 import com.example.pharmacy.client.TienIch.TuyChinhAlert;
-import com.example.pharmacy.common.model.KhuyenMai;
+import com.example.pharmacy.common.model.KhuyenMaiDto;
 import com.example.pharmacy.client.service.KhuyenMaiService;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -25,18 +25,18 @@ import java.util.List;
 
 public class DanhMucKhuyenMai_Ctrl extends Application {
 
-    @FXML public TableView<KhuyenMai> tbKM;
+    @FXML public TableView<KhuyenMaiDto> tbKM;
     public TextField tfTimKM;
     @FXML public Button btnthemKM;
-    @FXML public TableColumn<KhuyenMai, String> colChiTiet;
-    @FXML public TableColumn<KhuyenMai, String> colSTT;
-    @FXML public TableColumn<KhuyenMai, String> colMaKM;
-    @FXML public TableColumn<KhuyenMai, String> colTenKM;
-    @FXML public TableColumn<KhuyenMai, String> colLoaiKM;
-    @FXML public TableColumn<KhuyenMai, Float> colGiaTri;
-    @FXML public TableColumn<KhuyenMai, String> colNBD;
-    @FXML public TableColumn<KhuyenMai, String> colNKT;
-    @FXML public TableColumn<KhuyenMai, String> colNgayTao;
+    @FXML public TableColumn<KhuyenMaiDto, String> colChiTiet;
+    @FXML public TableColumn<KhuyenMaiDto, String> colSTT;
+    @FXML public TableColumn<KhuyenMaiDto, String> colMaKM;
+    @FXML public TableColumn<KhuyenMaiDto, String> colTenKM;
+    @FXML public TableColumn<KhuyenMaiDto, String> colLoaiKM;
+    @FXML public TableColumn<KhuyenMaiDto, Float> colGiaTri;
+    @FXML public TableColumn<KhuyenMaiDto, String> colNBD;
+    @FXML public TableColumn<KhuyenMaiDto, String> colNKT;
+    @FXML public TableColumn<KhuyenMaiDto, String> colNgayTao;
     @FXML public Button btnLamMoi;
     public Button btnTim;
 
@@ -57,8 +57,8 @@ public class DanhMucKhuyenMai_Ctrl extends Application {
     }
 
     public void loadTable() {
-        List<KhuyenMai> list = khuyenMaiService.findAll();
-        ObservableList<KhuyenMai> data = FXCollections.observableArrayList(list);
+        List<KhuyenMaiDto> list = khuyenMaiService.findAll();
+        ObservableList<KhuyenMaiDto> data = FXCollections.observableArrayList(list);
 
         colSTT.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(tbKM.getItems().indexOf(cellData.getValue()) + 1))
@@ -100,7 +100,7 @@ public class DanhMucKhuyenMai_Ctrl extends Application {
             private final Button btn = new Button("Xoa");
             {
                 btn.setOnAction(event -> {
-                    KhuyenMai km = getTableView().getItems().get(getIndex());
+                    KhuyenMaiDto km = getTableView().getItems().get(getIndex());
                     btnXoaClick(km);
                 });
                 btn.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
@@ -116,7 +116,7 @@ public class DanhMucKhuyenMai_Ctrl extends Application {
         tbKM.setItems(data);
     }
 
-    public void btnXoaClick(KhuyenMai km) {
+    public void btnXoaClick(KhuyenMaiDto km) {
         Alert confirm = new Alert(
                 Alert.AlertType.CONFIRMATION,
                 "Xac nhan xoa khuyen mai " + km.getMaKM() + "?",
@@ -163,7 +163,7 @@ public class DanhMucKhuyenMai_Ctrl extends Application {
 
     public void timKhuyenMai() {
         String keyword = tfTimKM.getText().trim().toLowerCase();
-        List<KhuyenMai> filtered = khuyenMaiService.searchByKeyword(keyword);
+        List<KhuyenMaiDto> filtered = khuyenMaiService.searchByKeyword(keyword);
         tbKM.setItems(FXCollections.observableArrayList(filtered));
     }
 }

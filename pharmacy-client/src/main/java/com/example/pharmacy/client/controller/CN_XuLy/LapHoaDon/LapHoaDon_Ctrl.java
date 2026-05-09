@@ -7,15 +7,15 @@ import com.example.pharmacy.client.TienIch.VNDFormatter;
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMKhachHang.ThemKhachHang_Ctrl;
 import com.example.pharmacy.client.controller.CN_TimKiem.TKHoaDon.ChiTietHoaDon_Ctrl;
 import com.example.pharmacy.client.controller.CN_TimKiem.TKKhachHang.TimKiemKhachHangTrongHD_Ctrl;
-import com.example.pharmacy.common.model.ChiTietDonViTinh;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.ChiTietPhieuDatHang;
-import com.example.pharmacy.common.model.DonViTinh;
-import com.example.pharmacy.common.model.HoaDon;
-import com.example.pharmacy.common.model.KhachHang;
-import com.example.pharmacy.common.model.PhieuDatHang;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietDonViTinhDto;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.ChiTietPhieuDatHangDto;
+import com.example.pharmacy.common.model.DonViTinhDto;
+import com.example.pharmacy.common.model.HoaDonDto;
+import com.example.pharmacy.common.model.KhachHangDto;
+import com.example.pharmacy.common.model.PhieuDatHangDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import com.example.pharmacy.client.service.ApDungKhuyenMai;
 import com.example.pharmacy.client.service.DichVuKhuyenMai;
 import com.example.pharmacy.client.service.HoaDonService;
@@ -65,7 +65,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class LapHoaDon_Ctrl extends Application {
-    public ObservableList<ChiTietHoaDon> dsChiTietHD = FXCollections.observableArrayList();
+    public ObservableList<ChiTietHoaDonDto> dsChiTietHD = FXCollections.observableArrayList();
     public Button btnXoaRong;
     public Button btnThemKH;
     public DatePicker dpNgayLap;
@@ -74,16 +74,16 @@ public class LapHoaDon_Ctrl extends Application {
     public TextField txtTimThuoc;
     public TextField txtTenKH;
     public TextField txtSDT;
-    public TableView<ChiTietHoaDon> tblChiTietHD;
-    public TableColumn<ChiTietHoaDon, String> colSTT;
-    public TableColumn<ChiTietHoaDon, String> colTenSP;
-    public TableColumn<ChiTietHoaDon, Boolean> colKeDon;
-    public TableColumn<ChiTietHoaDon, Number> colSL;
-    public TableColumn<ChiTietHoaDon, String> colDonVi;
-    public TableColumn<ChiTietHoaDon, String> colDonGia;
-    public TableColumn<ChiTietHoaDon, String> colChietKhau;
-    public TableColumn<ChiTietHoaDon, String> colThanhTien;
-    public TableColumn<ChiTietHoaDon, String> colBo;
+    public TableView<ChiTietHoaDonDto> tblChiTietHD;
+    public TableColumn<ChiTietHoaDonDto, String> colSTT;
+    public TableColumn<ChiTietHoaDonDto, String> colTenSP;
+    public TableColumn<ChiTietHoaDonDto, Boolean> colKeDon;
+    public TableColumn<ChiTietHoaDonDto, Number> colSL;
+    public TableColumn<ChiTietHoaDonDto, String> colDonVi;
+    public TableColumn<ChiTietHoaDonDto, String> colDonGia;
+    public TableColumn<ChiTietHoaDonDto, String> colChietKhau;
+    public TableColumn<ChiTietHoaDonDto, String> colThanhTien;
+    public TableColumn<ChiTietHoaDonDto, String> colBo;
     public Label lblTongTien;
     public Label lblGiamGia;
     public Label lblThongBaoTT;
@@ -98,14 +98,14 @@ public class LapHoaDon_Ctrl extends Application {
 
     private final ContextMenu goiYMenu = new ContextMenu();
     private final PauseTransition pause = new PauseTransition(Duration.millis(250));
-    private final IdentityHashMap<ChiTietHoaDon, ChiTietDonViTinh> dvtTheoDong = new IdentityHashMap<>();
+    private final IdentityHashMap<ChiTietHoaDonDto, ChiTietDonViTinhDto> dvtTheoDong = new IdentityHashMap<>();
     private final ThuocService thuocService = new ThuocService();
     private final HoaDonService hoaDonService = new HoaDonService();
     private final PhieuDatHangService phieuDatHangService = new PhieuDatHangService();
     private final DichVuKhuyenMai dichVuKhuyenMai = new DichVuKhuyenMai();
     private final VNDFormatter vndFormatter = new VNDFormatter();
 
-    private KhachHang khachHang;
+    private KhachHangDto khachHang;
     private BigDecimal currentInvoiceDiscount = BigDecimal.ZERO;
     private String maPhieuDat;
 
@@ -141,7 +141,7 @@ public class LapHoaDon_Ctrl extends Application {
 
         vndFormatter.applyNumberFormatter(txtSoTienKhachDua);
         txtSoTienKhachDua.textProperty().addListener((obs, oldVal, newVal) -> recalculateTotals());
-        dsChiTietHD.addListener((ListChangeListener<ChiTietHoaDon>) change -> recalculateTotals());
+        dsChiTietHD.addListener((ListChangeListener<ChiTietHoaDonDto>) change -> recalculateTotals());
         configureTable();
         setupMedicineSuggestions();
         recalculateTotals();
@@ -208,7 +208,7 @@ public class LapHoaDon_Ctrl extends Application {
 
             CreateHoaDonRequest request = buildRequest();
             String maHoaDon = hoaDonService.createInvoice(request, SessionContext.requireCurrentUser());
-            HoaDon hoaDonMoi = hoaDonService.findById(maHoaDon);
+            HoaDonDto hoaDonMoi = hoaDonService.findById(maHoaDon);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Thanh cong");
@@ -231,8 +231,8 @@ public class LapHoaDon_Ctrl extends Application {
     }
 
     public void loadDataFromMaPhieuDat(String maPhieuDat) {
-        PhieuDatHang phieuDatHang = phieuDatHangService.findById(maPhieuDat);
-        List<ChiTietPhieuDatHang> details = phieuDatHangService.findDetailsByMaPhieuDat(maPhieuDat);
+        PhieuDatHangDto phieuDatHang = phieuDatHangService.findById(maPhieuDat);
+        List<ChiTietPhieuDatHangDto> details = phieuDatHangService.findDetailsByMaPhieuDat(maPhieuDat);
         if (phieuDatHang == null || details.isEmpty()) {
             return;
         }
@@ -246,20 +246,20 @@ public class LapHoaDon_Ctrl extends Application {
 
         dsChiTietHD.clear();
         dvtTheoDong.clear();
-        List<Thuoc_SanPham> dsThuoc = thuocService.findAll();
-        for (ChiTietPhieuDatHang detail : details) {
-            Thuoc_SanPham thuoc = dsThuoc.stream()
+        List<Thuoc_SanPhamDto> dsThuoc = thuocService.findAll();
+        for (ChiTietPhieuDatHangDto detail : details) {
+            Thuoc_SanPhamDto thuoc = dsThuoc.stream()
                     .filter(item -> item.getMaThuoc() != null && item.getMaThuoc().equalsIgnoreCase(detail.getThuoc().getMaThuoc()))
                     .findFirst()
                     .orElse(detail.getThuoc());
 
-            ChiTietDonViTinh dvt = resolveDvt(thuoc, detail.getDvt());
+            ChiTietDonViTinhDto dvt = resolveDvt(thuoc, detail.getDvt());
             if (dvt == null || dvt.getDvt() == null) {
                 continue;
             }
 
-            ChiTietHoaDon row = new ChiTietHoaDon();
-            Thuoc_SP_TheoLo loHang = new Thuoc_SP_TheoLo();
+            ChiTietHoaDonDto row = new ChiTietHoaDonDto();
+            Thuoc_SP_TheoLoDto loHang = new Thuoc_SP_TheoLoDto();
             loHang.setThuoc(thuoc);
             row.setLoHang(loHang);
             row.setDvt(dvt.getDvt());
@@ -318,7 +318,7 @@ public class LapHoaDon_Ctrl extends Application {
             }
 
             private void adjust(int delta) {
-                ChiTietHoaDon row = currentRow();
+                ChiTietHoaDonDto row = currentRow();
                 if (row == null) {
                     return;
                 }
@@ -330,7 +330,7 @@ public class LapHoaDon_Ctrl extends Application {
             }
 
             private void commitFromText() {
-                ChiTietHoaDon row = currentRow();
+                ChiTietHoaDonDto row = currentRow();
                 if (row == null) {
                     return;
                 }
@@ -345,7 +345,7 @@ public class LapHoaDon_Ctrl extends Application {
                 recalculateTotals();
             }
 
-            private ChiTietHoaDon currentRow() {
+            private ChiTietHoaDonDto currentRow() {
                 return getIndex() >= 0 && getIndex() < getTableView().getItems().size()
                         ? getTableView().getItems().get(getIndex())
                         : null;
@@ -357,7 +357,7 @@ public class LapHoaDon_Ctrl extends Application {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    ChiTietHoaDon row = currentRow();
+                    ChiTietHoaDonDto row = currentRow();
                     tf.setText(row == null ? "1" : String.valueOf(row.getSoLuong()));
                     setGraphic(box);
                     setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
@@ -374,7 +374,7 @@ public class LapHoaDon_Ctrl extends Application {
                     if (getIndex() < 0 || getIndex() >= tblChiTietHD.getItems().size()) {
                         return;
                     }
-                    ChiTietHoaDon row = tblChiTietHD.getItems().get(getIndex());
+                    ChiTietHoaDonDto row = tblChiTietHD.getItems().get(getIndex());
                     dsChiTietHD.remove(row);
                     dvtTheoDong.remove(row);
                     recalculateTotals();
@@ -407,7 +407,7 @@ public class LapHoaDon_Ctrl extends Application {
             return;
         }
 
-        List<Thuoc_SanPham> results = thuocService.searchByKeyword(tuKhoa).stream().limit(8).toList();
+        List<Thuoc_SanPhamDto> results = thuocService.searchByKeyword(tuKhoa).stream().limit(8).toList();
         if (results.isEmpty()) {
             goiYMenu.hide();
             return;
@@ -415,7 +415,7 @@ public class LapHoaDon_Ctrl extends Application {
 
         goiYMenu.getItems().clear();
         goiYMenu.setStyle("-fx-min-width: 500; -fx-pref-width: 500;");
-        for (Thuoc_SanPham thuoc : results) {
+        for (Thuoc_SanPhamDto thuoc : results) {
             String tenDvt = thuoc.getTenDVTCoBan() == null ? "" : thuoc.getTenDVTCoBan();
             Label nameLbl = new Label(thuoc.getTenThuoc());
             nameLbl.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
@@ -440,17 +440,17 @@ public class LapHoaDon_Ctrl extends Application {
         }
     }
 
-    private void themThuocVaoBang(Thuoc_SanPham thuoc) {
+    private void themThuocVaoBang(Thuoc_SanPhamDto thuoc) {
         if (thuoc == null) {
             return;
         }
-        ChiTietDonViTinh dvt = resolveDefaultDvt(thuoc);
+        ChiTietDonViTinhDto dvt = resolveDefaultDvt(thuoc);
         if (dvt == null || dvt.getDvt() == null) {
             showAlert(Alert.AlertType.WARNING, "Thuoc chua co don vi tinh co ban.");
             return;
         }
 
-        for (ChiTietHoaDon row : dsChiTietHD) {
+        for (ChiTietHoaDonDto row : dsChiTietHD) {
             if (row.getLoHang() != null
                     && row.getLoHang().getThuoc() != null
                     && Objects.equals(row.getLoHang().getThuoc().getMaThuoc(), thuoc.getMaThuoc())
@@ -464,8 +464,8 @@ public class LapHoaDon_Ctrl extends Application {
             }
         }
 
-        ChiTietHoaDon detail = new ChiTietHoaDon();
-        Thuoc_SP_TheoLo loHang = new Thuoc_SP_TheoLo();
+        ChiTietHoaDonDto detail = new ChiTietHoaDonDto();
+        Thuoc_SP_TheoLoDto loHang = new Thuoc_SP_TheoLoDto();
         loHang.setThuoc(thuoc);
         detail.setLoHang(loHang);
         detail.setDvt(dvt.getDvt());
@@ -478,11 +478,11 @@ public class LapHoaDon_Ctrl extends Application {
         recalculateTotals();
     }
 
-    private void applyPromotion(ChiTietHoaDon row) {
+    private void applyPromotion(ChiTietHoaDonDto row) {
         if (row == null || row.getLoHang() == null || row.getLoHang().getThuoc() == null) {
             return;
         }
-        ChiTietDonViTinh dvt = dvtTheoDong.get(row);
+        ChiTietDonViTinhDto dvt = dvtTheoDong.get(row);
         double heSo = dvt == null ? 1 : Math.max(1d, dvt.getHeSoQuyDoi());
         int soLuongBase = Math.max(1, (int) Math.round(row.getSoLuong() * heSo));
         ApDungKhuyenMai apDung = dichVuKhuyenMai.apDungChoSP(
@@ -497,7 +497,7 @@ public class LapHoaDon_Ctrl extends Application {
     private void recalculateTotals() {
         BigDecimal tongTienHang = BigDecimal.ZERO;
         BigDecimal tongGiamGiaSanPham = BigDecimal.ZERO;
-        for (ChiTietHoaDon row : dsChiTietHD) {
+        for (ChiTietHoaDonDto row : dsChiTietHD) {
             BigDecimal line = BigDecimal.valueOf(row.getDonGia()).multiply(BigDecimal.valueOf(row.getSoLuong()));
             tongTienHang = tongTienHang.add(line);
             tongGiamGiaSanPham = tongGiamGiaSanPham.add(BigDecimal.valueOf(Math.max(0, row.getGiamGia())));
@@ -538,7 +538,7 @@ public class LapHoaDon_Ctrl extends Application {
         request.setDiscountInvoiceAmount(currentInvoiceDiscount);
         request.setMaPhieuDat(maPhieuDat);
 
-        for (ChiTietHoaDon row : dsChiTietHD) {
+        for (ChiTietHoaDonDto row : dsChiTietHD) {
             CreateHoaDonLineRequest line = new CreateHoaDonLineRequest();
             line.setMaThuoc(row.getLoHang() == null || row.getLoHang().getThuoc() == null ? null : row.getLoHang().getThuoc().getMaThuoc());
             line.setMaDvt(row.getDvt() == null ? null : row.getDvt().getMaDVT());
@@ -551,7 +551,7 @@ public class LapHoaDon_Ctrl extends Application {
         return request;
     }
 
-    private void openInvoiceDetail(HoaDon hoaDon) {
+    private void openInvoiceDetail(HoaDonDto hoaDon) {
         try {
             ChiTietHoaDon_Ctrl ctrl = new ChiTietHoaDon_Ctrl();
             ChiTietHoaDon_GUI gui = new ChiTietHoaDon_GUI();
@@ -586,17 +586,17 @@ public class LapHoaDon_Ctrl extends Application {
         recalculateTotals();
     }
 
-    private ChiTietDonViTinh resolveDefaultDvt(Thuoc_SanPham thuoc) {
+    private ChiTietDonViTinhDto resolveDefaultDvt(Thuoc_SanPhamDto thuoc) {
         if (thuoc == null || thuoc.getDsCTDVT() == null || thuoc.getDsCTDVT().isEmpty()) {
             return null;
         }
         return thuoc.getDsCTDVT().stream()
-                .filter(ChiTietDonViTinh::isDonViCoBan)
+                .filter(ChiTietDonViTinhDto::isDonViCoBan)
                 .findFirst()
                 .orElse(thuoc.getDsCTDVT().get(0));
     }
 
-    private ChiTietDonViTinh resolveDvt(Thuoc_SanPham thuoc, String maDvt) {
+    private ChiTietDonViTinhDto resolveDvt(Thuoc_SanPhamDto thuoc, String maDvt) {
         if (thuoc == null || thuoc.getDsCTDVT() == null) {
             return null;
         }
@@ -606,7 +606,7 @@ public class LapHoaDon_Ctrl extends Application {
                 .orElse(resolveDefaultDvt(thuoc));
     }
 
-    private BigDecimal tinhThanhTien(ChiTietHoaDon row) {
+    private BigDecimal tinhThanhTien(ChiTietHoaDonDto row) {
         BigDecimal line = BigDecimal.valueOf(row.getDonGia()).multiply(BigDecimal.valueOf(row.getSoLuong()));
         return line.subtract(BigDecimal.valueOf(Math.max(0, row.getGiamGia()))).max(BigDecimal.ZERO);
     }

@@ -1,39 +1,39 @@
 package com.example.pharmacy.client.service;
 
-import com.example.pharmacy.common.model.ChiTietKhuyenMai;
-import com.example.pharmacy.common.model.KhuyenMai;
-import com.example.pharmacy.common.model.LoaiKhuyenMai;
-import com.example.pharmacy.common.model.Thuoc_SP_TangKem;
+import com.example.pharmacy.common.model.ChiTietKhuyenMaiDto;
+import com.example.pharmacy.common.model.KhuyenMaiDto;
+import com.example.pharmacy.common.model.LoaiKhuyenMaiDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TangKemDto;
 
 import java.sql.Date;
 import java.util.List;
 
 public interface KhuyenMaiClientService {
-    List<KhuyenMai> findAll();
+    List<KhuyenMaiDto> findAll();
 
-    KhuyenMai findById(String maKhuyenMai);
+    KhuyenMaiDto findById(String maKhuyenMai);
 
-    List<KhuyenMai> searchByKeyword(String keyword);
+    List<KhuyenMaiDto> searchByKeyword(String keyword);
 
     String generateNewMaKM();
 
-    List<LoaiKhuyenMai> findAllLoaiKhuyenMai();
+    List<LoaiKhuyenMaiDto> findAllLoaiKhuyenMai();
 
-    LoaiKhuyenMai findLoaiKhuyenMaiById(String maLoaiKhuyenMai);
+    LoaiKhuyenMaiDto findLoaiKhuyenMaiById(String maLoaiKhuyenMai);
 
-    LoaiKhuyenMai findLoaiKhuyenMaiByTen(String tenLoaiKhuyenMai);
+    LoaiKhuyenMaiDto findLoaiKhuyenMaiByTen(String tenLoaiKhuyenMai);
 
-    List<ChiTietKhuyenMai> findChiTietByMaKM(String maKhuyenMai);
+    List<ChiTietKhuyenMaiDto> findChiTietByMaKM(String maKhuyenMai);
 
-    List<Thuoc_SP_TangKem> findQuaTangByMaKM(String maKhuyenMai);
+    List<Thuoc_SP_TangKemDto> findQuaTangByMaKM(String maKhuyenMai);
 
-    boolean create(KhuyenMai khuyenMai, List<ChiTietKhuyenMai> chiTietKhuyenMais, List<Thuoc_SP_TangKem> quaTangKhuyenMais);
+    boolean create(KhuyenMaiDto khuyenMai, List<ChiTietKhuyenMaiDto> chiTietKhuyenMais, List<Thuoc_SP_TangKemDto> quaTangKhuyenMais);
 
-    boolean update(KhuyenMai khuyenMai, List<ChiTietKhuyenMai> chiTietKhuyenMais, List<Thuoc_SP_TangKem> quaTangKhuyenMais);
+    boolean update(KhuyenMaiDto khuyenMai, List<ChiTietKhuyenMaiDto> chiTietKhuyenMais, List<Thuoc_SP_TangKemDto> quaTangKhuyenMais);
 
     boolean deleteByMaKM(String maKhuyenMai);
 
-    List<KhuyenMai> findActiveOn(Date ngay);
+    List<KhuyenMaiDto> findActiveOn(Date ngay);
 
-    List<KhuyenMai> findActiveInvoiceOn(Date ngay);
+    List<KhuyenMaiDto> findActiveInvoiceOn(Date ngay);
 }

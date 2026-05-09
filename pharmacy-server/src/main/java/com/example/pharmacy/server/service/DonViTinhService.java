@@ -1,21 +1,21 @@
 package com.example.pharmacy.server.service;
 
-import com.example.pharmacy.common.model.DonViTinh;
+import com.example.pharmacy.common.model.DonViTinhDto;
 
 import java.util.List;
 
 public interface DonViTinhService {
-    List<DonViTinh> findAll();
+    List<DonViTinhDto> findAll();
 
-    DonViTinh findById(String maDonViTinh);
+    DonViTinhDto findById(String maDonViTinh);
 
-    DonViTinh findByTenDonViTinh(String tenDonViTinh);
+    DonViTinhDto findByTenDonViTinh(String tenDonViTinh);
 
     String generateNewMaDVT();
 
-    boolean create(DonViTinh donViTinh);
+    boolean create(DonViTinhDto donViTinh);
 
-    boolean update(DonViTinh donViTinh);
+    boolean update(DonViTinhDto donViTinh);
 
     boolean deleteById(String maDonViTinh);
 }

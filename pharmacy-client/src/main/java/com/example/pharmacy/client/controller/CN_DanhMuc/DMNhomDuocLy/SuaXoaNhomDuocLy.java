@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMNhomDuocLy;
 
-import com.example.pharmacy.common.model.NhomDuocLy;
+import com.example.pharmacy.common.model.NhomDuocLyDto;
 import com.example.pharmacy.client.service.NhomDuocLyService;
 import javafx.application.Application;
 import javafx.scene.control.Alert;
@@ -21,7 +21,7 @@ public class SuaXoaNhomDuocLy extends Application {
     public TextField txtTenNDL;
 
     private final NhomDuocLyService nhomDuocLyService = new NhomDuocLyService();
-    private NhomDuocLy nhomDuocLyHienTai;
+    private NhomDuocLyDto nhomDuocLyHienTai;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -42,7 +42,7 @@ public class SuaXoaNhomDuocLy extends Application {
         }
     }
 
-    public void hienThiThongTin(NhomDuocLy ndl) {
+    public void hienThiThongTin(NhomDuocLyDto ndl) {
         if (ndl != null) {
             this.nhomDuocLyHienTai = ndl;
         }

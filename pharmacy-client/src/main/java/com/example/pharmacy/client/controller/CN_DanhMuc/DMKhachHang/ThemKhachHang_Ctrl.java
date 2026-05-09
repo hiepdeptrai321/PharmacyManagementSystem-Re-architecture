@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.controller.CN_DanhMuc.DMKhachHang;
 
-import com.example.pharmacy.common.model.KhachHang;
+import com.example.pharmacy.common.model.KhachHangDto;
 import com.example.pharmacy.client.service.KhachHangService;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -32,9 +32,9 @@ public class ThemKhachHang_Ctrl {
     public Label errGioiTinh;
 
     private final KhachHangService khachHangService = new KhachHangService();
-    private Consumer<KhachHang> onSaved;
+    private Consumer<KhachHangDto> onSaved;
 
-    public void setOnSaved(Consumer<KhachHang> onSaved) {
+    public void setOnSaved(Consumer<KhachHangDto> onSaved) {
         this.onSaved = onSaved;
     }
 
@@ -112,7 +112,7 @@ public class ThemKhachHang_Ctrl {
             return;
         }
 
-        KhachHang kh = new KhachHang();
+        KhachHangDto kh = new KhachHangDto();
         kh.setMaKH(khachHangService.generateNewMaKH());
         kh.setTenKH(ten);
         kh.setSdt(sdt);

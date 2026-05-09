@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_TimKiem.TKHoatDong;
 
 import com.example.pharmacy.client.controller.CN_TimKiem.TKHoatDong.TKHoatDong_Ctrl;
-import com.example.pharmacy.common.model.HoatDong;
+import com.example.pharmacy.common.model.HoatDongDto;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -66,36 +66,36 @@ public class TKHoatDong_GUI {
         cbBoLoc.setPromptText("⌛ Bộ lọc nhanh");
 
         // Table
-        TableView<HoatDong> tbHoatDong = new TableView<>();
+        TableView<HoatDongDto> tbHoatDong = new TableView<>();
         tbHoatDong.setId("tablethuoc");
         tbHoatDong.setLayoutX(12);
         tbHoatDong.setLayoutY(142);
         tbHoatDong.setPrefSize(1608, 772);
 
-        TableColumn<HoatDong, String> colSTT = new TableColumn<>("STT");
+        TableColumn<HoatDongDto, String> colSTT = new TableColumn<>("STT");
         colSTT.setPrefWidth(68);
         colSTT.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<HoatDong, String> colMa = new TableColumn<>("Mã hoạt động");
+        TableColumn<HoatDongDto, String> colMa = new TableColumn<>("Mã hoạt động");
         colMa.setPrefWidth(266);
         colMa.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<HoatDong, String> colLoai = new TableColumn<>("Loại hoạt động");
+        TableColumn<HoatDongDto, String> colLoai = new TableColumn<>("Loại hoạt động");
         colLoai.setPrefWidth(315);
         colLoai.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<HoatDong, String> colBang = new TableColumn<>("Bảng dữ liệu");
+        TableColumn<HoatDongDto, String> colBang = new TableColumn<>("Bảng dữ liệu");
         colBang.setPrefWidth(248.33);
         colBang.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<HoatDong, String> colThoiGian = new TableColumn<>("Thời gian");
+        TableColumn<HoatDongDto, String> colThoiGian = new TableColumn<>("Thời gian");
         colThoiGian.setPrefWidth(265.33);
         colThoiGian.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<HoatDong, String> colNguoi = new TableColumn<>("Người thực hiện");
+        TableColumn<HoatDongDto, String> colNguoi = new TableColumn<>("Người thực hiện");
         colNguoi.setPrefWidth(337);
 
-        TableColumn<HoatDong, String> colChiTiet = new TableColumn<>("");
+        TableColumn<HoatDongDto, String> colChiTiet = new TableColumn<>("");
         colChiTiet.setPrefWidth(90);
         colChiTiet.setStyle("-fx-alignment: CENTER;");
 

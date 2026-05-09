@@ -4,11 +4,11 @@ import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.client.service.ReportClientService;
 import com.example.pharmacy.client.service.RmiReportClientService;
 import com.example.pharmacy.common.request.DateRangeRequest;
-import com.example.pharmacy.common.model.HoaDonDisplay;
-import com.example.pharmacy.common.model.ThongKeBanHang;
-import com.example.pharmacy.common.model.ThongKeTonKho;
-import com.example.pharmacy.common.model.ThongKeTopSanPham;
-import com.example.pharmacy.common.model.ThuocHetHan;
+import com.example.pharmacy.common.model.HoaDonDisplayDto;
+import com.example.pharmacy.common.model.ThongKeBanHangDto;
+import com.example.pharmacy.common.model.ThongKeTonKhoDto;
+import com.example.pharmacy.common.model.ThongKeTopSanPhamDto;
+import com.example.pharmacy.common.model.ThuocHetHanDto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,35 +17,35 @@ public class ThongKeService {
     private final ReportClientService reportClientService =
             new RmiReportClientService(new RmiClientProvider());
 
-    public List<ThongKeBanHang> getThongKeBanHang(String preset) {
+    public List<ThongKeBanHangDto> getThongKeBanHang(String preset) {
         return reportClientService.getThongKeBanHang(preset);
     }
 
-    public List<ThongKeBanHang> getThongKeBanHang(LocalDate fromDate, LocalDate toDate) {
+    public List<ThongKeBanHangDto> getThongKeBanHang(LocalDate fromDate, LocalDate toDate) {
         return reportClientService.getThongKeBanHangByDateRange(new DateRangeRequest(fromDate, toDate));
     }
 
-    public List<HoaDonDisplay> getHoaDonTheoThoiGian(String preset) {
+    public List<HoaDonDisplayDto> getHoaDonTheoThoiGian(String preset) {
         return reportClientService.getHoaDonTheoThoiGian(preset);
     }
 
-    public List<HoaDonDisplay> getHoaDonTheoTuyChon(LocalDate fromDate, LocalDate toDate) {
+    public List<HoaDonDisplayDto> getHoaDonTheoTuyChon(LocalDate fromDate, LocalDate toDate) {
         return reportClientService.getHoaDonTheoDateRange(new DateRangeRequest(fromDate, toDate));
     }
 
-    public List<ThongKeTopSanPham> getTopBanChay(LocalDate fromDate, LocalDate toDate, int limit) {
+    public List<ThongKeTopSanPhamDto> getTopBanChay(LocalDate fromDate, LocalDate toDate, int limit) {
         return reportClientService.getTopBanChay(new DateRangeRequest(fromDate, toDate), limit);
     }
 
-    public List<ThongKeTopSanPham> getTopDoanhThu(LocalDate fromDate, LocalDate toDate, int limit) {
+    public List<ThongKeTopSanPhamDto> getTopDoanhThu(LocalDate fromDate, LocalDate toDate, int limit) {
         return reportClientService.getTopDoanhThu(new DateRangeRequest(fromDate, toDate), limit);
     }
 
-    public List<ThongKeTonKho> getThongKeXNT(LocalDate fromDate, LocalDate toDate) {
+    public List<ThongKeTonKhoDto> getThongKeXNT(LocalDate fromDate, LocalDate toDate) {
         return reportClientService.getThongKeXnt(new DateRangeRequest(fromDate, toDate));
     }
 
-    public List<ThuocHetHan> getThuocHetHan() {
+    public List<ThuocHetHanDto> getThuocHetHan() {
         return reportClientService.getThuocHetHan();
     }
 }

@@ -1,6 +1,6 @@
 package com.example.pharmacy.client.controller.CN_TimKiem.TKNhaCungCap;
 
-import com.example.pharmacy.common.model.NhaCungCap;
+import com.example.pharmacy.common.model.NhaCungCapDto;
 import com.example.pharmacy.client.service.NhaCungCapService;
 import com.example.pharmacy.client.view.CN_TimKiem.TKNhaCungCap.ChiTietNhaCungCap_GUI;
 import javafx.application.Application;
@@ -26,14 +26,14 @@ public class TimKiemNCC_Ctrl extends Application {
     public TextField txtTimKiem;
     public Button btnTim;
     public Button btnLamMoi;
-    public TableColumn<NhaCungCap, String> cotDiaChi;
-    public TableColumn<NhaCungCap, String> cotEmil;
-    public TableColumn<NhaCungCap, String> cotMNCC;
-    public TableColumn<NhaCungCap, String> cotSDT;
-    public TableColumn<NhaCungCap, String> cotSTT;
-    public TableColumn<NhaCungCap, String> cotTenNCC;
-    public TableColumn<NhaCungCap, String> cotChiTiet;
-    public TableView<NhaCungCap> tbNCC;
+    public TableColumn<NhaCungCapDto, String> cotDiaChi;
+    public TableColumn<NhaCungCapDto, String> cotEmil;
+    public TableColumn<NhaCungCapDto, String> cotMNCC;
+    public TableColumn<NhaCungCapDto, String> cotSDT;
+    public TableColumn<NhaCungCapDto, String> cotSTT;
+    public TableColumn<NhaCungCapDto, String> cotTenNCC;
+    public TableColumn<NhaCungCapDto, String> cotChiTiet;
+    public TableView<NhaCungCapDto> tbNCC;
 
     private final NhaCungCapService nhaCungCapService = new NhaCungCapService();
 
@@ -59,8 +59,8 @@ public class TimKiemNCC_Ctrl extends Application {
     }
 
     public void loadTable() {
-        List<NhaCungCap> list = nhaCungCapService.findAll();
-        ObservableList<NhaCungCap> data = FXCollections.observableArrayList(list);
+        List<NhaCungCapDto> list = nhaCungCapService.findAll();
+        ObservableList<NhaCungCapDto> data = FXCollections.observableArrayList(list);
         cotSTT.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(tbNCC.getItems().indexOf(cellData.getValue()) + 1))
         );
@@ -113,7 +113,7 @@ public class TimKiemNCC_Ctrl extends Application {
             private final Button btn = new Button("Chi tiết");
             {
                 btn.setOnAction(event -> {
-                    NhaCungCap ncc = getTableView().getItems().get(getIndex());
+                    NhaCungCapDto ncc = getTableView().getItems().get(getIndex());
                     btnChiTietClick(ncc);
                 });
                 btn.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
@@ -130,7 +130,7 @@ public class TimKiemNCC_Ctrl extends Application {
         tbNCC.setItems(data);
     }
 
-    public void btnChiTietClick(NhaCungCap ncc) {
+    public void btnChiTietClick(NhaCungCapDto ncc) {
         try {
             Stage dialog = new Stage();
             dialog.initOwner(btnLamMoi.getScene().getWindow());
@@ -151,7 +151,7 @@ public class TimKiemNCC_Ctrl extends Application {
     @FXML
     private void TimKiem() {
         String keyword = txtTimKiem.getText().trim().toLowerCase();
-        List<NhaCungCap> filtered = nhaCungCapService.searchByKeyword(keyword);
+        List<NhaCungCapDto> filtered = nhaCungCapService.searchByKeyword(keyword);
         tbNCC.setItems(FXCollections.observableArrayList(filtered));
     }
 

@@ -4,26 +4,26 @@ import com.example.pharmacy.common.dto.ExpiringLotDTO;
 import com.example.pharmacy.common.dto.RevenuePointDTO;
 import com.example.pharmacy.common.dto.TopSellingProductDTO;
 import com.example.pharmacy.common.request.DateRangeRequest;
-import com.example.pharmacy.common.model.HoaDonDisplay;
-import com.example.pharmacy.common.model.ThongKeBanHang;
-import com.example.pharmacy.common.model.ThongKeTonKho;
-import com.example.pharmacy.common.model.ThongKeTopSanPham;
-import com.example.pharmacy.common.model.ThuocHetHan;
+import com.example.pharmacy.common.model.HoaDonDisplayDto;
+import com.example.pharmacy.common.model.ThongKeBanHangDto;
+import com.example.pharmacy.common.model.ThongKeTonKhoDto;
+import com.example.pharmacy.common.model.ThongKeTopSanPhamDto;
+import com.example.pharmacy.common.model.ThuocHetHanDto;
 
 import java.util.List;
 
 public interface ReportRepository {
-    List<ThongKeBanHang> findThongKeBanHangByDateRange(DateRangeRequest request, ReportBucket bucket);
+    List<ThongKeBanHangDto> findThongKeBanHangByDateRange(DateRangeRequest request, ReportBucket bucket);
 
-    List<HoaDonDisplay> findHoaDonByDateRange(DateRangeRequest request);
+    List<HoaDonDisplayDto> findHoaDonByDateRange(DateRangeRequest request);
 
-    List<ThongKeTopSanPham> findTopBanChayByDateRange(DateRangeRequest request, int limit);
+    List<ThongKeTopSanPhamDto> findTopBanChayByDateRange(DateRangeRequest request, int limit);
 
-    List<ThongKeTopSanPham> findTopDoanhThuByDateRange(DateRangeRequest request, int limit);
+    List<ThongKeTopSanPhamDto> findTopDoanhThuByDateRange(DateRangeRequest request, int limit);
 
-    List<ThongKeTonKho> findThongKeXnt(DateRangeRequest request);
+    List<ThongKeTonKhoDto> findThongKeXnt(DateRangeRequest request);
 
-    List<ThuocHetHan> findThuocHetHan();
+    List<ThuocHetHanDto> findThuocHetHan();
 
     List<RevenuePointDTO> findRevenueByDateRange(DateRangeRequest request);
 

@@ -2,7 +2,7 @@ package com.example.pharmacy.client.controller.CN_DanhMuc.DMThuoc;
 
 import com.example.pharmacy.client.TienIch.TuyChinhAlert;
 import com.example.pharmacy.client.TienIch.LoadingOverlay;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import com.example.pharmacy.client.service.ThuocService;
 import com.example.pharmacy.client.view.CN_DanhMuc.DMThuoc.DanhMucThuoc_GUI;
 import javafx.application.Application;
@@ -27,16 +27,16 @@ import java.util.List;
 
 public class DanhMucThuoc_Ctrl extends Application {
 
-    public TableColumn<Thuoc_SanPham, String> colSTT;
-    public TableColumn<Thuoc_SanPham, String> colMaThuoc;
-    public TableColumn<Thuoc_SanPham, String> colTenThuoc;
-    public TableColumn<Thuoc_SanPham, String> colChiTiet;
-    public TableColumn<Thuoc_SanPham, String> colHamLuong;
-    public TableColumn<Thuoc_SanPham, String> colSDK_GPNK;
-    public TableColumn<Thuoc_SanPham, String> colXuatXu;
-    public TableColumn<Thuoc_SanPham, String> colLoaiHang;
-    public TableColumn<Thuoc_SanPham, String> colViTri;
-    public TableView<Thuoc_SanPham> tbl_Thuoc;
+    public TableColumn<Thuoc_SanPhamDto, String> colSTT;
+    public TableColumn<Thuoc_SanPhamDto, String> colMaThuoc;
+    public TableColumn<Thuoc_SanPhamDto, String> colTenThuoc;
+    public TableColumn<Thuoc_SanPhamDto, String> colChiTiet;
+    public TableColumn<Thuoc_SanPhamDto, String> colHamLuong;
+    public TableColumn<Thuoc_SanPhamDto, String> colSDK_GPNK;
+    public TableColumn<Thuoc_SanPhamDto, String> colXuatXu;
+    public TableColumn<Thuoc_SanPhamDto, String> colLoaiHang;
+    public TableColumn<Thuoc_SanPhamDto, String> colViTri;
+    public TableView<Thuoc_SanPhamDto> tbl_Thuoc;
     public TextField tfTimThuoc;
     public Button btnTimThuoc;
     public Button btnThemThuoc;
@@ -45,8 +45,8 @@ public class DanhMucThuoc_Ctrl extends Application {
 
     private final ThuocService thuocService = new ThuocService();
     private LoadingOverlay loadingOverlay;
-    private List<Thuoc_SanPham> list;
-    private ObservableList<Thuoc_SanPham> data;
+    private List<Thuoc_SanPhamDto> list;
+    private ObservableList<Thuoc_SanPhamDto> data;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -96,7 +96,7 @@ public class DanhMucThuoc_Ctrl extends Application {
 
                     {
                         btn.setOnAction(event -> {
-                            Thuoc_SanPham thuoc = getTableView().getItems().get(getIndex());
+                            Thuoc_SanPhamDto thuoc = getTableView().getItems().get(getIndex());
                             moCapNhat(thuoc);
                         });
                         btn.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
@@ -115,7 +115,7 @@ public class DanhMucThuoc_Ctrl extends Application {
         });
     }
 
-    private TableCell<Thuoc_SanPham, String> alignedCell() {
+    private TableCell<Thuoc_SanPhamDto, String> alignedCell() {
         return new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -137,7 +137,7 @@ public class DanhMucThuoc_Ctrl extends Application {
                 list = thuocService.findAll();
             }
             String keyword = tfTimThuoc.getText() == null ? "" : tfTimThuoc.getText().trim().toLowerCase();
-            List<Thuoc_SanPham> dsThuocLoc;
+            List<Thuoc_SanPhamDto> dsThuocLoc;
             if (keyword.isEmpty()) {
                 dsThuocLoc = list;
             } else {
@@ -146,7 +146,7 @@ public class DanhMucThuoc_Ctrl extends Application {
                                 || containsIgnoreCase(thuoc.getMaThuoc(), keyword))
                         .toList();
             }
-            ObservableList<Thuoc_SanPham> dataLoc = FXCollections.observableArrayList(dsThuocLoc);
+            ObservableList<Thuoc_SanPhamDto> dataLoc = FXCollections.observableArrayList(dsThuocLoc);
             Platform.runLater(() -> tbl_Thuoc.setItems(dataLoc));
         });
     }
@@ -174,7 +174,7 @@ public class DanhMucThuoc_Ctrl extends Application {
         }
     }
 
-    public void moCapNhat(Thuoc_SanPham thuoc) {
+    public void moCapNhat(Thuoc_SanPhamDto thuoc) {
         try {
             if (thuoc == null) {
                 return;

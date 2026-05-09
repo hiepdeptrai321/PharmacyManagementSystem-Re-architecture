@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_DanhMuc.DMThuoc;
 
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMThuoc.DanhMucThuoc_Ctrl;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,8 +23,8 @@ public class DanhMucThuoc_GUI extends Application {
     // ===== UI fields (giữ state để inject, KHÔNG dùng lookup) =====
     private TextField tfTimThuoc;
     private Button btnTimThuoc, btnThemThuoc, btnLamMoi, btnNhapExcel;
-    private TableView<Thuoc_SanPham> tbl_Thuoc;
-    private TableColumn<Thuoc_SanPham, String> colSTT, colMaThuoc, colTenThuoc,
+    private TableView<Thuoc_SanPhamDto> tbl_Thuoc;
+    private TableColumn<Thuoc_SanPhamDto, String> colSTT, colMaThuoc, colTenThuoc,
             colHamLuong, colSDK_GPNK, colXuatXu, colLoaiHang, colViTri, colChiTiet;
     StackPane rootTablePane;
 

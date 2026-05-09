@@ -1,10 +1,10 @@
 package com.example.pharmacy.client.controller.CN_CapNhat.CapNhatKhuyenMai;
 
-import com.example.pharmacy.common.model.ChiTietKhuyenMai;
-import com.example.pharmacy.common.model.KhuyenMai;
-import com.example.pharmacy.common.model.LoaiKhuyenMai;
-import com.example.pharmacy.common.model.Thuoc_SP_TangKem;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietKhuyenMaiDto;
+import com.example.pharmacy.common.model.KhuyenMaiDto;
+import com.example.pharmacy.common.model.LoaiKhuyenMaiDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TangKemDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import com.example.pharmacy.client.service.KhuyenMaiService;
 import com.example.pharmacy.client.service.ThuocService;
 import javafx.application.Platform;
@@ -39,26 +39,26 @@ public class SuaKhuyenMai_Ctrl {
     public Tab tabThuoc;
     public Button btnLuu;
     public Button btnHuy;
-    public TableView<ChiTietKhuyenMai> tbDSThuoc;
-    public TableColumn<ChiTietKhuyenMai, String> colMaThuoc;
-    public TableColumn<ChiTietKhuyenMai, String> colTenThuoc;
-    public TableColumn<ChiTietKhuyenMai, Integer> colSLAP;
-    public TableColumn<ChiTietKhuyenMai, Integer> colSLTD;
-    public TableColumn<ChiTietKhuyenMai, Void> colXoaCT;
+    public TableView<ChiTietKhuyenMaiDto> tbDSThuoc;
+    public TableColumn<ChiTietKhuyenMaiDto, String> colMaThuoc;
+    public TableColumn<ChiTietKhuyenMaiDto, String> colTenThuoc;
+    public TableColumn<ChiTietKhuyenMaiDto, Integer> colSLAP;
+    public TableColumn<ChiTietKhuyenMaiDto, Integer> colSLTD;
+    public TableColumn<ChiTietKhuyenMaiDto, Void> colXoaCT;
     public TabPane tabPaneProducts;
     public Tab tabTangKem;
     public Tab tabHoaDon;
-    public TableView<Thuoc_SP_TangKem> tbTangKem;
-    public TableColumn<Thuoc_SP_TangKem, String> colMaQua;
-    public TableColumn<Thuoc_SP_TangKem, String> colTenQua;
-    public TableColumn<Thuoc_SP_TangKem, Integer> colSLTang;
-    public TableColumn<Thuoc_SP_TangKem, Void> colXoaQua;
-    public TableColumn<ChiTietKhuyenMai, String> colDonVi;
-    public TableColumn<Thuoc_SP_TangKem, String> colDonViQua;
+    public TableView<Thuoc_SP_TangKemDto> tbTangKem;
+    public TableColumn<Thuoc_SP_TangKemDto, String> colMaQua;
+    public TableColumn<Thuoc_SP_TangKemDto, String> colTenQua;
+    public TableColumn<Thuoc_SP_TangKemDto, Integer> colSLTang;
+    public TableColumn<Thuoc_SP_TangKemDto, Void> colXoaQua;
+    public TableColumn<ChiTietKhuyenMaiDto, String> colDonVi;
+    public TableColumn<Thuoc_SP_TangKemDto, String> colDonViQua;
     public TextField tfTimThuoc;
-    public ListView<Thuoc_SanPham> listViewThuoc;
+    public ListView<Thuoc_SanPhamDto> listViewThuoc;
     public TextField tfTimQua;
-    public ListView<Thuoc_SanPham> listViewQua;
+    public ListView<Thuoc_SanPhamDto> listViewQua;
     public TextField tfTenKM;
     public TextField tfMaKM;
     public ComboBox<String> cbLoaiKM;
@@ -68,9 +68,9 @@ public class SuaKhuyenMai_Ctrl {
     public TextField tfMoTa;
     public TextField tfGiaTriHoaDon;
 
-    private final ObservableList<ChiTietKhuyenMai> ctItems = FXCollections.observableArrayList();
-    private final ObservableList<Thuoc_SP_TangKem> giftItems = FXCollections.observableArrayList();
-    private final ObservableList<Thuoc_SanPham> allThuoc = FXCollections.observableArrayList();
+    private final ObservableList<ChiTietKhuyenMaiDto> ctItems = FXCollections.observableArrayList();
+    private final ObservableList<Thuoc_SP_TangKemDto> giftItems = FXCollections.observableArrayList();
+    private final ObservableList<Thuoc_SanPhamDto> allThuoc = FXCollections.observableArrayList();
     private final Locale vnLocale = new Locale("vi", "VN");
     private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(vnLocale);
     private ChangeListener<Boolean> giaTriFocusListener;
@@ -83,7 +83,7 @@ public class SuaKhuyenMai_Ctrl {
         if (cbLoaiKM != null) {
             cbLoaiKM.getItems().setAll(
                     khuyenMaiService.findAllLoaiKhuyenMai().stream()
-                            .map(LoaiKhuyenMai::getTenLoai)
+                            .map(LoaiKhuyenMaiDto::getTenLoai)
                             .toList()
             );
             cbLoaiKM.setCellFactory(lv -> new ListCell<>() {
@@ -119,7 +119,7 @@ public class SuaKhuyenMai_Ctrl {
     }
 
     private void loadAllThuoc() {
-        List<Thuoc_SanPham> ds = thuocService.findAll();
+        List<Thuoc_SanPhamDto> ds = thuocService.findAll();
         if (ds != null) {
             allThuoc.setAll(ds);
         }
@@ -143,7 +143,7 @@ public class SuaKhuyenMai_Ctrl {
         ).asObject());
         colSLAP.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         colSLAP.setOnEditCommit(e -> {
-            ChiTietKhuyenMai row = e.getRowValue();
+            ChiTietKhuyenMaiDto row = e.getRowValue();
             row.setSlApDung(e.getNewValue() == null ? 0 : Math.max(0, e.getNewValue()));
             tbDSThuoc.refresh();
         });
@@ -153,7 +153,7 @@ public class SuaKhuyenMai_Ctrl {
         ).asObject());
         colSLTD.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         colSLTD.setOnEditCommit(e -> {
-            ChiTietKhuyenMai row = e.getRowValue();
+            ChiTietKhuyenMaiDto row = e.getRowValue();
             row.setSoHDToiDa(e.getNewValue() == null ? 0 : Math.max(0, e.getNewValue()));
             tbDSThuoc.refresh();
         });
@@ -163,7 +163,7 @@ public class SuaKhuyenMai_Ctrl {
             {
                 btn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 4px;");
                 btn.setOnAction(ev -> {
-                    ChiTietKhuyenMai item = getTableView().getItems().get(getIndex());
+                    ChiTietKhuyenMaiDto item = getTableView().getItems().get(getIndex());
                     getTableView().getItems().remove(item);
                 });
             }
@@ -196,7 +196,7 @@ public class SuaKhuyenMai_Ctrl {
         ).asObject());
         colSLTang.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         colSLTang.setOnEditCommit(e -> {
-            Thuoc_SP_TangKem row = e.getRowValue();
+            Thuoc_SP_TangKemDto row = e.getRowValue();
             row.setSoLuong(e.getNewValue() == null ? 0 : Math.max(0, e.getNewValue()));
             tbTangKem.refresh();
         });
@@ -206,7 +206,7 @@ public class SuaKhuyenMai_Ctrl {
             {
                 btn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 4px;");
                 btn.setOnAction(ev -> {
-                    Thuoc_SP_TangKem item = getTableView().getItems().get(getIndex());
+                    Thuoc_SP_TangKemDto item = getTableView().getItems().get(getIndex());
                     getTableView().getItems().remove(item);
                 });
             }
@@ -230,7 +230,7 @@ public class SuaKhuyenMai_Ctrl {
         listViewThuoc.setPrefHeight(0);
         listViewThuoc.setItems(allThuoc);
         listViewThuoc.setCellFactory(data -> new ListCell<>() {
-            @Override protected void updateItem(Thuoc_SanPham item, boolean empty) {
+            @Override protected void updateItem(Thuoc_SanPhamDto item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty || item == null ? null : item.getMaThuoc() + " - " + item.getTenThuoc());
             }
@@ -239,8 +239,8 @@ public class SuaKhuyenMai_Ctrl {
         tfTimThuoc.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null && !newVal.trim().isEmpty()) {
                 String keyword = newVal.toLowerCase();
-                ObservableList<Thuoc_SanPham> filtered = FXCollections.observableArrayList();
-                for (Thuoc_SanPham sp : allThuoc) {
+                ObservableList<Thuoc_SanPhamDto> filtered = FXCollections.observableArrayList();
+                for (Thuoc_SanPhamDto sp : allThuoc) {
                     String ma = sp.getMaThuoc() == null ? "" : sp.getMaThuoc().toLowerCase();
                     String ten = sp.getTenThuoc() == null ? "" : sp.getTenThuoc().toLowerCase();
                     if (ma.contains(keyword) || ten.contains(keyword)) {
@@ -283,7 +283,7 @@ public class SuaKhuyenMai_Ctrl {
         listViewQua.setPrefHeight(0);
         listViewQua.setItems(allThuoc);
         listViewQua.setCellFactory(data -> new ListCell<>() {
-            @Override protected void updateItem(Thuoc_SanPham item, boolean empty) {
+            @Override protected void updateItem(Thuoc_SanPhamDto item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty || item == null ? null : item.getMaThuoc() + " - " + item.getTenThuoc());
             }
@@ -292,8 +292,8 @@ public class SuaKhuyenMai_Ctrl {
         tfTimQua.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null && !newVal.trim().isEmpty()) {
                 String keyword = newVal.toLowerCase();
-                ObservableList<Thuoc_SanPham> filtered = FXCollections.observableArrayList();
-                for (Thuoc_SanPham sp : allThuoc) {
+                ObservableList<Thuoc_SanPhamDto> filtered = FXCollections.observableArrayList();
+                for (Thuoc_SanPhamDto sp : allThuoc) {
                     String ma = sp.getMaThuoc() == null ? "" : sp.getMaThuoc().toLowerCase();
                     String ten = sp.getTenThuoc() == null ? "" : sp.getTenThuoc().toLowerCase();
                     if (ma.contains(keyword) || ten.contains(keyword)) {
@@ -327,7 +327,7 @@ public class SuaKhuyenMai_Ctrl {
         });
     }
 
-    private void addThuocToCTKM(Thuoc_SanPham sp) {
+    private void addThuocToCTKM(Thuoc_SanPhamDto sp) {
         if (sp == null) {
             return;
         }
@@ -337,14 +337,14 @@ public class SuaKhuyenMai_Ctrl {
         if (exists) {
             return;
         }
-        ChiTietKhuyenMai ct = new ChiTietKhuyenMai();
+        ChiTietKhuyenMaiDto ct = new ChiTietKhuyenMaiDto();
         ct.setThuoc(sp);
         ct.setSlApDung(1);
         ct.setSoHDToiDa(1);
         ctItems.add(ct);
     }
 
-    private void addGiftItem(Thuoc_SanPham sp) {
+    private void addGiftItem(Thuoc_SanPhamDto sp) {
         if (sp == null) {
             return;
         }
@@ -354,7 +354,7 @@ public class SuaKhuyenMai_Ctrl {
         if (exists) {
             return;
         }
-        Thuoc_SP_TangKem gift = new Thuoc_SP_TangKem();
+        Thuoc_SP_TangKemDto gift = new Thuoc_SP_TangKemDto();
         gift.setThuocTangKem(sp);
         gift.setSoLuong(1);
         giftItems.add(gift);
@@ -364,20 +364,20 @@ public class SuaKhuyenMai_Ctrl {
         if (tabTangKem == null || cbLoaiKM == null) {
             return;
         }
-        LoaiKhuyenMai loaiKhuyenMai = khuyenMaiService.findLoaiKhuyenMaiByTen(cbLoaiKM.getValue());
+        LoaiKhuyenMaiDto loaiKhuyenMai = khuyenMaiService.findLoaiKhuyenMaiByTen(cbLoaiKM.getValue());
         boolean enable = loaiKhuyenMai != null && "LKM001".equalsIgnoreCase(loaiKhuyenMai.getMaLoai());
         tabTangKem.setDisable(!enable);
     }
 
-    public void loadDatatbCTKM(List<ChiTietKhuyenMai> list) {
+    public void loadDatatbCTKM(List<ChiTietKhuyenMaiDto> list) {
         ctItems.setAll(list == null ? List.of() : list);
     }
 
-    public void loadDatatbQuaTang(List<Thuoc_SP_TangKem> list) {
+    public void loadDatatbQuaTang(List<Thuoc_SP_TangKemDto> list) {
         giftItems.setAll(list == null ? List.of() : list);
     }
 
-    public void loadData(KhuyenMai km) {
+    public void loadData(KhuyenMaiDto km) {
         if (km == null) {
             return;
         }
@@ -448,7 +448,7 @@ public class SuaKhuyenMai_Ctrl {
             updateTabsBasedOnMaLoai(null);
             return;
         }
-        LoaiKhuyenMai loai = khuyenMaiService.findLoaiKhuyenMaiByTen(tenLoai);
+        LoaiKhuyenMaiDto loai = khuyenMaiService.findLoaiKhuyenMaiByTen(tenLoai);
         if (loai != null && loai.getMaLoai() != null) {
             updateTabsBasedOnMaLoai(loai.getMaLoai());
             return;
@@ -530,7 +530,7 @@ public class SuaKhuyenMai_Ctrl {
             String moTa = tfMoTa == null ? "" : tfMoTa.getText();
             java.sql.Date tuNgay = dpTuNgay == null || dpTuNgay.getValue() == null ? null : java.sql.Date.valueOf(dpTuNgay.getValue());
             java.sql.Date denNgay = dpDenNgay == null || dpDenNgay.getValue() == null ? null : java.sql.Date.valueOf(dpDenNgay.getValue());
-            LoaiKhuyenMai loai = loaiTen == null ? null : khuyenMaiService.findLoaiKhuyenMaiByTen(loaiTen);
+            LoaiKhuyenMaiDto loai = loaiTen == null ? null : khuyenMaiService.findLoaiKhuyenMaiByTen(loaiTen);
 
             float giaTriKMVal;
             double giaTriApDungVal;
@@ -546,7 +546,7 @@ public class SuaKhuyenMai_Ctrl {
                 giaTriApDungVal = 0d;
             }
 
-            KhuyenMai km = new KhuyenMai(maKM, loai, tenKM, giaTriKMVal, tuNgay, denNgay, moTa);
+            KhuyenMaiDto km = new KhuyenMaiDto(maKM, loai, tenKM, giaTriKMVal, tuNgay, denNgay, moTa);
             km.setGiaTriApDung(giaTriApDungVal);
 
             boolean updated = khuyenMaiService.update(km, List.copyOf(ctItems), List.copyOf(giftItems));

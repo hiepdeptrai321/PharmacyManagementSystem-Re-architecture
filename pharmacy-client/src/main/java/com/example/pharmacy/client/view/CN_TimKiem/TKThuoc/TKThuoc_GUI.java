@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_TimKiem.TKThuoc;
 
 import com.example.pharmacy.client.controller.CN_TimKiem.TKThuoc.TimKiemThuoc_Ctrl;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -270,7 +270,7 @@ public class TKThuoc_GUI {
         ComboBox<String> cboTimKiem, cbxLoaiHang, cbxXuatSu;
         TextField txtHamLuongMin, txtHamLuongMax;
 
-        TableView<Thuoc_SanPham> tbl_Thuoc;
-        TableColumn<Thuoc_SanPham, String> colMaThuoc, colTenThuoc, colHamLuong, colSDK_GPNK, colXuatXu, colLoaiHang, colViTri, colChiTiet;
+        TableView<Thuoc_SanPhamDto> tbl_Thuoc;
+        TableColumn<Thuoc_SanPhamDto, String> colMaThuoc, colTenThuoc, colHamLuong, colSDK_GPNK, colXuatXu, colLoaiHang, colViTri, colChiTiet;
     }
 }

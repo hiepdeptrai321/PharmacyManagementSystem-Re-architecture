@@ -139,7 +139,7 @@ public class JpaKeHangRepository implements KeHangRepository {
             return entityManager.createNativeQuery(
                             """
                             SELECT TenThuoc
-                            FROM Thuoc_SanPham
+                            FROM Thuoc_SanPhamDto
                             WHERE ViTri = :maKeHang AND TrangThaiXoa = 0
                             ORDER BY TenThuoc
                             """

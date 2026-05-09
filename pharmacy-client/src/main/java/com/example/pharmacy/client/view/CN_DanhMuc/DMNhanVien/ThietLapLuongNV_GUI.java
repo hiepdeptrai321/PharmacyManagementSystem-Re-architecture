@@ -1,8 +1,8 @@
 package com.example.pharmacy.client.view.CN_DanhMuc.DMNhanVien;
 
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMNhanVien.ThietLapLuongNV_Ctrl;
-import com.example.pharmacy.common.model.LuongNhanVien;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.LuongNhanVienDto;
+import com.example.pharmacy.common.model.NhanVienDto;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,8 +31,8 @@ public class ThietLapLuongNV_GUI {
 
     public void showWithController(Stage stage,
                                    ThietLapLuongNV_Ctrl ctrl,
-                                   NhanVien nhanVien,
-                                   LuongNhanVien luongHienHanh) {
+                                   NhanVienDto nhanVien,
+                                   LuongNhanVienDto luongHienHanh) {
         AnchorPane root = buildUI();
 
         ctrl.txtMaNV = txtMaNV;

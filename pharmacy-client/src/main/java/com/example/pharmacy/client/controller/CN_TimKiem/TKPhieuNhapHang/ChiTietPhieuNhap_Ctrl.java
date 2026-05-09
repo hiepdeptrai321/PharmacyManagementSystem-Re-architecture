@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.controller.CN_TimKiem.TKPhieuNhapHang;
 
-import com.example.pharmacy.common.model.ChiTietPhieuNhap;
-import com.example.pharmacy.common.model.PhieuNhap;
+import com.example.pharmacy.common.model.ChiTietPhieuNhapDto;
+import com.example.pharmacy.common.model.PhieuNhapDto;
 import com.example.pharmacy.client.service.PhieuNhapService;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,15 +23,15 @@ public class ChiTietPhieuNhap_Ctrl {
     public TextField txtTrangThai;
     public TextField txtNhanVien;
     public TextArea txtGhiChu;
-    public TableView<ChiTietPhieuNhap> tblChiTietPhieuNhap;
-    public TableColumn<ChiTietPhieuNhap, String> colTenThuoc;
-    public TableColumn<ChiTietPhieuNhap, String> colMaThuoc;
-    public TableColumn<ChiTietPhieuNhap, String> colSoLuong;
-    public TableColumn<ChiTietPhieuNhap, String> colGiaNhap;
-    public TableColumn<ChiTietPhieuNhap, String> colThue;
-    public TableColumn<ChiTietPhieuNhap, String> colChietKhau;
+    public TableView<ChiTietPhieuNhapDto> tblChiTietPhieuNhap;
+    public TableColumn<ChiTietPhieuNhapDto, String> colTenThuoc;
+    public TableColumn<ChiTietPhieuNhapDto, String> colMaThuoc;
+    public TableColumn<ChiTietPhieuNhapDto, String> colSoLuong;
+    public TableColumn<ChiTietPhieuNhapDto, String> colGiaNhap;
+    public TableColumn<ChiTietPhieuNhapDto, String> colThue;
+    public TableColumn<ChiTietPhieuNhapDto, String> colChietKhau;
     public Label lblTongGiaNhap;
-    public TableColumn<ChiTietPhieuNhap, String> colMaLoHang;
+    public TableColumn<ChiTietPhieuNhapDto, String> colMaLoHang;
 
     private final PhieuNhapService phieuNhapService = new PhieuNhapService();
 
@@ -43,7 +43,7 @@ public class ChiTietPhieuNhap_Ctrl {
         });
     }
 
-    public void load(PhieuNhap temp) {
+    public void load(PhieuNhapDto temp) {
         txtMaPhieuNhap.setText(temp.getMaPN());
         txtNhaCungCap.setText(temp.getNhaCungCap().getTenNCC());
         txtNgayNhap.setText(String.valueOf(temp.getNgayNhap()));
@@ -51,7 +51,7 @@ public class ChiTietPhieuNhap_Ctrl {
         txtNhanVien.setText(temp.getNhanVien().getTenNV());
         txtGhiChu.setText(temp.getGhiChu());
 
-        List<ChiTietPhieuNhap> list = phieuNhapService.findDetailsByMaPhieuNhap(temp.getMaPN());
+        List<ChiTietPhieuNhapDto> list = phieuNhapService.findDetailsByMaPhieuNhap(temp.getMaPN());
         tblChiTietPhieuNhap.getItems().setAll(list);
 
         colTenThuoc.setCellValueFactory(cel -> new SimpleStringProperty(cel.getValue().getThuoc().getTenThuoc()));

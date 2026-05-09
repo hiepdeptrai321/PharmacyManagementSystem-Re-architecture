@@ -2,12 +2,12 @@ package com.example.pharmacy.server.repository.jdbc;
 
 import com.example.pharmacy.server.config.JdbcConnectionProvider;
 import com.example.pharmacy.server.repository.TonKhoRepository;
-import com.example.pharmacy.common.model.ChiTietDonViTinh;
-import com.example.pharmacy.common.model.DonViTinh;
-import com.example.pharmacy.common.model.KeHang;
-import com.example.pharmacy.common.model.LoaiHang;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietDonViTinhDto;
+import com.example.pharmacy.common.model.DonViTinhDto;
+import com.example.pharmacy.common.model.KeHangDto;
+import com.example.pharmacy.common.model.LoaiHangDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -31,16 +31,16 @@ public class JdbcTonKhoRepository extends AbstractJdbcRepository implements TonK
                    lh.TenLH,
                    dvt.MaDVT AS BaseMaDVT,
                    dvt.TenDonViTinh AS BaseTenDVT
-            FROM Thuoc_SP_TheoLo lo
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
-            LEFT JOIN KeHang kh ON kh.MaKe = ts.ViTri
-            LEFT JOIN LoaiHang lh ON lh.MaLoaiHang = ts.MaLoaiHang
-            LEFT JOIN ChiTietDonViTinh ctdvt ON ctdvt.MaThuoc = ts.MaThuoc AND ctdvt.DonViCoBan = 1
-            LEFT JOIN DonViTinh dvt ON dvt.MaDVT = ctdvt.MaDVT
+            FROM Thuoc_SP_TheoLoDto lo
+            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = lo.MaThuoc
+            LEFT JOIN KeHangDto kh ON kh.MaKe = ts.ViTri
+            LEFT JOIN LoaiHangDto lh ON lh.MaLoaiHang = ts.MaLoaiHang
+            LEFT JOIN ChiTietDonViTinhDto ctdvt ON ctdvt.MaThuoc = ts.MaThuoc AND ctdvt.DonViCoBan = 1
+            LEFT JOIN DonViTinhDto dvt ON dvt.MaDVT = ctdvt.MaDVT
             ORDER BY ts.TenThuoc ASC, lo.MaLH ASC
             """;
     private static final String UPDATE_LOT_QUANTITY_SQL = """
-            UPDATE Thuoc_SP_TheoLo
+            UPDATE Thuoc_SP_TheoLoDto
             SET SoLuongTon = ?
             WHERE MaLH = ?
             """;
@@ -50,9 +50,9 @@ public class JdbcTonKhoRepository extends AbstractJdbcRepository implements TonK
     }
 
     @Override
-    public List<Thuoc_SP_TheoLo> findAllLots() {
+    public List<Thuoc_SP_TheoLoDto> findAllLots() {
         Connection connection = null;
-        List<Thuoc_SP_TheoLo> list = new ArrayList<>();
+        List<Thuoc_SP_TheoLoDto> list = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_LOTS_SQL);
@@ -70,7 +70,7 @@ public class JdbcTonKhoRepository extends AbstractJdbcRepository implements TonK
     }
 
     @Override
-    public boolean updateLotQuantity(Thuoc_SP_TheoLo thuocTheoLo) {
+    public boolean updateLotQuantity(Thuoc_SP_TheoLoDto thuocTheoLo) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -86,14 +86,14 @@ public class JdbcTonKhoRepository extends AbstractJdbcRepository implements TonK
         }
     }
 
-    private Thuoc_SP_TheoLo mapLot(ResultSet resultSet) throws Exception {
-        Thuoc_SanPham thuoc = new Thuoc_SanPham();
+    private Thuoc_SP_TheoLoDto mapLot(ResultSet resultSet) throws Exception {
+        Thuoc_SanPhamDto thuoc = new Thuoc_SanPhamDto();
         thuoc.setMaThuoc(resultSet.getString("MaThuoc"));
         thuoc.setTenThuoc(resultSet.getString("TenThuoc"));
 
         String maKe = resultSet.getString("ViTri");
         if (maKe != null) {
-            KeHang keHang = new KeHang();
+            KeHangDto keHang = new KeHangDto();
             keHang.setMaKe(maKe);
             keHang.setTenKe(resultSet.getString("TenKe"));
             thuoc.setVitri(keHang);
@@ -101,7 +101,7 @@ public class JdbcTonKhoRepository extends AbstractJdbcRepository implements TonK
 
         String maLoaiHang = resultSet.getString("MaLoaiHang");
         if (maLoaiHang != null) {
-            LoaiHang loaiHang = new LoaiHang();
+            LoaiHangDto loaiHang = new LoaiHangDto();
             loaiHang.setMaLoaiHang(maLoaiHang);
             loaiHang.setTenLoaiHang(resultSet.getString("TenLH"));
             thuoc.setLoaiHang(loaiHang);
@@ -109,17 +109,17 @@ public class JdbcTonKhoRepository extends AbstractJdbcRepository implements TonK
 
         String maDvt = resultSet.getString("BaseMaDVT");
         if (maDvt != null) {
-            DonViTinh donViTinh = new DonViTinh();
+            DonViTinhDto donViTinh = new DonViTinhDto();
             donViTinh.setMaDVT(maDvt);
             donViTinh.setTenDonViTinh(resultSet.getString("BaseTenDVT"));
-            ChiTietDonViTinh chiTietDonViTinh = new ChiTietDonViTinh();
+            ChiTietDonViTinhDto chiTietDonViTinh = new ChiTietDonViTinhDto();
             chiTietDonViTinh.setThuoc(thuoc);
             chiTietDonViTinh.setDvt(donViTinh);
             chiTietDonViTinh.setDonViCoBan(true);
             thuoc.getDsCTDVT().add(chiTietDonViTinh);
         }
 
-        Thuoc_SP_TheoLo lot = new Thuoc_SP_TheoLo();
+        Thuoc_SP_TheoLoDto lot = new Thuoc_SP_TheoLoDto();
         lot.setMaLH(resultSet.getString("MaLH"));
         lot.setSoLuongTon(resultSet.getInt("SoLuongTon"));
         Date nsx = resultSet.getDate("NSX");

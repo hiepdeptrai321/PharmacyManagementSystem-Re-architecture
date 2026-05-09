@@ -3,8 +3,8 @@ package com.example.pharmacy.server.bootstrap.rmi;
 import com.example.pharmacy.common.dto.UserContext;
 import com.example.pharmacy.common.remote.PhieuDatHangRemote;
 import com.example.pharmacy.server.service.PhieuDatHangService;
-import com.example.pharmacy.common.model.ChiTietPhieuDatHang;
-import com.example.pharmacy.common.model.PhieuDatHang;
+import com.example.pharmacy.common.model.ChiTietPhieuDatHangDto;
+import com.example.pharmacy.common.model.PhieuDatHangDto;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -25,22 +25,22 @@ public class PhieuDatHangRemoteAdapter extends UnicastRemoteObject implements Ph
     }
 
     @Override
-    public String create(PhieuDatHang phieuDatHang, List<ChiTietPhieuDatHang> details, UserContext actor) throws RemoteException {
+    public String create(PhieuDatHangDto phieuDatHang, List<ChiTietPhieuDatHangDto> details, UserContext actor) throws RemoteException {
         return phieuDatHangService.create(phieuDatHang, details, actor);
     }
 
     @Override
-    public List<PhieuDatHang> findAll() throws RemoteException {
+    public List<PhieuDatHangDto> findAll() throws RemoteException {
         return phieuDatHangService.findAll();
     }
 
     @Override
-    public PhieuDatHang findById(String maPhieuDat) throws RemoteException {
+    public PhieuDatHangDto findById(String maPhieuDat) throws RemoteException {
         return phieuDatHangService.findById(maPhieuDat);
     }
 
     @Override
-    public List<ChiTietPhieuDatHang> findDetailsByMaPhieuDat(String maPhieuDat) throws RemoteException {
+    public List<ChiTietPhieuDatHangDto> findDetailsByMaPhieuDat(String maPhieuDat) throws RemoteException {
         return phieuDatHangService.findDetailsByMaPhieuDat(maPhieuDat);
     }
 

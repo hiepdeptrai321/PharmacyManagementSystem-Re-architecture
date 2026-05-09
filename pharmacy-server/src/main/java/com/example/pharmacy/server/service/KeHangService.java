@@ -1,21 +1,21 @@
 package com.example.pharmacy.server.service;
 
-import com.example.pharmacy.common.model.KeHang;
+import com.example.pharmacy.common.model.KeHangDto;
 
 import java.util.List;
 
 public interface KeHangService {
-    List<KeHang> findAll();
+    List<KeHangDto> findAll();
 
-    KeHang findById(String maKeHang);
+    KeHangDto findById(String maKeHang);
 
-    KeHang findByTenKe(String tenKe);
+    KeHangDto findByTenKe(String tenKe);
 
     String generateNewMaKeHang();
 
-    boolean create(KeHang keHang);
+    boolean create(KeHangDto keHang);
 
-    boolean update(KeHang keHang);
+    boolean update(KeHangDto keHang);
 
     boolean deleteById(String maKeHang);
 

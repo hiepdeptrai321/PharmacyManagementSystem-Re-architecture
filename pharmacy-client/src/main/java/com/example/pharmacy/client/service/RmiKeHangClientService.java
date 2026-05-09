@@ -2,7 +2,7 @@ package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.common.remote.KeHangRemote;
-import com.example.pharmacy.common.model.KeHang;
+import com.example.pharmacy.common.model.KeHangDto;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -17,7 +17,7 @@ public class RmiKeHangClientService implements KeHangClientService {
     }
 
     @Override
-    public List<KeHang> findAll() {
+    public List<KeHangDto> findAll() {
         try {
             return remote().findAll();
         } catch (RemoteException | NotBoundException exception) {
@@ -27,7 +27,7 @@ public class RmiKeHangClientService implements KeHangClientService {
     }
 
     @Override
-    public KeHang findById(String maKeHang) {
+    public KeHangDto findById(String maKeHang) {
         try {
             return remote().findById(maKeHang);
         } catch (RemoteException | NotBoundException exception) {
@@ -37,7 +37,7 @@ public class RmiKeHangClientService implements KeHangClientService {
     }
 
     @Override
-    public KeHang findByTenKe(String tenKe) {
+    public KeHangDto findByTenKe(String tenKe) {
         try {
             return remote().findByTenKe(tenKe);
         } catch (RemoteException | NotBoundException exception) {
@@ -57,7 +57,7 @@ public class RmiKeHangClientService implements KeHangClientService {
     }
 
     @Override
-    public boolean create(KeHang keHang) {
+    public boolean create(KeHangDto keHang) {
         try {
             return remote().create(keHang);
         } catch (RemoteException | NotBoundException exception) {
@@ -67,7 +67,7 @@ public class RmiKeHangClientService implements KeHangClientService {
     }
 
     @Override
-    public boolean update(KeHang keHang) {
+    public boolean update(KeHangDto keHang) {
         try {
             return remote().update(keHang);
         } catch (RemoteException | NotBoundException exception) {

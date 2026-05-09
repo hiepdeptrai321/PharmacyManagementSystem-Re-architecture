@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_ThongKe;
 
 import com.example.pharmacy.client.controller.CN_ThongKe.ThongKeTopSanPham_Ctrl;
-import com.example.pharmacy.common.model.ThongKeTopSanPham;
+import com.example.pharmacy.common.model.ThongKeTopSanPhamDto;
 import javafx.geometry.Insets;
 import javafx.geometry.Side;
 import javafx.scene.Scene;
@@ -107,16 +107,16 @@ public class ThongKeTopSanPham_GUI {
         Label listLabel = new Label("Danh sách chi tiết");
         listLabel.getStyleClass().add("sub-title"); // Màu đỏ, to
 
-        TableView<ThongKeTopSanPham> table = new TableView<>();
+        TableView<ThongKeTopSanPhamDto> table = new TableView<>();
         table.setPrefHeight(300);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        TableColumn<ThongKeTopSanPham, Integer> colSTT = new TableColumn<>("Hạng");
-        TableColumn<ThongKeTopSanPham, String> colMa = new TableColumn<>("Mã thuốc");
-        TableColumn<ThongKeTopSanPham, String> colTen = new TableColumn<>("Tên thuốc");
-        TableColumn<ThongKeTopSanPham, String> colDVT = new TableColumn<>("ĐVT");
-        TableColumn<ThongKeTopSanPham, Integer> colSL = new TableColumn<>("Số lượng bán");
-        TableColumn<ThongKeTopSanPham, Double> colTien = new TableColumn<>("Tổng tiền");
+        TableColumn<ThongKeTopSanPhamDto, Integer> colSTT = new TableColumn<>("Hạng");
+        TableColumn<ThongKeTopSanPhamDto, String> colMa = new TableColumn<>("Mã thuốc");
+        TableColumn<ThongKeTopSanPhamDto, String> colTen = new TableColumn<>("Tên thuốc");
+        TableColumn<ThongKeTopSanPhamDto, String> colDVT = new TableColumn<>("ĐVT");
+        TableColumn<ThongKeTopSanPhamDto, Integer> colSL = new TableColumn<>("Số lượng bán");
+        TableColumn<ThongKeTopSanPhamDto, Double> colTien = new TableColumn<>("Tổng tiền");
 
         colSTT.setMinWidth(50);
         colMa.setMinWidth(100);
@@ -170,7 +170,7 @@ public class ThongKeTopSanPham_GUI {
         ctrl.colTien = colTien;
 
         Scene scene = new Scene(root);
-        String cssPath = "/com/example/pharmacy/client/css/ThongKeBanHang.css";
+        String cssPath = "/com/example/pharmacy/client/css/ThongKeBanHangDto.css";
         java.net.URL cssUrl = getClass().getResource(cssPath);
         if (cssUrl != null) root.getStylesheets().add(cssUrl.toExternalForm());
 

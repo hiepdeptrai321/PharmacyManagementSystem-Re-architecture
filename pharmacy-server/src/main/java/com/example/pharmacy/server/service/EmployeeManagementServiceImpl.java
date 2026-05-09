@@ -37,7 +37,7 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
             }
             String maNhanVien = codeGenerationService.nextCode(BusinessCodeType.NHAN_VIEN);
             employeeWriteRepository.insert(maNhanVien, request);
-            auditService.logAction(actor, AuditAction.CREATE, "NhanVien", maNhanVien,
+            auditService.logAction(actor, AuditAction.CREATE, "NhanVienDto", maNhanVien,
                     "Tao nhan vien moi voi tai khoan " + request.getUsername().trim());
             return maNhanVien;
         });

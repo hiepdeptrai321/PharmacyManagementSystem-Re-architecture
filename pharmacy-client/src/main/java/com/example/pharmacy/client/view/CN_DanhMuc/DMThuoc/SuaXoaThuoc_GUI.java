@@ -1,8 +1,8 @@
 package com.example.pharmacy.client.view.CN_DanhMuc.DMThuoc;
 
 import com.example.pharmacy.client.controller.CN_DanhMuc.DMThuoc.SuaXoaThuoc_Ctrl;
-import com.example.pharmacy.common.model.ChiTietHoatChat;
-import com.example.pharmacy.common.model.HoatChat;
+import com.example.pharmacy.common.model.ChiTietHoatChatDto;
+import com.example.pharmacy.common.model.HoatChatDto;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,9 +25,9 @@ public class SuaXoaThuoc_GUI extends Application {
             txtHangSanXuat, txtNuocSanXuat, txtQuyCachDongGoi, txtSDK_GPNK, txtTimKiemHoatChat;
     public ComboBox<?> cbxLoaiHang, cbxViTri, cbxNhomDuocLy;
     public ImageView imgThuoc;
-    public TableView<ChiTietHoatChat> tblHoatChat;
-    public TableColumn<ChiTietHoatChat, String> colMaHoatChat, colTenHoatChat, colHamLuong, colXoa;
-    public ListView<HoatChat> listViewHoatChat;
+    public TableView<ChiTietHoatChatDto> tblHoatChat;
+    public TableColumn<ChiTietHoatChatDto, String> colMaHoatChat, colTenHoatChat, colHamLuong, colXoa;
+    public ListView<HoatChatDto> listViewHoatChat;
     public Button btnChonAnh, btnXoa, btnHuy, btnLuu;
     public CheckBox cbETC;
 

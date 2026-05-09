@@ -3,7 +3,7 @@ package com.example.pharmacy.server.bootstrap.rmi;
 import com.example.pharmacy.common.dto.UserContext;
 import com.example.pharmacy.common.remote.TonKhoRemote;
 import com.example.pharmacy.server.service.TonKhoService;
-import com.example.pharmacy.common.model.Thuoc_SP_TheoLo;
+import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -19,12 +19,12 @@ public class TonKhoRemoteAdapter extends UnicastRemoteObject implements TonKhoRe
     }
 
     @Override
-    public List<Thuoc_SP_TheoLo> findAllLots() throws RemoteException {
+    public List<Thuoc_SP_TheoLoDto> findAllLots() throws RemoteException {
         return tonKhoService.findAllLots();
     }
 
     @Override
-    public boolean updateLotQuantity(Thuoc_SP_TheoLo thuocTheoLo, UserContext actor) throws RemoteException {
+    public boolean updateLotQuantity(Thuoc_SP_TheoLoDto thuocTheoLo, UserContext actor) throws RemoteException {
         return tonKhoService.updateLotQuantity(thuocTheoLo, actor);
     }
 }

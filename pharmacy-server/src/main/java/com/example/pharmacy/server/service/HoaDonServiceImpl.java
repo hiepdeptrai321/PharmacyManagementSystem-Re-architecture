@@ -9,8 +9,8 @@ import com.example.pharmacy.common.request.CreateHoaDonRequest;
 import com.example.pharmacy.common.request.HoaDonSearchRequest;
 import com.example.pharmacy.server.repository.HoaDonRepository;
 import com.example.pharmacy.server.transaction.TransactionManager;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.HoaDon;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.HoaDonDto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -60,19 +60,19 @@ public class HoaDonServiceImpl implements HoaDonService {
                 hoaDonRepository.updatePreorderStatus(request.getMaPhieuDat().trim(), 2);
             }
 
-            auditService.logAction(actor, AuditAction.PAYMENT, "HoaDon", maHoaDon,
+            auditService.logAction(actor, AuditAction.PAYMENT, "HoaDonDto", maHoaDon,
                     "Lap hoa don voi " + request.getLines().size() + " dong san pham.");
             return maHoaDon;
         });
     }
 
     @Override
-    public List<HoaDon> findAll() {
+    public List<HoaDonDto> findAll() {
         return hoaDonRepository.findAll();
     }
 
     @Override
-    public HoaDon findById(String maHoaDon) {
+    public HoaDonDto findById(String maHoaDon) {
         if (isBlank(maHoaDon)) {
             return null;
         }
@@ -80,7 +80,7 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
-    public List<ChiTietHoaDon> findDetailsByMaHD(String maHoaDon) {
+    public List<ChiTietHoaDonDto> findDetailsByMaHD(String maHoaDon) {
         if (isBlank(maHoaDon)) {
             return List.of();
         }
@@ -88,7 +88,7 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
-    public List<HoaDon> search(HoaDonSearchRequest request) {
+    public List<HoaDonDto> search(HoaDonSearchRequest request) {
         if (request == null) {
             return findAll();
         }
@@ -97,7 +97,7 @@ public class HoaDonServiceImpl implements HoaDonService {
         LocalDate fromDate = request.getFromDate();
         LocalDate toDate = request.getToDate();
 
-        List<HoaDon> source = hoaDonRepository.findAll();
+        List<HoaDonDto> source = hoaDonRepository.findAll();
         return source.stream()
                 .filter(hoaDon -> matchKeyword(hoaDon, criteria, keyword))
                 .filter(hoaDon -> matchDate(hoaDon, fromDate, toDate))
@@ -216,7 +216,7 @@ public class HoaDonServiceImpl implements HoaDonService {
         }
     }
 
-    private boolean matchKeyword(HoaDon hoaDon, String criteria, String keyword) {
+    private boolean matchKeyword(HoaDonDto hoaDon, String criteria, String keyword) {
         if (keyword.isEmpty() && criteria.isEmpty()) {
             return true;
         }
@@ -241,7 +241,7 @@ public class HoaDonServiceImpl implements HoaDonService {
         };
     }
 
-    private boolean matchDate(HoaDon hoaDon, LocalDate fromDate, LocalDate toDate) {
+    private boolean matchDate(HoaDonDto hoaDon, LocalDate fromDate, LocalDate toDate) {
         if (hoaDon.getNgayLap() == null) {
             return fromDate == null && toDate == null;
         }

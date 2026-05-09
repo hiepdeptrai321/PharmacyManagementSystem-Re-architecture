@@ -2,7 +2,7 @@ package com.example.pharmacy.client.controller.CN_TimKiem.TKPhieuDoiHang;
 
 import com.example.pharmacy.client.TienIch.TuyChinhAlert;
 import com.example.pharmacy.client.TienIch.DoiNgay;
-import com.example.pharmacy.common.model.PhieuDoiHang;
+import com.example.pharmacy.common.model.PhieuDoiHangDto;
 import com.example.pharmacy.client.service.DoiTraService;
 import com.example.pharmacy.client.view.CN_TimKiem.TKPhieuDoi.ChiTietPhieuDoiHang_GUI;
 import com.example.pharmacy.client.view.CN_TimKiem.TKPhieuDoi.TKPhieuDoiHang_GUI;
@@ -27,15 +27,15 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class TKPhieuDoiHang_Ctrl extends Application {
-    public TableView<PhieuDoiHang> tblPD;
-    public TableColumn<PhieuDoiHang, Number> colSTT;
-    public TableColumn<PhieuDoiHang, String> colMaPD;
-    public TableColumn<PhieuDoiHang, String> colMaHD;
-    public TableColumn<PhieuDoiHang, String> colNgayLap;
-    public TableColumn<PhieuDoiHang, String> colTenKH;
-    public TableColumn<PhieuDoiHang, String> colSdtKH;
-    public TableColumn<PhieuDoiHang, String> colTenNV;
-    public TableColumn<PhieuDoiHang, String> colChiTiet;
+    public TableView<PhieuDoiHangDto> tblPD;
+    public TableColumn<PhieuDoiHangDto, Number> colSTT;
+    public TableColumn<PhieuDoiHangDto, String> colMaPD;
+    public TableColumn<PhieuDoiHangDto, String> colMaHD;
+    public TableColumn<PhieuDoiHangDto, String> colNgayLap;
+    public TableColumn<PhieuDoiHangDto, String> colTenKH;
+    public TableColumn<PhieuDoiHangDto, String> colSdtKH;
+    public TableColumn<PhieuDoiHangDto, String> colTenNV;
+    public TableColumn<PhieuDoiHangDto, String> colChiTiet;
     public ComboBox<String> cboTimKiem;
     public TextField txtNoiDungTimKiem;
     public DatePicker dpTuNgay;
@@ -69,7 +69,7 @@ public class TKPhieuDoiHang_Ctrl extends Application {
         cbLoc.setValue("⌛ Bo loc nhanh");
 
         tblPD.setRowFactory(tv -> {
-            TableRow<PhieuDoiHang> row = new TableRow<>();
+            TableRow<PhieuDoiHangDto> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (!row.isEmpty() && event.getClickCount() == 2) {
                     moChiTiet(row.getItem());
@@ -86,7 +86,7 @@ public class TKPhieuDoiHang_Ctrl extends Application {
     }
 
     public void loadTable() {
-        List<PhieuDoiHang> list = doiTraService.findAllPhieuDoi();
+        List<PhieuDoiHangDto> list = doiTraService.findAllPhieuDoi();
         tblPD.setItems(FXCollections.observableArrayList(list));
 
         colSTT.setCellValueFactory(cd -> new ReadOnlyObjectWrapper<>(tblPD.getItems().indexOf(cd.getValue()) + 1));
@@ -129,14 +129,14 @@ public class TKPhieuDoiHang_Ctrl extends Application {
         String noiDung = txtNoiDungTimKiem.getText().trim().toLowerCase();
         var tuNgay = dpTuNgay == null ? null : dpTuNgay.getValue();
         var denNgay = dpDenNgay == null ? null : dpDenNgay.getValue();
-        List<PhieuDoiHang> list = doiTraService.findAllPhieuDoi();
+        List<PhieuDoiHangDto> list = doiTraService.findAllPhieuDoi();
 
         if ((tieuChi == null || "Tiêu chí".equals(tieuChi)) && (tuNgay == null && denNgay == null) && noiDung.isEmpty()) {
             loadTable();
             return;
         }
 
-        List<PhieuDoiHang> filtered = list.stream().filter(phieuDoiHang -> {
+        List<PhieuDoiHangDto> filtered = list.stream().filter(phieuDoiHang -> {
             boolean match = true;
             switch (tieuChi) {
                 case "Mã phiếu đổi" -> match = safe(phieuDoiHang.getMaPD()).toLowerCase().contains(noiDung);
@@ -212,7 +212,7 @@ public class TKPhieuDoiHang_Ctrl extends Application {
         timKiem();
     }
 
-    private void moChiTiet(PhieuDoiHang phieuDoiHang) {
+    private void moChiTiet(PhieuDoiHangDto phieuDoiHang) {
         try {
             ChiTietPhieuDoiHang_Ctrl ctrl = new ChiTietPhieuDoiHang_Ctrl();
             Stage dialog = new Stage();
@@ -227,7 +227,7 @@ public class TKPhieuDoiHang_Ctrl extends Application {
         }
     }
 
-    private TableCell<PhieuDoiHang, String> alignedLeftCell() {
+    private TableCell<PhieuDoiHangDto, String> alignedLeftCell() {
         return new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {

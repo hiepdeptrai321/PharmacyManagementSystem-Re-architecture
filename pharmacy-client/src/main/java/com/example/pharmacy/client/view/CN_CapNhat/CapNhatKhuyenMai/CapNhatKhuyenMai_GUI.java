@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.view.CN_CapNhat.CapNhatKhuyenMai;
 
 import com.example.pharmacy.client.controller.CN_CapNhat.CapNhatKhuyenMai.CapNhatKhuyenMai_Ctrl;
-import com.example.pharmacy.common.model.KhuyenMai;
+import com.example.pharmacy.common.model.KhuyenMaiDto;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -145,15 +145,15 @@ public class CapNhatKhuyenMai_GUI {
         ctrl.tfTimKM = tfTimKM;
         ctrl.btnTimKM = btnTimKM;
         ctrl.btnReset = btnReset;
-        ctrl.tbKM = (TableView<KhuyenMai>)(TableView<?>) tbKM;
-        ctrl.colSTT = (TableColumn<KhuyenMai, String>) (TableColumn<?, ?>) colSTT;
-        ctrl.colMaKM = (TableColumn<KhuyenMai, String>) (TableColumn<?, ?>) colMaKM;
-        ctrl.colTenKM = (TableColumn<KhuyenMai, String>) (TableColumn<?, ?>) colTenKM;
-        ctrl.colLoaiKM = (TableColumn<KhuyenMai, String>) (TableColumn<?, ?>) colLoaiKM;
-        ctrl.colGiaTri = (TableColumn<KhuyenMai, Float>) (TableColumn<?, ?>) colGiaTri;
-        ctrl.colNBD = (TableColumn<KhuyenMai, String>) (TableColumn<?, ?>) colNBD;
-        ctrl.colNKT = (TableColumn<KhuyenMai, String>) (TableColumn<?, ?>) colNKT;
-        ctrl.colChiTiet = (TableColumn<KhuyenMai, String>) (TableColumn<?, ?>) colChiTiet;
+        ctrl.tbKM = (TableView<KhuyenMaiDto>)(TableView<?>) tbKM;
+        ctrl.colSTT = (TableColumn<KhuyenMaiDto, String>) (TableColumn<?, ?>) colSTT;
+        ctrl.colMaKM = (TableColumn<KhuyenMaiDto, String>) (TableColumn<?, ?>) colMaKM;
+        ctrl.colTenKM = (TableColumn<KhuyenMaiDto, String>) (TableColumn<?, ?>) colTenKM;
+        ctrl.colLoaiKM = (TableColumn<KhuyenMaiDto, String>) (TableColumn<?, ?>) colLoaiKM;
+        ctrl.colGiaTri = (TableColumn<KhuyenMaiDto, Float>) (TableColumn<?, ?>) colGiaTri;
+        ctrl.colNBD = (TableColumn<KhuyenMaiDto, String>) (TableColumn<?, ?>) colNBD;
+        ctrl.colNKT = (TableColumn<KhuyenMaiDto, String>) (TableColumn<?, ?>) colNKT;
+        ctrl.colChiTiet = (TableColumn<KhuyenMaiDto, String>) (TableColumn<?, ?>) colChiTiet;
         ctrl.rootTablePane = rootTablePane;
 
         // Initialize controller logic

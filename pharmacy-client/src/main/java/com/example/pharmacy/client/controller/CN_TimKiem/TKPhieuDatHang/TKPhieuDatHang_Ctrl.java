@@ -2,7 +2,7 @@ package com.example.pharmacy.client.controller.CN_TimKiem.TKPhieuDatHang;
 
 import com.example.pharmacy.client.TienIch.DoiNgay;
 import com.example.pharmacy.client.TienIch.VNDFormatter;
-import com.example.pharmacy.common.model.PhieuDatHang;
+import com.example.pharmacy.common.model.PhieuDatHangDto;
 import com.example.pharmacy.client.service.PhieuDatHangService;
 import com.example.pharmacy.client.view.CN_TimKiem.TKPhieuDatHang.ChiTietPhieuDatHang_GUI;
 import javafx.application.Platform;
@@ -27,16 +27,16 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class TKPhieuDatHang_Ctrl {
-    public TableView<PhieuDatHang> tblPD;
-    public TableColumn<PhieuDatHang, Number> colSTT;
-    public TableColumn<PhieuDatHang, String> colMaPD;
-    public TableColumn<PhieuDatHang, String> colNgayLap;
-    public TableColumn<PhieuDatHang, String> colTenKH;
-    public TableColumn<PhieuDatHang, String> colSdtKH;
-    public TableColumn<PhieuDatHang, String> colTenNV;
-    public TableColumn<PhieuDatHang, String> colSoTienCoc;
-    public TableColumn<PhieuDatHang, String> colTT;
-    public TableColumn<PhieuDatHang, String> colChiTiet;
+    public TableView<PhieuDatHangDto> tblPD;
+    public TableColumn<PhieuDatHangDto, Number> colSTT;
+    public TableColumn<PhieuDatHangDto, String> colMaPD;
+    public TableColumn<PhieuDatHangDto, String> colNgayLap;
+    public TableColumn<PhieuDatHangDto, String> colTenKH;
+    public TableColumn<PhieuDatHangDto, String> colSdtKH;
+    public TableColumn<PhieuDatHangDto, String> colTenNV;
+    public TableColumn<PhieuDatHangDto, String> colSoTienCoc;
+    public TableColumn<PhieuDatHangDto, String> colTT;
+    public TableColumn<PhieuDatHangDto, String> colChiTiet;
     public ComboBox<String> cboTimKiem;
     public TextField txtNoiDungTimKiem;
     public DatePicker dpTuNgay;
@@ -54,7 +54,7 @@ public class TKPhieuDatHang_Ctrl {
         cbLoc.setValue("Bộ lọc nhanh");
 
         tblPD.setRowFactory(tv -> {
-            TableRow<PhieuDatHang> row = new TableRow<>();
+            TableRow<PhieuDatHangDto> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (!row.isEmpty() && event.getClickCount() == 2) {
                     btnChiTietClick(row.getItem());
@@ -71,8 +71,8 @@ public class TKPhieuDatHang_Ctrl {
     }
 
     public void loadTable() {
-        List<PhieuDatHang> list = phieuDatHangService.findAll();
-        ObservableList<PhieuDatHang> data = FXCollections.observableArrayList(list);
+        List<PhieuDatHangDto> list = phieuDatHangService.findAll();
+        ObservableList<PhieuDatHangDto> data = FXCollections.observableArrayList(list);
         colSTT.setCellValueFactory(cellData ->
                 new ReadOnlyObjectWrapper<>(tblPD.getItems().indexOf(cellData.getValue()) + 1)
         );
@@ -107,7 +107,7 @@ public class TKPhieuDatHang_Ctrl {
         tblPD.setItems(data);
     }
 
-    private TableCell<PhieuDatHang, String> leftAlignedCell() {
+    private TableCell<PhieuDatHangDto, String> leftAlignedCell() {
         return new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -131,7 +131,7 @@ public class TKPhieuDatHang_Ctrl {
         };
     }
 
-    private void btnChiTietClick(PhieuDatHang phieuDatHang) {
+    private void btnChiTietClick(PhieuDatHangDto phieuDatHang) {
         try {
             ChiTietPhieuDatHang_Ctrl ctrl = new ChiTietPhieuDatHang_Ctrl();
             Stage stage = new Stage();
@@ -153,7 +153,7 @@ public class TKPhieuDatHang_Ctrl {
         var tuNgay = dpTuNgay == null ? null : dpTuNgay.getValue();
         var denNgay = dpDenNgay == null ? null : dpDenNgay.getValue();
 
-        List<PhieuDatHang> filtered = phieuDatHangService.findAll().stream()
+        List<PhieuDatHangDto> filtered = phieuDatHangService.findAll().stream()
                 .filter(phieuDatHang -> matchCriteria(phieuDatHang, tieuChi, noiDung))
                 .filter(phieuDatHang -> tuNgay == null || !phieuDatHang.getNgayLap().toLocalDateTime().toLocalDate().isBefore(tuNgay))
                 .filter(phieuDatHang -> denNgay == null || !phieuDatHang.getNgayLap().toLocalDateTime().toLocalDate().isAfter(denNgay))
@@ -161,7 +161,7 @@ public class TKPhieuDatHang_Ctrl {
         tblPD.setItems(FXCollections.observableArrayList(filtered));
     }
 
-    private boolean matchCriteria(PhieuDatHang phieuDatHang, String tieuChi, String noiDung) {
+    private boolean matchCriteria(PhieuDatHangDto phieuDatHang, String tieuChi, String noiDung) {
         if (noiDung.isEmpty()) {
             return true;
         }

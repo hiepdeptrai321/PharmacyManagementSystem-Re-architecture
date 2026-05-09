@@ -3,12 +3,12 @@ package com.example.pharmacy.common.remote;
 import com.example.pharmacy.common.dto.UserContext;
 import com.example.pharmacy.common.request.CreatePhieuDoiRequest;
 import com.example.pharmacy.common.request.CreatePhieuTraRequest;
-import com.example.pharmacy.common.model.ChiTietHoaDon;
-import com.example.pharmacy.common.model.ChiTietPhieuDoiHang;
-import com.example.pharmacy.common.model.ChiTietPhieuTraHang;
-import com.example.pharmacy.common.model.HoaDon;
-import com.example.pharmacy.common.model.PhieuDoiHang;
-import com.example.pharmacy.common.model.PhieuTraHang;
+import com.example.pharmacy.common.model.ChiTietHoaDonDto;
+import com.example.pharmacy.common.model.ChiTietPhieuDoiHangDto;
+import com.example.pharmacy.common.model.ChiTietPhieuTraHangDto;
+import com.example.pharmacy.common.model.HoaDonDto;
+import com.example.pharmacy.common.model.PhieuDoiHangDto;
+import com.example.pharmacy.common.model.PhieuTraHangDto;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -17,9 +17,9 @@ import java.util.List;
 public interface DoiTraRemote extends Remote {
     String BINDING_NAME = "DoiTraRemoteService";
 
-    HoaDon findHoaDonGocForDoiTra(String maHoaDon) throws RemoteException;
+    HoaDonDto findHoaDonGocForDoiTra(String maHoaDon) throws RemoteException;
 
-    List<ChiTietHoaDon> findHoaDonDetailsForDoiTra(String maHoaDon) throws RemoteException;
+    List<ChiTietHoaDonDto> findHoaDonDetailsForDoiTra(String maHoaDon) throws RemoteException;
 
     int getSoLuongDaDoi(String maHoaDon, String maLoHang, String maDonViTinh) throws RemoteException;
 
@@ -31,15 +31,15 @@ public interface DoiTraRemote extends Remote {
 
     void attachKhachHangToHoaDon(String maHoaDon, String maKhachHang, UserContext actor) throws RemoteException;
 
-    List<PhieuDoiHang> findAllPhieuDoi() throws RemoteException;
+    List<PhieuDoiHangDto> findAllPhieuDoi() throws RemoteException;
 
-    PhieuDoiHang findPhieuDoiById(String maPhieuDoi) throws RemoteException;
+    PhieuDoiHangDto findPhieuDoiById(String maPhieuDoi) throws RemoteException;
 
-    List<ChiTietPhieuDoiHang> findChiTietPhieuDoiByMaPD(String maPhieuDoi) throws RemoteException;
+    List<ChiTietPhieuDoiHangDto> findChiTietPhieuDoiByMaPD(String maPhieuDoi) throws RemoteException;
 
-    List<PhieuTraHang> findAllPhieuTra() throws RemoteException;
+    List<PhieuTraHangDto> findAllPhieuTra() throws RemoteException;
 
-    PhieuTraHang findPhieuTraById(String maPhieuTra) throws RemoteException;
+    PhieuTraHangDto findPhieuTraById(String maPhieuTra) throws RemoteException;
 
-    List<ChiTietPhieuTraHang> findChiTietPhieuTraByMaPT(String maPhieuTra) throws RemoteException;
+    List<ChiTietPhieuTraHangDto> findChiTietPhieuTraByMaPT(String maPhieuTra) throws RemoteException;
 }

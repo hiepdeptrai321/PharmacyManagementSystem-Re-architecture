@@ -70,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
                                 UserRole.fromLegacyValue(entity.getVaiTro())
                         ),
                         AuditAction.LOGIN,
-                        "NhanVien",
+                        "NhanVienDto",
                         entity.getMaNV(),
                         "Dang nhap thanh cong."
                 );

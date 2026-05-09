@@ -2,16 +2,16 @@ package com.example.pharmacy.server.repository.jdbc;
 
 import com.example.pharmacy.server.config.JdbcConnectionProvider;
 import com.example.pharmacy.server.repository.PromotionRepository;
-import com.example.pharmacy.common.model.ChiTietDonViTinh;
-import com.example.pharmacy.common.model.ChiTietKhuyenMai;
-import com.example.pharmacy.common.model.DonViTinh;
-import com.example.pharmacy.common.model.KeHang;
-import com.example.pharmacy.common.model.KhuyenMai;
-import com.example.pharmacy.common.model.LoaiHang;
-import com.example.pharmacy.common.model.LoaiKhuyenMai;
-import com.example.pharmacy.common.model.NhomDuocLy;
-import com.example.pharmacy.common.model.Thuoc_SP_TangKem;
-import com.example.pharmacy.common.model.Thuoc_SanPham;
+import com.example.pharmacy.common.model.ChiTietDonViTinhDto;
+import com.example.pharmacy.common.model.ChiTietKhuyenMaiDto;
+import com.example.pharmacy.common.model.DonViTinhDto;
+import com.example.pharmacy.common.model.KeHangDto;
+import com.example.pharmacy.common.model.KhuyenMaiDto;
+import com.example.pharmacy.common.model.LoaiHangDto;
+import com.example.pharmacy.common.model.LoaiKhuyenMaiDto;
+import com.example.pharmacy.common.model.NhomDuocLyDto;
+import com.example.pharmacy.common.model.Thuoc_SP_TangKemDto;
+import com.example.pharmacy.common.model.Thuoc_SanPhamDto;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -38,8 +38,8 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
                    lkm.MaLoai AS LKM_MaLoai,
                    lkm.TenLoai AS LKM_TenLoai,
                    lkm.MoTa AS LKM_MoTa
-            FROM KhuyenMai km
-            JOIN LoaiKhuyenMai lkm ON lkm.MaLoai = km.MaLoai
+            FROM KhuyenMaiDto km
+            JOIN LoaiKhuyenMaiDto lkm ON lkm.MaLoai = km.MaLoai
             """;
     private static final String SELECT_ALL_PROMOTIONS_SQL = PROMOTION_SELECT_FRAGMENT + """
             ORDER BY km.NgayBatDau DESC, km.MaKM DESC
@@ -53,17 +53,17 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
             """;
     private static final String SELECT_ALL_PROMOTION_TYPES_SQL = """
             SELECT MaLoai, TenLoai, MoTa
-            FROM LoaiKhuyenMai
+            FROM LoaiKhuyenMaiDto
             ORDER BY TenLoai ASC, MaLoai ASC
             """;
     private static final String SELECT_PROMOTION_TYPE_BY_ID_SQL = """
             SELECT MaLoai, TenLoai, MoTa
-            FROM LoaiKhuyenMai
+            FROM LoaiKhuyenMaiDto
             WHERE MaLoai = ?
             """;
     private static final String SELECT_PROMOTION_TYPE_BY_NAME_SQL = """
             SELECT MaLoai, TenLoai, MoTa
-            FROM LoaiKhuyenMai
+            FROM LoaiKhuyenMaiDto
             WHERE LOWER(TenLoai) = LOWER(?)
             """;
     private static final String MEDICINE_SELECT_FRAGMENT = """
@@ -95,11 +95,11 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
                    ct.SLApDung,
                    ct.SLToiDa,
             """ + MEDICINE_SELECT_FRAGMENT + """
-            FROM ChiTietKhuyenMai ct
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = ct.MaThuoc
-            LEFT JOIN NhomDuocLy ndl ON ndl.MaNDL = ts.MaNDL
-            LEFT JOIN LoaiHang lh ON lh.MaLoaiHang = ts.MaLoaiHang
-            LEFT JOIN KeHang kh ON kh.MaKe = ts.ViTri
+            FROM ChiTietKhuyenMaiDto ct
+            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = ct.MaThuoc
+            LEFT JOIN NhomDuocLyDto ndl ON ndl.MaNDL = ts.MaNDL
+            LEFT JOIN LoaiHangDto lh ON lh.MaLoaiHang = ts.MaLoaiHang
+            LEFT JOIN KeHangDto kh ON kh.MaKe = ts.ViTri
             WHERE ct.MaKM = ?
             ORDER BY ts.TenThuoc ASC, ct.MaThuoc ASC
             """;
@@ -108,21 +108,21 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
                    tg.MaThuocTangKem,
                    tg.SoLuong,
             """ + MEDICINE_SELECT_FRAGMENT.replace("ts.MaThuoc,", "ts.MaThuoc AS MaThuocTangKem,") + """
-            FROM Thuoc_SP_TangKem tg
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = tg.MaThuocTangKem
-            LEFT JOIN NhomDuocLy ndl ON ndl.MaNDL = ts.MaNDL
-            LEFT JOIN LoaiHang lh ON lh.MaLoaiHang = ts.MaLoaiHang
-            LEFT JOIN KeHang kh ON kh.MaKe = ts.ViTri
+            FROM Thuoc_SP_TangKemDto tg
+            JOIN Thuoc_SanPhamDto ts ON ts.MaThuoc = tg.MaThuocTangKem
+            LEFT JOIN NhomDuocLyDto ndl ON ndl.MaNDL = ts.MaNDL
+            LEFT JOIN LoaiHangDto lh ON lh.MaLoaiHang = ts.MaLoaiHang
+            LEFT JOIN KeHangDto kh ON kh.MaKe = ts.ViTri
             WHERE tg.MaKM = ?
             ORDER BY ts.TenThuoc ASC, tg.MaThuocTangKem ASC
             """;
     private static final String INSERT_PROMOTION_SQL = """
-            INSERT INTO KhuyenMai (
+            INSERT INTO KhuyenMaiDto (
                 MaKM, MaLoai, TenKM, GiaTriKM, NgayBatDau, NgayKetThuc, MoTa, GiaTriApDung
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """;
     private static final String UPDATE_PROMOTION_SQL = """
-            UPDATE KhuyenMai
+            UPDATE KhuyenMaiDto
             SET MaLoai = ?,
                 TenKM = ?,
                 GiaTriKM = ?,
@@ -133,23 +133,23 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
             WHERE MaKM = ?
             """;
     private static final String DELETE_PROMOTION_SQL = """
-            DELETE FROM KhuyenMai
+            DELETE FROM KhuyenMaiDto
             WHERE MaKM = ?
             """;
     private static final String INSERT_PROMOTION_DETAIL_SQL = """
-            INSERT INTO ChiTietKhuyenMai (MaThuoc, MaKM, SLApDung, SLToiDa)
+            INSERT INTO ChiTietKhuyenMaiDto (MaThuoc, MaKM, SLApDung, SLToiDa)
             VALUES (?, ?, ?, ?)
             """;
     private static final String DELETE_PROMOTION_DETAILS_SQL = """
-            DELETE FROM ChiTietKhuyenMai
+            DELETE FROM ChiTietKhuyenMaiDto
             WHERE MaKM = ?
             """;
     private static final String INSERT_PROMOTION_GIFT_SQL = """
-            INSERT INTO Thuoc_SP_TangKem (MaThuocTangKem, MaKM, SoLuong)
+            INSERT INTO Thuoc_SP_TangKemDto (MaThuocTangKem, MaKM, SoLuong)
             VALUES (?, ?, ?)
             """;
     private static final String DELETE_PROMOTION_GIFTS_SQL = """
-            DELETE FROM Thuoc_SP_TangKem
+            DELETE FROM Thuoc_SP_TangKemDto
             WHERE MaKM = ?
             """;
     private static final String SELECT_ACTIVE_PROMOTIONS_SQL = PROMOTION_SELECT_FRAGMENT + """
@@ -166,9 +166,9 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
     }
 
     @Override
-    public List<KhuyenMai> findAll() {
+    public List<KhuyenMaiDto> findAll() {
         Connection connection = null;
-        List<KhuyenMai> promotions = new ArrayList<>();
+        List<KhuyenMaiDto> promotions = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_PROMOTIONS_SQL);
@@ -186,7 +186,7 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
     }
 
     @Override
-    public KhuyenMai findById(String maKhuyenMai) {
+    public KhuyenMaiDto findById(String maKhuyenMai) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -207,9 +207,9 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
     }
 
     @Override
-    public List<KhuyenMai> searchByKeyword(String keyword) {
+    public List<KhuyenMaiDto> searchByKeyword(String keyword) {
         Connection connection = null;
-        List<KhuyenMai> promotions = new ArrayList<>();
+        List<KhuyenMaiDto> promotions = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SEARCH_PROMOTIONS_SQL)) {
@@ -231,34 +231,34 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
     }
 
     @Override
-    public List<LoaiKhuyenMai> findAllLoaiKhuyenMai() {
+    public List<LoaiKhuyenMaiDto> findAllLoaiKhuyenMai() {
         return loadPromotionTypes(SELECT_ALL_PROMOTION_TYPES_SQL, null);
     }
 
     @Override
-    public LoaiKhuyenMai findLoaiKhuyenMaiById(String maLoaiKhuyenMai) {
-        List<LoaiKhuyenMai> types = loadPromotionTypes(SELECT_PROMOTION_TYPE_BY_ID_SQL, maLoaiKhuyenMai);
+    public LoaiKhuyenMaiDto findLoaiKhuyenMaiById(String maLoaiKhuyenMai) {
+        List<LoaiKhuyenMaiDto> types = loadPromotionTypes(SELECT_PROMOTION_TYPE_BY_ID_SQL, maLoaiKhuyenMai);
         return types.isEmpty() ? null : types.get(0);
     }
 
     @Override
-    public LoaiKhuyenMai findLoaiKhuyenMaiByTen(String tenLoaiKhuyenMai) {
-        List<LoaiKhuyenMai> types = loadPromotionTypes(SELECT_PROMOTION_TYPE_BY_NAME_SQL, tenLoaiKhuyenMai);
+    public LoaiKhuyenMaiDto findLoaiKhuyenMaiByTen(String tenLoaiKhuyenMai) {
+        List<LoaiKhuyenMaiDto> types = loadPromotionTypes(SELECT_PROMOTION_TYPE_BY_NAME_SQL, tenLoaiKhuyenMai);
         return types.isEmpty() ? null : types.get(0);
     }
 
     @Override
-    public List<ChiTietKhuyenMai> findChiTietByMaKM(String maKhuyenMai) {
+    public List<ChiTietKhuyenMaiDto> findChiTietByMaKM(String maKhuyenMai) {
         Connection connection = null;
-        List<ChiTietKhuyenMai> details = new ArrayList<>();
+        List<ChiTietKhuyenMaiDto> details = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_PROMOTION_DETAILS_SQL)) {
                 statement.setString(1, maKhuyenMai);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
-                        ChiTietKhuyenMai detail = new ChiTietKhuyenMai();
-                        KhuyenMai promotion = new KhuyenMai();
+                        ChiTietKhuyenMaiDto detail = new ChiTietKhuyenMaiDto();
+                        KhuyenMaiDto promotion = new KhuyenMaiDto();
                         promotion.setMaKM(resultSet.getString("MaKM"));
                         detail.setKhuyenMai(promotion);
                         detail.setThuoc(mapMedicine(resultSet, "MaThuoc"));
@@ -268,7 +268,7 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
                     }
                 }
             }
-            attachUnitDetailsToPromotionMedicines(details.stream().map(ChiTietKhuyenMai::getThuoc).toList());
+            attachUnitDetailsToPromotionMedicines(details.stream().map(ChiTietKhuyenMaiDto::getThuoc).toList());
             return details;
         } catch (Exception exception) {
             throw new IllegalStateException("Could not load promotion details for " + maKhuyenMai, exception);
@@ -278,17 +278,17 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
     }
 
     @Override
-    public List<Thuoc_SP_TangKem> findQuaTangByMaKM(String maKhuyenMai) {
+    public List<Thuoc_SP_TangKemDto> findQuaTangByMaKM(String maKhuyenMai) {
         Connection connection = null;
-        List<Thuoc_SP_TangKem> gifts = new ArrayList<>();
+        List<Thuoc_SP_TangKemDto> gifts = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SELECT_PROMOTION_GIFTS_SQL)) {
                 statement.setString(1, maKhuyenMai);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
-                        Thuoc_SP_TangKem gift = new Thuoc_SP_TangKem();
-                        KhuyenMai promotion = new KhuyenMai();
+                        Thuoc_SP_TangKemDto gift = new Thuoc_SP_TangKemDto();
+                        KhuyenMaiDto promotion = new KhuyenMaiDto();
                         promotion.setMaKM(resultSet.getString("MaKM"));
                         gift.setKhuyenmai(promotion);
                         gift.setThuocTangKem(mapMedicine(resultSet, "MaThuocTangKem"));
@@ -297,7 +297,7 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
                     }
                 }
             }
-            attachUnitDetailsToPromotionMedicines(gifts.stream().map(Thuoc_SP_TangKem::getThuocTangKem).toList());
+            attachUnitDetailsToPromotionMedicines(gifts.stream().map(Thuoc_SP_TangKemDto::getThuocTangKem).toList());
             return gifts;
         } catch (Exception exception) {
             throw new IllegalStateException("Could not load promotion gifts for " + maKhuyenMai, exception);
@@ -307,7 +307,7 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
     }
 
     @Override
-    public boolean insertPromotion(KhuyenMai khuyenMai) {
+    public boolean insertPromotion(KhuyenMaiDto khuyenMai) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -323,7 +323,7 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
     }
 
     @Override
-    public boolean updatePromotion(KhuyenMai khuyenMai) {
+    public boolean updatePromotion(KhuyenMaiDto khuyenMai) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -362,7 +362,7 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
     }
 
     @Override
-    public void insertPromotionDetail(ChiTietKhuyenMai chiTietKhuyenMai) {
+    public void insertPromotionDetail(ChiTietKhuyenMaiDto chiTietKhuyenMai) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -397,7 +397,7 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
     }
 
     @Override
-    public void insertPromotionGift(Thuoc_SP_TangKem quaTangKhuyenMai) {
+    public void insertPromotionGift(Thuoc_SP_TangKemDto quaTangKhuyenMai) {
         Connection connection = null;
         try {
             connection = getConnection();
@@ -431,18 +431,18 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
     }
 
     @Override
-    public List<KhuyenMai> findActiveOn(Date ngay) {
+    public List<KhuyenMaiDto> findActiveOn(Date ngay) {
         return loadActivePromotions(SELECT_ACTIVE_PROMOTIONS_SQL, ngay);
     }
 
     @Override
-    public List<KhuyenMai> findActiveInvoiceOn(Date ngay) {
+    public List<KhuyenMaiDto> findActiveInvoiceOn(Date ngay) {
         return loadActivePromotions(SELECT_ACTIVE_INVOICE_PROMOTIONS_SQL, ngay);
     }
 
-    private List<LoaiKhuyenMai> loadPromotionTypes(String sql, String parameter) {
+    private List<LoaiKhuyenMaiDto> loadPromotionTypes(String sql, String parameter) {
         Connection connection = null;
-        List<LoaiKhuyenMai> types = new ArrayList<>();
+        List<LoaiKhuyenMaiDto> types = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -463,9 +463,9 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
         }
     }
 
-    private List<KhuyenMai> loadActivePromotions(String sql, Date ngay) {
+    private List<KhuyenMaiDto> loadActivePromotions(String sql, Date ngay) {
         Connection connection = null;
-        List<KhuyenMai> promotions = new ArrayList<>();
+        List<KhuyenMaiDto> promotions = new ArrayList<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -485,7 +485,7 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
         }
     }
 
-    private void bindPromotion(PreparedStatement statement, KhuyenMai khuyenMai) throws SQLException {
+    private void bindPromotion(PreparedStatement statement, KhuyenMaiDto khuyenMai) throws SQLException {
         statement.setString(1, khuyenMai.getMaKM());
         statement.setString(2, khuyenMai.getLoaiKM() == null ? null : khuyenMai.getLoaiKM().getMaLoai());
         statement.setString(3, khuyenMai.getTenKM());
@@ -496,8 +496,8 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
         statement.setDouble(8, khuyenMai.getGiaTriApDung());
     }
 
-    private KhuyenMai mapPromotion(ResultSet resultSet) throws SQLException {
-        KhuyenMai promotion = new KhuyenMai();
+    private KhuyenMaiDto mapPromotion(ResultSet resultSet) throws SQLException {
+        KhuyenMaiDto promotion = new KhuyenMaiDto();
         promotion.setMaKM(resultSet.getString("MaKM"));
         promotion.setLoaiKM(mapPromotionType(resultSet, "LKM_"));
         promotion.setTenKM(resultSet.getString("TenKM"));
@@ -510,20 +510,20 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
         return promotion;
     }
 
-    private LoaiKhuyenMai mapPromotionType(ResultSet resultSet, String prefix) throws SQLException {
+    private LoaiKhuyenMaiDto mapPromotionType(ResultSet resultSet, String prefix) throws SQLException {
         String maLoai = resultSet.getString(prefix + "MaLoai");
         if (maLoai == null) {
             return null;
         }
-        LoaiKhuyenMai type = new LoaiKhuyenMai();
+        LoaiKhuyenMaiDto type = new LoaiKhuyenMaiDto();
         type.setMaLoai(maLoai);
         type.setTenLoai(resultSet.getString(prefix + "TenLoai"));
         type.setMoTa(resultSet.getString(prefix + "MoTa"));
         return type;
     }
 
-    private Thuoc_SanPham mapMedicine(ResultSet resultSet, String maThuocColumn) throws SQLException {
-        Thuoc_SanPham medicine = new Thuoc_SanPham();
+    private Thuoc_SanPhamDto mapMedicine(ResultSet resultSet, String maThuocColumn) throws SQLException {
+        Thuoc_SanPhamDto medicine = new Thuoc_SanPhamDto();
         medicine.setMaThuoc(resultSet.getString(maThuocColumn));
         medicine.setTenThuoc(resultSet.getString("TenThuoc"));
         medicine.setHamLuong(resultSet.getFloat("HamLuong"));
@@ -541,49 +541,49 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
         return medicine;
     }
 
-    private NhomDuocLy mapNhomDuocLy(ResultSet resultSet) throws SQLException {
+    private NhomDuocLyDto mapNhomDuocLy(ResultSet resultSet) throws SQLException {
         String maNdl = resultSet.getString("NDL_MaNDL");
         if (maNdl == null) {
             return null;
         }
-        NhomDuocLy nhomDuocLy = new NhomDuocLy();
+        NhomDuocLyDto nhomDuocLy = new NhomDuocLyDto();
         nhomDuocLy.setMaNDL(maNdl);
         nhomDuocLy.setTenNDL(resultSet.getString("NDL_TenNDL"));
         nhomDuocLy.setMoTa(resultSet.getString("NDL_MoTa"));
         return nhomDuocLy;
     }
 
-    private LoaiHang mapLoaiHang(ResultSet resultSet) throws SQLException {
+    private LoaiHangDto mapLoaiHang(ResultSet resultSet) throws SQLException {
         String maLoaiHang = resultSet.getString("LH_MaLoaiHang");
         if (maLoaiHang == null) {
             return null;
         }
-        LoaiHang loaiHang = new LoaiHang();
+        LoaiHangDto loaiHang = new LoaiHangDto();
         loaiHang.setMaLoaiHang(maLoaiHang);
         loaiHang.setTenLoaiHang(resultSet.getString("LH_TenLH"));
         loaiHang.setMoTa(resultSet.getString("LH_MoTa"));
         return loaiHang;
     }
 
-    private KeHang mapKeHang(ResultSet resultSet) throws SQLException {
+    private KeHangDto mapKeHang(ResultSet resultSet) throws SQLException {
         String maKe = resultSet.getString("KE_MaKe");
         if (maKe == null) {
             return null;
         }
-        KeHang keHang = new KeHang();
+        KeHangDto keHang = new KeHangDto();
         keHang.setMaKe(maKe);
         keHang.setTenKe(resultSet.getString("KE_TenKe"));
         keHang.setMoTa(resultSet.getString("KE_MoTa"));
         return keHang;
     }
 
-    private void attachUnitDetailsToPromotionMedicines(Collection<Thuoc_SanPham> medicines) {
+    private void attachUnitDetailsToPromotionMedicines(Collection<Thuoc_SanPhamDto> medicines) {
         if (medicines == null || medicines.isEmpty()) {
             return;
         }
 
-        Map<String, Thuoc_SanPham> medicinesById = new LinkedHashMap<>();
-        for (Thuoc_SanPham medicine : medicines) {
+        Map<String, Thuoc_SanPhamDto> medicinesById = new LinkedHashMap<>();
+        for (Thuoc_SanPhamDto medicine : medicines) {
             if (medicine != null && medicine.getMaThuoc() != null && !medicine.getMaThuoc().isBlank()) {
                 medicinesById.put(medicine.getMaThuoc(), medicine);
             }
@@ -601,14 +601,14 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
                        ctdvt.DonViCoBan,
                        dvt.TenDonViTinh,
                        dvt.KiHieu
-                FROM ChiTietDonViTinh ctdvt
-                JOIN DonViTinh dvt ON dvt.MaDVT = ctdvt.MaDVT
+                FROM ChiTietDonViTinhDto ctdvt
+                JOIN DonViTinhDto dvt ON dvt.MaDVT = ctdvt.MaDVT
                 WHERE ctdvt.MaThuoc IN (%s)
                 ORDER BY ctdvt.MaThuoc ASC, ctdvt.DonViCoBan DESC, ctdvt.HeSoQuyDoi DESC, ctdvt.MaDVT ASC
                 """.formatted(placeholders(medicinesById.size()));
 
         Connection connection = null;
-        Map<String, List<ChiTietDonViTinh>> detailsByMedicineId = new LinkedHashMap<>();
+        Map<String, List<ChiTietDonViTinhDto>> detailsByMedicineId = new LinkedHashMap<>();
         try {
             connection = getConnection();
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -619,8 +619,8 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         String maThuoc = resultSet.getString("MaThuoc");
-                        ChiTietDonViTinh detail = new ChiTietDonViTinh();
-                        DonViTinh donViTinh = new DonViTinh();
+                        ChiTietDonViTinhDto detail = new ChiTietDonViTinhDto();
+                        DonViTinhDto donViTinh = new DonViTinhDto();
                         donViTinh.setMaDVT(resultSet.getString("MaDVT"));
                         donViTinh.setTenDonViTinh(resultSet.getString("TenDonViTinh"));
                         donViTinh.setKiHieu(resultSet.getString("KiHieu"));
@@ -639,14 +639,14 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
             closeConnection(connection);
         }
 
-        for (Map.Entry<String, Thuoc_SanPham> entry : medicinesById.entrySet()) {
-            Thuoc_SanPham medicine = entry.getValue();
-            List<ChiTietDonViTinh> details = detailsByMedicineId.getOrDefault(entry.getKey(), new ArrayList<>());
-            for (ChiTietDonViTinh detail : details) {
+        for (Map.Entry<String, Thuoc_SanPhamDto> entry : medicinesById.entrySet()) {
+            Thuoc_SanPhamDto medicine = entry.getValue();
+            List<ChiTietDonViTinhDto> details = detailsByMedicineId.getOrDefault(entry.getKey(), new ArrayList<>());
+            for (ChiTietDonViTinhDto detail : details) {
                 detail.setThuoc(medicine);
             }
             medicine.setDsCTDVT(details);
-            medicine.setDvcb(details.stream().filter(ChiTietDonViTinh::isDonViCoBan).findFirst().orElse(null));
+            medicine.setDvcb(details.stream().filter(ChiTietDonViTinhDto::isDonViCoBan).findFirst().orElse(null));
         }
     }
 

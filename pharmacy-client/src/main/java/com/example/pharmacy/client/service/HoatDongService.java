@@ -5,8 +5,8 @@ import com.example.pharmacy.client.service.AuditLogClientService;
 import com.example.pharmacy.client.service.RmiAuditLogClientService;
 import com.example.pharmacy.common.dto.AuditLogDTO;
 import com.example.pharmacy.common.request.AuditLogSearchRequest;
-import com.example.pharmacy.common.model.HoatDong;
-import com.example.pharmacy.common.model.NhanVien;
+import com.example.pharmacy.common.model.HoatDongDto;
+import com.example.pharmacy.common.model.NhanVienDto;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -16,30 +16,30 @@ public class HoatDongService {
     private final AuditLogClientService auditLogClientService =
             new RmiAuditLogClientService(new RmiClientProvider());
 
-    public List<HoatDong> findAll() {
+    public List<HoatDongDto> findAll() {
         return mapLogs(auditLogClientService.findAuditLogs(new AuditLogSearchRequest(null, null, null)));
     }
 
-    public List<HoatDong> search(String keyword, LocalDate fromDate, LocalDate toDate) {
+    public List<HoatDongDto> search(String keyword, LocalDate fromDate, LocalDate toDate) {
         return mapLogs(auditLogClientService.findAuditLogs(new AuditLogSearchRequest(keyword, fromDate, toDate)));
     }
 
-    public HoatDong findByCode(String auditCode) {
+    public HoatDongDto findByCode(String auditCode) {
         return mapLog(auditLogClientService.findAuditLogByCode(auditCode));
     }
 
-    private List<HoatDong> mapLogs(List<AuditLogDTO> logs) {
+    private List<HoatDongDto> mapLogs(List<AuditLogDTO> logs) {
         return logs.stream().map(this::mapLog).toList();
     }
 
-    private HoatDong mapLog(AuditLogDTO log) {
+    private HoatDongDto mapLog(AuditLogDTO log) {
         if (log == null) {
             return null;
         }
-        NhanVien nhanVien = new NhanVien();
+        NhanVienDto nhanVien = new NhanVienDto();
         nhanVien.setMaNV(log.getEmployeeId());
         nhanVien.setTenNV(log.getFullName());
-        HoatDong hoatDong = new HoatDong();
+        HoatDongDto hoatDong = new HoatDongDto();
         hoatDong.setMaHD(log.getAuditCode());
         hoatDong.setLoaiHD(log.getAction() == null ? "" : log.getAction().name());
         hoatDong.setBang(log.getEntityName());

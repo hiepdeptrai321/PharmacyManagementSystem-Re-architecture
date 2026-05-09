@@ -1,9 +1,9 @@
 package com.example.pharmacy.client.view.CN_XuLy.LapPhieuNhapHang;
 
 import com.example.pharmacy.client.controller.CN_XuLy.LapPhieuNhapHang.LapPhieuNhapHang_Ctrl;
-import com.example.pharmacy.common.model.CTPN_TSPTL_CHTDVT;
-import com.example.pharmacy.common.model.ChiTietDonViTinh;
-import com.example.pharmacy.common.model.NhaCungCap;
+import com.example.pharmacy.common.model.CTPN_TSPTL_CHTDVTDto;
+import com.example.pharmacy.common.model.ChiTietDonViTinhDto;
+import com.example.pharmacy.common.model.NhaCungCapDto;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -438,19 +438,19 @@ public class LapPhieuNhapHang_GUI extends Application {
         Pane root;
 
         // bảng
-        TableView<CTPN_TSPTL_CHTDVT> tblNhapThuoc;
-        TableColumn<CTPN_TSPTL_CHTDVT, String> colSTT, colMaThuoc, colTenThuoc,
+        TableView<CTPN_TSPTL_CHTDVTDto> tblNhapThuoc;
+        TableColumn<CTPN_TSPTL_CHTDVTDto, String> colSTT, colMaThuoc, colTenThuoc,
                 colLoHang, colDonViNhap, colThanhTien, colXoa;
-        TableColumn<CTPN_TSPTL_CHTDVT, LocalDate> colHanSuDung, colNSX;
-        TableColumn<CTPN_TSPTL_CHTDVT, Integer> colSoLuong;
-        TableColumn<CTPN_TSPTL_CHTDVT, Double> colDonGiaNhap;
-        TableColumn<CTPN_TSPTL_CHTDVT, Float> colChietKhau, colThue;
+        TableColumn<CTPN_TSPTL_CHTDVTDto, LocalDate> colHanSuDung, colNSX;
+        TableColumn<CTPN_TSPTL_CHTDVTDto, Integer> colSoLuong;
+        TableColumn<CTPN_TSPTL_CHTDVTDto, Double> colDonGiaNhap;
+        TableColumn<CTPN_TSPTL_CHTDVTDto, Float> colChietKhau, colThue;
 
         // thanh trên
         ComboBox<String> cbxNCC;
         DatePicker txtNgayNhap;
         TextField txtMaPhieuNhap, txtTimKiemChiTietDonViTinh;
-        ListView<ChiTietDonViTinh> listViewChiTietDonViTinh;
+        ListView<ChiTietDonViTinhDto> listViewChiTietDonViTinh;
         Pane pnThemNCC;
         Label lblThemThuoc;
 

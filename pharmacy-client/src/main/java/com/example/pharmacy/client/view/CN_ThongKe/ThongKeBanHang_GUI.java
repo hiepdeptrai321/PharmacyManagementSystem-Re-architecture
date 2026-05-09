@@ -1,8 +1,8 @@
 package com.example.pharmacy.client.view.CN_ThongKe;
 
 import com.example.pharmacy.client.controller.CN_ThongKe.ThongKeBanHang_Ctrl;
-import com.example.pharmacy.common.model.HoaDonDisplay;
-import com.example.pharmacy.common.model.ThongKeBanHang;
+import com.example.pharmacy.common.model.HoaDonDisplayDto;
+import com.example.pharmacy.common.model.ThongKeBanHangDto;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -37,14 +37,14 @@ public class ThongKeBanHang_GUI {
         Label lblDen = new Label("Đến:");
 
         // Bảng Doanh Thu
-        TableView<ThongKeBanHang> tableDoanhThu = new TableView<>();
-        TableColumn<ThongKeBanHang, String> cotTG = new TableColumn<>("Thời gian");
-        TableColumn<ThongKeBanHang, Integer> cotSLHoaDon = new TableColumn<>("Số lượng HĐ");
-        TableColumn<ThongKeBanHang, Double> cotTongGT = new TableColumn<>("Tổng giá trị");
-        TableColumn<ThongKeBanHang, Double> cotGG = new TableColumn<>("Giảm giá");
-        TableColumn<ThongKeBanHang, Integer> cotDT = new TableColumn<>("Số lượng đơn trả");
-        TableColumn<ThongKeBanHang, Double> cotGTDonTra = new TableColumn<>("Giá trị đơn trả");
-        TableColumn<ThongKeBanHang, Double> cotDoanhThu = new TableColumn<>("Doanh thu");
+        TableView<ThongKeBanHangDto> tableDoanhThu = new TableView<>();
+        TableColumn<ThongKeBanHangDto, String> cotTG = new TableColumn<>("Thời gian");
+        TableColumn<ThongKeBanHangDto, Integer> cotSLHoaDon = new TableColumn<>("Số lượng HĐ");
+        TableColumn<ThongKeBanHangDto, Double> cotTongGT = new TableColumn<>("Tổng giá trị");
+        TableColumn<ThongKeBanHangDto, Double> cotGG = new TableColumn<>("Giảm giá");
+        TableColumn<ThongKeBanHangDto, Integer> cotDT = new TableColumn<>("Số lượng đơn trả");
+        TableColumn<ThongKeBanHangDto, Double> cotGTDonTra = new TableColumn<>("Giá trị đơn trả");
+        TableColumn<ThongKeBanHangDto, Double> cotDoanhThu = new TableColumn<>("Doanh thu");
 
         // Biểu đồ
         CategoryAxis xAxis = new CategoryAxis();
@@ -52,12 +52,12 @@ public class ThongKeBanHang_GUI {
         BarChart<String, Number> chartDoanhThu = new BarChart<>(xAxis, yAxis);
 
         // Bảng Hóa Đơn
-        TableView<HoaDonDisplay> tableHoaDon = new TableView<>();
-        TableColumn<HoaDonDisplay, String> cotMaHoaDon = new TableColumn<>("Mã Hóa Đơn");
-        TableColumn<HoaDonDisplay, LocalDate> cotNgayLap = new TableColumn<>("Ngày Lập");
-        TableColumn<HoaDonDisplay, String> cotMaKhachHang = new TableColumn<>("Mã Khách Hàng");
-        TableColumn<HoaDonDisplay, String> cotMaNhanVien = new TableColumn<>("Mã Nhân Viên");
-        TableColumn<HoaDonDisplay, Double> cotTongTien = new TableColumn<>("Tổng Tiền");
+        TableView<HoaDonDisplayDto> tableHoaDon = new TableView<>();
+        TableColumn<HoaDonDisplayDto, String> cotMaHoaDon = new TableColumn<>("Mã Hóa Đơn");
+        TableColumn<HoaDonDisplayDto, LocalDate> cotNgayLap = new TableColumn<>("Ngày Lập");
+        TableColumn<HoaDonDisplayDto, String> cotMaKhachHang = new TableColumn<>("Mã Khách Hàng");
+        TableColumn<HoaDonDisplayDto, String> cotMaNhanVien = new TableColumn<>("Mã Nhân Viên");
+        TableColumn<HoaDonDisplayDto, Double> cotTongTien = new TableColumn<>("Tổng Tiền");
 
         // --- 2. Cấu hình Bảng Doanh Thu (Không setStyle cứng nữa) ---
         cotTG.setPrefWidth(147.33);
@@ -230,7 +230,7 @@ public class ThongKeBanHang_GUI {
         Scene scene = new Scene(root);
 
         // --- SỬA LẠI: Gắn CSS trực tiếp vào ROOT (Quan trọng nhất) ---
-        String cssPath = "/com/example/pharmacy/client/css/ThongKeBanHang.css";
+        String cssPath = "/com/example/pharmacy/client/css/ThongKeBanHangDto.css";
         java.net.URL cssUrl = getClass().getResource(cssPath);
 
         if (cssUrl != null) {
@@ -243,7 +243,7 @@ public class ThongKeBanHang_GUI {
             System.out.println("Đã gắn CSS vào Root Pane thành công!");
         } else {
             // Thử tìm đường dẫn ngắn nếu đường dẫn dài lỗi
-            var shortUrl = getClass().getResource("/css/ThongKeBanHang.css");
+            var shortUrl = getClass().getResource("/css/ThongKeBanHangDto.css");
             if(shortUrl != null) {
                 root.getStylesheets().add(shortUrl.toExternalForm());
             } else {
