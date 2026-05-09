@@ -1,9 +1,9 @@
 package com.example.pharmacy.client.controller;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
-import com.example.pharmacy.client.service.ReportClientService;
+import com.example.pharmacy.client.service.interfa.ReportClientService;
 import com.example.pharmacy.client.service.RmiReportClientService;
-import com.example.pharmacy.client.service.TonKhoClientService;
+import com.example.pharmacy.client.service.interfa.TonKhoClientService;
 import com.example.pharmacy.client.service.RmiTonKhoClientService;
 import com.example.pharmacy.common.request.DateRangeRequest;
 import com.example.pharmacy.client.TienIch.VNDFormatter;

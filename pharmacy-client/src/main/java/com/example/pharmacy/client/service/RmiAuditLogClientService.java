@@ -1,6 +1,7 @@
 package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
+import com.example.pharmacy.client.service.interfa.AuditLogClientService;
 import com.example.pharmacy.common.dto.AuditLogDTO;
 import com.example.pharmacy.common.remote.AuditLogRemote;
 import com.example.pharmacy.common.request.AuditLogSearchRequest;

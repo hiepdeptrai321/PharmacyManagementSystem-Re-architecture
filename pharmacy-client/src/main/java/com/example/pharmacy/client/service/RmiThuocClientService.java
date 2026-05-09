@@ -1,6 +1,7 @@
 package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
+import com.example.pharmacy.client.service.interfa.ThuocClientService;
 import com.example.pharmacy.common.remote.ThuocRemote;
 import com.example.pharmacy.common.model.ChiTietHoatChatDto;
 import com.example.pharmacy.common.model.HoatChatDto;

@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
-import com.example.pharmacy.client.service.PhieuDatHangClientService;
+import com.example.pharmacy.client.service.interfa.PhieuDatHangClientService;
 import com.example.pharmacy.client.service.RmiPhieuDatHangClientService;
 import com.example.pharmacy.common.model.ChiTietPhieuDatHangDto;
 import com.example.pharmacy.common.model.PhieuDatHangDto;

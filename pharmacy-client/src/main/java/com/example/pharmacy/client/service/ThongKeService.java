@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
-import com.example.pharmacy.client.service.ReportClientService;
+import com.example.pharmacy.client.service.interfa.ReportClientService;
 import com.example.pharmacy.client.service.RmiReportClientService;
 import com.example.pharmacy.common.request.DateRangeRequest;
 import com.example.pharmacy.common.model.HoaDonDisplayDto;

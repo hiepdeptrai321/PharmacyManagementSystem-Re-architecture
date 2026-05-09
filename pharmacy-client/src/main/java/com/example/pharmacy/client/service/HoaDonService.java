@@ -1,7 +1,7 @@
 package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
-import com.example.pharmacy.client.service.HoaDonClientService;
+import com.example.pharmacy.client.service.interfa.HoaDonClientService;
 import com.example.pharmacy.client.service.RmiHoaDonClientService;
 import com.example.pharmacy.common.request.CreateHoaDonRequest;
 import com.example.pharmacy.common.request.HoaDonSearchRequest;

@@ -1,6 +1,7 @@
 package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
+import com.example.pharmacy.client.service.interfa.TonKhoClientService;
 import com.example.pharmacy.common.dto.UserContext;
 import com.example.pharmacy.common.remote.TonKhoRemote;
 import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;

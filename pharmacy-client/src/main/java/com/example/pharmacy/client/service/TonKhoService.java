@@ -2,7 +2,7 @@ package com.example.pharmacy.client.service;
 
 import com.example.pharmacy.client.rmi.RmiClientProvider;
 import com.example.pharmacy.client.service.RmiTonKhoClientService;
-import com.example.pharmacy.client.service.TonKhoClientService;
+import com.example.pharmacy.client.service.interfa.TonKhoClientService;
 import com.example.pharmacy.common.model.Thuoc_SP_TheoLoDto;
 import com.example.pharmacy.common.session.UserContext;
 import com.example.pharmacy.client.session.UserContextMapper;
