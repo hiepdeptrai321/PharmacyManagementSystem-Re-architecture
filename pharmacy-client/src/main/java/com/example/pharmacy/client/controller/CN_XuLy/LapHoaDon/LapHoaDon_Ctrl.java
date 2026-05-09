@@ -32,6 +32,7 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -289,6 +290,7 @@ public class LapHoaDon_Ctrl extends Application {
             protected void updateItem(Boolean item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty ? null : Boolean.TRUE.equals(item) ? "Co" : "Khong");
+                setAlignment(Pos.CENTER);
             }
         });
         colDonVi.setCellValueFactory(cell -> new ReadOnlyStringWrapper(
@@ -305,8 +307,9 @@ public class LapHoaDon_Ctrl extends Application {
             private final HBox box = new HBox(6, btnDec, tf, btnInc);
 
             {
+                box.setAlignment(Pos.CENTER);
                 tf.setPrefWidth(56);
-                tf.setStyle("-fx-alignment: center-right;");
+                tf.setStyle("-fx-alignment: center;");
                 btnDec.setOnAction(e -> adjust(-1));
                 btnInc.setOnAction(e -> adjust(1));
                 tf.setOnAction(e -> commitFromText());
@@ -360,6 +363,7 @@ public class LapHoaDon_Ctrl extends Application {
                     ChiTietHoaDonDto row = currentRow();
                     tf.setText(row == null ? "1" : String.valueOf(row.getSoLuong()));
                     setGraphic(box);
+                    setAlignment(Pos.CENTER);
                     setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                 }
             }
@@ -385,6 +389,7 @@ public class LapHoaDon_Ctrl extends Application {
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 setGraphic(empty ? null : btnXoa);
+                setAlignment(Pos.CENTER);
                 setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
             }
         });

@@ -1,7 +1,8 @@
-package com.example.pharmacy.server.repository;
+package com.example.pharmacy.server.repository.jpa;
 
 import com.example.pharmacy.server.config.JpaUtil;
-import com.example.pharmacy.server.entity.NhanVienEntity;
+import com.example.pharmacy.server.entity.KeHangEntity;
+import com.example.pharmacy.server.repository.KeHangRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -9,29 +10,28 @@ import jakarta.persistence.EntityTransaction;
 import java.util.List;
 import java.util.Optional;
 
-public class JpaNhanVienManagementRepository implements NhanVienManagementRepository {
+public class JpaKeHangRepository implements KeHangRepository {
     private final EntityManagerFactory entityManagerFactory;
 
-    public JpaNhanVienManagementRepository() {
+    public JpaKeHangRepository() {
         this(JpaUtil.getEntityManagerFactory());
     }
 
-    public JpaNhanVienManagementRepository(EntityManagerFactory entityManagerFactory) {
+    public JpaKeHangRepository(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
     @Override
-    public List<NhanVienEntity> findAllNotDeleted() {
+    public List<KeHangEntity> findAll() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             return entityManager.createQuery(
                             """
-                            SELECT nv
-                            FROM NhanVienEntity nv
-                            WHERE nv.trangThaiXoa = false
-                            ORDER BY nv.maNV
+                            SELECT kh
+                            FROM KeHangEntity kh
+                            ORDER BY kh.maKe
                             """,
-                            NhanVienEntity.class
+                            KeHangEntity.class
                     )
                     .getResultList();
         } finally {
@@ -40,42 +40,38 @@ public class JpaNhanVienManagementRepository implements NhanVienManagementReposi
     }
 
     @Override
-    public Optional<NhanVienEntity> findById(String maNhanVien) {
+    public Optional<KeHangEntity> findById(String maKeHang) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            return Optional.ofNullable(entityManager.find(NhanVienEntity.class, maNhanVien));
+            return Optional.ofNullable(entityManager.find(KeHangEntity.class, maKeHang));
         } finally {
             entityManager.close();
         }
     }
 
     @Override
-    public boolean existsByUsername(String username, String excludedMaNhanVien) {
-        if (username == null || username.isBlank()) {
-            return false;
-        }
+    public Optional<KeHangEntity> findByTenKe(String tenKe) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            Long count = entityManager.createQuery(
+            List<KeHangEntity> result = entityManager.createQuery(
                             """
-                            SELECT COUNT(nv)
-                            FROM NhanVienEntity nv
-                            WHERE LOWER(nv.taiKhoan) = LOWER(:username)
-                              AND (:excludedMaNhanVien IS NULL OR nv.maNV <> :excludedMaNhanVien)
+                            SELECT kh
+                            FROM KeHangEntity kh
+                            WHERE LOWER(kh.tenKe) = LOWER(:tenKe)
                             """,
-                            Long.class
+                            KeHangEntity.class
                     )
-                    .setParameter("username", username.trim())
-                    .setParameter("excludedMaNhanVien", excludedMaNhanVien)
-                    .getSingleResult();
-            return count != null && count > 0;
+                    .setParameter("tenKe", tenKe)
+                    .setMaxResults(1)
+                    .getResultList();
+            return result.stream().findFirst();
         } finally {
             entityManager.close();
         }
     }
 
     @Override
-    public NhanVienEntity save(NhanVienEntity entity) {
+    public KeHangEntity save(KeHangEntity entity) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
@@ -94,12 +90,12 @@ public class JpaNhanVienManagementRepository implements NhanVienManagementReposi
     }
 
     @Override
-    public NhanVienEntity update(NhanVienEntity entity) {
+    public KeHangEntity update(KeHangEntity entity) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            NhanVienEntity merged = entityManager.merge(entity);
+            KeHangEntity merged = entityManager.merge(entity);
             transaction.commit();
             return merged;
         } catch (RuntimeException exception) {
@@ -113,18 +109,17 @@ public class JpaNhanVienManagementRepository implements NhanVienManagementReposi
     }
 
     @Override
-    public boolean softDelete(String maNhanVien) {
+    public boolean deleteById(String maKeHang) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            NhanVienEntity entity = entityManager.find(NhanVienEntity.class, maNhanVien);
+            KeHangEntity entity = entityManager.find(KeHangEntity.class, maKeHang);
             if (entity == null) {
                 transaction.rollback();
                 return false;
             }
-            entity.setTrangThaiXoa(true);
-            entity.setTrangThai(false);
+            entityManager.remove(entity);
             transaction.commit();
             return true;
         } catch (RuntimeException exception) {
@@ -132,6 +127,26 @@ public class JpaNhanVienManagementRepository implements NhanVienManagementReposi
                 transaction.rollback();
             }
             throw exception;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<String> findThuocNamesByKeHang(String maKeHang) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        try {
+            return entityManager.createNativeQuery(
+                            """
+                            SELECT TenThuoc
+                            FROM Thuoc_SanPham
+                            WHERE ViTri = :maKeHang AND TrangThaiXoa = 0
+                            ORDER BY TenThuoc
+                            """
+                    )
+                    .setParameter("maKeHang", maKeHang)
+                    .getResultList();
         } finally {
             entityManager.close();
         }

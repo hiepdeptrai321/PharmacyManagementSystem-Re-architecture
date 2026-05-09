@@ -30,12 +30,12 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
             VALUES (?, ?, ?, ?, ?, ?)
             """;
     private static final String SELECT_HE_SO_QUY_DOI_SQL = """
-            SELECT HeSoQuyDoi
+            SELECT MaDVT, HeSoQuyDoi, DonViCoBan
             FROM ChiTietDonViTinh
             WHERE MaThuoc = ? AND MaDVT = ?
             """;
     private static final String SELECT_LOT_SQL = """
-            SELECT MaLH, SoLuongTon
+            SELECT MaLH, SoLuongTon, SoLuongDat, SoLuongGiu, HSD
             FROM Thuoc_SP_TheoLo
             WHERE MaThuoc = ?
             ORDER BY COALESCE(HSD, DATE('9999-12-31')) ASC, MaLH ASC
@@ -43,8 +43,11 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
             """;
     private static final String UPDATE_LOT_STOCK_SQL = """
             UPDATE Thuoc_SP_TheoLo
-            SET SoLuongTon = SoLuongTon - ?
-            WHERE MaLH = ? AND SoLuongTon >= ?
+            SET SoLuongTon = SoLuongTon - GREATEST(? - ?, 0),
+                SoLuongGiu = SoLuongGiu - ?
+            WHERE MaLH = ?
+              AND SoLuongTon >= GREATEST(? - ?, 0)
+              AND SoLuongGiu >= ?
             """;
     private static final String UPDATE_PHIEU_DAT_HANG_STATUS_SQL = """
             UPDATE PhieuDatHang
@@ -116,8 +119,9 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
                 statement.setString(3, isBlank(request.getMaKhachHang()) ? null : request.getMaKhachHang().trim());
                 LocalDateTime ngayLap = request.getNgayLap() == null ? LocalDateTime.now() : request.getNgayLap();
                 statement.setTimestamp(4, Timestamp.valueOf(ngayLap));
-                statement.setString(5, request.getLoaiHoaDon());
-                statement.setString(6, isBlank(request.getMaDonThuoc()) ? null : request.getMaDonThuoc().trim());
+                statement.setBoolean(5, true);
+                statement.setString(6, request.getLoaiHoaDon());
+                statement.setString(7, isBlank(request.getMaDonThuoc()) ? null : request.getMaDonThuoc().trim());
                 statement.executeUpdate();
             }
         } catch (Exception exception) {
@@ -213,6 +217,8 @@ public class JdbcHoaDonRepository extends AbstractJdbcRepository implements HoaD
                 statement.setInt(3, reservedGiam);
                 statement.setString(4, maLo);
                 statement.setInt(5, soLuongTonGiam);
+                statement.setInt(6, reservedGiam);
+                statement.setInt(7, reservedGiam);
                 return statement.executeUpdate() > 0;
             }
         } catch (Exception exception) {

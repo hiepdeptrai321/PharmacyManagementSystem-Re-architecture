@@ -1,5 +1,6 @@
 package com.example.pharmacy.client.view.CN_TimKiem.TKHoaDon;
 
+import com.example.pharmacy.client.TienIch.TuyChinhAlert;
 import com.example.pharmacy.client.controller.CN_TimKiem.TKHoaDon.ChiTietHoaDon_Ctrl;
 import javafx.application.Application;
 import javafx.geometry.Orientation;
@@ -18,11 +19,12 @@ public class ChiTietHoaDon_GUI {
         AnchorPane root = buildUI(ctrl);
         Scene scene = new Scene(root, 1646, 895);
         try {
-            String css = "/com/example/pharmacy/client/css/ChiTietHoaDonDto.css";
+            String css = "/com/example/pharmacy/client/css/ChiTietHoaDon.css";
             if (getClass().getResource(css) != null)
                 scene.getStylesheets().add(getClass().getResource(css).toExternalForm());
         } catch (Exception ignored) {
         }
+        TuyChinhAlert.setAppIcon(stage);
         stage.setScene(scene);
         stage.setTitle("Chi Tiết Hóa Đơn");
         stage.show();

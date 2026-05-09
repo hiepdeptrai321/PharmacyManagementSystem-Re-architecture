@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.StringJoiner;
 
 public class JdbcPromotionRepository extends AbstractJdbcRepository implements PromotionRepository {
-    private static final String SELECT_KHUYEN_MAI_SQL = """
+    private static final String BASE_PROMOTION_SELECT_SQL = """
             SELECT km.MaKM,
                    km.TenKM,
                    km.GiaTriKM,
@@ -36,19 +36,22 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
                    km.NgayKetThuc,
                    km.MoTa,
                    km.NgayTao,
-                   km.MaLoai,
-                   lkm.TenLoai
+                   lkm.MaLoai AS LKM_MaLoai,
+                   lkm.TenLoai AS LKM_TenLoai,
+                   lkm.MoTa AS LKM_MoTa
             FROM KhuyenMai km
             JOIN LoaiKhuyenMai lkm ON lkm.MaLoai = km.MaLoai
+            """;
+    private static final String PROMOTION_ORDER_BY_SQL = """
             ORDER BY km.NgayBatDau DESC, km.MaKM DESC
             """;
-    private static final String SELECT_PROMOTION_BY_ID_SQL = SELECT_KHUYEN_MAI_SQL + """
+    private static final String SELECT_KHUYEN_MAI_SQL = BASE_PROMOTION_SELECT_SQL + PROMOTION_ORDER_BY_SQL;
+    private static final String SELECT_PROMOTION_BY_ID_SQL = BASE_PROMOTION_SELECT_SQL + """
             WHERE km.MaKM = ?
-            """;
-    private static final String SEARCH_PROMOTIONS_SQL = SELECT_KHUYEN_MAI_SQL + """
+            """ + PROMOTION_ORDER_BY_SQL;
+    private static final String SEARCH_PROMOTIONS_SQL = BASE_PROMOTION_SELECT_SQL + """
             WHERE LOWER(km.TenKM) LIKE ? OR LOWER(km.MaKM) LIKE ?
-            ORDER BY km.NgayBatDau DESC, km.MaKM DESC
-            """;
+            """ + PROMOTION_ORDER_BY_SQL;
     private static final String SELECT_ALL_LOAI_KHUYEN_MAI_SQL = """
             SELECT MaLoai, TenLoai, MoTa
             FROM LoaiKhuyenMai
@@ -150,14 +153,12 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
             DELETE FROM Thuoc_SP_TangKem
             WHERE MaKM = ?
             """;
-    private static final String SELECT_ACTIVE_PROMOTIONS_SQL = SELECT_KHUYEN_MAI_SQL + """
+    private static final String SELECT_ACTIVE_PROMOTIONS_SQL = BASE_PROMOTION_SELECT_SQL + """
             WHERE km.NgayBatDau <= ? AND km.NgayKetThuc >= ?
-            ORDER BY km.NgayBatDau DESC, km.MaKM DESC
-            """;
-    private static final String SELECT_ACTIVE_INVOICE_PROMOTIONS_SQL = SELECT_KHUYEN_MAI_SQL + """
+            """ + PROMOTION_ORDER_BY_SQL;
+    private static final String SELECT_ACTIVE_INVOICE_PROMOTIONS_SQL = BASE_PROMOTION_SELECT_SQL + """
             WHERE km.NgayBatDau <= ? AND km.NgayKetThuc >= ? AND km.MaLoai IN ('LKM004', 'LKM005')
-            ORDER BY km.NgayBatDau DESC, km.MaKM DESC
-            """;
+            """ + PROMOTION_ORDER_BY_SQL;
 
     public JdbcPromotionRepository(JdbcConnectionProvider connectionProvider) {
         super(connectionProvider);
@@ -169,7 +170,7 @@ public class JdbcPromotionRepository extends AbstractJdbcRepository implements P
         List<KhuyenMaiDto> promotions = new ArrayList<>();
         try {
             connection = getConnection();
-            try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_PROMOTIONS_SQL);
+            try (PreparedStatement statement = connection.prepareStatement(SELECT_KHUYEN_MAI_SQL);
                  ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     promotions.add(mapPromotion(resultSet));

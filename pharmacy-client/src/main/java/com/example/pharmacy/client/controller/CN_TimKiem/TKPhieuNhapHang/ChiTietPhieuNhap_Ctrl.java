@@ -1,5 +1,6 @@
 package com.example.pharmacy.client.controller.CN_TimKiem.TKPhieuNhapHang;
 
+import com.example.pharmacy.client.TienIch.TuyChinhAlert;
 import com.example.pharmacy.common.model.ChiTietPhieuNhapDto;
 import com.example.pharmacy.common.model.PhieuNhapDto;
 import com.example.pharmacy.client.service.PhieuNhapService;
@@ -36,11 +37,7 @@ public class ChiTietPhieuNhap_Ctrl {
     private final PhieuNhapService phieuNhapService = new PhieuNhapService();
 
     public void initialize() {
-        Platform.runLater(() -> {
-            Stage dialog = (Stage) txtGhiChu.getScene().getWindow();
-            dialog.getIcons().add(new javafx.scene.image.Image(
-                    getClass().getResourceAsStream("/com/example/pharmacy/client/img/logoNguyenBan.png")));
-        });
+        Platform.runLater(this::applyDialogIconSafely);
     }
 
     public void load(PhieuNhapDto temp) {
@@ -66,5 +63,14 @@ public class ChiTietPhieuNhap_Ctrl {
 
     public void btnThoat(MouseEvent mouseEvent) {
         ((Stage) txtGhiChu.getScene().getWindow()).close();
+    }
+
+    private void applyDialogIconSafely() {
+        if (txtGhiChu == null || txtGhiChu.getScene() == null || txtGhiChu.getScene().getWindow() == null) {
+            return;
+        }
+        if (txtGhiChu.getScene().getWindow() instanceof Stage dialog) {
+            TuyChinhAlert.setAppIcon(dialog);
+        }
     }
 }

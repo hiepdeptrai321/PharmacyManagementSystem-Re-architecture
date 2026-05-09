@@ -230,7 +230,7 @@ public class ThongKeBanHang_GUI {
         Scene scene = new Scene(root);
 
         // --- SỬA LẠI: Gắn CSS trực tiếp vào ROOT (Quan trọng nhất) ---
-        String cssPath = "/com/example/pharmacy/client/css/ThongKeBanHangDto.css";
+        String cssPath = "/com/example/pharmacy/client/css/ThongKeBanHang.css";
         java.net.URL cssUrl = getClass().getResource(cssPath);
 
         if (cssUrl != null) {
@@ -243,7 +243,7 @@ public class ThongKeBanHang_GUI {
             System.out.println("Đã gắn CSS vào Root Pane thành công!");
         } else {
             // Thử tìm đường dẫn ngắn nếu đường dẫn dài lỗi
-            var shortUrl = getClass().getResource("/css/ThongKeBanHangDto.css");
+            var shortUrl = getClass().getResource("/css/ThongKeBanHang.css");
             if(shortUrl != null) {
                 root.getStylesheets().add(shortUrl.toExternalForm());
             } else {

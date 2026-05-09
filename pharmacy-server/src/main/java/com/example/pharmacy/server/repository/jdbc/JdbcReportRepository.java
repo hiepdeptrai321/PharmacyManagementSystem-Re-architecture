@@ -283,122 +283,6 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
                 OR COALESCE(SUM(CASE WHEN ds.Ngay BETWEEN ? AND ? THEN ds.TongXuat ELSE 0 END), 0) <> 0
             ORDER BY p.TenThuoc
             """;
-    private static final String THONG_KE_BAN_HANG_SQL = """
-            SELECT hd.NgayLap AS ngay,
-                   SUM(cthd.SoLuong) AS soLuong,
-                   SUM((cthd.DonGia - cthd.GiamGia) * cthd.SoLuong) AS doanhThu
-            FROM HoaDon hd
-            JOIN ChiTietHoaDon cthd ON cthd.MaHD = hd.MaHD
-            WHERE hd.NgayLap BETWEEN ? AND ?
-            GROUP BY ngay
-            ORDER BY ngay
-            """;
-    private static final String THONG_KE_DOANH_THU_SQL = """
-            SELECT hd.NgayLap AS ngay,
-                   SUM((cthd.DonGia - cthd.GiamGia) * cthd.SoLuong) AS doanhThu
-            FROM HoaDon hd
-            JOIN ChiTietHoaDon cthd ON cthd.MaHD = hd.MaHD
-            WHERE hd.NgayLap BETWEEN ? AND ?
-            GROUP BY ngay
-            ORDER BY ngay
-            """;
-    private static final String THONG_KE_TON_KHO_SQL = """
-            SELECT lo.MaLH,
-                   lo.MaThuoc,
-                   ts.TenThuoc,
-                   lo.SoLuongTon,
-                   lo.HSD
-            FROM Thuoc_SP_TheoLo lo
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
-            ORDER BY lo.HSD ASC
-            """;
-    private static final String THONG_KE_TOP_BAN_CHAY_SQL = """
-            SELECT lo.MaThuoc,
-                   ts.TenThuoc,
-                   SUM(cthd.SoLuong) AS soLuong
-            FROM ChiTietHoaDon cthd
-            JOIN Thuoc_SP_TheoLo lo ON lo.MaLH = cthd.MaLH
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
-            WHERE cthd.MaHD IN (
-                SELECT hd.MaHD
-                FROM HoaDon hd
-                WHERE hd.NgayLap BETWEEN ? AND ?
-            )
-            GROUP BY lo.MaThuoc, ts.TenThuoc
-            ORDER BY soLuong DESC
-            LIMIT ?
-            """;
-    private static final String THONG_KE_TOP_DOANH_THU_SQL = """
-            SELECT lo.MaThuoc,
-                   ts.TenThuoc,
-                   SUM((cthd.DonGia - cthd.GiamGia) * cthd.SoLuong) AS doanhThu
-            FROM ChiTietHoaDon cthd
-            JOIN Thuoc_SP_TheoLo lo ON lo.MaLH = cthd.MaLH
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
-            WHERE cthd.MaHD IN (
-                SELECT hd.MaHD
-                FROM HoaDon hd
-                WHERE hd.NgayLap BETWEEN ? AND ?
-            )
-            GROUP BY lo.MaThuoc, ts.TenThuoc
-            ORDER BY doanhThu DESC
-            LIMIT ?
-            """;
-    private static final String HOADON_BY_RANGE_SQL = """
-            SELECT h.MaHD,
-                   h.NgayLap,
-                   h.MaKH,
-                   h.MaNV,
-                   h.TrangThai,
-                   h.LoaiHoaDon,
-                   COALESCE(SUM(ct.SoLuong), 0) AS tongSanPham
-            FROM HoaDon h
-            LEFT JOIN ChiTietHoaDon ct ON h.MaHD = ct.MaHD
-            WHERE h.NgayLap BETWEEN ? AND ?
-            GROUP BY h.MaHD
-            ORDER BY h.NgayLap DESC
-            """;
-    private static final String THONG_KE_XNT_SQL = """
-            SELECT cthd.MaHD,
-                   cthd.MaLH,
-                   cthd.SoLuong,
-                   cthd.DonGia,
-                   cthd.GiamGia
-            FROM ChiTietHoaDon cthd
-            WHERE cthd.MaHD BETWEEN ? AND ?
-            """;
-    private static final String THUOC_HET_HAN_SQL = """
-            SELECT lo.MaLH,
-                   lo.MaThuoc,
-                   ts.TenThuoc,
-                   lo.SoLuongTon,
-                   lo.HSD
-            FROM Thuoc_SP_TheoLo lo
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
-            WHERE lo.HSD IS NOT NULL AND lo.HSD <= ?
-            ORDER BY lo.HSD ASC
-            """;
-    private static final String THONG_KE_DOI_TRA_SQL = """
-            SELECT ctpd.MaThuoc,
-                   ts.TenThuoc,
-                   SUM(ctpd.SoLuong) AS soLuongDoi
-            FROM ChiTietPhieuDoiHang ctpd
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = ctpd.MaThuoc
-            JOIN PhieuDoiHang pd ON pd.MaPD = ctpd.MaPD
-            WHERE pd.NgayLap BETWEEN ? AND ?
-            GROUP BY ctpd.MaThuoc, ts.TenThuoc
-            """;
-    private static final String THONG_KE_TRA_HANG_SQL = """
-            SELECT ctpt.MaThuoc,
-                   ts.TenThuoc,
-                   SUM(ctpt.SoLuong) AS soLuongTra
-            FROM ChiTietPhieuTraHang ctpt
-            JOIN Thuoc_SanPham ts ON ts.MaThuoc = ctpt.MaThuoc
-            JOIN PhieuTraHang pt ON pt.MaPT = ctpt.MaPT
-            WHERE pt.NgayLap BETWEEN ? AND ?
-            GROUP BY ctpt.MaThuoc, ts.TenThuoc
-            """;
-
     public JdbcReportRepository(JdbcConnectionProvider connectionProvider) {
         super(connectionProvider);
     }
@@ -645,9 +529,9 @@ public class JdbcReportRepository extends AbstractJdbcRepository implements Repo
 
     private String buildThongKeBanHangSql(ReportBucket bucket) {
         BucketExpression expression = switch (bucket) {
-            case HOUR -> new BucketExpression("DATE_FORMAT(%s, '%H:00')", "HOUR(%s)");
-            case MONTH -> new BucketExpression("DATE_FORMAT(%s, '%m/%Y')", "MONTH(%s)");
-            default -> new BucketExpression("DATE_FORMAT(%s, '%d/%m')", "DATE(%s)");
+            case HOUR -> new BucketExpression("DATE_FORMAT(%s, '%%H:00')", "HOUR(%s)");
+            case MONTH -> new BucketExpression("DATE_FORMAT(%s, '%%m/%%Y')", "MONTH(%s)");
+            default -> new BucketExpression("DATE_FORMAT(%s, '%%d/%%m')", "DATE(%s)");
         };
 
         String salesLabel = expression.labelExpression("hd.NgayLap");

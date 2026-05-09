@@ -1,7 +1,8 @@
-package com.example.pharmacy.server.repository;
+package com.example.pharmacy.server.repository.jpa;
 
 import com.example.pharmacy.server.config.JpaUtil;
-import com.example.pharmacy.server.entity.NhaCungCapEntity;
+import com.example.pharmacy.server.entity.LuongNhanVienEntity;
+import com.example.pharmacy.server.repository.LuongNhanVienRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -9,29 +10,31 @@ import jakarta.persistence.EntityTransaction;
 import java.util.List;
 import java.util.Optional;
 
-public class JpaNhaCungCapRepository implements NhaCungCapRepository {
+public class JpaLuongNhanVienRepository implements LuongNhanVienRepository {
     private final EntityManagerFactory entityManagerFactory;
 
-    public JpaNhaCungCapRepository() {
+    public JpaLuongNhanVienRepository() {
         this(JpaUtil.getEntityManagerFactory());
     }
 
-    public JpaNhaCungCapRepository(EntityManagerFactory entityManagerFactory) {
+    public JpaLuongNhanVienRepository(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
     @Override
-    public List<NhaCungCapEntity> findAll() {
+    public List<LuongNhanVienEntity> findByMaNhanVien(String maNhanVien) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             return entityManager.createQuery(
                             """
-                            SELECT ncc
-                            FROM NhaCungCapEntity ncc
-                            ORDER BY ncc.maNCC
+                            SELECT lnv
+                            FROM LuongNhanVienEntity lnv
+                            WHERE lnv.maNV = :maNhanVien
+                            ORDER BY lnv.tuNgay DESC, lnv.maLNV DESC
                             """,
-                            NhaCungCapEntity.class
+                            LuongNhanVienEntity.class
                     )
+                    .setParameter("maNhanVien", maNhanVien)
                     .getResultList();
         } finally {
             entityManager.close();
@@ -39,17 +42,17 @@ public class JpaNhaCungCapRepository implements NhaCungCapRepository {
     }
 
     @Override
-    public Optional<NhaCungCapEntity> findById(String maNhaCungCap) {
+    public Optional<LuongNhanVienEntity> findById(String maLuongNhanVien) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            return Optional.ofNullable(entityManager.find(NhaCungCapEntity.class, maNhaCungCap));
+            return Optional.ofNullable(entityManager.find(LuongNhanVienEntity.class, maLuongNhanVien));
         } finally {
             entityManager.close();
         }
     }
 
     @Override
-    public NhaCungCapEntity save(NhaCungCapEntity entity) {
+    public LuongNhanVienEntity save(LuongNhanVienEntity entity) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
@@ -68,38 +71,14 @@ public class JpaNhaCungCapRepository implements NhaCungCapRepository {
     }
 
     @Override
-    public NhaCungCapEntity update(NhaCungCapEntity entity) {
+    public LuongNhanVienEntity update(LuongNhanVienEntity entity) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            NhaCungCapEntity merged = entityManager.merge(entity);
+            LuongNhanVienEntity merged = entityManager.merge(entity);
             transaction.commit();
             return merged;
-        } catch (RuntimeException exception) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw exception;
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
-    public boolean deleteById(String maNhaCungCap) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            NhaCungCapEntity entity = entityManager.find(NhaCungCapEntity.class, maNhaCungCap);
-            if (entity == null) {
-                transaction.rollback();
-                return false;
-            }
-            entityManager.remove(entity);
-            transaction.commit();
-            return true;
         } catch (RuntimeException exception) {
             if (transaction.isActive()) {
                 transaction.rollback();
