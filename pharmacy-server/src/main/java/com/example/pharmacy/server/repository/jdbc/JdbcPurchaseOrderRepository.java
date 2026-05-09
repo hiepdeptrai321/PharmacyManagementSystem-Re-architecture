@@ -41,7 +41,9 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
             SELECT pn.MaPN, pn.NgayNhap, pn.TrangThai, pn.GhiChu,
                    ncc.MaNCC, ncc.TenNCC,
                    nv.MaNV, nv.TenNV,
-                   COUNT(ct.MaPN) AS soDong
+                   COUNT(ct.MaPN) AS soDong,
+                   COALESCE(SUM((ct.GiaNhap * ct.SoLuong) - ((ct.GiaNhap * ct.SoLuong) * (ct.ChietKhau / 100.0))
+                                + (((ct.GiaNhap * ct.SoLuong) - ((ct.GiaNhap * ct.SoLuong) * (ct.ChietKhau / 100.0))) * (ct.Thue / 100.0))), 0) AS TongTien
             FROM PhieuNhap pn
             JOIN NhaCungCap ncc ON ncc.MaNCC = pn.MaNCC
             JOIN NhanVien nv ON nv.MaNV = pn.MaNV
@@ -53,7 +55,9 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
             SELECT pn.MaPN, pn.NgayNhap, pn.TrangThai, pn.GhiChu,
                    ncc.MaNCC, ncc.TenNCC,
                    nv.MaNV, nv.TenNV,
-                   COUNT(ct.MaPN) AS soDong
+                   COUNT(ct.MaPN) AS soDong,
+                   COALESCE(SUM((ct.GiaNhap * ct.SoLuong) - ((ct.GiaNhap * ct.SoLuong) * (ct.ChietKhau / 100.0))
+                                + (((ct.GiaNhap * ct.SoLuong) - ((ct.GiaNhap * ct.SoLuong) * (ct.ChietKhau / 100.0))) * (ct.Thue / 100.0))), 0) AS TongTien
             FROM PhieuNhap pn
             JOIN NhaCungCap ncc ON ncc.MaNCC = pn.MaNCC
             JOIN NhanVien nv ON nv.MaNV = pn.MaNV
@@ -93,9 +97,10 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
             try (PreparedStatement statement = connection.prepareStatement(INSERT_PHIEU_NHAP_SQL)) {
                 statement.setString(1, maPhieuNhap);
                 statement.setDate(2, Date.valueOf(request.getNgayNhap()));
-                statement.setString(3, request.getGhiChu());
-                statement.setString(4, request.getMaNhaCungCap());
-                statement.setString(5, employeeId);
+                statement.setBoolean(3, true);
+                statement.setString(4, request.getGhiChu());
+                statement.setString(5, request.getMaNhaCungCap());
+                statement.setString(6, employeeId);
                 statement.executeUpdate();
             }
         } catch (Exception exception) {
@@ -138,8 +143,10 @@ public class JdbcPurchaseOrderRepository extends AbstractJdbcRepository implemen
                 statement.setString(2, item.getMaThuoc());
                 statement.setString(3, maLo);
                 statement.setInt(4, item.getSoLuong());
-                statement.setDate(5, item.getNsx() == null ? null : Date.valueOf(item.getNsx()));
-                statement.setDate(6, item.getHsd() == null ? null : Date.valueOf(item.getHsd()));
+                statement.setInt(5, 0);
+                statement.setInt(6, 0);
+                statement.setDate(7, item.getNsx() == null ? null : Date.valueOf(item.getNsx()));
+                statement.setDate(8, item.getHsd() == null ? null : Date.valueOf(item.getHsd()));
                 statement.executeUpdate();
             }
         } catch (Exception exception) {

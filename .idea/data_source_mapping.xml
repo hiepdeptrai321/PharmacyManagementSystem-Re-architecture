@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="DataSourcePerFileMappings">
-    <file url="file://$PROJECT_DIR$/pharmacy-server/src/main/java/com/example/pharmacy/server/repository/JdbcNhanVienRepository.java" value="13cbd9ff-c994-4e2b-bfd6-496fbc010e1b" />
-  </component>
-</project>

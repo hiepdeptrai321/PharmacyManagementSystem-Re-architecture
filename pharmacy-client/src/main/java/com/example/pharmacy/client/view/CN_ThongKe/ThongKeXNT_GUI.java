@@ -159,7 +159,7 @@ public class ThongKeXNT_GUI {
 
         // --- Tạo Scene ---
         Scene scene = new Scene(root);
-        String cssPath = "/com/example/pharmacy/client/css/ThongKeBanHangDto.css";
+        String cssPath = "/com/example/pharmacy/client/css/ThongKeBanHang.css";
         java.net.URL cssUrl = getClass().getResource(cssPath);
         if (cssUrl != null) root.getStylesheets().add(cssUrl.toExternalForm());
 

@@ -79,25 +79,34 @@ public class LapHoaDon_GUI {
 
         TableColumn<ChiTietHoaDonDto, String> colSTT = new TableColumn<>("STT");
         colSTT.setPrefWidth(50);
+        colSTT.setStyle("-fx-alignment: CENTER;");
         TableColumn<ChiTietHoaDonDto, String> colTenSP = new TableColumn<>("Tên sản phẩm");
         colTenSP.setPrefWidth(324.6);
+        colTenSP.setStyle("-fx-alignment: CENTER;");
         TableColumn<ChiTietHoaDonDto, Boolean> colKeDon = new TableColumn<>("Kê đơn");
         colKeDon.setPrefWidth(80);
+        colKeDon.setStyle("-fx-alignment: CENTER;");
         TableColumn<ChiTietHoaDonDto, String> colDonGia = new TableColumn<>("Đơn giá");
         colDonGia.setPrefWidth(143.3);
+        colDonGia.setStyle("-fx-alignment: CENTER;");
         TableColumn<ChiTietHoaDonDto, Number> colSL = new TableColumn<>("Số lượng");
         colSL.setPrefWidth(131);
+        colSL.setStyle("-fx-alignment: CENTER;");
         TableColumn<ChiTietHoaDonDto, String> colDonVi = new TableColumn<>("Đơn vị");
         colDonVi.setPrefWidth(100);
+        colDonVi.setStyle("-fx-alignment: CENTER;");
 
         TableColumn<ChiTietHoaDonDto, String> colChietKhau = new TableColumn<>("Giảm giá");
         colChietKhau.setPrefWidth(123);
+        colChietKhau.setStyle("-fx-alignment: CENTER;");
 
         TableColumn<ChiTietHoaDonDto, String> colThanhTien = new TableColumn<>("Thành tiền");
         colThanhTien.setPrefWidth(174);
+        colThanhTien.setStyle("-fx-alignment: CENTER;");
 
         TableColumn<ChiTietHoaDonDto, String> colBo = new TableColumn<>("Bỏ");
         colBo.setPrefWidth(55);
+        colBo.setStyle("-fx-alignment: CENTER;");
         tblChiTietHD.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         tblChiTietHD.getColumns().addAll(colSTT, colTenSP, colKeDon, colDonGia, colSL, colDonVi, colChietKhau, colThanhTien, colBo);

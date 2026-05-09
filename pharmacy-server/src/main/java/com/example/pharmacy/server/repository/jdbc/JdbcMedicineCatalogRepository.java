@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implements MedicineCatalogRepository {
-    private static final String SELECT_MEDICINE_SQL = """
+    private static final String BASE_MEDICINE_SELECT_SQL = """
             SELECT ts.MaThuoc,
                    ts.TenThuoc,
                    ts.HamLuong,
@@ -44,19 +44,26 @@ public class JdbcMedicineCatalogRepository extends AbstractJdbcRepository implem
                    ts.ViTri,
                    ts.TrangThaiXoa,
                    ts.ETC,
-                   ndl.TenNDL,
-                   lh.TenLH,
-                   kh.TenKe
+                   ndl.MaNDL AS NDL_MaNDL,
+                   ndl.TenNDL AS NDL_TenNDL,
+                   ndl.MoTa AS NDL_MoTa,
+                   lh.MaLoaiHang AS LH_MaLoaiHang,
+                   lh.TenLH AS LH_TenLH,
+                   lh.MoTa AS LH_MoTa,
+                   kh.MaKe AS KE_MaKe,
+                   kh.TenKe AS KE_TenKe,
+                   kh.MoTa AS KE_MoTa
             FROM Thuoc_SanPham ts
             LEFT JOIN NhomDuocLy ndl ON ndl.MaNDL = ts.MaNDL
             LEFT JOIN LoaiHang lh ON lh.MaLoaiHang = ts.MaLoaiHang
             LEFT JOIN KeHang kh ON kh.MaKe = ts.ViTri
-            ORDER BY ts.TenThuoc
             """;
-    private static final String SELECT_ALL_MEDICINES_SQL = SELECT_MEDICINE_SQL + """
-            WHERE ts.TrangThaiXoa = 0
+    private static final String MEDICINE_ORDER_BY_SQL = """
             ORDER BY ts.TenThuoc ASC, ts.MaThuoc ASC
             """;
+    private static final String SELECT_ALL_MEDICINES_SQL = BASE_MEDICINE_SELECT_SQL + """
+            WHERE ts.TrangThaiXoa = 0
+            """ + MEDICINE_ORDER_BY_SQL;
     private static final String SELECT_ALL_LOAI_HANG_SQL = """
             SELECT MaLoaiHang, TenLH, MoTa
             FROM LoaiHang

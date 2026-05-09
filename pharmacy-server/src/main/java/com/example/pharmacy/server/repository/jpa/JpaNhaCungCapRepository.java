@@ -1,7 +1,8 @@
-package com.example.pharmacy.server.repository;
+package com.example.pharmacy.server.repository.jpa;
 
 import com.example.pharmacy.server.config.JpaUtil;
-import com.example.pharmacy.server.entity.NhomDuocLyEntity;
+import com.example.pharmacy.server.entity.NhaCungCapEntity;
+import com.example.pharmacy.server.repository.NhaCungCapRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -9,28 +10,28 @@ import jakarta.persistence.EntityTransaction;
 import java.util.List;
 import java.util.Optional;
 
-public class JpaNhomDuocLyRepository implements NhomDuocLyRepository {
+public class JpaNhaCungCapRepository implements NhaCungCapRepository {
     private final EntityManagerFactory entityManagerFactory;
 
-    public JpaNhomDuocLyRepository() {
+    public JpaNhaCungCapRepository() {
         this(JpaUtil.getEntityManagerFactory());
     }
 
-    public JpaNhomDuocLyRepository(EntityManagerFactory entityManagerFactory) {
+    public JpaNhaCungCapRepository(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
     @Override
-    public List<NhomDuocLyEntity> findAll() {
+    public List<NhaCungCapEntity> findAll() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             return entityManager.createQuery(
                             """
-                            SELECT ndl
-                            FROM NhomDuocLyEntity ndl
-                            ORDER BY ndl.maNDL
+                            SELECT ncc
+                            FROM NhaCungCapEntity ncc
+                            ORDER BY ncc.maNCC
                             """,
-                            NhomDuocLyEntity.class
+                            NhaCungCapEntity.class
                     )
                     .getResultList();
         } finally {
@@ -39,17 +40,17 @@ public class JpaNhomDuocLyRepository implements NhomDuocLyRepository {
     }
 
     @Override
-    public Optional<NhomDuocLyEntity> findById(String maNhomDuocLy) {
+    public Optional<NhaCungCapEntity> findById(String maNhaCungCap) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            return Optional.ofNullable(entityManager.find(NhomDuocLyEntity.class, maNhomDuocLy));
+            return Optional.ofNullable(entityManager.find(NhaCungCapEntity.class, maNhaCungCap));
         } finally {
             entityManager.close();
         }
     }
 
     @Override
-    public NhomDuocLyEntity save(NhomDuocLyEntity entity) {
+    public NhaCungCapEntity save(NhaCungCapEntity entity) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
@@ -68,12 +69,12 @@ public class JpaNhomDuocLyRepository implements NhomDuocLyRepository {
     }
 
     @Override
-    public NhomDuocLyEntity update(NhomDuocLyEntity entity) {
+    public NhaCungCapEntity update(NhaCungCapEntity entity) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            NhomDuocLyEntity merged = entityManager.merge(entity);
+            NhaCungCapEntity merged = entityManager.merge(entity);
             transaction.commit();
             return merged;
         } catch (RuntimeException exception) {
@@ -87,12 +88,12 @@ public class JpaNhomDuocLyRepository implements NhomDuocLyRepository {
     }
 
     @Override
-    public boolean deleteById(String maNhomDuocLy) {
+    public boolean deleteById(String maNhaCungCap) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            NhomDuocLyEntity entity = entityManager.find(NhomDuocLyEntity.class, maNhomDuocLy);
+            NhaCungCapEntity entity = entityManager.find(NhaCungCapEntity.class, maNhaCungCap);
             if (entity == null) {
                 transaction.rollback();
                 return false;
@@ -105,26 +106,6 @@ public class JpaNhomDuocLyRepository implements NhomDuocLyRepository {
                 transaction.rollback();
             }
             throw exception;
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<String> findThuocNamesByNhomDuocLy(String maNhomDuocLy) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            return entityManager.createNativeQuery(
-                            """
-                            SELECT TenThuoc
-                            FROM Thuoc_SanPham
-                            WHERE MaNDL = :maNhomDuocLy AND TrangThaiXoa = 0
-                            ORDER BY TenThuoc
-                            """
-                    )
-                    .setParameter("maNhomDuocLy", maNhomDuocLy)
-                    .getResultList();
         } finally {
             entityManager.close();
         }

@@ -1,7 +1,8 @@
-package com.example.pharmacy.server.repository;
+package com.example.pharmacy.server.repository.jpa;
 
 import com.example.pharmacy.server.config.JpaUtil;
-import com.example.pharmacy.server.entity.LuongNhanVienEntity;
+import com.example.pharmacy.server.entity.KhachHangEntity;
+import com.example.pharmacy.server.repository.KhachHangRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -9,31 +10,30 @@ import jakarta.persistence.EntityTransaction;
 import java.util.List;
 import java.util.Optional;
 
-public class JpaLuongNhanVienRepository implements LuongNhanVienRepository {
+public class JpaKhachHangRepository implements KhachHangRepository {
     private final EntityManagerFactory entityManagerFactory;
 
-    public JpaLuongNhanVienRepository() {
+    public JpaKhachHangRepository() {
         this(JpaUtil.getEntityManagerFactory());
     }
 
-    public JpaLuongNhanVienRepository(EntityManagerFactory entityManagerFactory) {
+    public JpaKhachHangRepository(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
     @Override
-    public List<LuongNhanVienEntity> findByMaNhanVien(String maNhanVien) {
+    public List<KhachHangEntity> findAllActive() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             return entityManager.createQuery(
                             """
-                            SELECT lnv
-                            FROM LuongNhanVienEntity lnv
-                            WHERE lnv.maNV = :maNhanVien
-                            ORDER BY lnv.tuNgay DESC, lnv.maLNV DESC
+                            SELECT kh
+                            FROM KhachHangEntity kh
+                            WHERE kh.trangThai = true
+                            ORDER BY kh.maKH
                             """,
-                            LuongNhanVienEntity.class
+                            KhachHangEntity.class
                     )
-                    .setParameter("maNhanVien", maNhanVien)
                     .getResultList();
         } finally {
             entityManager.close();
@@ -41,17 +41,17 @@ public class JpaLuongNhanVienRepository implements LuongNhanVienRepository {
     }
 
     @Override
-    public Optional<LuongNhanVienEntity> findById(String maLuongNhanVien) {
+    public Optional<KhachHangEntity> findById(String maKhachHang) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            return Optional.ofNullable(entityManager.find(LuongNhanVienEntity.class, maLuongNhanVien));
+            return Optional.ofNullable(entityManager.find(KhachHangEntity.class, maKhachHang));
         } finally {
             entityManager.close();
         }
     }
 
     @Override
-    public LuongNhanVienEntity save(LuongNhanVienEntity entity) {
+    public KhachHangEntity save(KhachHangEntity entity) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
@@ -70,14 +70,38 @@ public class JpaLuongNhanVienRepository implements LuongNhanVienRepository {
     }
 
     @Override
-    public LuongNhanVienEntity update(LuongNhanVienEntity entity) {
+    public KhachHangEntity update(KhachHangEntity entity) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            LuongNhanVienEntity merged = entityManager.merge(entity);
+            KhachHangEntity merged = entityManager.merge(entity);
             transaction.commit();
             return merged;
+        } catch (RuntimeException exception) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw exception;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public boolean softDelete(String maKhachHang) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            KhachHangEntity entity = entityManager.find(KhachHangEntity.class, maKhachHang);
+            if (entity == null) {
+                transaction.rollback();
+                return false;
+            }
+            entity.setTrangThai(false);
+            transaction.commit();
+            return true;
         } catch (RuntimeException exception) {
             if (transaction.isActive()) {
                 transaction.rollback();

@@ -1,7 +1,8 @@
-package com.example.pharmacy.server.repository;
+package com.example.pharmacy.server.repository.jpa;
 
 import com.example.pharmacy.server.config.JpaUtil;
 import com.example.pharmacy.server.entity.NhanVienEntity;
+import com.example.pharmacy.server.repository.NhanVienRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 

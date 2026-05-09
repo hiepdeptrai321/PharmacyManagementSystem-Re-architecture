@@ -31,8 +31,8 @@ public class JdbcTonKhoRepository extends AbstractJdbcRepository implements TonK
                    kh.TenKe,
                    lh.MaLoaiHang,
                    lh.TenLH,
-                   ctdvt.MaDVT,
-                   dvt.TenDonViTinh
+                   ctdvt.MaDVT AS BaseMaDVT,
+                   dvt.TenDonViTinh AS BaseTenDVT
             FROM Thuoc_SP_TheoLo lo
             JOIN Thuoc_SanPham ts ON ts.MaThuoc = lo.MaThuoc
             LEFT JOIN KeHang kh ON kh.MaKe = ts.ViTri

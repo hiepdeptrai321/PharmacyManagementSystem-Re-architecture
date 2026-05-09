@@ -1,7 +1,8 @@
-package com.example.pharmacy.server.repository;
+package com.example.pharmacy.server.repository.jpa;
 
 import com.example.pharmacy.server.config.JpaUtil;
-import com.example.pharmacy.server.entity.KeHangEntity;
+import com.example.pharmacy.server.entity.NhomDuocLyEntity;
+import com.example.pharmacy.server.repository.NhomDuocLyRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -9,28 +10,28 @@ import jakarta.persistence.EntityTransaction;
 import java.util.List;
 import java.util.Optional;
 
-public class JpaKeHangRepository implements KeHangRepository {
+public class JpaNhomDuocLyRepository implements NhomDuocLyRepository {
     private final EntityManagerFactory entityManagerFactory;
 
-    public JpaKeHangRepository() {
+    public JpaNhomDuocLyRepository() {
         this(JpaUtil.getEntityManagerFactory());
     }
 
-    public JpaKeHangRepository(EntityManagerFactory entityManagerFactory) {
+    public JpaNhomDuocLyRepository(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
     @Override
-    public List<KeHangEntity> findAll() {
+    public List<NhomDuocLyEntity> findAll() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             return entityManager.createQuery(
                             """
-                            SELECT kh
-                            FROM KeHangEntity kh
-                            ORDER BY kh.maKe
+                            SELECT ndl
+                            FROM NhomDuocLyEntity ndl
+                            ORDER BY ndl.maNDL
                             """,
-                            KeHangEntity.class
+                            NhomDuocLyEntity.class
                     )
                     .getResultList();
         } finally {
@@ -39,38 +40,17 @@ public class JpaKeHangRepository implements KeHangRepository {
     }
 
     @Override
-    public Optional<KeHangEntity> findById(String maKeHang) {
+    public Optional<NhomDuocLyEntity> findById(String maNhomDuocLy) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            return Optional.ofNullable(entityManager.find(KeHangEntity.class, maKeHang));
+            return Optional.ofNullable(entityManager.find(NhomDuocLyEntity.class, maNhomDuocLy));
         } finally {
             entityManager.close();
         }
     }
 
     @Override
-    public Optional<KeHangEntity> findByTenKe(String tenKe) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            List<KeHangEntity> result = entityManager.createQuery(
-                            """
-                            SELECT kh
-                            FROM KeHangEntity kh
-                            WHERE LOWER(kh.tenKe) = LOWER(:tenKe)
-                            """,
-                            KeHangEntity.class
-                    )
-                    .setParameter("tenKe", tenKe)
-                    .setMaxResults(1)
-                    .getResultList();
-            return result.stream().findFirst();
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
-    public KeHangEntity save(KeHangEntity entity) {
+    public NhomDuocLyEntity save(NhomDuocLyEntity entity) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
@@ -89,12 +69,12 @@ public class JpaKeHangRepository implements KeHangRepository {
     }
 
     @Override
-    public KeHangEntity update(KeHangEntity entity) {
+    public NhomDuocLyEntity update(NhomDuocLyEntity entity) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            KeHangEntity merged = entityManager.merge(entity);
+            NhomDuocLyEntity merged = entityManager.merge(entity);
             transaction.commit();
             return merged;
         } catch (RuntimeException exception) {
@@ -108,12 +88,12 @@ public class JpaKeHangRepository implements KeHangRepository {
     }
 
     @Override
-    public boolean deleteById(String maKeHang) {
+    public boolean deleteById(String maNhomDuocLy) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            KeHangEntity entity = entityManager.find(KeHangEntity.class, maKeHang);
+            NhomDuocLyEntity entity = entityManager.find(NhomDuocLyEntity.class, maNhomDuocLy);
             if (entity == null) {
                 transaction.rollback();
                 return false;
@@ -133,18 +113,18 @@ public class JpaKeHangRepository implements KeHangRepository {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<String> findThuocNamesByKeHang(String maKeHang) {
+    public List<String> findThuocNamesByNhomDuocLy(String maNhomDuocLy) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
             return entityManager.createNativeQuery(
                             """
                             SELECT TenThuoc
-                            FROM Thuoc_SanPhamDto
-                            WHERE ViTri = :maKeHang AND TrangThaiXoa = 0
+                            FROM Thuoc_SanPham
+                            WHERE MaNDL = :maNhomDuocLy AND TrangThaiXoa = 0
                             ORDER BY TenThuoc
                             """
                     )
-                    .setParameter("maKeHang", maKeHang)
+                    .setParameter("maNhomDuocLy", maNhomDuocLy)
                     .getResultList();
         } finally {
             entityManager.close();

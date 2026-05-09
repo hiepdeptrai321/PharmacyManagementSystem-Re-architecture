@@ -57,7 +57,7 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
             WHERE MaKH = ?
             """;
     private static final String SELECT_LOT_STOCK_SQL = """
-            SELECT MaLH, SoLuongTon
+            SELECT MaLH, SoLuongTon, SoLuongDat, SoLuongGiu
             FROM Thuoc_SP_TheoLo
             WHERE MaThuoc = ?
             ORDER BY COALESCE(HSD, DATE('9999-12-31')) ASC, MaLH ASC
@@ -65,7 +65,8 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
             """;
     private static final String UPDATE_LOT_STOCK_SQL = """
             UPDATE Thuoc_SP_TheoLo
-            SET SoLuongTon = SoLuongTon - ?
+            SET SoLuongTon = SoLuongTon - ?,
+                SoLuongGiu = SoLuongGiu + ?
             WHERE MaLH = ? AND SoLuongTon >= ?
             """;
     private static final String UPDATE_CHI_TIET_STATUS_SQL = """
@@ -296,8 +297,9 @@ public class JdbcPhieuDatHangRepository extends AbstractJdbcRepository implement
             }
             try (PreparedStatement statement = connection.prepareStatement(UPDATE_LOT_STOCK_SQL)) {
                 statement.setInt(1, allocate);
-                statement.setString(2, lot.maLo());
-                statement.setInt(3, allocate);
+                statement.setInt(2, allocate);
+                statement.setString(3, lot.maLo());
+                statement.setInt(4, allocate);
                 statement.executeUpdate();
             }
             remaining -= allocate;

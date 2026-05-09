@@ -1,6 +1,7 @@
-package com.example.pharmacy.server.repository;
+package com.example.pharmacy.server.repository.jdbc;
 
 import com.example.pharmacy.server.config.JdbcConnectionProvider;
+import com.example.pharmacy.server.repository.NhanVienRepository;
 import com.example.pharmacy.server.entity.NhanVienEntity;
 
 import java.sql.Connection;
@@ -12,7 +13,7 @@ import java.util.Optional;
 public class JdbcNhanVienRepository implements NhanVienRepository {
     private static final String FIND_BY_USERNAME_SQL = """
             SELECT MaNV, TaiKhoan, MatKhau, TenNV, VaiTro, TrangThai, TrangThaiXoa
-            FROM NhanVienDto
+            FROM NhanVien
             WHERE TaiKhoan = ?
             LIMIT 1
             """;
@@ -46,7 +47,7 @@ public class JdbcNhanVienRepository implements NhanVienRepository {
                 }
             }
         } catch (Exception exception) {
-            throw new IllegalStateException("Could not query NhanVienDto by username.", exception);
+            throw new IllegalStateException("Could not query NhanVien by username.", exception);
         } finally {
             connectionProvider.close(connection);
         }

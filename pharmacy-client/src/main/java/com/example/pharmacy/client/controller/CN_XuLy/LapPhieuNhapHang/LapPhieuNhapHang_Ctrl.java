@@ -36,6 +36,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -442,44 +443,23 @@ public class LapPhieuNhapHang_Ctrl {
     }
 
     public void suKienThemChiTietDonViTinhVaoBang() {
-        listViewChiTietDonViTinh.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal == null) {
+        // Khong them dong ngay trong selectedItemProperty vi JavaFX ListView de loi
+        // khi vua thay doi selection vua clear/doi item list trong cung mot nhip UI.
+        listViewChiTietDonViTinh.setOnMouseClicked(event -> {
+            ChiTietDonViTinhDto selected = listViewChiTietDonViTinh.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                themChiTietDonViTinhDaChon(selected);
+            }
+        });
+        listViewChiTietDonViTinh.setOnKeyPressed(event -> {
+            if (event.getCode() != KeyCode.ENTER) {
                 return;
             }
-            txtTimKiemChiTietDonViTinh.clear();
-            listViewChiTietDonViTinh.setVisible(false);
-
-            CTPN_TSPTL_CHTDVTDto item = new CTPN_TSPTL_CHTDVTDto();
-            ChiTietDonViTinhDto ctdvt = new ChiTietDonViTinhDto();
-            ctdvt.setThuoc(newVal.getThuoc());
-            ctdvt.setDvt(newVal.getDvt());
-            ctdvt.setHeSoQuyDoi(newVal.getHeSoQuyDoi());
-            ctdvt.setGiaNhap(newVal.getGiaNhap());
-            ctdvt.setGiaBan(newVal.getGiaBan());
-            ctdvt.setDonViCoBan(newVal.isDonViCoBan());
-
-            String maLo = String.format("TMP-LH-%04d", ++maLoHienTai);
-            ChiTietPhieuNhapDto ctpn = new ChiTietPhieuNhapDto();
-            ctpn.setThuoc(newVal.getThuoc());
-            ctpn.setMaLH(maLo);
-            ctpn.setSoLuong(1);
-            ctpn.setGiaNhap(newVal.getGiaNhap());
-            ctpn.setChietKhau(0);
-            ctpn.setThue(0);
-
-            Thuoc_SP_TheoLoDto lo = new Thuoc_SP_TheoLoDto();
-            lo.setThuoc(newVal.getThuoc());
-            lo.setMaLH(maLo);
-            lo.setNsx(Date.valueOf(LocalDate.now()));
-            lo.setHsd(Date.valueOf(LocalDate.now().plusMonths(12)));
-            lo.setSoLuongTon(ctpn.getSoLuong());
-
-            item.setChiTietDonViTinh(ctdvt);
-            item.setChiTietPhieuNhap(ctpn);
-            item.setChiTietSP_theoLo(lo);
-
-            themVaoBangNhap(item);
-            listViewChiTietDonViTinh.getSelectionModel().clearSelection();
+            ChiTietDonViTinhDto selected = listViewChiTietDonViTinh.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                themChiTietDonViTinhDaChon(selected);
+                event.consume();
+            }
         });
     }
 
@@ -487,6 +467,48 @@ public class LapPhieuNhapHang_Ctrl {
         listNhapThuoc.add(ct);
         tblNhapThuoc.refresh();
         capNhatTongTien();
+    }
+
+    private void themChiTietDonViTinhDaChon(ChiTietDonViTinhDto selected) {
+        CTPN_TSPTL_CHTDVTDto item = new CTPN_TSPTL_CHTDVTDto();
+        ChiTietDonViTinhDto ctdvt = new ChiTietDonViTinhDto();
+        ctdvt.setThuoc(selected.getThuoc());
+        ctdvt.setDvt(selected.getDvt());
+        ctdvt.setHeSoQuyDoi(selected.getHeSoQuyDoi());
+        ctdvt.setGiaNhap(selected.getGiaNhap());
+        ctdvt.setGiaBan(selected.getGiaBan());
+        ctdvt.setDonViCoBan(selected.isDonViCoBan());
+
+        // Ma lo tam chi de hien thi tren bang nhap, khong dung lam ma lo thuc trong DB.
+        String maLoTam = String.format("NHAP-TMP-%03d", ++maLoHienTai);
+        ChiTietPhieuNhapDto ctpn = new ChiTietPhieuNhapDto();
+        ctpn.setThuoc(selected.getThuoc());
+        ctpn.setMaLH(maLoTam);
+        ctpn.setSoLuong(1);
+        ctpn.setGiaNhap(selected.getGiaNhap());
+        ctpn.setChietKhau(0);
+        ctpn.setThue(0);
+
+        Thuoc_SP_TheoLoDto lo = new Thuoc_SP_TheoLoDto();
+        lo.setThuoc(selected.getThuoc());
+        lo.setMaLH(maLoTam);
+        lo.setNsx(Date.valueOf(LocalDate.now()));
+        lo.setHsd(Date.valueOf(LocalDate.now().plusMonths(12)));
+        lo.setSoLuongTon(ctpn.getSoLuong());
+
+        item.setChiTietDonViTinh(ctdvt);
+        item.setChiTietPhieuNhap(ctpn);
+        item.setChiTietSP_theoLo(lo);
+
+        themVaoBangNhap(item);
+        Platform.runLater(this::resetTimKiemChiTietDonViTinh);
+    }
+
+    private void resetTimKiemChiTietDonViTinh() {
+        txtTimKiemChiTietDonViTinh.clear();
+        listViewChiTietDonViTinh.getSelectionModel().clearSelection();
+        listViewChiTietDonViTinh.setItems(allChiTietDonViTinh);
+        listViewChiTietDonViTinh.setVisible(false);
     }
 
     private void listenerListNhapThuoc() {
